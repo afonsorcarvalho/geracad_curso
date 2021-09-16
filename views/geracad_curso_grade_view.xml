@@ -1,0 +1,114 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="geracad_curso_grade_list">
+      <field name="name">cursos.grade.list</field>
+      <field name="model">geracad.curso.grade</field>
+      <field name="arch" type="xml">
+        <tree>
+          
+          <field name="sequence" optional="hide"/>
+          <field name="display_name" string="Nome" invisible="1"/>
+          <field name="curso_id" optional="show"/>
+          <field name="disciplina_id" optional="show"/>
+          <field name="periodo" optional="show"/>
+          <field name="disciplina_id_carga_horaria" sum="Soma Total" optional="show"/>
+             
+     
+     
+
+        </tree>
+    
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="geracad_curso_grade_form_view">
+      <field name="name">geracad.curso.grade.form</field>
+      <field name="model">geracad.curso.grade</field>
+      <field name="arch" type="xml">
+          <form string="Grades">
+            <sheet>
+              <group>
+                <group>
+                  <field name="periodo" />   
+                  <field name="display_name" string="Nome" invisible="1"/>
+                  <field name="curso_id"/>
+                  <field name="disciplina_id" />
+                  <field name="disciplina_id_carga_horaria" />
+                  
+                </group>
+                <group>
+            
+                </group>
+              </group>         
+            </sheet>
+            <div class="oe_chatter">
+              <field name="message_follower_ids" widget="mail_followers"/>
+              <field name="message_ids" widget="mail_thread"/>
+          </div>
+          </form>
+      </field>
+    </record>
+
+
+    <record id="geracad_curso_grade_search" model="ir.ui.view">
+      <field name="name">geracad.curso.grade.search</field>
+      <field name="model">geracad.curso.grade</field>
+      <field name="arch" type="xml">
+        <search string="Procura Grade">
+          <field name="curso_id"/>
+          <field name="disciplina_id" />
+          <field name="periodo" />   
+      </search>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="geracad_curso_grade_action_window">
+      <field name="name">Grade</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">geracad.curso.grade</field>
+      <field name="view_mode">tree,form</field>
+   
+      <field name="search_view_id" ref="geracad_curso_grade_search"/>
+    
+      <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+          Crie um novo Grade
+        </p>
+      </field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record id="action_geracad_curso_grade_form_view" model="ir.actions.act_window.view">
+      <field eval="11" name="sequence"/>
+      <field name="view_mode">form</field>
+      <field name="view_id" ref="geracad_curso_grade_form_view"/>
+      <field name="act_window_id" ref="geracad_curso_grade_action_window"/>
+      
+    </record>
+    <record id="action_geracad_cursos_grade_tree_view" model="ir.actions.act_window.view">
+      <field eval="10" name="sequence"/>
+      <field name="view_mode">tree</field>
+      <field name="view_id" ref="geracad_curso_grade_list"/>
+      <field name="act_window_id" ref="geracad_curso_grade_action_window"/>
+    </record>
+
+    
+
+    <!-- menu categories -->
+
+    <menuitem name="Grade" id="geracad_curso.menu_grade_1" parent="geracad_curso.menu_root"/>
+    <menuitem name="grade 2" id="geracad_curso.menu_grade_2" parent="geracad_curso.menu_root"/>
+
+    <!-- actions -->
+
+    <menuitem name="Grades" id="geracad_curso.menu_grade_1_list" parent="geracad_curso.configuracao"
+              action="geracad_curso_grade_action_window"/>
+    <!-- <menuitem name="Em Disciplina" id="geracad_curso.menu_grade_2_list" parent="geracad_curso.configuracao"
+              action="geracad_curso_grade_action_window"/> -->
+    <!-- <menuitem name="Server to list" id="geracad_aluno" parent="geracad_aluno.menu_2"
+              action="geracad_aluno.action_server"/> -->
+
+  </data>
+</odoo>
