@@ -57,6 +57,8 @@ class GeracadCursoTurma(models.Model):
 
     unidade_id = fields.Many2one('geracad.curso.unidade', string="Unidade")
 
+    matriculas_count = fields.Integer("Qtd Matriculas", compute="_compute_matriculas_count")
+
     active = fields.Boolean(default = True)
 
     @api.model
@@ -124,6 +126,12 @@ class GeracadCursoTurma(models.Model):
             number_sequencial = int(number_sequencial_string)+1
         resultado_string ="{:02d}"
         return resultado_string.format(number_sequencial)
+
+    def _compute_matriculas_count(self):       
+        for record in self:    
+            record.matriculas_count = self.env["geracad.curso.matricula"].search(
+                [('curso_turma_id', '=', record.id)],
+                offset=0, limit=None, order=None, count=True)
     
     """
 
@@ -155,6 +163,21 @@ class GeracadCursoTurma(models.Model):
             'state': 'aberta',
             'matricula_aberta': True,
             })
+    
+    def action_go_matriculas(self):
+
+        _logger.info("action open matriculas")
+        
+        return {
+            'name': _('Matriculados'),
+            'type': 'ir.actions.act_window',
+            'target':'current',
+            'view_mode': 'tree,form',
+            'res_model': 'geracad.curso.matricula',
+            'domain': [('curso_turma_id', '=', self.id)],
+        }
+        
+
 
         
 

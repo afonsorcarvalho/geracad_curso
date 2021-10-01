@@ -1,4 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
 <odoo>
-   
+    <record id="sequence_disciplina_seq" model="ir.sequence">
+        <field name="name">Disciplina sequence</field>
+        <field name="code">disciplina.sequence</field>
+
+        <field eval="4" name="padding"/>
+       
+        <field eval="1" name="number_increment"/>
+       
+    </record>
 </odoo>

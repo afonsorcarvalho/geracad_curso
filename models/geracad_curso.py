@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 from datetime import datetime, timedelta
 
 
@@ -35,6 +35,10 @@ class GeracadCurso(models.Model):
     )
     carga_horaria_total = fields.Integer(string="Carga Horária", compute='_compute_carga_horaria_total')
 
+    
+    
+    
+
     _sql_constraints = [
         ('sigla_uniq', 'unique (sigla)',
          'Esta Sigla já está em uso por outro Curso!')
@@ -68,6 +72,8 @@ class GeracadCursoDisciplina(models.Model):
     _inherit = ['mail.thread']
 
     name = fields.Char()
+    codigo = fields.Char("Código", default=lambda self: _('New'))
+
     metodologia = fields.Many2one(
         string='Metodologia',
         comodel_name='geracad.curso.disciplina.metodologia',
@@ -78,6 +84,21 @@ class GeracadCursoDisciplina(models.Model):
     ementa = fields.Html(
         string='Ementa',
     )
+   
+    @api.model
+    def create(self, values):
+        if values.get('codigo', _('New')) == _('New'):
+            values['codigo'] = self.env['ir.sequence'].next_by_code('disciplina.sequence') or ('New')
+            
+
+        result = super(GeracadCursoDisciplina,self).create(values)
+        
+        return result
+    _sql_constraints = [
+        ('codigo_disciplina_uniq', 'unique (codigo)', 'Este codigo já está sendo usado por uma disciplina !'),
+    ]
+    
+    
     
 class GeracadCursoDisciplinaMetodologia(models.Model):
     _name = "geracad.curso.disciplina.metodologia"

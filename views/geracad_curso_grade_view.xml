@@ -33,8 +33,8 @@
                 <group>
                   <field name="periodo" />   
                   <field name="display_name" string="Nome" invisible="1"/>
-                  <field name="curso_id"/>
-                  <field name="disciplina_id" />
+                  <field name="curso_id" options="{'no_create': True}"/>
+                  <field name="disciplina_id" options="{'no_create': True}" />
                   <field name="disciplina_id_carga_horaria" />
                   
                 </group>
@@ -103,8 +103,7 @@
 
     <!-- actions -->
 
-    <menuitem name="Grades" id="geracad_curso.menu_grade_1_list" parent="geracad_curso.configuracao"
-              action="geracad_curso_grade_action_window"/>
+   
     <!-- <menuitem name="Em Disciplina" id="geracad_curso.menu_grade_2_list" parent="geracad_curso.configuracao"
               action="geracad_curso_grade_action_window"/> -->
     <!-- <menuitem name="Server to list" id="geracad_aluno" parent="geracad_aluno.menu_2"

@@ -18,7 +18,8 @@ class GeracadCursoMatricula(models.Model):
 
     name = fields.Char("Código")
     company_id = fields.Many2one(
-        'res.company', string="Unidade",required=True, default=lambda self: self.env.company
+        'res.company', string="Unidade", required=True, default=lambda self: self.env.company
+        
     )
 
     curso_turma_id = fields.Many2one(
@@ -69,8 +70,34 @@ class GeracadCursoMatricula(models.Model):
         ('falecido', 'Falecido'),
         ('formado', 'Formado'),
         
-    ], string="Status", default="draft", track_visibility='onchange')
+    ], string="Status", default="draft", readonly=True)
 
+    matriculas_disciplina_ids = fields.One2many(
+       
+        comodel_name="geracad.curso.matricula.disciplina",
+        inverse_name="curso_matricula_id",
+
+    )
+
+    matriculas_disciplinas_count = fields.Integer(
+        string='Disciplinas', 
+        compute='_compute_matriculas_disciplinas',
+            
+        )
+        
+        
+    
+    
+
+    
+    def _compute_matriculas_disciplinas(self):
+        for record in self:    
+            record.matriculas_disciplinas_count = self.env["geracad.curso.matricula.disciplina"].search(
+                [('curso_matricula_id', '=', record.id)],
+                offset=0, limit=None, order=None, count=True)
+
+    
+    
 
     active = fields.Boolean(default=True)
     
@@ -91,6 +118,17 @@ class GeracadCursoMatricula(models.Model):
         return result
     
     
+    
+    @api.depends('name', 'curso_turma_id')
+    def name_get(self):
+        result = []
+        for record in self:
+            name = '[' + record.name + '] ' + record.aluno_id.name
+            result.append((record.id, name))
+        return result
+    
+    
+
     def _gera_codigo_matricula(self,vals):
         """
             Gera o codigo da matricula de cursos pegando o codigo da turma de curso + número sequencial
@@ -126,13 +164,39 @@ class GeracadCursoMatricula(models.Model):
         resultado_string ="{:02d}"
         return resultado_string.format(number_sequencial)
     
+    
+    
+    
+
     """
 
             BUTTON ACTIONS
 
     """
+    def action_trancar(self):
+        _logger.info("Matrícula Trancada")
+        self.write({'state': 'trancado'})
 
-    
+    def action_go_matriculas_disciplinas(self):
+
+        _logger.info("action open matriculas disciplinas")
+        
+        return {
+            'name': _('Disciplinas'),
+            'type': 'ir.actions.act_window',
+            'target':'current',
+            'view_mode': 'tree,form',
+            'res_model': 'geracad.curso.matricula.disciplina',
+            'domain': [('curso_matricula_id', '=', self.id)],
+            'context': {
+                'default_curso_matricula_id': self.id,
+                'group_by': ['state'],
+                'expand': True
+            }
+        }
+        
+
+   
 
         
 
