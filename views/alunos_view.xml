@@ -1,0 +1,98 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="geracad_aluno_form_view_inherit">
+      <field name="name">geracad.aluno.form.inherit</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="geracad_aluno.geracad_aluno_form_view"/>
+     
+      <field name="arch" type="xml">
+        <xpath expr="//div" position="before">
+          <div class="oe_button_box" name="button_box">
+            <button name="action_go_matriculas_disciplinas" class="oe_stat_button" icon="fa-file-text-o"
+                >
+
+            </button>
+          
+        </div>
+      </xpath>
+        <xpath expr="//group[@name='outros']" position="after"></xpath>
+          <xpath expr="//group[@name='outros']" position="after">
+            <notebook>
+              <page string="Cursos Matriculados">
+                <group>
+                  <field name="matriculas_ids" 
+                  
+                  nolabel="1"
+                  
+                  >
+                    <tree>
+                      <field name="name" string="Matrícula"/>
+                      <field name="curso_turma_id" />
+                      <field name="curso_nome" />
+                      <field name="aluno_id" />
+                      <field name="data_matricula" />
+                      <field name="state" widget="badge"/>
+
+                     
+                    </tree>
+                    <form>
+                      <group>
+                        <group>
+                          <field name="name" string="Matrícula" 
+                          readonly="1"
+                          />
+                          <field name="curso_turma_id" />
+                        
+                        </group>
+                        <group>
+                          <field name="data_matricula" />
+                          <field name="data_conclusao" />
+                          <field name="company_id"/>
+                        </group>
+                      </group>
+                      <notebook>
+                        <page string="Disciplinas Matriculadas">
+                          <group>
+                            <field name="matriculas_disciplina_ids" nolabel="1"/>
+                          </group>
+                        </page>
+                      </notebook>
+                    </form>
+                  </field>
+                  
+                </group>
+              </page>
+              <!-- <page string="Disciplinas">
+                <group>
+                  <field name="matriculas_disciplina_ids" 
+                  
+                  nolabel="1"
+                  
+                  >
+                  <tree>
+                    <field name="name"/>
+                    <field name="turma_disciplina_id"/>
+                    <field name="data_matricula"/>
+                    <field name="state" widget="badge"/>
+
+                  </tree>
+                </field>
+
+                </group>
+              </page> -->
+            </notebook>
+         
+            
+          </xpath>
+        
+
+      </field>
+    </record>
+
+
+    
+
+  </data>
+</odoo>
