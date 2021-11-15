@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 
 class geracadCursoAluno(models.Model):
@@ -20,3 +24,25 @@ class geracadCursoAluno(models.Model):
         inverse_name="aluno_id",
 
     )
+
+    matriculas_curso_count = fields.Integer("Cursos Matriculados", compute="_compute_matriculas_curso_count")
+
+    
+    def _compute_matriculas_curso_count(self):
+        self.matriculas_curso_count = len(self.matriculas_ids)
+    
+    def action_go_matriculas_disciplinas(self):
+        _logger.info("action aluno open matriculas disciplinas")
+        
+        return {
+            'name': _('Cursos Matriculados'),
+            'type': 'ir.actions.act_window',
+            'target':'current',
+            'view_mode': 'tree,form',
+            'res_model': 'geracad.curso.matricula',
+            'domain': [('aluno_id', '=', self.id)],
+            'context': {
+                'default_aluno_id': self.id,
+                
+            }
+        }

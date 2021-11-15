@@ -376,6 +376,21 @@
           </tree>   
         </field>
       </record>
+      <record id="geracad_curso_matricula_search" model="ir.ui.view">
+        <field name="name">geracad_curso.matricula.search</field>
+        <field name="model">geracad.curso.matricula</field>
+        <field name="arch" type="xml">
+          <search string="Procure">
+            <field name="curso_turma_codigo"  />
+            <field name="curso_nome" />
+            <field name="aluno_id" />
+            <field name="data_matricula" />
+            <field name="data_conclusao" />
+            <field name="state" />
+
+          </search>
+        </field>
+      </record>
       <record model="ir.ui.view" id="geracad_curso_matricula_form">
         <field name="name">geracad.curso.matricula.form</field>
         <field name="model">geracad.curso.matricula</field>
@@ -402,8 +417,16 @@
                       <span class="o_stat_text">Disciplinas</span>
                     </div>
                 </button>
+                <button name="action_go_notas_disciplinas" type="object" class="oe_stat_button" icon="fa-file-text-o"
+                    >
+                    <div class="o_field_widget o_stat_info">
+                     
+                      <field name="notas_disciplinas_count" class="o_state_value" />
+                      <span class="o_stat_text">Notas</span>
+                    </div>
+                </button>
               
-            </div>
+              </div>
               
               <h1>
                   <field name="name" string="Código" readonly="1"/>
@@ -495,23 +518,30 @@
       <field name="view_id" ref="geracad_curso_matricula_list"/>
       <field name="act_window_id" ref="geracad_curso_matricula_action_window"/>
     </record>
-
+    
+   
     <!-- Top menu item -->
 
     <menuitem name="Cursos" id="geracad_curso.menu_root" web_icon="geracad_curso,static/description/icon.png"
-    action="geracad_curso_action_window"/>
+    action="geracad_curso_matricula_action_window"/>
 
     <!-- menu categories -->
 
-    <menuitem name="Matricular" id="geracad_curso.menu_matricular" sequence="1" parent="geracad_curso.menu_root"/>
+    <menuitem name="Matriculas" id="geracad_curso.menu_matricular" sequence="1" parent="geracad_curso.menu_root"/>
+    <menuitem name="Turmas" id="geracad_curso.menu_turmas" sequence="1" parent="geracad_curso.menu_root"/>
     <menuitem name="Configuração" id="geracad_curso.configuracao" sequence="100" parent="geracad_curso.menu_root"/>
 
     <!-- actions -->
 
-    <menuitem name="Em Cursos" id="geracad_curso.matricular_curso_menu_list" parent="geracad_curso.menu_matricular"
+    <menuitem name="Curso" id="geracad_curso.matricular_curso_menu_list" parent="geracad_curso.menu_matricular"
               action="geracad_curso_matricula_action_window"/>
-    <menuitem name="Em Disciplina" id="geracad_curso.matricular_disciplina_menu_list" parent="geracad_curso.menu_matricular"
+    <menuitem name="Disciplina" id="geracad_curso.matricular_disciplina_menu_list" parent="geracad_curso.menu_matricular"
               action="geracad_curso_matricula_disciplina_action_window"/>
+
+    <menuitem name="Curso" id="geracad_curso.turma_curso_menu_list" parent="geracad_curso.menu_turmas"
+              action="geracad_curso_turma_action_window"/>
+    <menuitem name="Disciplina" id="geracad_curso.turma_disciplina_menu_list" parent="geracad_curso.menu_turmas"
+              action="geracad_curso_turma_disciplina_action_window"/>
 
               <!-- configuração -->
     <menuitem name="Cursos" id="geracad_curso.curso_menu" parent="geracad_curso.configuracao"
@@ -530,6 +560,12 @@
               action="geracad_curso_turma_action_window" sequence="6"/>
     <menuitem name="Turma de Disciplina" id="geracad_curso.menu_turma_disciplina_1_list" parent="geracad_curso.configuracao"
               action="geracad_curso_turma_disciplina_action_window" sequence="7"/>
+    <menuitem name="Notas de Disciplinas" id="geracad_curso.menu_nota_disciplina_list" parent="geracad_curso.configuracao"
+              action="geracad_curso_nota_disciplina_action_window" sequence="8"/>
+    <menuitem name="Contratos" id="geracad_curso.menu_nota_contrato_list" parent="geracad_curso.configuracao"
+              action="geracad_curso_contrato_action_window" sequence="9"/>
+    <menuitem name="Parcelas" id="geracad_curso.menu_financeiro_parcelas_list" parent="geracad_curso.configuracao"
+              action="geracad_curso_financeiro_parcelas_action_window" sequence="9"/>
     
     <!-- <menuitem name="Server to list" id="geracad_aluno" parent="geracad_aluno.menu_2"
               action="geracad_aluno.action_server"/> -->

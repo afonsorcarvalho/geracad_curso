@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-# from odoo import http
+from odoo import http
 
 
-# class GeracadAluno(http.Controller):
-#     @http.route('/geracad_aluno/geracad_aluno/', auth='public')
-#     def index(self, **kw):
-#         return "Hello, world"
+class GeracadAluno(http.Controller):
+     @http.route('/geracad_curso/', auth='public')
+     def index(self, **kw):
+         return "Hello, world"
 
 #     @http.route('/geracad_aluno/geracad_aluno/objects/', auth='public')
 #     def list(self, **kw):

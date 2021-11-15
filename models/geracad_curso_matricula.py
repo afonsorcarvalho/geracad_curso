@@ -84,24 +84,27 @@ class GeracadCursoMatricula(models.Model):
         compute='_compute_matriculas_disciplinas',
             
         )
-        
-        
-    
-    
+    notas_disciplinas_count = fields.Integer(
+        string='Disciplinas', 
+        compute='_compute_notas_disciplinas',
+            
+        )
 
+    active = fields.Boolean(default=True)
     
+    _sql_constraints = [ ('curso_turma_id_aluno_id_unique','UNIQUE(curso_turma_id, aluno_id)','Aluno já matriculado nessa turma') ]
+  
     def _compute_matriculas_disciplinas(self):
         for record in self:    
             record.matriculas_disciplinas_count = self.env["geracad.curso.matricula.disciplina"].search(
                 [('curso_matricula_id', '=', record.id)],
                 offset=0, limit=None, order=None, count=True)
-
-    
-    
-
-    active = fields.Boolean(default=True)
-    
-    _sql_constraints = [ ('curso_turma_id_aluno_id_unique','UNIQUE(curso_turma_id, aluno_id)','Aluno já matriculado nessa turma') ]
+                
+    def _compute_notas_disciplinas(self):
+        for record in self:    
+            record.notas_disciplinas_count = self.env["geracad.curso.nota.disciplina"].search(
+                [('curso_matricula_id', '=', record.id)],
+                offset=0, limit=None, order=None, count=True)
 
     @api.model
     def create(self, vals):
@@ -173,6 +176,9 @@ class GeracadCursoMatricula(models.Model):
             BUTTON ACTIONS
 
     """
+    def action_gerar_contrato(self):
+        _logger.info("Gerando Contrato")
+
     def action_trancar(self):
         _logger.info("Matrícula Trancada")
         self.write({'state': 'trancado'})
@@ -192,6 +198,23 @@ class GeracadCursoMatricula(models.Model):
                 'default_curso_matricula_id': self.id,
                 'group_by': ['state'],
                 'expand': True
+            }
+        }
+        
+    def action_go_notas_disciplinas(self):
+
+        _logger.info("action open notas disciplinas")
+        
+        return {
+            'name': _('Notas Disciplinas'),
+            'type': 'ir.actions.act_window',
+            'target':'current',
+            'view_mode': 'tree,form',
+            'res_model': 'geracad.curso.nota.disciplina',
+            'domain': [('curso_matricula_id', '=', self.id)],
+            'context': {
+                'default_curso_matricula_id': self.id,
+     
             }
         }
         

@@ -11,8 +11,9 @@
         <xpath expr="//div" position="before">
           <div class="oe_button_box" name="button_box">
             <button name="action_go_matriculas_disciplinas" class="oe_stat_button" icon="fa-file-text-o"
-                >
-
+            type="object"    >
+            <field name="matriculas_curso_count"  class="o_state_value"/>
+            <span class="o_stat_text">Matrículas</span>
             </button>
           
         </div>

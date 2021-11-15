@@ -86,6 +86,22 @@ class GeracadCursoMatriculaDisciplina(models.Model):
         vals['state'] = 'inscrito'
         
         result = super(GeracadCursoMatriculaDisciplina, self).create(vals)
+
+        _logger.info("Criado Matricula")
+        _logger.info(result)
+
+        # criando as notas do aluno
+        notas_disciplina = self.env['geracad.curso.nota.disciplina'].create(
+            {
+                "company_id": result.company_id.id,
+                "disciplina_matricula_id": result.id,
+                "turma_disciplina_id": result.turma_disciplina_id.id
+
+            }
+            )
+
+
+
         return result
     
     

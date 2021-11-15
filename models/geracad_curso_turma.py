@@ -18,7 +18,7 @@ class GeracadCursoTurma(models.Model):
 
     name = fields.Char("Código")
     company_id = fields.Many2one(
-        'res.company', required=True, default=lambda self: self.env.company
+        'res.company', string="Unidade", required=True, default=lambda self: self.env.company
     )
 
     curso_id = fields.Many2one(

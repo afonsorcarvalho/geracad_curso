@@ -34,36 +34,96 @@
       <field name="model">geracad.curso.turma.disciplina</field>
       <field name="arch" type="xml">
           <form string="Disciplina">
+            <header>
+            
+              <button name="action_encerrar_matricula" string="Encerrar" class="oe_highlight" states="aberta" type="object"
+                  special="cancel"
+                  confirm="Tem certeza que deseja encerrar matriculas nessa turma? Esta ação não poderá ser defeita"
+              />
+              <button name="action_cancelar_matricula" string="Cancelar"  states="aberta" type="object"
+                  special="cancel"
+                  confirm="Tem certeza que deseja cancelar essa turma? Esta ação não poderá ser defeita"
+              />
+              <button name="action_suspender_matricula" string="Suspender" states="aberta" type="object"/>
+              <button name="action_abrir_matricula" string="Abrir" states="suspensa" type="object"/>
+              <field name="state" widget="statusbar" statusbar_visible="aberta, encerrada"/>
+            </header>
             <sheet>
-              <group>
-                <group>
+              <div class="oe_button_box" name="button_box">
+                <button name="action_go_alunos_disciplinas" type="object" class="oe_stat_button" icon="fa-file-text-o"
+                    >
+                    <div class="o_field_widget o_stat_info">
+                     
+                      <field name="alunos_count" class="o_state_value" />
+                      <span class="o_stat_text">Alunos</span>
+                    </div>
+                </button>
+                <button name="action_go_notas_disciplinas" type="object" class="oe_stat_button" icon="fa-file-text-o"
+                    >
+                    <div class="o_field_widget o_stat_info">
+                     
+                   
+                      <span class="o_stat_text">Notas</span>
+                    </div>
+                </button>
+              
+              </div>
+
+              <h1>
+              <field name="display_name" readonly="1"/>
+              </h1>
+              <group >
+                <group  string="Turma Disciplina">
                   
-                  <field name="name" readonly="1"/>
                   
-                  <field name="curso_turma_id" options="{'no_create': True}" />
-                  <field name="disciplina_id" options="{'no_create': True}"/>
+                  
+                  <field name="curso_turma_id" options="{'no_create': True }" 
+                  attrs="{'readonly' : [('state','!=', 'draft')]  }"
+                   />
+                  <field name="disciplina_id" options="{'no_create': True}"
+                  attrs="{'readonly' : [('state','!=', 'draft')]  }"
+                  />
                  
                   <field name="professor_id" options="{'no_create': True}"/>
                   <field name="vagas"/>
                   <field name="sala_id" options="{'no_create': True}"/>
                 </group>
-                <group>
-                  <field name="data_abertura" />
+                <group string="Datas e Status">
+                  <field name="data_abertura" 
+                  attrs="{'readonly' : [('state','!=', 'draft')]  }"
+                  />
                   <field name="data_inicio" />
                   <field name="data_previsao_termino" />
                   <field name="data_encerramento" />
-                  <field name="state" />
+               
                 </group>
               </group>    
               <group>
-                <group>
-                  <field name="matricula_aberta" />
-                  <field name="e_pendencia" />
-                  <field name="e_aproveitamento" />
-                  <field name="company_id" options="{'no_create': True}"/>
+                <group string="Outras informações">
+                  <field name="matricula_aberta"  attrs="{'readonly' : [('state','!=', 'draft')]  }"/>
+                  <field name="e_pendencia"  attrs="{'readonly' : [('state','!=', 'draft')]  }" />
+                  <field name="e_aproveitamento"  attrs="{'readonly' : [('state','!=', 'draft')]  }" />
+                  <field name="company_id" string="Unidade" options="{'no_create': True}"  attrs="{'readonly' : [('state','!=', 'draft')]  }"/>
 
                 </group>
               </group>     
+              <notebook>
+                <page string="Notas">
+                  <group>
+                    <field name="notas" nolabel="1" readonly="1">
+                      <tree  editable="0" delete="0" create="0">
+                        <field name="disciplina_matricula_id"/>
+                        <field name="nota_1"/>
+                        <field name="nota_2"/>
+                        <field name="final"/>
+                        <field name="media"/>
+                        <field name="situation" string="Situação"/>
+                      </tree>
+
+                    </field>
+                  </group>
+                </page>
+              </notebook>  
             </sheet>
             <div class="oe_chatter">
               <field name="message_follower_ids" widget="mail_followers"/>

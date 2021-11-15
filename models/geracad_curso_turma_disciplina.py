@@ -85,7 +85,7 @@ class GeracadCursoTurmDisciplina(models.Model):
         ('encerrada', 'Matrícula Encerrada'),
         ('suspensa', 'Matrícula Suspensa'), 
         ('cancelada', 'Cancelada'),
-    ], string="Status", default="draft", track_visibility='onchange')
+    ], string="Status", readonly=1,default="draft", track_visibility='onchange')
 
     sala_id = fields.Many2one(
         'geracad.curso.sala',
@@ -96,8 +96,24 @@ class GeracadCursoTurmDisciplina(models.Model):
     e_pendencia = fields.Boolean("É pendência")
     e_aproveitamento = fields.Boolean("É aproveitamento")
 
-    active = fields.Boolean(default = True)
+    alunos_count = fields.Integer(
+        string='Alunos', 
+        compute='_compute_alunos_count',
+            
+        )
+    notas = fields.One2many('geracad.curso.nota.disciplina', 'turma_disciplina_id')
+    active = fields.Boolean(default=True)
+    
 
+
+    def _compute_alunos_count(self):
+        for record in self:    
+            record.alunos_count = self.env["geracad.curso.matricula.disciplina"].search(
+                [('turma_disciplina_id', '=', record.id)],
+                offset=0, limit=None, order=None, count=True)
+
+    
+    
     @api.model
     def create(self, vals):
         if 'company_id' in vals:
@@ -185,6 +201,41 @@ class GeracadCursoTurmDisciplina(models.Model):
             BUTTON ACTIONS
 
     """
+
+    def action_go_alunos_disciplinas(self):
+        _logger.info("action open alunos disciplinas")
+
+        return {
+            'name': _('Alunos'),
+            'type': 'ir.actions.act_window',
+            'target':'current',
+            'view_mode': 'tree,form',
+            'res_model': 'geracad.curso.matricula.disciplina',
+            'domain': [('turma_disciplina_id', '=', self.id)],
+            'context': {
+                'default_turma_disciplina_id': self.id,
+                'group_by': ['state'],
+                'expand': True
+            }
+        }
+    def action_go_notas_disciplinas(self):
+        _logger.info("action open alunos disciplinas")
+
+        return {
+            'name': _('Notas'),
+            'type': 'ir.actions.act_window',
+            'target':'current',
+            'view_mode': 'tree,form',
+            'res_model': 'geracad.curso.nota.disciplina',
+            'domain': [('turma_disciplina_id', '=', self.id)],
+            'context': {
+                'default_turma_disciplina_id': self.id,
+                
+                'expand': True,
+                'editable': "bottom",
+            }
+        }
+
 
     def action_suspender_matricula(self):
         self.write({
