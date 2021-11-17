@@ -1,0 +1,141 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="geracad_curso_financeiro_parcelas_list">
+      <field name="name">cursos.financeiro.parcelas.list</field>
+      <field name="model">geracad.curso.financeiro.parcelas</field>
+      <field name="arch" type="xml">
+        <tree>
+         <field name="name"/>
+         <field name="curso_matricula_id"/>
+         <field name="aluno_id"/>
+         <field name="curso_nome"/>
+         <field name="data_vencimento"/>
+         <field name="data_pagamento"/>
+         
+         <field name="valor"/>
+         <field name="valor_pago"/>
+         <field name="esta_pago"/>
+         <field name="juros"/>
+         <field name="multa"/>
+         <field name="desconto"/>
+         <field name="forma_de_pagamento"/>
+
+         <field name="sacado"/>
+       <!--  <field name="state"/> -->
+        </tree>
+   
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="geracad_curso_financeiro_parcelas_form_view">
+      <field name="name">geracad.curso.financeiro.parcelas.form</field>
+      <field name="model">geracad.curso.financeiro.parcelas</field>
+      <field name="arch" type="xml">
+          <form string="Contrato">
+            <header>
+              <!--   <button name="action_confirma_contrato" string="Confirmar" class="oe_highlight" states="draft" type="object"/>
+           <button name="action_cancela_contrato" string="Cancelar"  states="vigente" type="object"/>
+              <button name="action_finaliza_contrato" string="Finalizar" class="oe_highlight" states="vigente" type="object"/>
+              <field name="state" widget="statusbar" statusbar_visible="draft, vigente, finalizado" statusbar_colors="{'KEY_IS_STATE':'VALUE_IS_COLOR'}"/> -->
+            </header>
+            <sheet>
+              <h1>
+                <field name="name"></field>
+              </h1>
+              <group >
+                <group string="Aluno">
+                  <field name="curso_matricula_id"/>
+                  <field name="aluno_id"/>
+                  <field name="curso_nome"/>
+                </group>
+                <group string="Datas">
+                  <field name="data_vencimento"/>
+                  <field name="data_pagamento"/>
+                </group>
+              </group>         
+              <group>
+                <group string="Condições de Pagamento">
+
+                  <field name="valor"/>
+                  <field name="valor_pago"/>
+                  <field name="esta_pago"/>
+                  <field name="forma_de_pagamento"/>
+
+                </group>
+                <group string="Dados Sacado">
+                  <field name="sacado"/>     
+                  <field name="sacado_cpf"/>     
+                              
+                </group>
+              </group>         
+            </sheet>
+            <div class="oe_chatter">
+              <field name="message_follower_ids" widget="mail_followers"/>
+              <field name="message_ids" widget="mail_thread"/>
+          </div>
+          </form>
+      </field>
+    </record>
+
+
+    <record id="geracad_curso_financeiro_parcelas_search" model="ir.ui.view">
+      <field name="name">geracad.curso.financeiro.parcelas.search</field>
+      <field name="model">geracad.curso.financeiro.parcelas</field>
+      <field name="arch" type="xml">
+        <search string="Procura parcelas">
+          <field name="name"/>
+          <!-- <field name="metodologia" />
+          <field name="ementa" />    -->
+      </search>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="geracad_curso_financeiro_parcelas_action_window">
+      <field name="name">Parcelas</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">geracad.curso.financeiro.parcelas</field>
+      <field name="view_mode">tree,form</field>
+   
+      <field name="search_view_id" ref="geracad_curso_financeiro_parcelas_search"/>
+    
+      <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+          Crie um nova Parcela
+        </p>
+      </field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record id="action_geracad_curso_financeiro_parcelas_form_view" model="ir.actions.act_window.view">
+      <field eval="11" name="sequence"/>
+      <field name="view_mode">form</field>
+      <field name="view_id" ref="geracad_curso_financeiro_parcelas_form_view"/>
+      <field name="act_window_id" ref="geracad_curso_financeiro_parcelas_action_window"/>
+      
+    </record>
+    <record id="action_geracad_cursos_financeiro_parcelas_tree_view" model="ir.actions.act_window.view">
+      <field eval="10" name="sequence"/>
+      <field name="view_mode">tree</field>
+      <field name="view_id" ref="geracad_curso_financeiro_parcelas_list"/>
+      <field name="act_window_id" ref="geracad_curso_financeiro_parcelas_action_window"/>
+    </record>
+
+    
+
+    <!-- menu categories -->
+
+    <!-- <menuitem name="Disciplina" id="geracad_curso.menu_disciplina_1" parent="geracad_curso.menu_root"/>
+    <menuitem name="Disciplina 2" id="geracad_curso.menu_disciplina_2" parent="geracad_curso.menu_root"/> -->
+
+    <!-- actions -->
+
+   
+    <!-- <menuitem name="Em Disciplina" id="geracad_curso.menu_disciplina_2_list" parent="geracad_curso.menu_disciplina_1"
+              action="geracad_curso_disciplina_action_window"/> -->
+    <!-- <menuitem name="Server to list" id="geracad_aluno" parent="geracad_aluno.menu_2"
+              action="geracad_aluno.action_server"/> -->
+
+  </data>
+</odoo>
