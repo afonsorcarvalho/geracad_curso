@@ -400,6 +400,9 @@
               <button type="object" name="action_trancar" string="Trancar"
                         class="oe_highlight"
                         attrs="{'invisible': [('state', '=', 'trancado')]}"/>
+              <button type="object" name="action_gerar_contrato" string="Gerar Contrato"
+                        class="oe_highlight"
+                        attrs="{'invisible': [('state', '!=', 'inscrito'),]}"/>
               <field name="state"  widget="statusbar"  />
             </header>
             <sheet>
@@ -409,6 +412,14 @@
               <widget name="web_ribbon" title="Encerrada" bg_color="bg-warning" attrs="{'invisible': [('state', '!=', 'encerrada')]}"/> -->
               
               <div class="oe_button_box" name="button_box">
+                <button name="action_go_contratos" type="object" class="oe_stat_button" icon="fa-file-text-o"
+                    >
+                    <div class="o_field_widget o_stat_info">
+                     
+                      <field name="contratos_count" class="o_state_value" />
+                      <span class="o_stat_text">Contratos</span>
+                    </div>
+                </button>
                 <button name="action_go_matriculas_disciplinas" type="object" class="oe_stat_button" icon="fa-file-text-o"
                     >
                     <div class="o_field_widget o_stat_info">

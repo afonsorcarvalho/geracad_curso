@@ -89,6 +89,13 @@ class GeracadCursoMatricula(models.Model):
         compute='_compute_notas_disciplinas',
             
         )
+    contratos_count = fields.Integer(
+        string='Contratos', 
+        compute='_compute_contratos',
+            
+        )
+    
+    contrato_gerado = fields.Boolean("Gerado Contrato?", readonly=True)
 
     active = fields.Boolean(default=True)
     
@@ -103,6 +110,12 @@ class GeracadCursoMatricula(models.Model):
     def _compute_notas_disciplinas(self):
         for record in self:    
             record.notas_disciplinas_count = self.env["geracad.curso.nota.disciplina"].search(
+                [('curso_matricula_id', '=', record.id)],
+                offset=0, limit=None, order=None, count=True)
+   
+    def _compute_contratos(self):
+        for record in self:    
+            record.contratos_count = self.env["geracad.curso.contrato"].search(
                 [('curso_matricula_id', '=', record.id)],
                 offset=0, limit=None, order=None, count=True)
 
@@ -178,6 +191,18 @@ class GeracadCursoMatricula(models.Model):
     """
     def action_gerar_contrato(self):
         _logger.info("Gerando Contrato")
+        return {
+            'name': _('Gerar Contrato'),
+            'type': 'ir.actions.act_window',
+            'target':'current',
+            'view_mode': 'form',
+            'res_model': 'geracad.curso.contrato',
+            'domain': [('curso_matricula_id', '=', self.id)],
+            'context': {
+                'default_curso_matricula_id': self.id,
+             
+            }
+        }
 
     def action_trancar(self):
         _logger.info("Matrícula Trancada")
@@ -215,6 +240,23 @@ class GeracadCursoMatricula(models.Model):
             'context': {
                 'default_curso_matricula_id': self.id,
      
+            }
+        }
+
+    def action_go_contratos(self):
+
+        _logger.info("action open notas disciplinas")
+        
+        return {
+            'name': _('Gerar Contrato'),
+            'type': 'ir.actions.act_window',
+            'target':'current',
+            'view_mode': 'tree,form',
+            'res_model': 'geracad.curso.contrato',
+            'domain': [('curso_matricula_id', '=', self.id)],
+            'context': {
+                'default_curso_matricula_id': self.id,
+             
             }
         }
         
