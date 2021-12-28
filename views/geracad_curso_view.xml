@@ -238,7 +238,7 @@
       <field name="name">geracad.curso.turma.list</field>
       <field name="model">geracad.curso.turma</field>
       <field name="arch" type="xml">
-        <tree>        
+        <tree default_order='data_abertura desc'>        
           <field name="name" string="Nome"/>
           <field name="curso_id" string="Curso"/>
           <field name="turno" string="Turno"/>
@@ -295,7 +295,7 @@
             </div>
             
             <h1>
-                <field name="name" string="Código" readonly="1"/>
+                <field name="name" string="Código" />
             </h1>
             <group>
              
@@ -350,7 +350,9 @@
         <field name="name">geracad.curso.matricula.list</field>
         <field name="model">geracad.curso.matricula</field>
         <field name="arch" type="xml">
-          <tree >        
+          <tree 
+          default_order="data_matricula desc"
+          >        
            
             <field name="name" string="Nome" />
             

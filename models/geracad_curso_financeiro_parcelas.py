@@ -56,12 +56,12 @@ class GeracadCursoFinanceiroParcelas(models.Model):
     data_vencimento = fields.Date(
         string='Data Vencimento',
         default=fields.Date.context_today,
-        track_visibility='onchange'
+        track_visibility='true'
     )
     data_pagamento = fields.Date(
         string='Data Pagamento',
-        default=fields.Date.context_today,
-        track_visibility='onchange'
+        
+        track_visibility='true'
     )
     numero_parcela = fields.Integer("Parcela")
     valor = fields.Monetary(string='Valor', required=True)
@@ -97,7 +97,8 @@ class GeracadCursoFinanceiroParcelas(models.Model):
         ('vigente', 'Vigente'),
         ('cancelado', 'Cancelado'),
         ('finalizado', 'Finalizado'),
-    ], string="Status", default="draft", track_visibility='onchange')
+        ('suspenso', 'Suspenso'),
+    ], string="Status", default="draft", track_visibility='true')
 
     active = fields.Boolean(default = True)
 

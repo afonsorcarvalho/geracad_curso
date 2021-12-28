@@ -35,17 +35,17 @@ class GeracadCursoTurma(models.Model):
     data_abertura = fields.Date(
         string='Data Abertura',
         default=fields.Date.context_today,
-        track_visibility='onchange'
+        track_visibility='true'
     )
 
     data_encerramento = fields.Date(
         string='Data Encerramento',
         default=fields.Date.context_today,
-        track_visibility='onchange'
+        track_visibility='true'
     )
    
     vagas = fields.Integer(
-        string='Vagas',track_visibility='onchange'
+        string='Vagas',track_visibility='true'
     )
     state = fields.Selection([
         ('draft', 'Rascunho'),
@@ -53,9 +53,11 @@ class GeracadCursoTurma(models.Model):
         ('encerrada', 'Matrícula Encerrada'),
         ('suspensa', 'Matrícula Suspensa'), 
         ('cancelada', 'Cancelada'),
-    ], string="Status", default="draft", track_visibility='onchange')
+    ], string="Status", default="draft", track_visibility='true')
 
-    unidade_id = fields.Many2one('geracad.curso.unidade', string="Unidade")
+    unidade_id = fields.Many2one('geracad.curso.unidade', string="Unidade",
+    company_dependent=True
+    )
 
     matriculas_count = fields.Integer("Qtd Matriculas", compute="_compute_matriculas_count")
 

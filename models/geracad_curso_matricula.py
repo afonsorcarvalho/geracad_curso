@@ -11,8 +11,9 @@ class GeracadCursoMatricula(models.Model):
     _description = "matricula de Cursos"
     _check_company_auto = True
 
+
     
-    _inherit = ['mail.thread']
+    _inherit = ['portal.mixin','mail.thread']
     
 
 
@@ -30,6 +31,12 @@ class GeracadCursoMatricula(models.Model):
     curso_nome = fields.Char( 
         related='curso_turma_id.curso_id.name',
         string="Nome do curso",
+        readonly=True,
+        store=True
+    )
+    curso_id = fields.Many2one( 
+        related='curso_turma_id.curso_id',
+        string="Curso",
         readonly=True,
         store=True
     )
@@ -51,13 +58,13 @@ class GeracadCursoMatricula(models.Model):
     data_matricula = fields.Date(
         string='Data Matrícula',
         default=fields.Date.context_today,
-        track_visibility='onchange'
+        track_visibility='true'
     )
 
     data_conclusao = fields.Date(
         string='Data Conclusão',
         default=fields.Date.context_today,
-        track_visibility='onchange'
+        track_visibility='true'
     )
    
     state = fields.Selection([
@@ -70,7 +77,7 @@ class GeracadCursoMatricula(models.Model):
         ('falecido', 'Falecido'),
         ('formado', 'Formado'),
         
-    ], string="Status", default="draft", readonly=True)
+    ], string="Status", default="draft", readonly=False)
 
     matriculas_disciplina_ids = fields.One2many(
        
@@ -122,11 +129,11 @@ class GeracadCursoMatricula(models.Model):
     @api.model
     def create(self, vals):
         if 'company_id' in vals:
-            curso_turma = self.env['geracad.curso.turma'].search([('id', '=', vals['curso_turma_id'] )])
-            self = self.with_company(curso_turma.company_id)
+             curso_turma = self.env['geracad.curso.turma'].search([('id', '=', vals['curso_turma_id'] )])
+             self = self.with_company(curso_turma.company_id)
 
         if vals.get('name', _('New')) == _('New'):
-            seq_date = None
+             seq_date = None
         vals['name'] = self._gera_codigo_matricula(vals) or _('New')
         vals['state'] = 'inscrito'
         
@@ -179,11 +186,43 @@ class GeracadCursoMatricula(models.Model):
             number_sequencial = int(number_sequencial_string)+1
         resultado_string ="{:02d}"
         return resultado_string.format(number_sequencial)
-    
-    
-    
-    
 
+    
+    def _get_periodos(self):
+        res = []
+        for periodo in range(self.curso_id.quantidade_de_periodos):
+                res.append(periodo+1)   
+        return res  
+
+    def _get_notas_periodo(self, periodo):
+        
+        nota_disciplina_ids = self.env['geracad.curso.nota.disciplina'].search([('curso_matricula_id', '=', self.id)])
+        nota_disciplina_ids_periodo = []
+        for nota_disciplina_id in nota_disciplina_ids:
+            _logger.debug(nota_disciplina_id)
+            if nota_disciplina_id.periodo == int(periodo):
+                nota_disciplina_ids_periodo.append(nota_disciplina_id)
+        
+        return nota_disciplina_ids_periodo
+
+    def _tem_notas_periodo(self,periodo):
+        count_disciplinas = self.env['geracad.curso.nota.disciplina'].search([('curso_matricula_id', '=', self.id),('periodo', '=', periodo)], count=True)
+        return count_disciplinas
+    
+    def _get_portal_return_action(self):
+        """ Return the action used to display matriculas when returning from customer portal. """
+        self.ensure_one()
+        return self.env.ref('sale.action_quotations_with_onboarding')
+    
+    # url de acesso no portal
+    def _compute_access_url(self):
+        super(GeracadCursoMatricula, self)._compute_access_url()
+        for matricula in self:
+            matricula.access_url = '/my/matriculas/%s' % matricula.id
+    # url de nome do aquivo download no portal
+    def _get_report_base_filename(self):
+        self.ensure_one()
+        return 'Histórico - %s' % (self.name)
     """
 
             BUTTON ACTIONS

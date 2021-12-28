@@ -49,8 +49,13 @@
                   <field name="curso_nome"/>
                 </group>
                 <group string="Datas">
-                  <field name="data_inicio"/>
-                  <field name="data_encerramento"/>
+                  <field name="data_inicio" 
+                  required="1"
+                  />
+                  <field name="data_encerramento"
+                  
+                  required="1"
+                  />
                 </group>
               </group>         
               <group>

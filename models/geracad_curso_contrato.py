@@ -59,15 +59,16 @@ class GeracadCursoContrato(models.Model):
     data_inicio = fields.Date(
         string='Data Início',
         default=fields.Date.context_today,
-        track_visibility='onchange'
+        track_visibility='true'
     )
     data_encerramento = fields.Date(
         string='Data Encerramento',
         default=fields.Date.context_today,
-        track_visibility='onchange'
+        track_visibility='true'
     )
     qtd_parcelas = fields.Integer(string='Qtd. parcelas',required=True)
     valor_parcelas = fields.Monetary(string='Valor', required=True)
+    parcelas_geradas = fields.Boolean(string="Parcelas geradas", default=False)
     juros = fields.Float("Juros")
     multa = fields.Float("Multa")
     desconto = fields.Float("Desconto")
@@ -102,7 +103,7 @@ class GeracadCursoContrato(models.Model):
         ('vigente', 'Vigente'),
         ('cancelado', 'Cancelado'),
         ('finalizado', 'Finalizado'),
-    ], string="Status", default="draft", track_visibility='onchange')
+    ], string="Status", default="draft", track_visibility='true')
 
     active = fields.Boolean(default = True)
     
@@ -151,6 +152,7 @@ class GeracadCursoContrato(models.Model):
                     'multa': self.multa,
                     'forma_de_pagamento': self.forma_de_pagamento,
                     'sacado': self.sacado.id,
+                    'state':'vigente',
                     
 
 
@@ -162,11 +164,71 @@ class GeracadCursoContrato(models.Model):
     
     def _cancela_parcelas_financeiro(self):
         _logger.info("CANCELANDO PARCELAS FINANCEIRO")
+        parcelas_pagas = self._tem_parcelas_pagas()
+        if len(parcelas_pagas) > 0:
+            raise ValidationError('Contrato com %s parcelas pagas. Não pode ser cancelado!' %  (len(parcelas_pagas)))
+        else:
+            self._set_state_parcelas('cancelado')
     
+    def _suspende_parcelas_financeiro(self):
+        _logger.info("SUSPENDENDO PARCELAS FINANCEIRO")
+        parcelas_nao_pagas = self.env['geracad.curso.financeiro.parcelas'].search([
+            ('contrato_id','=',self.id),('state','=', 'vigente'),('esta_pago','=', False)])
+        for parcela in parcelas_nao_pagas:
+            parcela.write({
+                'state': 'supenso'
+            })
+
+    def _reativa_parcelas_financeiro(self, valor_da_parcela, data_vencimento_parcelas):
+        """ 
+            Utilizado quando contrato suspenso e reativa, modificando os valores e as datas de vencimento das parcelas
+            do contrato
+        """
+        _logger.info("REATIVANDO PARCELAS FINANCEIRO")
+        self.search([('', '=', ), ...], offset=0, limit=None, order=None, count=False)
+        parcelas_suspensas = self.env['geracad.curso.financeiro.parcelas'].search([
+            ('contrato_id','=',self.id),('state','=', 'suspenso'),('esta_pago','=', False)], order='name ASC')
+        number=0
+        for parcela in parcelas_suspensas:
+            parcela.write({
+                'state': 'vigente',
+                'valor': valor_da_parcela,
+                'date_vencimento': data_vencimento_parcelas + relativedelta(months=(number)),
+            })
+             
+
+    def _tem_parcelas_pagas(self):
+        _logger.debug("PROCURANDO PARCELAS PAGAS")
+        parcelas_pagas = self.env['geracad.curso.financeiro.parcelas'].search([
+            ('contrato_id','=',self.id),('state','=', 'vigente'),('esta_pago','=', True)])
+        _logger.debug(parcelas_pagas)
+        return parcelas_pagas
+
     def _verifica_parcelas_abertas_financeiro(self):
         _logger.info("VERFICANDO PARCELAS EM ABERTO")
-        return False
+        parcelas_abertas = self.env['geracad.curso.financeiro.parcelas'].search([
+            ('contrato_id','=',self.id),('state','=', 'vigente'),('esta_pago','=', False)])
+        parcelas_em_aberto = []
+        for parcela in parcelas_abertas:
+            diferenca = parcela.data_vencimento - date.today()
+
+            if diferenca.days > 0:
+                parcelas_em_aberto.append({
+                    'data_vencimento': parcela.data_vencimento,
+                    'dias_de_atraso': diferenca.days
+                    
+                })
+        _logger.debug(parcelas_em_aberto)
+        return parcelas_em_aberto
     
+    
+    def _set_state_parcelas(self, state):
+        for record in self:
+            for parcela in record.parcelas_contratos_id:
+                parcela.write({
+                    'state': state
+                })
+
     """
 
             BUTTON ACTIONS
@@ -176,67 +238,62 @@ class GeracadCursoContrato(models.Model):
     def action_confirma_contrato(self):
        
         self.curso_matricula_id.write({
-            'contrato_gerado' : 1
+            'contrato_gerado' : 1,
         })
         self.write({
             'state': 'vigente',
+            'parcelas_geradas': True
            })
-        
+        self._set_state_parcelas('vigente')
+
+ 
+
     def action_gera_parcelas(self):
         self._gera_parcelas_financeiro(self.qtd_parcelas,self.valor_parcelas)
+        self.write({
+            'parcelas_geradas': True
+           })
         
         
         
     def action_cancela_contrato(self):
         self._cancela_parcelas_financeiro()
         self.curso_matricula_id.write({
-            'contrato_gerado' : 0
+            'contrato_gerado' : False
         })
         self.write({
-            'state': 'vigente',
+            'state': 'draft',
            })
+    
+    def action_suspender_contrato(self):
+        self._sespende_parcelas_financeiro()
+        self.curso_matricula_id.write({
+            'contrato_gerado' : True
+        })
+        self.write({
+            'state': 'draft',
+           })
+
+    def action_reativar_contrato(self):
+        self._reativa_parcelas_financeiro()
+        self.curso_matricula_id.write({
+            'contrato_gerado' : True
+        })
+        self.write({
+            'state': 'draft',
+           })
+
     def action_finaliza_contrato(self):
-        if self._verifica_parcelas_abertas_financeiro():
+        parcelas_em_aberto = self._verifica_parcelas_abertas_financeiro()
+        _logger.debug("parcelas em aberto")
+        _logger.debug(parcelas_em_aberto)
+        if len(parcelas_em_aberto) == 0:
             self.write({
                 'state': 'finalizado',
             })
         else:
-            raise ValidationError('Contrato com parcelas em aberto. Não pode ser finalizado!')
+            raise ValidationError('Contrato com %s parcelas em aberto. Não pode ser finalizado!' % (len(parcelas_em_aberto)))
 
-            
-
-
-    # def action_encerrar_matricula(self):
-    #     self.write({
-    #         'state': 'encerrada',
-    #         'matricula_aberta': False,
-    #         })
-    
-    # def action_cancelar_matricula(self):
-    #     self.write({
-    #         'state': 'cancelada',
-    #         'matricula_aberta': False,
-    #         })
-
-    # def action_abrir_matricula(self):
-    #     self.write({
-    #         'state': 'aberta',
-    #         'matricula_aberta': True,
-    #         })
-    
-    # def action_go_matriculas(self):
-
-    #     _logger.info("action open matriculas")
-        
-    #     return {
-    #         'name': _('Matriculados'),
-    #         'type': 'ir.actions.act_window',
-    #         'target':'current',
-    #         'view_mode': 'tree,form',
-    #         'res_model': 'geracad.curso.matricula',
-    #         'domain': [('curso_turma_id', '=', self.id)],
-    #     }
-        
 
 
         

@@ -9,6 +9,7 @@
         <tree editable="bottom">
           <field name="disciplina_matricula_id" readonly="1"/>
           <field name="turma_disciplina_id"  readonly="1"/>
+          <field name="faltas"/>
           <field name="nota_1"/>
           <field name="nota_2"/>
           <field name="final"/>
@@ -30,6 +31,7 @@
                   
                   <field name="disciplina_matricula_id"/>
                   <field name="turma_disciplina_id"/>
+                  <field name="faltas"/>
                   <field name="nota_1"/>
                   <field name="nota_2"/>
                   <field name="final"/>

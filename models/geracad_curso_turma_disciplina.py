@@ -24,8 +24,15 @@ class GeracadCursoTurmDisciplina(models.Model):
     disciplina_id = fields.Many2one(
         'geracad.curso.disciplina',
         string='Disciplina',
-        required=True
+        required=True, 
+        # domain=lambda self: self._get_disiplina_id_domain()
+        
         )
+    
+    def _get_disiplina_id_domain(self):
+        res = [('id', '=', 0)] # Nothing accepted by domain, by default
+        return res
+
     disciplina_nome = fields.Char("Disciplina", 
         related='disciplina_id.name',
         readonly=True,
@@ -35,39 +42,72 @@ class GeracadCursoTurmDisciplina(models.Model):
         'geracad.curso.turma',
         string='Curso',
         )
+    
     # curso_turma_nome = fields.Char("Código Curso", 
     #     related='curso_turma_id.name',
     #     readonly=True,
     #     store=True
     # )
-    # curso_turma_curso_nome = fields.Char("Curso", 
-    #     related='curso_turma_id.curso_id.name',
-    #     readonly=True,
-    #     store=True
-    # )
+    curso_id = fields.Many2one(
+        string = "Curso", 
+        related='curso_turma_id.curso_id',
+        readonly=True,
+        store=True
+    )
+    
+    
+    periodo = fields.Integer(
+        string = "Periodo", 
+        compute = "_compute_dados_grade",
+        readonly=True,
+        store=True
+        
+    )
+
+    carga_horaria = fields.Integer(
+        string = "Periodo", 
+        compute = "_compute_dados_grade",
+        readonly=True,
+        store=True
+        
+    )
+   
+   
+    @api.depends('curso_turma_id','disciplina_id') 
+    def _compute_dados_grade(self):
+        for record in self:
+            grade_id = self.env['geracad.curso.grade'].search([
+                ('disciplina_id', '=', record.disciplina_id.id  ),
+                ('curso_id', '=', record.curso_id.id  )], 
+                offset=0, limit=1, order=None, count=False)
+            
+            record.periodo = grade_id.periodo
+            record.carga_horaria = grade_id.disciplina_id_carga_horaria
+        
+  
    
     matricula_aberta = fields.Boolean(string="Matrícula Aberta", default=True)
     
     data_abertura = fields.Date(
         string='Data Abertura',
         default=fields.Date.context_today,
-        track_visibility='onchange'
+        track_visibility='true'
     )
     data_inicio = fields.Date(
         string='Inicio das aulas',
         default=fields.Date.context_today,
-        track_visibility='onchange'
+        track_visibility='true'
     )
     data_previsao_termino = fields.Date(
         string='Previsão de término',
         default=fields.Date.context_today,
-        track_visibility='onchange'
+        track_visibility='true'
     )
 
     data_encerramento = fields.Date(
         string='Data Encerramento',
         default=fields.Date.context_today,
-        track_visibility='onchange'
+        track_visibility='true'
     )
     professor_id =  fields.Many2one(
         'res.partner',
@@ -77,15 +117,16 @@ class GeracadCursoTurmDisciplina(models.Model):
         )
    
     vagas = fields.Integer(
-        string='Vagas',track_visibility='onchange'
+        string='Vagas',track_visibility='true'
     )
     state = fields.Selection([
         ('draft', 'Rascunho'),
         ('aberta', 'Matrícula Aberta'),
         ('encerrada', 'Matrícula Encerrada'),
         ('suspensa', 'Matrícula Suspensa'), 
+        ('em_andamento', 'Em andamento'), 
         ('cancelada', 'Cancelada'),
-    ], string="Status", readonly=1,default="draft", track_visibility='onchange')
+    ], string="Status", default="draft", track_visibility='true')
 
     sala_id = fields.Many2one(
         'geracad.curso.sala',

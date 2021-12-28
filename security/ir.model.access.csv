@@ -1,4 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_geracad_curso_portal,access_geracad_curso_access_geracad_curso_portal,model_geracad_curso,base.group_portal,1,0,0,0
 access_geracad_curso,access_geracad_curso,model_geracad_curso,base.group_user,1,1,1,0
 access_geracad_curso_admin,access_geracad_curso,model_geracad_curso,base.group_system,1,1,1,1
 
@@ -24,6 +25,7 @@ access_geracad_curso_unidade_admin,access_geracad_curso_unidade_admin,model_gera
 access_geracad_curso_turma,access_geracad_curso_turma,model_geracad_curso_turma,base.group_user,1,1,1,0
 access_geracad_curso_turma_admin,access_geracad_curso_turma_admin,model_geracad_curso_turma,base.group_system,1,1,1,1
 
+access_geracad_curso_matricula_portal,access_geracad_curso_matricula_portal,model_geracad_curso_matricula,base.group_portal,1,0,0,0
 access_geracad_curso_matricula,access_geracad_curso_matricula,model_geracad_curso_matricula,base.group_user,1,1,1,0
 access_geracad_curso_matricula_admin,access_geracad_curso_matricula_admin,model_geracad_curso_matricula,base.group_system,1,1,1,1
 

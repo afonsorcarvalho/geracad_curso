@@ -16,7 +16,7 @@ class GeracadCursoMatriculaDisciplina(models.Model):
     
 
 
-    name = fields.Char("Nome")
+    name = fields.Char("Nome", compute="_compute_name", store=True)
     
     company_id = fields.Many2one(
         'res.company', string="Unidade",required=True, default=lambda self: self.env.company
@@ -58,23 +58,34 @@ class GeracadCursoMatriculaDisciplina(models.Model):
     data_matricula = fields.Date(
         string='Data Matrícula',
         default=fields.Date.context_today,
-        track_visibility='onchange'
+        track_visibility='true'
     )
 
-   
    
     state = fields.Selection([
         ('draft', 'Rascunho'),
         ('inscrito', 'Inscrito'),
+        ('trancado', 'Trancada'),
+        ('abandono', 'Abandono'), 
         ('cancelada', 'Cancelada'),
-       
+        ('expulso', 'Expulso'), 
+        ('falecido', 'Falecido'),
+        ('formado', 'Formado'),
         
-    ], string="Status", default="draft", track_visibility='onchange')
+    ], string="Status", default="draft", readonly=False)
+
 
 
     active = fields.Boolean(default=True)
     
     _sql_constraints = [ ('curso_matricula_id_turma_disciplina_id_unique','UNIQUE(curso_matricula_id, turma_disciplina_id)','Aluno já matriculado nessa disciplina') ]
+
+    @api.depends('curso_matricula_id')
+    def _compute_name(self):
+        for record in self:
+            record.name = record.curso_matricula_id.name
+    
+
 
     @api.model
     def create(self, vals):
@@ -90,15 +101,15 @@ class GeracadCursoMatriculaDisciplina(models.Model):
         _logger.info("Criado Matricula")
         _logger.info(result)
 
-        # criando as notas do aluno
+        #criando as notas do aluno
         notas_disciplina = self.env['geracad.curso.nota.disciplina'].create(
-            {
-                "company_id": result.company_id.id,
-                "disciplina_matricula_id": result.id,
-                "turma_disciplina_id": result.turma_disciplina_id.id
+             {
+                 "company_id": result.company_id.id,
+                 "disciplina_matricula_id": result.id,
+                 "turma_disciplina_id": result.turma_disciplina_id.id
 
-            }
-            )
+             }
+             )
 
 
 

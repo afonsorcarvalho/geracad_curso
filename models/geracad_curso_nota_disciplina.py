@@ -24,7 +24,7 @@ class GeracadCursoNotaDisciplina(models.Model):
 
     disciplina_matricula_id = fields.Many2one(
         'geracad.curso.matricula.disciplina',
-        string='Matricula',
+        string='Matricula Disciplina',
         required=True
         )
 
@@ -36,22 +36,60 @@ class GeracadCursoNotaDisciplina(models.Model):
         store=True
         
         )
+    curso_id = fields.Many2one(
+        'geracad.curso',
+        
+        related='disciplina_matricula_id.curso_matricula_id.curso_turma_id.curso_id',
+        readonly=True,
+        store=True
+        
+        )
 
     turma_disciplina_id = fields.Many2one(
         "geracad.curso.turma.disciplina",
         string='Turma Disciplina',
-        required=True
+        
+        related='disciplina_matricula_id.turma_disciplina_id',
+        readonly=True,
+        store=True,
+        
+        
         
         )
+    disciplina_id = fields.Many2one(
+        "geracad.curso.disciplina",
+        related='turma_disciplina_id.disciplina_id',
+        
+        readonly=True, 
+        
+        string='Disciplina',          
+        )
+
     faltas = fields.Integer(
         string='Faltas',
         default=0
     )
     
+    periodo = fields.Integer(
+        string='periodo',
+        compute="_compute_periodo",
+        store=True
+    )
+    gerado_historico_final = fields.Boolean("Histórico final?")
+   
+    @api.depends('disciplina_matricula_id','curso_matricula_id')
+    def _compute_periodo(self):
+        for record in self:
+            grade = self.env["geracad.curso.grade"].search([('curso_id','=',record.curso_id.id),('disciplina_id','=',record.disciplina_id.id)])
+            record.periodo = grade.periodo
+
+    
     nota_1 = fields.Float()
     nota_2 = fields.Float()
     final = fields.Float()
-    media = fields.Float("Média", compute="_compute_media")
+    media = fields.Float("Média", compute="_compute_media", 
+    store=True
+    )
     situation = fields.Selection([
         ('AM', 'AM'),
         ('AP', 'AP'),
@@ -62,7 +100,8 @@ class GeracadCursoNotaDisciplina(models.Model):
         ('TR', 'TR'),
         ('AB', 'AB'),
         ('EA', 'EA'),
-        ], default='IN')
+        ('FA', 'FA'),
+        ], default='IN', string="Situação")
 
 
    
@@ -75,7 +114,7 @@ class GeracadCursoNotaDisciplina(models.Model):
     #     )   
    
    
-
+    
    
    
     state = fields.Selection([
@@ -84,7 +123,7 @@ class GeracadCursoNotaDisciplina(models.Model):
         ('concluida', 'Concluida'),
        
         
-    ], string="Status", default="draft", track_visibility='onchange')
+    ], string="Status", default="draft", track_visibility='true')
 
 
     active = fields.Boolean(default=True)
