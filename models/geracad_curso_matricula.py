@@ -209,10 +209,10 @@ class GeracadCursoMatricula(models.Model):
         count_disciplinas = self.env['geracad.curso.nota.disciplina'].search([('curso_matricula_id', '=', self.id),('periodo', '=', periodo)], count=True)
         return count_disciplinas
     
-    def _get_portal_return_action(self):
-        """ Return the action used to display matriculas when returning from customer portal. """
-        self.ensure_one()
-        return self.env.ref('sale.action_quotations_with_onboarding')
+    # def _get_portal_return_action(self):
+    #     """ Return the action used to display matriculas when returning from customer portal. """
+    #     self.ensure_one()
+    #     return self.env.ref('sale.action_quotations_with_onboarding')
     
     # url de acesso no portal
     def _compute_access_url(self):

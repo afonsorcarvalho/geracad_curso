@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="view_historico_aluno_template">
+
+		<t t-call="web.html_container">
+			<t t-foreach="docs" t-as="o">
+				<t t-call="web.external_layout">
+					<style>
+						.o_report_layout_background{
+							background-image: none;
+						}
+						.o_background_header h3 {
+							max-width: 400px;
+						}
+						table { }
+						td {  }
+						td.col-disciplina { width: 300px  }
+					
+						.float-right {width:400px}
+						.dados-aluno {padding-top: 10px}
+						.cabecalho-historico {padding: 20px}
+						#table_cabecalho {
+						
+						}
+						.pt-5{
+							padding-top: 0rem !important;
+						}
+						.assinaturas{
+							padding-top: 4rem ;
+						}
+						.legenda{
+							font-size: 0.6rem;
+						}
+
+				  </style>
+					<div class="page">
+						<table class="table table-sm table-striped" style="table-layout: fixed" id="table_cabecalho">
+							<thead style="display: table-row-group">
+								<tr>
+									<th colspan="8">
+										<div class="row cabecalho-historico">
+											<div class="col-12">
+												<h4 class="text-center color-primary">
+													HISTÓRICO ESCOLAR
+												</h4>
+												<h5 class="text-center" t-field="o.curso_nome" />
+												<h6 class="text-center">
+													Resolução n° 144/2017-CEE/MA
+												</h6>
+											</div>
+										</div>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td colspan="8">
+										<div class="row dados-aluno">
+											<div class="col-6">
+												<div class="col-auto" name="data_conclusao">
+													<strong>ALUNO:</strong>
+													<span t-field="o.aluno_id.display_name" />
+												</div>
+												<div class="col-auto" name="matricula">
+													<strong>MATRÍCULA:</strong>
+													<span t-field="o.name" />
+												</div>
+												<div class="col-auto" name="l10n_br_cnpj_cpf">
+													<strong>CPF:</strong>
+													<span t-field="o.aluno_id.l10n_br_cnpj_cpf" />
+												</div>
+												<div class="col-auto" name="data_nascimento">
+													<strong>DATA DE NASCIMENTO:</strong>
+													<span t-field="o.aluno_id.data_nascimento" />
+												</div>
+											</div>
+											<div class="col-6">
+												<div class="col-auto" name="data_matricula">
+													<strong>DATA INÍCIO:</strong>
+													<span t-field="o.data_matricula" />
+												</div>
+												<div class="col-auto" name="data_conclusao">
+													<strong>DATA TÉRMINO:</strong>
+													<span t-field="o.data_conclusao" />
+												</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+
+						</table>
+						
+						<t t-foreach="o._get_periodos()" t-as="periodo">
+							
+							<t t-if="o._tem_notas_periodo(periodo)">
+							
+								<t t-call="geracad_curso.view_historico_aluno_notas_template" />
+							</t>
+							
+						</t>
+						<div class="row">
+							<div class="col-auto text-right legenda ">
+									LEGENDA:  AM - APROV. MEDIA   AP - APROV. FINAL  RC - REP. CONTEUDO  RF - REP. P/ FALTA  IN - INSCRITO  CA - CANCELAMENTO  TR - TRANCAMENTO  AB - ABANDONO  EA - ESTUDOS APROVEITADOS
+							</div>
+
+						</div>
+						<div class="row assinaturas">
+							<div class="col-6 text-center">
+								_____________________________________________
+								<br />
+								<strong>Carlos Cesar Bezerra de Carvalho</strong>
+								<br />
+								<span>Engº Eletricista - CREA 6091/D</span>
+								<br />
+								<span>Diretor</span>
+								<br />
+
+
+							</div>
+							<div class="col-6 text-center">
+								_____________________________________________
+								<br />
+								<strong>Samara Maria Soares Prazeres</strong>
+								<br />
+								<span>Secretária Escolar</span>
+								<br />
+
+							</div>
+						</div>
+					</div>
+				</t>
+			</t>
+		</t>
+	</template>
+</odoo>

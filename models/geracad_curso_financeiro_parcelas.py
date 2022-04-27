@@ -34,7 +34,7 @@ class GeracadCursoFinanceiroParcelas(models.Model):
     contrato_id = fields.Many2one(
         'geracad.curso.contrato',
         string='Contrato',
-        required=True
+        required=False
         )
     aluno_id = fields.Many2one(
         

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo> 
+  <template id='view_contrato_aluno_template'>
+    <style>
+      p{border:1px solid lightgray; margin-left:16px;}
+      
+
+    </style>
+    <t t-call='web.html_container'>
+      <t t-foreach='docs' t-as='o'>
+        <t t-call='web.external_layout'>
+          <div class="page">
+            
+            <h2 style="text-align: center;" >Declaração</h2>
+            <p style="text-align: justify;">Declaramos para os devidos fins que o aluno Wolney Ribeiro Borges, CPF nº 92641652315, encontra-se regularmente matriculado nesta instituição de ensino técnico profissionalizante, cursando atualmente o 4° período do curso Técnico em Telecomunicações.</p>
+ 
+<p style="text-align: justify;">A Carga Horária total do Curso Técnico em Telecomunicações é de 1500 horas, dentre as quais estão inclusas as 300 horas de estágio supervisionado obrigatório.</p>
+
+<p style="text-align: justify;">Informamos ainda que o referido curso é reconhecido pelo Conselho de Educação do Estado do Maranhão, conforme resolução nº 191/2005-CEE  e registrado no Conselho Regional de Engenharia, Arquitetura e Agronomia do Maranhão (CREA-MA).</p>
+
+<p style="text-align: justify;">Esta declaração terá validade de 30 (trinta) dias após a data de sua emissão.</p>
+        </div>
+      </t>
+    </t>
+    </t>
+  </template>
+</odoo>
+ 
+
+ 
+ 
+ 
+ 
