@@ -65,13 +65,21 @@
                   <field name="valor_parcelas"/>
                   <field name="forma_de_pagamento"/>
                   <field name="data_vencimento_parcelas"/>
+                  
                   <field name="valor_total"/>
                   
                   
                 </group>
-                <group string="Dados Sacado">
+                <group string="Responsável Financeiro">
                   <field name="sacado"/>     
                   <field name="sacado_cpf"/>     
+                  <field name="valor_total_pago"/>     
+                  <field name="valor_a_pagar" decoration-danger="1"/>
+                  <field name="data_assinatura_contrato"/>
+                              
+                </group>
+                <group string="Valores Totais">
+                
                   <field name="valor_total_pago"/>     
                   <field name="valor_a_pagar" decoration-danger="1"/>     
                               

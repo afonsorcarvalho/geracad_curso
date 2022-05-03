@@ -74,6 +74,7 @@ class GeracadCursoContrato(models.Model):
     desconto = fields.Float("Desconto")
     data_vencimento_parcelas = fields.Date("Vencimento parcelas", required=True)
     parcelas_contrato_ids = fields.One2many('geracad.curso.financeiro.parcelas', 'contrato_id')
+    data_assinatura_contrato = fields.Date("Data assinatura", required=True)
     valor_total = fields.Float("Valor Total", compute="_compute_valor_total_contrato")
     valor_total_pago = fields.Float("Valor Total Pago", compute="_compute_valor_total_pago_contrato")
     valor_a_pagar = fields.Float("Valor Total a Pagar", compute="_compute_valor_total_a_pagar_contrato")
