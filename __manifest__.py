@@ -19,7 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','geracad_aluno', 'portal',],
+    'depends': ['base','geracad_aluno', 'portal'],
 
     # always loaded
     'data': [
@@ -31,6 +31,7 @@
         'views/geracad_curso_disciplina_view.xml',
         'views/geracad_curso_turma_disciplina_view.xml',
         'views/geracad_curso_matricula_disciplina_view.xml',
+        'views/geracad_curso_matricula_view.xml',
         'views/geracad_curso_nota_disciplina_view.xml',
         'views/geracad_curso_financeiro_parcelas_view.xml',
         'views/geracad_curso_view.xml',
@@ -41,6 +42,7 @@
         'reports/report_contrato_aluno_template.xml',
         'reports/report_historico_aluno_notas_template.xml',
         'reports/report_historico_aluno_template.xml',
+        'reports/report_turma_disciplina_diario_template.xml',
         'reports/report_actions.xml',
     ],
     # only loaded in demonstration mode
