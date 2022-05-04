@@ -18,29 +18,21 @@ class GeracadCursoTurmDisciplina(models.Model):
 
     name = fields.Char("Código")
     company_id = fields.Many2one(
-        'res.company', required=True, default=lambda self: self.env.company
+        'res.company',string="Unidade", required=True, default=lambda self: self.env.company
     )
 
     disciplina_id = fields.Many2one(
         'geracad.curso.disciplina',
         string='Disciplina',
         required=True, 
-        # domain=lambda self: self._get_disiplina_id_domain()
+   
         
         )
-    
-    def _get_disiplina_id_domain(self):
-        res = [('id', '=', 0)] # Nothing accepted by domain, by default
-        return res
+   
 
-    disciplina_nome = fields.Char("Disciplina", 
-        related='disciplina_id.name',
-        readonly=True,
-        store=True
-    )
     curso_turma_id = fields.Many2one(
         'geracad.curso.turma',
-        string='Curso',
+        string='Curso Turma',
         )
     
     # curso_turma_nome = fields.Char("Código Curso", 
@@ -72,7 +64,7 @@ class GeracadCursoTurmDisciplina(models.Model):
         
     )
    
-   
+    
     @api.depends('curso_turma_id','disciplina_id') 
     def _compute_dados_grade(self):
         for record in self:
@@ -145,7 +137,48 @@ class GeracadCursoTurmDisciplina(models.Model):
     notas = fields.One2many('geracad.curso.nota.disciplina', 'turma_disciplina_id')
     active = fields.Boolean(default=True)
     
+    
+    #apaga os filtros que não serão possível fazer procura
+    def get_fields_to_ignore_in_search(self): 
+        
+        return [ 'message_needaction',
+            'active',
+            'active',
+            'create_date',
+            'create_uid',
+            'message_channel_ids',
+            'message_attachment_count',
+            'message_follower_ids',
+            'message_has_error',
+            'message_has_error_counter',
+            'message_has_sms_error',
+            'message_ids',
+            'message_is_follower',
+            'message_main_attachment_id',
+            'message_needaction',
+            'message_needaction_counter',
+            'message_partner_ids',
+            'message_unread',
+            'message_unread_counter',
+            'website_message_ids',
+            'write_date',
+            'write_uid',
+            '__last_update',
+            
+            ]
 
+    @api.model
+    def fields_get(self, allfields=None, attributes=None):
+        res = super(GeracadCursoTurmDisciplina, self).fields_get(allfields, attributes=attributes)
+        _logger.info(res)
+        for field in self.get_fields_to_ignore_in_search():
+
+            if res.get(field):
+                res[field]['searchable'] = False 
+                res[field]['selectable'] = False 
+                res[field]['sortable'] = False     
+                res[field]['exportable'] = False 
+        return res
 
     def _compute_alunos_count(self):
         for record in self:    

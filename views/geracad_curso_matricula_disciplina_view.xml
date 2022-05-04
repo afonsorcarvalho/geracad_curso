@@ -24,6 +24,72 @@
       </field>
     </record>
 
+    <record id="geracad_curso_matricula_disciplina_search" model="ir.ui.view">
+      <field name="name">cursos.matricula.disciplina.search</field>
+      <field name="model">geracad.curso.matricula.disciplina</field>
+      <field name="arch" type="xml">
+       
+        <search string="Procure">
+          <field name="name" string="Código da matricula"  />
+         
+          <field name="curso_matricula_id" />
+       
+          <field name="turma_disciplina_id" />
+          <field name="aluno_id" />
+          <field name="data_matricula" />
+       
+          <field name="company_id" />
+          <field name="state" />
+         
+          <filter name="filter_data_matricula" date="data_matricula" 
+            
+            string="Data da matrícula"/>
+          
+          
+          
+          <filter name="groupby_unidade" string="Unidade" context="{'group_by' : 'company_id'}"></filter>
+          
+          <filter name="data_matricula" string="Data da matricula" domain="[]" context="{'group_by':'data_matricula'}"/>
+         
+         
+          <filter name="state" string="Status" domain="[]" context="{'group_by':'state'}"/>
+        
+          
+          
+         
+          <searchpanel>
+            <field name="state" string="Status" enable_counters="1" select="multi"/>
+            <field name="company_id" string="Unidade" enable_counters="1" select="multi"/>
+           
+          
+            
+        </searchpanel>
+
+        </search>
+      </field>
+    </record>
+    <record model="ir.ui.view" id="geracad_curso_matricula_disciplina_pivot">
+      <field name="name">geracad.curso.matricula.disciplina.pivot</field>
+      <field name="model">geracad.curso.matricula.disciplina</field>
+      <field name="arch" type="xml">
+          <pivot string="Matriculas em Disciplinas" disable_linking="True">
+            <field name="curso_nome" type="row"/>
+            <field name="turma_disciplina_id" type="measure"/>
+              
+          </pivot>
+      </field>
+  </record>
+  <record model="ir.ui.view" id="geracad_curso_matricula_disciplina_graph">
+    <field name="name">geracad.curso.matricula.disciplina.graph</field>
+    <field name="model">geracad.curso.matricula.disciplina</field>
+      <field name="arch" type="xml">
+          <graph string="Matriculas em Disciplinas">
+              <field name="curso_nome" type="row"/>
+              <field name="turma_disciplina_id" type="measure"/>
+          </graph>
+      </field>
+  </record>
+
     <record model="ir.ui.view" id="geracad_curso_matricula_disciplina_form_view">
       <field name="name">geracad.curso.matricula.disciplina.form</field>
       <field name="model">geracad.curso.matricula.disciplina</field>
@@ -56,27 +122,12 @@
     </record>
 
 
-    <record id="geracad_curso_matricula_disciplina_search" model="ir.ui.view">
-      <field name="name">geracad.curso.matricula.disciplina.search</field>
-      <field name="model">geracad.curso.matricula.disciplina</field>
-      <field name="arch" type="xml">
-        <search string="Procura Matricula">
-          <field name="name"/>
-          <field name="curso_matricula_id"/>
-          <field name="curso_nome"/>
-          <field name="aluno_id" />
-          <field name="turma_disciplina_id" />   
-          <field name="data_matricula" />   
-          
-      </search>
-      </field>
-    </record>
-
+  
     <record model="ir.actions.act_window" id="geracad_curso_matricula_disciplina_action_window">
       <field name="name">Matricula Disciplina</field>
       <field name="type">ir.actions.act_window</field>
       <field name="res_model">geracad.curso.matricula.disciplina</field>
-      <field name="view_mode">tree,form</field>
+      <field name="view_mode">tree,form,pivot,graph</field>
    
       <field name="search_view_id" ref="geracad_curso_matricula_disciplina_search"/>
     

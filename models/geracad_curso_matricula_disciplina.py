@@ -16,7 +16,7 @@ class GeracadCursoMatriculaDisciplina(models.Model):
     
 
 
-    name = fields.Char("Nome", compute="_compute_name", store=True)
+    name = fields.Char("Cód. Matrícula", compute="_compute_name", store=True)
     
     company_id = fields.Many2one(
         'res.company', string="Unidade",required=True, default=lambda self: self.env.company
@@ -39,6 +39,7 @@ class GeracadCursoMatriculaDisciplina(models.Model):
         required=True
         
         )
+    
 
     aluno_id = fields.Many2one(
         

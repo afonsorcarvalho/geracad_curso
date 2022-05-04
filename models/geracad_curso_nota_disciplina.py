@@ -6,6 +6,10 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
+#TODO
+# Fazer botão de finalizar notas
+# fazer estatísticas de notas (com média por curso, melhor nota etc)
+
 class GeracadCursoNotaDisciplina(models.Model):
     _name = "geracad.curso.nota.disciplina"
     _description = "Notas de Disciplinas de Cursos"
@@ -30,8 +34,27 @@ class GeracadCursoNotaDisciplina(models.Model):
 
     curso_matricula_id = fields.Many2one(
         'geracad.curso.matricula',
+        string="Matricula Curso",
         
         related='disciplina_matricula_id.curso_matricula_id',
+        readonly=True,
+        store=True
+        
+        )
+    curso_matricula_state = fields.Selection(
+       
+        string="State Curso",
+        
+        related='disciplina_matricula_id.state',
+        readonly=True,
+        store=True
+    )
+    
+    curso_turma_id = fields.Many2one(
+        'geracad.curso.turma',
+        string="Turma Curso",
+        
+        related='disciplina_matricula_id.curso_matricula_id.curso_turma_id',
         readonly=True,
         store=True
         
@@ -62,7 +85,8 @@ class GeracadCursoNotaDisciplina(models.Model):
         
         readonly=True, 
         
-        string='Disciplina',          
+        string='Disciplina',      
+        store=True    
         )
 
     faltas = fields.Integer(
@@ -119,8 +143,8 @@ class GeracadCursoNotaDisciplina(models.Model):
    
     state = fields.Selection([
         ('draft', 'Rascunho'),
-        ('atualizada', 'Atualizada'),
-        ('concluida', 'Concluida'),
+        ('atualizando', 'Em atualização'),
+        ('concluida', 'Concluída'),
        
         
     ], string="Status", default="draft", track_visibility='true')
@@ -143,12 +167,6 @@ class GeracadCursoNotaDisciplina(models.Model):
     
   
     
-    """
-
-            BUTTON ACTIONS
-
-    """
-
     
 
         

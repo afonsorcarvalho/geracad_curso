@@ -17,10 +17,13 @@
           <field name="data_inicio" optional="show"/>
           <field name="data_previsao_termino" optional="show"/>
           <field name="data_encerramento" optional="show"/>
+          <field name="e_pendencia" optional="show"/>
+          <field name="e_aproveitamento" optional="show"/>
           <field name="state" 
           widget="badge"
-           optional="show"/>
+          optional="show"/>
           
+          <field name="company_id" optional="show"/>
      
      
 
@@ -28,6 +31,87 @@
     
       </field>
     </record>
+
+    <record id="geracad_curso_turma_disciplina_search" model="ir.ui.view">
+      <field name="name">cursos.turma.disciplina.search</field>
+      <field name="model">geracad.curso.turma.disciplina</field>
+      <field name="arch" type="xml">
+       
+        <search string="Procure">
+          <field name="name" string="Código da turma"  />
+          <field name="disciplina_id"  />
+          <field name="curso_turma_id" />
+       
+          <field name="professor_id" />
+          <field name="data_abertura" />
+          <field name="data_inicio" />
+          <field name="data_previsao_termino" />
+          <field name="data_encerramento" />
+          <field name="company_id" />
+          <field name="state" />
+         
+          <filter name="filter_data_abertura" date="data_abertura" 
+            
+            string="Data de Abertura"/>
+          <filter name="filter_data_inicio" date="data_inicio" 
+            
+            string="Data de início das aulas"/>
+          <filter name="filter_data_previsao_termino" date="data_previsao_termino" 
+            
+            string="Data previsão de término"/>
+          <filter name="filter_data_encerramento" date="data_encerramento" 
+            
+            string="Data de encerramento"/>
+          
+          <filter name="groupby_unidade" string="Unidade" context="{'group_by' : 'company_id'}"></filter>
+          <filter name="groupby_e_pendencia" string="Pendência" context="{'group_by' : 'e_pendencia'}"></filter>
+          <filter name="groupby_e_aproveitamento" string="Aproveitamento" context="{'group_by' : 'e_aproveitamento'}"></filter>
+          <filter name="data_abertura" string="Data de abertura" domain="[]" context="{'group_by':'data_abertura'}"/>
+          <filter name="data_inicio" string="Data de início das aulas" domain="[]" context="{'group_by':'data_inicio'}"/>
+          <filter name="data_previsao_termino" string="Data previsão de término" domain="[]" context="{'group_by':'data_previsao_termino'}"/>
+          <filter name="e_pendencia" string="É pendência" domain="[('e_pendencia','=', True)]" />
+          <filter name="not_pendencia" string="Não é pendência" domain="[('e_pendencia','=', False)]" />
+          <filter name="e_aproveitamento" string="É aproveitamento" domain="[('e_aproveitamento','=', True)]" />
+          <filter name="not_aproveitamento" string="Não é aproveitamento" domain="[('e_aproveitamento','=', False)]" />
+          <filter name="data_encerramento" string="Data de encerramento" domain="[]" context="{'group_by':'data_encerramento'}"/>
+         
+          <filter name="state" string="Status" domain="[]" context="{'group_by':'state'}"/>
+        
+          
+          
+         
+          <searchpanel>
+            <field name="state" string="Status" enable_counters="1" select="multi"/>
+            <field name="company_id" string="Unidade" enable_counters="1" select="multi"/>
+           
+          
+            
+        </searchpanel>
+
+        </search>
+      </field>
+    </record>
+    <record model="ir.ui.view" id="geracad_curso_turma_disciplina_pivot">
+      <field name="name">geracad.curso.turma.disciplina.pivot</field>
+      <field name="model">geracad.curso.turma.disciplina</field>
+      <field name="arch" type="xml">
+          <pivot string="Turmas Disciplinas" disable_linking="True">
+            <field name="disciplina_id" type="row"/>
+            <field name="professor_id" type="measure"/>
+              
+          </pivot>
+      </field>
+  </record>
+  <record model="ir.ui.view" id="geracad_curso_turma_disciplina_graph">
+    <field name="name">geracad.curso.turma.disciplina.graph</field>
+    <field name="model">geracad.curso.turma.disciplina</field>
+      <field name="arch" type="xml">
+          <graph string="Turmas Disciplinas">
+              <field name="disciplina_id" type="row"/>
+              <field name="professor_id" type="measure"/>
+          </graph>
+      </field>
+  </record>
 
     <record model="ir.ui.view" id="geracad_curso_turma_disciplina_form_view">
       <field name="name">geracad.curso.turma.disciplina.form</field>
@@ -63,12 +147,12 @@
               <field name="display_name" readonly="1" />
             </h1>
             <group>
-              <group string="Turma Disciplina">
+              <group string="Dados da Turma Disciplina">
                 <field name="curso_turma_id" string="Turma Curso" options="{'no_create': True }" attrs="{'readonly' : [('state','!=', 'draft')]  }" />
+                <field name="curso_id"  />
                 <field name="disciplina_id" options="{'no_create': True}" attrs="{'readonly' : [('state','!=', 'draft')]  }"
                 
                 />
-                <field name="curso_id"  />
         
                 <field name="periodo"/>
                 <field name="carga_horaria"/>
@@ -83,11 +167,16 @@
                 <field name="data_encerramento" />
 
               </group>
+             
             </group>
-            <group>
-              <group string="Outras informações">
+            <group string="Outras informações">
+              <group >
                 <field name="matricula_aberta" attrs="{'readonly' : [('state','!=', 'draft')]  }" />
                 <field name="e_pendencia" attrs="{'readonly' : [('state','!=', 'draft')]  }" />
+               
+              </group>
+              <group >
+               
                 <field name="e_aproveitamento" attrs="{'readonly' : [('state','!=', 'draft')]  }" />
                 <field name="company_id" string="Unidade" options="{'no_create': True}" attrs="{'readonly' : [('state','!=', 'draft')]  }" />
 
@@ -120,30 +209,13 @@
     </record>
 
 
-    <record id="geracad_curso_turma_disciplina_search" model="ir.ui.view">
-      <field name="name">geracad.curso.turma.disciplina.search</field>
-      <field name="model">geracad.curso.turma.disciplina</field>
-      <field name="arch" type="xml">
-        <search string="Procura Disciplina">
-          <field name="name"/>
-          <field name="curso_turma_id" />
-          <field name="matricula_aberta" />
-          <field name="professor_id"/>
-          <field name="vagas"/>
-          <field name="sala_id"/>
-          <field name="e_pendencia" />
-          <field name="e_aproveitamento" />
-         
-         
-      </search>
-      </field>
-    </record>
+    
 
     <record model="ir.actions.act_window" id="geracad_curso_turma_disciplina_action_window">
       <field name="name">Turma de Disciplina</field>
       <field name="type">ir.actions.act_window</field>
       <field name="res_model">geracad.curso.turma.disciplina</field>
-      <field name="view_mode">tree,form</field>
+      <field name="view_mode">tree,form,pivot,graph</field>
    
       <field name="search_view_id" ref="geracad_curso_turma_disciplina_search"/>
     
