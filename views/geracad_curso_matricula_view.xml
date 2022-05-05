@@ -13,7 +13,7 @@
           default_order="data_matricula desc"
           >        
            
-            <field name="name" string="Nome" optional="show" />
+            <field name="name" string="Código" optional="show" />
             
             
             <field name="aluno_id" optional="show" />
