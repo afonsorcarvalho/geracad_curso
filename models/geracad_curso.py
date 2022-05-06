@@ -52,7 +52,6 @@ class GeracadCurso(models.Model):
 
     @api.depends('grade_id')
     def _compute_carga_horaria_total(self):
-    
         for record in self:
             sum = 0
             for grade_line in record.grade_id:

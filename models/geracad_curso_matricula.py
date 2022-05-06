@@ -40,6 +40,14 @@ class GeracadCursoMatricula(models.Model):
         readonly=True,
         store=True
     )
+    curso_type = fields.Many2one(
+        string='Tipo do Curso',
+        comodel_name="geracad.curso.type",related='curso_id.type_curso',
+        store=True,
+        readonly=True
+        
+    )
+   
     curso_turma_codigo = fields.Char( 
         related='curso_turma_id.name',
         string="Código da turma",
@@ -53,7 +61,8 @@ class GeracadCursoMatricula(models.Model):
         
         domain=[('e_aluno','=',True)]
         
-        )   
+        )  
+    aluno_mobile =  fields.Char(related='aluno_id.mobile',readonly=True) ;
    
     data_matricula = fields.Date(
         string='Data Matrícula',
@@ -77,7 +86,9 @@ class GeracadCursoMatricula(models.Model):
         ('falecido', 'Falecido'),
         ('formado', 'Formado'),
         
-    ], string="Status", default="draft", readonly=False)
+    ], string="Status", default="draft", readonly=False, tracking=True
+    
+    )
 
     matriculas_disciplina_ids = fields.One2many(
        
@@ -102,7 +113,7 @@ class GeracadCursoMatricula(models.Model):
             
         )
     
-    contrato_gerado = fields.Boolean("Gerado Contrato?", readonly=True)
+    contrato_gerado = fields.Boolean("Gerado Contrato?",tracking=True ,readonly=True)
 
     active = fields.Boolean(default=True)
     
@@ -246,6 +257,10 @@ class GeracadCursoMatricula(models.Model):
     def action_trancar(self):
         _logger.info("Matrícula Trancada")
         self.write({'state': 'trancado'})
+
+    def action_destrancar(self):
+        _logger.info("Matrícula Destrancada")
+        self.write({'state': 'inscrito'})
 
     def action_go_matriculas_disciplinas(self):
 

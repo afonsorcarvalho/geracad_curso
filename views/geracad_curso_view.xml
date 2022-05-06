@@ -6,7 +6,9 @@
       <field name="name">cursos.list</field>
       <field name="model">geracad.curso</field>
       <field name="arch" type="xml">
-        <tree>
+        <tree 
+        delete="false"
+        >
          
          
           <field name="sigla" placeholder="Sigla do Curso" optional="show"
@@ -94,9 +96,19 @@
       <field name="model">geracad.curso</field>
       <field name="arch" type="xml">
         <search string="Procura Cursos">
-          <filter string="Cursos"
-          name="Cursos"
-          domain="[]"
+          <filter string="Cursos Técnicos"
+          name="Cursos Tecnicos"
+          domain="[('type_curso','=','Técnico')]"
+          context="{}"
+          help="" />
+          <filter string="Cursos Qualificação"
+          name="Curso qualificacao"
+          domain="[('type_curso','=','Qualificação')]"
+          context="{}"
+          help="" />
+          <filter string="Cursos Preparatórios"
+          name="Curso qualificacao"
+          domain="[('type_curso','=','Preparatório')]"
           context="{}"
           help="" />
           <field name="name" string="nome"/>

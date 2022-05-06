@@ -17,8 +17,10 @@
             
             
             <field name="aluno_id" optional="show" />
+            <field name="aluno_mobile" string="Celular" optional="hide" />
             <field name="curso_turma_codigo" optional="show"  />
             <field name="curso_nome" optional="show" />
+            <field name="curso_type" optional="hide" />
            
             <field name="data_matricula" />
             <field name="data_conclusao" optional="show"  />
@@ -53,9 +55,7 @@
             <field name="data_conclusao" />
             <field name="company_id" />
             <field name="state" />
-            <filter name="curso_id"  
-              
-              string="Data da Matrícula"/>
+            
             <filter name="filter_data_matricula" date="data_matricula" 
               
               string="Data da Matrícula"/>
@@ -63,12 +63,17 @@
               
               string="Data da Conclusão"/>
             
-            <filter name="groupby_unidade" string="Unidade" context="{'group_by' : 'company_id'}"></filter>
+            <filter name="groupby_unidade" string="Unidade" context="{'group_by' : 'company_id'}" groups="base.group_multi_company"></filter>
             <filter name="groupby_curso_turma_id" string="Código Turma" context="{'group_by' : 'curso_turma_id'}"></filter>
+            <separator orientation="vertical"/>
             <filter name="data_matricula" string="Data da Matrícula" domain="[]" context="{'group_by':'data_matricula'}"/>
             <filter name="data_conclusao" string="Data da conclusão" domain="[]" context="{'group_by':'data_conclusao'}"/>
+            <separator orientation="vertical"/>
             <filter name="curso_id" string="Curso" domain="[]" context="{'group_by':'curso_id'}"/>
             <filter name="state" string="Status" domain="[]" context="{'group_by':'state'}"/>
+            <filter name="curso_type" string="Tipo de Curso" domain="[]" context="{'group_by':'curso_type'}"/>
+            
+            
           
             
             
@@ -116,6 +121,9 @@
               <button type="object" name="action_trancar" string="Trancar"
                         class="oe_highlight"
                         attrs="{'invisible': [('state', '=', 'trancado')]}"/>
+              <button type="object" name="action_destrancar" string="Destrancar"
+                        class="oe_highlight"
+                        attrs="{'invisible': [('state', '!=', 'trancado')]}"/>
               <button type="object" name="action_gerar_contrato" string="Gerar Contrato"
                         class="oe_highlight"
                         attrs="{'invisible': [('state', '!=', 'inscrito'),]}"/>
