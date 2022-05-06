@@ -2,9 +2,16 @@
 
 from odoo import models, fields, api, _
 from datetime import date
+from babel.dates import format_datetime, format_date
+
+
+from odoo.tools.misc import formatLang, format_date as odoo_format_date, get_lang
+
 import logging
 
 _logger = logging.getLogger(__name__)
+
+
 
 class GeracadCursoTurmDisciplina(models.Model):
     _name = "geracad.curso.turma.disciplina"
@@ -14,7 +21,7 @@ class GeracadCursoTurmDisciplina(models.Model):
     
     _inherit = ['mail.thread']
     
-
+    
 
     name = fields.Char("Código")
     company_id = fields.Many2one(
@@ -138,6 +145,14 @@ class GeracadCursoTurmDisciplina(models.Model):
     active = fields.Boolean(default=True)
     
     
+    #usado na impressão do diário
+    def get_diario_date(self):
+        locale = get_lang(self.env).code
+
+        _logger.info(self.company_id.city_id.name + '-' + self.company_id.state_id.code)
+        date_str = self.company_id.city_id.name + '-' + self.company_id.state_id.code + ', ' + format_date(self.data_encerramento,format="long",locale=locale)
+        return   date_str
+
     #apaga os filtros que não serão possível fazer procura
     def get_fields_to_ignore_in_search(self): 
         

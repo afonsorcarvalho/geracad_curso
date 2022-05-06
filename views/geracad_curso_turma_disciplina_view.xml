@@ -7,18 +7,18 @@
       <field name="model">geracad.curso.turma.disciplina</field>
       <field name="arch" type="xml">
         <tree>
-          <field name="id" optional="show"/>
+          <field name="id" optional="hide"/>
           <field name="name" string="Nome" />
           <field name="disciplina_id"/>
-          <field name="curso_turma_id" optional="show"/>
+          <field name="curso_turma_id" optional="hide"/>
           <field name="matricula_aberta" optional="show"/>
           <field name="professor_id" optional="show" context="{'default_e_professor': 1}"/>
           <field name="data_abertura" optional="show"/>
-          <field name="data_inicio" optional="show"/>
-          <field name="data_previsao_termino" optional="show"/>
+          <field name="data_inicio" optional="hide"/>
+          <field name="data_previsao_termino" optional="hide"/>
           <field name="data_encerramento" optional="show"/>
-          <field name="e_pendencia" optional="show"/>
-          <field name="e_aproveitamento" optional="show"/>
+          <field name="e_pendencia" optional="hide"/>
+          <field name="e_aproveitamento" optional="hide"/>
           <field name="state" 
           widget="badge"
           optional="show"/>

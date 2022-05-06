@@ -1,127 +1,201 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <record id="paperformat_diario" model="report.paperformat">
+        <field name="name">Diario</field>
+        <field name="default" eval="True" />
+        <field name="orientation">Landscape</field>
+        <field name="dpi">130</field>
+        <field name="margin_top">20</field>
+        <field name="margin_bottom">15</field>
+        <field name="margin_left">3</field>
+        <field name="margin_right">3</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">16</field>
+    </record>
 
 
     <template id="report_turma_disciplina_diario_template">
-        <style type="text/css">
+  
 
-            .col, col-4, col-12, col-6 {
-                padding:0px;
-            }
-            
-            td, th, tr { padding: 0 0px;}
-            
-        </style>
 
         <t t-call="web.html_container">
+           
             <t t-foreach="docs" t-as="o">
                 <t t-call="web.external_layout">
+                       <style type="text/css">
 
-                    <table class="table table-condensed table-bordered">
-                        <thead>
+                            .col, col-4, col-12, col-6 {
+                                padding:0px;
+                            }
+                            .table thead {
+                                margin-top: 5px;
+                            }
+                            .table tfoot{
+                                font-size:10px;
 
-                        <tr>
-                            <th colspan="3" padding="5mm" align="left" height="49" width="35%">
-                                Cód: 016.2205.02
-                                <br />
-                                Disciplina: Redes de Computadores
-                                <br />
-                                Professor: Fernando Oliveira
-                            </th>
-                            <th colspan="22" style="text-align:center;">REGISTRO DE FREQUÊNCIA</th>
-                            <th width="40mm" rowspan="3" style="text-align:center;">NOT1</th>
-                            <th width="40mm" rowspan="3" style="text-align:center;">NOT2</th>
-                            <th width="40mm" rowspan="3" style="text-align:center;">MED</th>
-                            <th width="40mm" rowspan="3" style="text-align:center;">FINAL</th>
-                            <th width="40mm" rowspan="3" style="text-align:center;">C. F.</th>
-                            <th width="40mm" rowspan="3" style="text-align:center;">SF.</th>
-                        </tr>
-                        <tr>
-                            <th colspan="3" height="24" class="pri_col">Carga Horária: 
-                            <span t-field="o.carga_horaria" />h
-                            </th>
-                            <th width="20mm" rowspan="2"></th>
-                            <th width="20mm" rowspan="2"></th>
-                            <th width="20mm" rowspan="2"></th>
-                            <th width="20" rowspan="2"></th>
-                            <th width="20" rowspan="2"></th>
-                            <th width="20" rowspan="2"></th>
-                            <th width="20" rowspan="2"></th>
-                            <th width="20" rowspan="2"></th>
-                            <th width="20" rowspan="2"></th>
-                            <th width="20" rowspan="2"></th>
-                            <th width="20" rowspan="2"></th>
-                            <th width="20" rowspan="2"></th>
-                            <th width="20" rowspan="2"></th>
-                            <th width="20" rowspan="2"></th>
-                            <th width="20" rowspan="2"></th>
-                            <th width="20" rowspan="2"></th>
-                            <th width="20" rowspan="2"></th>
-                            <th width="20" rowspan="2"></th>
-                            <th width="20" rowspan="2"></th>
-                            <th width="20" rowspan="2"></th>
-                            <th width="20" rowspan="2"></th>
-                            <th width="50" rowspan="2">FALTAS </th>
-                        </tr>
-                        <tr>
-                            <th class="pri_col"></th>
-                            <th>Matr.</th>
-                            <th>Nome</th>
-                        </tr>
-                    </thead><tbody>
+                            }
+                            .table td, .table th{
+                                margin:0px;
+                                padding:3px;
+                            }
 
-                        <t t-set="count" t-value="1" />
+                         
+                            .table-bordered th, .table-bordered td{
+                                border:1px solid #000000
+                            }
 
-                        <t t-foreach="o.notas" t-as="rec">
+                            .diario_date{
+                                text-align:center;
+                            }
+                            .diario_assinatura{
+                                text-align:center;
+                            }
+                        
+                            
+                        
+                            
+                        </style>
+                    <div class="page">
+                     
+                        <table class="table table-condensed table-bordered" cellpadding="0" cellspacing="0" padding="0" margin="0">
+                            <thead>
 
-                            <tr>
-                                <td class="pri_col">
-                                    <t t-esc="count" />
-                                    <t t-set="count" t-value="count + 1" />
-                                </td>
-                                <td>
-                                    <span t-field="rec.curso_matricula_id.name" />
-                                </td>
-                                <td width="250mm">
-                                    <span t-field="rec.curso_matricula_id.aluno_id" />
-                                </td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td align="center">
-                                    <div style="text-align:center;"></div>
-                                </td>
-                            </tr>
+                                <tr>
+                                    <th colspan="3" padding="0mm" align="left" height="49" width="35%">
+                                        Cód: 
+                                        <span t-field="o.name" />
+                                        
+                                        <br />
+                                        Disciplina:<span t-field="o.disciplina_id" />
+                                       
+                                       
+                                        <br />
+                                        Professor:  <span t-field="o.professor_id" />
+                                    </th>
+                                    <th colspan="22" style="text-align:center;">REGISTRO DE FREQUÊNCIA</th>
+                                    <th width="40mm" rowspan="3" style="text-align:center;">NOT1</th>
+                                    <th width="40mm" rowspan="3" style="text-align:center;">NOT2</th>
+                                    <th width="40mm" rowspan="3" style="text-align:center;">MED</th>
+                                    <th width="40mm" rowspan="3" style="text-align:center;">FINAL</th>
+                                    <th width="40mm" rowspan="3" style="text-align:center;">C.F.</th>
+                                    <th width="40mm" rowspan="3" style="text-align:center;">SF.</th>
+                                </tr>
+                                <tr>
+                                    <th colspan="3" height="24" class="pri_col">
+                                        Carga Horária:
+                                        <span t-field="o.carga_horaria" />
+                                        h
+                                    </th>
+                                    <th width="20mm" rowspan="2"></th>
+                                    <th width="20mm" rowspan="2"></th>
+                                    <th width="20mm" rowspan="2"></th>
+                                    <th width="20" rowspan="2"></th>
+                                    <th width="20" rowspan="2"></th>
+                                    <th width="20" rowspan="2"></th>
+                                    <th width="20" rowspan="2"></th>
+                                    <th width="20" rowspan="2"></th>
+                                    <th width="20" rowspan="2"></th>
+                                    <th width="20" rowspan="2"></th>
+                                    <th width="20" rowspan="2"></th>
+                                    <th width="20" rowspan="2"></th>
+                                    <th width="20" rowspan="2"></th>
+                                    <th width="20" rowspan="2"></th>
+                                    <th width="20" rowspan="2"></th>
+                                    <th width="20" rowspan="2"></th>
+                                    <th width="20" rowspan="2"></th>
+                                    <th width="20" rowspan="2"></th>
+                                    <th width="20" rowspan="2"></th>
+                                    <th width="20" rowspan="2"></th>
+                                    <th width="20" rowspan="2"></th>
+                                    <th width="50" rowspan="2">FALTAS </th>
+                                </tr>
+                                <tr>
+                                    <th class="pri_col"></th>
+                                    <th>Matr.</th>
+                                    <th>Nome</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                        </t>
-                    </tbody>
-                    
-                    </table>
+                                <t t-set="count" t-value="1" />
 
+                                <t t-foreach="o.notas" t-as="rec">
+
+                                    <tr>
+                                        <td class="pri_col">
+                                            <t t-esc="count" />
+                                            <t t-set="count" t-value="count + 1" />
+                                        </td>
+                                        <td>
+                                            <span t-field="rec.curso_matricula_id.name" />
+                                        </td>
+                                        <td width="250mm">
+                                            <span class="text-uppercase" t-field="rec.curso_matricula_id.aluno_id" />
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td align="center">
+                                            <div style="text-align:center;"></div>
+                                        </td>
+                                    </tr>
+
+                                </t>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="31">LEGENDA: AM - APROV. MEDIA AP - APROV. FINAL RC - REP. CONTEUDO RF - REP. P/ FALTA IN - INSCRITO CA - CANCELAMENTO TR - TRANCAMENTO AB - ABANDONO EA - ESTUDOS APROVEITADOS</td>
+                                </tr>
+                                
+                            </tfoot>
+
+                        </table>
+                      <div class="row">
+                        <div class="col-6">
+                            
+                        </div>
+                        <div class="col-6 diario_date" >
+                             
+                            <t t-esc="o.get_diario_date()"/>
+                           
+                        </div>
+                    </div>
+
+                    <div class="row-12"></div>
+
+                        <div class="row-12 diario_assinatura">
+                            ________________________________________________________ <br/>
+                               
+                               <span class="text-uppercase font-italic" t-field="o.professor_id" />
+                               
+                        </div>
+                        
+                        
+                    </div>
                 </t>
             </t>
         </t>

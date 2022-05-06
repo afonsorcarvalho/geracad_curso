@@ -27,18 +27,7 @@
     <!-- <field name="paperformat_id" ref="report.paperformat_euro" /> --> 
     <field name="help">Histórico aluno</field>
 </record>
-<record id="paperformat_diario" model="report.paperformat">
-    <field name="name">Diario</field>
-    <field name="default" eval="True" />
-    <field name="orientation">Landscape</field>
-    <field name="dpi">120</field>
-    <field name="margin_top">15</field>
-    <field name="margin_bottom">15</field>
-    <field name="margin_left">3</field>
-    <field name="margin_right">3</field>
-    <field name="header_line" eval="False" />
-    <field name="header_spacing">10</field>
-</record>
+
 
 <!-- <record id="paperformat_Portrait" model="report.paperformat" >
     <field name="name">Human readable name</field>

@@ -108,11 +108,11 @@ class GeracadCursoNotaDisciplina(models.Model):
             record.periodo = grade.periodo
 
     
-    nota_1 = fields.Float()
-    nota_2 = fields.Float()
-    final = fields.Float()
+    nota_1 = fields.Float(track_visibility='true')
+    nota_2 = fields.Float(track_visibility='true')
+    final = fields.Float(track_visibility='true')
     media = fields.Float("Média", compute="_compute_media", 
-    store=True
+    store=True,track_visibility='true'
     )
     situation = fields.Selection([
         ('AM', 'AM'),
@@ -125,7 +125,7 @@ class GeracadCursoNotaDisciplina(models.Model):
         ('AB', 'AB'),
         ('EA', 'EA'),
         ('FA', 'FA'),
-        ], default='IN', string="Situação")
+        ], default='IN', string="Situação",track_visibility='true')
 
 
    
