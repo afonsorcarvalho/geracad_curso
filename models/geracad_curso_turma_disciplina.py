@@ -101,13 +101,14 @@ class GeracadCursoTurmDisciplina(models.Model):
         string='Previsão de término',
         default=fields.Date.context_today,
         track_visibility='true'
+       
     )
 
     data_encerramento = fields.Date(
         string='Data Encerramento',
-        default=fields.Date.context_today,
         track_visibility='true'
     )
+     
     professor_id =  fields.Many2one(
         'res.partner',
         string='Professor',

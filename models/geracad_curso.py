@@ -14,6 +14,7 @@ class GeracadCurso(models.Model):
 
     name = fields.Char()
     sigla = fields.Char()
+    resolucao = fields.Char("Resolução")
     type_curso = fields.Many2one(
         string="Tipo do Curso",
         comodel_name="geracad.curso.type",

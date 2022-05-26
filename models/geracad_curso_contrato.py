@@ -14,7 +14,7 @@ _logger = logging.getLogger(__name__)
 class GeracadCursoContrato(models.Model):
     _name = "geracad.curso.contrato"
     _description = "Contratos de Cursos"
-    _check_company_auto = True
+#  _check_company_auto = True
 
     
     _inherit = ['mail.thread']
@@ -30,7 +30,10 @@ class GeracadCursoContrato(models.Model):
             record.name = record.curso_matricula_id.name
     
     
+    #TODO - Pegar a unidade a mesma da matricula caso tenha sido selecionado a matricula do aluno
+    # caso contrario a companhia do poprio usuario
     
+
     company_id = fields.Many2one(
         'res.company', string="Unidade", required=True, default=lambda self: self.env.company
     )

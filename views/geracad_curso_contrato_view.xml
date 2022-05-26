@@ -84,11 +84,21 @@
                   <field name="valor_a_pagar" decoration-danger="1"/>     
                               
                 </group>
+                <group string="Unidade" 
+                 groups="base.group_multi_company"
+                >
+                
+                  <field name="company_id"/>     
+                  
+                              
+                </group>
               </group>         
               <group string="Parcelas">
               <field name="parcelas_contrato_ids" nolabel="1">
                 <tree>
-                  <field name="name"/>
+                  <field name="name" 
+                  readonly="1"
+                  />
                   <field name="data_vencimento"/>
                   <field name="valor"/>
                   <field name="valor_pago"/>

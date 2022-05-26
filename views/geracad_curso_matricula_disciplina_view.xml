@@ -7,7 +7,7 @@
       <field name="model">geracad.curso.matricula.disciplina</field>
       <field name="arch" type="xml">
         <tree expand="1">
-         
+      
           
           <field name="curso_matricula_id" optional="show"/>
           <field name="curso_nome" optional="show"/>

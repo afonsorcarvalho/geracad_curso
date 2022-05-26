@@ -151,7 +151,9 @@
                 . As partes elegem de comum acordo o Tribunal Arbitral e Mediação do Maranhão, com foro e sede na Rua Domingues Virgílio, nº 754, São Francisco, São Luís-MA, seus árbitros e regulamento interno para dirimir futuras e eventuais controvérsias oriundas da interpretação e execução deste contrato, conforme art. 4 parágrafo 2º da Lei 9.307/96, renunciando a submissão estatal.
               </p>
             </p>
-            <p align="right">{localidade}, {dia} de {mes} de {ano}</p>
+            <p align="right">
+            <span t-field=" o.company_id.city_id" />
+            , {dia} de {mes} de {ano}</p>
             <br />
             <table class="table col-12">
               <tr>
