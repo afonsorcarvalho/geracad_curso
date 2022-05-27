@@ -19,7 +19,7 @@
         <record id="group_geracad_curso_professor" model="res.groups">
             <field name="name">Professor</field>
             <field name="category_id" ref="module_category_geracad_curso"/>
-            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <!-- <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/> -->
         </record>
         <record id="group_geracad_curso_administrator" model="res.groups">
             <field name="name">Administrador</field>
@@ -27,16 +27,27 @@
             <field name="implied_ids" eval="[(4, ref('group_geracad_curso_user'))]"/>
             <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
         </record>
+
+        <!-- Professores Rules -->
+       <record model="ir.rule" id="geracad_curso_nota_disciplina_professor_rule">
+            <field name="name">Regra de nota disciplina apenas professor da disciplina</field>
+            <field name="model_id" ref="model_geracad_curso_nota_disciplina"/>
+            <field name="groups" eval="[(4, ref('group_geracad_curso_professor'))]"/>
+            <field name="domain_force">[ '|', ('professor_id', '=', False),('professor_id', '=', user.partner_id.id)]</field>
+        </record>
+        
+
         <!-- Multi - Company Rules -->
        <record model="ir.rule" id="geracad_curso_company_rule">
             <field name="name">Event: multi-company</field>
             <field name="model_id" ref="model_geracad_curso_matricula"/>
             <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
         </record>
+        
        <record model="ir.rule" id="geracad_curso_contrato_company_rule">
             <field name="name">Event: contrato multi-company</field>
             <field name="model_id" ref="model_geracad_curso_contrato"/>
-
+            
             <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
         </record>
        

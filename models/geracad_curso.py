@@ -156,14 +156,3 @@ class GeracadUnidade(models.Model):
         required=True, 
         default=lambda self: self.env.user.company_id
     )
-
-
-    
-
-    
-    
-
-    
-    
-    
-

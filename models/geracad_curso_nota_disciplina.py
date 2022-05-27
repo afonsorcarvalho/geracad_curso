@@ -2,6 +2,7 @@
 
 from odoo import models, fields, api, _
 from datetime import date
+from odoo.exceptions import ValidationError
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -76,6 +77,17 @@ class GeracadCursoNotaDisciplina(models.Model):
         
         
         )
+    professor_id = fields.Many2one(
+        "res.partner",
+        string='Professor',
+        
+        related='disciplina_matricula_id.turma_disciplina_id.professor_id',
+        readonly=True,
+        store=True,
+        
+        
+        
+        )
     disciplina_id = fields.Many2one(
         "geracad.curso.disciplina",
         related='turma_disciplina_id.disciplina_id',
@@ -89,7 +101,8 @@ class GeracadCursoNotaDisciplina(models.Model):
     faltas = fields.Integer(
         string='Faltas',
         default=0,
-        tracking=True
+        tracking=True,
+        group_operator="avg",
     )
     
     periodo = fields.Integer(
@@ -106,11 +119,11 @@ class GeracadCursoNotaDisciplina(models.Model):
             record.periodo = grade.periodo
 
     
-    nota_1 = fields.Float(group_operator=False, tracking=True)
-    nota_2 = fields.Float(group_operator=False,tracking=True)
-    final = fields.Float(group_operator=False,tracking=True)
+    nota_1 = fields.Float(group_operator="avg", tracking=True)
+    nota_2 = fields.Float(group_operator="avg",tracking=True)
+    final = fields.Float(group_operator="avg",tracking=True)
     media = fields.Float("Média", compute="_compute_media", 
-    store=True,tracking=True,group_operator=False,
+    store=True,tracking=True,group_operator="avg",
     )
     situation = fields.Selection([
         ('AM', 'AM'), # aprovado por media
@@ -138,36 +151,42 @@ class GeracadCursoNotaDisciplina(models.Model):
    
     
    
-   
+    
     state = fields.Selection([
         ('draft', 'Rascunho'),
         ('atualizando', 'Em atualização'),
         ('concluida', 'Concluída'),
-       
-        
     ], string="Status", default="draft", tracking=True)
-
-
+    
     active = fields.Boolean(default=True)
     
     _sql_constraints = [ ('curso_disciplina_matricula_id_turma_disciplina_id_unique','UNIQUE(disciplina_matricula_id, turma_disciplina_id)','Aluno já com notas nessa turma disciplina') ]
+   
+    @api.constrains('faltas')
+    def _check_faltas(self):  
+        for record in self:
+            if record.faltas < 0 or record.faltas > record.disciplina_id.carga_horaria:
+                raise ValidationError("As faltas devem estar entre 0 e " + str(record.disciplina_id.carga_horaria) )
+    
+    @api.constrains('nota_1')
+    def _check_nota_1(self):  
+        for record in self:
+            if record.nota_1 < 0 or record.nota_1 > 10.0:
+                raise ValidationError("A nota 1 deve estar entre 0 e 10")
+    
+    @api.constrains('nota_2')
+    def _check_nota_2(self):  
+        for record in self:
+            if record.nota_2 < 0 or record.nota_2 > 10.0:
+                raise ValidationError("A nota 2 deve estar entre 0 e 10")
+    
+    @api.constrains('final')
+    def _check_final(self):  
+        for record in self:
+            if record.final < 0 or record.final > 10.0:
+                raise ValidationError("A nota Final deve estar entre 0 e 10")
 
-    
-    
-    
-    @api.depends('nota_1', 'nota_2','final','faltas')
+    @api.depends('nota_1', 'nota_2','final')
     def _compute_media(self):
         for record in self:
             record.media = (record.nota_1 + record.nota_2)/2
-    
-    
-    
-    
-  
-    
-    
-
-        
-
-    
-       

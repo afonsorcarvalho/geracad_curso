@@ -253,7 +253,9 @@ class GeracadCursoMatricula(models.Model):
              
             }
         }
-
+    #TODO
+    # - Fazer todas as disciplinas ainda nao cursadas ficarem
+    # tambem trancada
     def action_trancar(self):
         _logger.info("Matrícula Trancada")
         self.write({'state': 'trancado'})
@@ -261,6 +263,10 @@ class GeracadCursoMatricula(models.Model):
     def action_destrancar(self):
         _logger.info("Matrícula Destrancada")
         self.write({'state': 'inscrito'})
+    
+
+    
+    
 
     def action_go_matriculas_disciplinas(self):
 
@@ -296,7 +302,7 @@ class GeracadCursoMatricula(models.Model):
      
             }
         }
-
+    
     def action_go_contratos(self):
 
         _logger.info("action open notas disciplinas")
