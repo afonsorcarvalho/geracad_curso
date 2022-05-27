@@ -40,6 +40,7 @@
         'views/portal_templates.xml',
         'views/geracad_curso_portal_templates.xml',
         'reports/report_contrato_aluno_template.xml',
+        'reports/report_declaracao_aluno_template.xml',
         'reports/report_historico_aluno_notas_template.xml',
         'reports/report_historico_aluno_template.xml',
         'reports/report_turma_disciplina_diario_template.xml',

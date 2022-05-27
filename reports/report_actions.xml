@@ -28,6 +28,20 @@
     <field name="help">Histórico aluno</field>
 </record>
 
+<record id="action_declaracao_aluno_report" model="ir.actions.report">
+    <field name="name">Declaração Aluno</field>
+    <field name="model">geracad.curso.matricula</field>
+    <field name="report_type">qweb-html</field>
+    <field name="report_name">geracad_curso.view_declaracao_aluno_template</field>
+    <field name="report_file">geracad_curso.view_declaracao_aluno_template</field>
+    <field name="attachment_use" eval="False"/>
+    
+     <field name="print_report_name">'Declaração Aluno - %s - %s' % (object.aluno_id.name, object.name)</field> 
+     <field name="binding_model_id" ref="model_geracad_curso_matricula"/> 
+    <!-- <field name="paperformat_id" ref="report.paperformat_euro" /> --> 
+    <field name="help">Declaração aluno</field>
+</record>
+
 
 <!-- <record id="paperformat_Portrait" model="report.paperformat" >
     <field name="name">Human readable name</field>

@@ -14,12 +14,9 @@ class GeracadCursoNotaDisciplina(models.Model):
     _name = "geracad.curso.nota.disciplina"
     _description = "Notas de Disciplinas de Cursos"
     _check_company_auto = True
-
-    
+  
     _inherit = ['mail.thread']
-    
-
-
+  
     name = fields.Char("Nome")
     
     company_id = fields.Many2one(
