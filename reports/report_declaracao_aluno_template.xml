@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE odoo [
+  <!ENTITY Ccedil "entity-value">
+]>
+<odoo>
+  <template id='view_declaracao_aluno_template'>
+    
+    <t t-call='web.html_container'>
+      <t t-foreach='docs' t-as='o'>
+        <t t-call='web.external_layout'>
+        <style>
+      p{ margin-left:16px;
+      font-size:24px;
+      }
+      div{ 
+      font-size:24px;
+      }
+      
+
+    </style>
+          <div class="page">
+
+            <h1 align="center">DECLARAÇÃO</h1>
+
+
+       
+
+            <br />
+            <br />
+            <br />
+           
+              <p align="justify">
+               Declaramos para os devidos fins que o aluno 
+               <span t-field="o.aluno_id.name" />
+               , RG nº 
+               <span t-field="o.aluno_id.rg" />
+               , encontra-se regularmente matriculado nesta instituição de ensino técnico profissionalizante, cursando atualmente o 4° período do curso <span t-field="o.curso_id.name" />.</p>
+
+<p>A Carga Horária total do <span t-field="o.curso_id.name" /> é de <span t-field="o.curso_id.carga_horaria_total" />  horas, dentre as quais estão inclusas as 300 horas de estágio supervisionado obrigatório.</p>
+
+<p>Informamos ainda que o referido curso é reconhecido pelo Conselho de Educação do Estado do Maranhão e registrado no Conselho Regional de Engenharia, Arquitetura e Agronomia do Maranhão (CREA-MA).</p>
+
+<p>Esta declaração terá validade de 30 (trinta) dias após a data de sua emissão.</p>
+               <br/>
+               <br/>
+               <div class="row">
+               <div class="col-6">
+               </div>
+               <div class="col-6" align="right">
+                <p>São Luís - MA, 13 de maio de 2000.</p>
+               </div>
+               </div>
+   <div class="row center">
+   <div class="col-12 center" align="center">
+   _________________________________________________<br/>
+   Carlos Cesar Bezerra de Carvalho<br/>
+Engenheiro Eletricista<br/>
+Diretor Geral<br/>
+CREA 6091-D<br/>
+</div>
+   </div>        
+             
+
+
+          </div>
+        </t>
+      </t>
+    </t>
+  </template>
+</odoo>
+ 
+
+ 
+ 
+ 
+ 
