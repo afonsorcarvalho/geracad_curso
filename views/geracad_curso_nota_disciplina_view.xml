@@ -75,12 +75,15 @@
           
           
           >
-            <sheet>
+            <sheet> 
+              <h2><field name="curso_matricula_id" readonly="1"/></h2>
               <group>
+               
                 <group>
                   
+                  
                   <field name="disciplina_matricula_id" 
-                  readonly="1"
+                  readonly="1" 
                   />
                   <field name="turma_disciplina_id"  readonly="1"/>
                   <field name="faltas"/>

@@ -88,7 +88,8 @@ class GeracadCursoNotaDisciplina(models.Model):
 
     faltas = fields.Integer(
         string='Faltas',
-        default=0
+        default=0,
+        tracking=True
     )
     
     periodo = fields.Integer(
@@ -112,15 +113,15 @@ class GeracadCursoNotaDisciplina(models.Model):
     store=True,tracking=True,group_operator=False,
     )
     situation = fields.Selection([
-        ('AM', 'AM'),
-        ('AP', 'AP'),
-        ('RC', 'RC'),
-        ('RF', 'RF'),
-        ('IN', 'IN'),
-        ('CA', 'CA'),
-        ('TR', 'TR'),
-        ('AB', 'AB'),
-        ('EA', 'EA'),
+        ('AM', 'AM'), # aprovado por media
+        ('AP', 'AP'), # aprovado por final
+        ('RC', 'RC'), # reprovado por conteudo
+        ('RF', 'RF'), # repovado por Falta
+        ('IN', 'IN'), # inscrito
+        ('CA', 'CA'), # cancelado
+        ('TR', 'TR'), # trancado
+        ('AB', 'AB'), # abandono
+        ('EA', 'EA'), # estudos aproveitados
         ('FA', 'FA'),
         ], default='IN', string="Situação",tracking=True)
 
