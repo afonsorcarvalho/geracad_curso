@@ -367,6 +367,17 @@
         </p>
       </field>
     </record>
+    <record model="ir.actions.act_window" id="geracad_curso_notas_disciplina_action_window">
+      <field name="name">Notas discicplinas</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">geracad.curso.nota.disciplina</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+          Nota de disciplinas
+        </p>
+      </field>
+    </record>
 
     <!-- actions opening views on models -->
     <record id="action_geracad_curso_form_view" model="ir.actions.act_window.view">
@@ -400,6 +411,7 @@
       <field name="view_id" ref="geracad_curso_sala_list"/>
       <field name="act_window_id" ref="geracad_curso_sala_action_window"/>
     </record>
+    
     <record id="action_geracad_curso_turma_tree_view" model="ir.actions.act_window.view">
       <field eval="10" name="sequence"/>
       <field name="view_mode">tree</field>
@@ -417,7 +429,14 @@
     <!-- Top menu item -->
 
     <menuitem name="Cursos" id="geracad_curso.menu_root" web_icon="geracad_curso,static/description/icon.png"
-    action="geracad_curso_matricula_action_window"/>
+    action="geracad_curso_matricula_action_window" 
+    groups="group_geracad_curso_user,group_geracad_curso_secretaria,group_geracad_curso_administrator"
+    />
+
+    <menuitem name="Notas" id="geracad_curso.menu_root_notas" web_icon="geracad_curso,static/description/icon.png"
+    action="geracad_curso_notas_disciplina_action_window" 
+    groups="group_geracad_curso_professor"
+    />
 
     <!-- menu categories -->
 
