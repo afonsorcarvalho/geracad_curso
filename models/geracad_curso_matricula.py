@@ -117,7 +117,7 @@ class GeracadCursoMatricula(models.Model):
 
     active = fields.Boolean(default=True)
     
-    _sql_constraints = [ ('curso_turma_id_aluno_id_state_unique','UNIQUE(curso_turma_id, aluno_id, state)','Aluno já matriculado nessa turma') ]
+   
   
     def _compute_matriculas_disciplinas(self):
         for record in self:    
