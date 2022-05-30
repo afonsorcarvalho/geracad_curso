@@ -435,7 +435,7 @@
 
     <menuitem name="Notas" id="geracad_curso.menu_root_notas" web_icon="geracad_curso,static/description/icon.png"
     action="geracad_curso_notas_disciplina_action_window" 
-    groups="group_geracad_curso_professor,group_geracad_curso_secretaria,group_geracad_curso_user,group_geracad_curso_administrator"
+    groups="group_geracad_curso_professor,group_geracad_curso_secretaria,group_geracad_curso_administrator"
     />
 
     <!-- menu categories -->
