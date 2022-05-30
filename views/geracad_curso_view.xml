@@ -368,7 +368,7 @@
       </field>
     </record>
     <record model="ir.actions.act_window" id="geracad_curso_notas_disciplina_action_window">
-      <field name="name">Notas discicplinas</field>
+      <field name="name">Notas de Disciplinas</field>
       <field name="type">ir.actions.act_window</field>
       <field name="res_model">geracad.curso.nota.disciplina</field>
       <field name="view_mode">tree,form</field>
@@ -454,7 +454,9 @@
     <menuitem name="Curso" id="geracad_curso.turma_curso_menu_list" parent="geracad_curso.menu_turmas"
               action="geracad_curso_turma_action_window"/>
     <menuitem name="Disciplina" id="geracad_curso.turma_disciplina_menu_list" parent="geracad_curso.menu_turmas"
-              action="geracad_curso_turma_disciplina_action_window"/>
+              action="geracad_curso_turma_disciplina_action_window"
+              groups="group_geracad_curso_user,group_geracad_curso_secretaria,group_geracad_curso_administrator"
+              />
 
               <!-- configuração -->
     <menuitem name="Cursos" id="geracad_curso.curso_menu" parent="geracad_curso.configuracao"

@@ -37,10 +37,13 @@
           <field name="final" optional="show"/>
           <field name="media"  readonly="1" optional="show"/>
           <field name="situation" optional="show" />
-          <field name="state"  />
+          <field name="state" optional="show"/>
         </tree>
-    
+   
       </field>
+      
+      
+      
     </record>
     <record model="ir.ui.view" id="geracad_curso_nota_disciplina_pivot">
       <field name="name">cursos.nota.disciplina.pivot</field>
@@ -92,6 +95,7 @@
                   <field name="final"/>
                   <field name="media"  readonly="1"/>
                   <field name="situation"/>
+                  <field name="professor_id"/>
                   <field name="state"/>
                   
                 </group>
@@ -116,6 +120,12 @@
       <field name="arch" type="xml">
         <search string="Procura Nota">
           <field name="name"/>
+          <field name="turma_disciplina_id"  />
+          <field name="professor_id"  />
+          <field name="disciplina_id"  />
+          <field name="curso_matricula_id"  />
+          <field name="curso_turma_id"  />
+
       </search>
       </field>
     </record>
