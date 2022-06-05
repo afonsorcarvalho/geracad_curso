@@ -81,7 +81,8 @@ class GeracadCursoFinanceiroParcelas(models.Model):
             ('emp_cobranca', 'Empresa de Cobrança'), 
             ('debito', 'Cartão Débito'), 
             ('credito', 'Cartão Crédito'), 
-            ('deposito', 'Depósito Bancário'), 
+            ('deposito', 'Depósito Bancário'),
+            ('tribunal','Tribunal'), 
             
             ],
         required=True
