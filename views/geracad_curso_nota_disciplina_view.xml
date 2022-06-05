@@ -7,7 +7,7 @@
       <field name="model">geracad.curso.nota.disciplina</field>
       <field name="arch" type="xml">
         <tree 
-         create="false"
+         create="true"
          
          delete="false"
          
@@ -150,6 +150,7 @@
       <field eval="11" name="sequence"/>
       <field name="view_mode">form</field>
       <field name="view_id" ref="geracad_curso_nota_disciplina_form_view"/>
+    
       <field name="act_window_id" ref="geracad_curso_nota_disciplina_action_window"/>
       
     </record>

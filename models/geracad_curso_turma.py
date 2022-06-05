@@ -34,13 +34,13 @@ class GeracadCursoTurma(models.Model):
     
     data_abertura = fields.Date(
         string='Data Abertura',
-        default=fields.Date.context_today,
+        # default=fields.Date.context_today,
         track_visibility='true'
     )
 
     data_encerramento = fields.Date(
         string='Data Encerramento',
-        default=fields.Date.context_today,
+        # default=fields.Date.context_today,
         track_visibility='true'
     )
    
