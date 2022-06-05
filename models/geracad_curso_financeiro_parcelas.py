@@ -46,6 +46,7 @@ class GeracadCursoFinanceiroParcelas(models.Model):
     currency_id = fields.Many2one(
         'res.currency', related='company_id.currency_id',
         string="Company Currency", readonly=True)
+
     curso_nome = fields.Char(
         related = 'curso_matricula_id.curso_nome',
         string='Curso',
@@ -89,7 +90,7 @@ class GeracadCursoFinanceiroParcelas(models.Model):
     
 
 
-    sacado = fields.Many2one('res.partner',string="Sacado", required=True)
+    sacado = fields.Many2one('res.partner',string="Sacado")
     sacado_cpf = fields.Char(string="CPF", related='sacado.l10n_br_cnpj_cpf', store=True)
   
     state = fields.Selection([
