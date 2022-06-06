@@ -144,7 +144,15 @@
                       <span class="o_stat_text">Contratos</span>
                     </div>
                 </button>
-                <button name="action_go_matriculas_disciplinas" type="object" class="oe_stat_button" icon="fa-file-text-o"
+                <button name="action_go_parcelas" type="object" class="oe_stat_button" icon="fa-money"
+                    >
+                    <div class="o_field_widget o_stat_info">
+                     
+                      <field name="parcelas_count" class="o_state_value" />
+                      <span class="o_stat_text">Parcelas</span>
+                    </div>
+                </button>
+                <button name="action_go_matriculas_disciplinas" type="object" class="oe_stat_button" icon="fa-list-ol"
                     >
                     <div class="o_field_widget o_stat_info">
                      
@@ -152,7 +160,7 @@
                       <span class="o_stat_text">Disciplinas</span>
                     </div>
                 </button>
-                <button name="action_go_notas_disciplinas" type="object" class="oe_stat_button" icon="fa-file-text-o"
+                <button name="action_go_notas_disciplinas" type="object" class="oe_stat_button" icon="fa-list-alt"
                     >
                     <div class="o_field_widget o_stat_info">
                      

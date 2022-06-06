@@ -154,6 +154,17 @@ class GeracadCursoTurmDisciplina(models.Model):
         date_str = self.company_id.city_id.name + '-' + self.company_id.state_id.code + ', ' + format_date(self.data_encerramento,format="long",locale=locale)
         return   date_str
 
+    #usado na impressão da ata
+    def get_ano_semestre(self,tipo):
+        if tipo == "semestre":
+            if(self.data_abertura.month > 6):
+                return '2º'
+            else:
+                return '1º'
+        if tipo == "ano":
+            return self.data_abertura.year
+
+
     #apaga os filtros que não serão possível fazer procura
     def get_fields_to_ignore_in_search(self): 
         

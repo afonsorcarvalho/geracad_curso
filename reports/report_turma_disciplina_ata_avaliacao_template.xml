@@ -73,11 +73,13 @@
                             <tr>
                                 <td width="6%" rowspan="2">Ano:</td>
                                 <td width="13%" rowspan="2" valign="middle">
-                                    <div style="text-align:center;">2022</div>
+                                    <div style="text-align:center;"><t t-esc="o.get_ano_semestre('ano')" /></div>
                                 </td>
                                 <td width="11%" rowspan="2">Semestre:</td>
                                 <td width="8%" rowspan="2" valign="middle">
-                                    <div style="text-align:center;">1º</div>
+                                    <div style="text-align:center;">
+                                    <t t-esc="o.get_ano_semestre('semestre')" />
+                                    </div>
                                 </td>
                                 <td width="25%">1ª AVALIAÇÃO (  ) </td>
                                 <td width="22%">2ª AVALIAÇÃO (  )</td>

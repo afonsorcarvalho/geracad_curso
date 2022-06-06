@@ -112,6 +112,9 @@ class GeracadCursoMatricula(models.Model):
         compute='_compute_contratos',
             
         )
+
+    parcelas_ids = fields.One2many('geracad.curso.financeiro.parcelas', 'curso_matricula_id')
+
     parcelas_count = fields.Integer(
         string='Qtd. Parcelas', 
         compute='_compute_parcelas',
@@ -139,6 +142,11 @@ class GeracadCursoMatricula(models.Model):
     def _compute_contratos(self):
         for record in self:    
             record.contratos_count = self.env["geracad.curso.contrato"].search(
+                [('curso_matricula_id', '=', record.id)],
+                offset=0, limit=None, order=None, count=True)
+    def _compute_parcelas(self):
+        for record in self:    
+            record.parcelas_count = self.env["geracad.curso.financeiro.parcelas"].search(
                 [('curso_matricula_id', '=', record.id)],
                 offset=0, limit=None, order=None, count=True)
 
@@ -318,6 +326,22 @@ class GeracadCursoMatricula(models.Model):
             'target':'current',
             'view_mode': 'tree,form',
             'res_model': 'geracad.curso.contrato',
+            'domain': [('curso_matricula_id', '=', self.id)],
+            'context': {
+                'default_curso_matricula_id': self.id,
+             
+            }
+        }
+    def action_go_parcelas(self):
+
+        _logger.info("action open financeiro parcelas")
+        
+        return {
+            'name': _('Financeiro Parcelas'),
+            'type': 'ir.actions.act_window',
+            'target':'current',
+            'view_mode': 'tree,form',
+            'res_model': 'geracad.curso.financeiro.parcelas',
             'domain': [('curso_matricula_id', '=', self.id)],
             'context': {
                 'default_curso_matricula_id': self.id,
