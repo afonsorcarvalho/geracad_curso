@@ -156,11 +156,8 @@ class GeracadCursoContrato(models.Model):
                     'multa': self.multa,
                     'forma_de_pagamento': self.forma_de_pagamento,
                     'sacado': self.sacado.id,
-                    'state':'vigente',
                     
 
-
-                
                 })]
             })
 
@@ -225,10 +222,14 @@ class GeracadCursoContrato(models.Model):
         _logger.debug(parcelas_em_aberto)
         return parcelas_em_aberto
     
-    
+    #TODO 
+    # PROCURAR PARCELAS NA MATRICULA DO ALUNO E MUDAR O ESTADO TAMBÉM
+    # POIS EXISTEM PARCELAS IMPORTADAS DO SISTEMA ANTIGO QUE NÃO TEM CONTRATO
     def _set_state_parcelas(self, state):
         for record in self:
-            for parcela in record.parcelas_contratos_id:
+            _logger.debug("Verificando Parcelas do Contrato")
+            _logger.debug(record)
+            for parcela in record.parcelas_contrato_ids:
                 parcela.write({
                     'state': state
                 })
@@ -240,19 +241,27 @@ class GeracadCursoContrato(models.Model):
     """
 
     def action_confirma_contrato(self):
-       
+
+        if not self.parcelas_geradas:
+            raise ValidationError('Contrato sem parcelas geradas. Gere as parcelas e confirme o contrato! ' )
+
         self.curso_matricula_id.write({
             'contrato_gerado' : 1,
         })
         self.write({
             'state': 'vigente',
-            'parcelas_geradas': True
+            
            })
+        
         self._set_state_parcelas('vigente')
 
  
 
     def action_gera_parcelas(self):
+        _logger.debug("GERANDO PARCELAS")
+        if self.parcelas_geradas:
+            raise ValidationError('Contrato com parcelas já geradas. ' )
+
         self._gera_parcelas_financeiro(self.qtd_parcelas,self.valor_parcelas)
         self.write({
             'parcelas_geradas': True
@@ -263,14 +272,17 @@ class GeracadCursoContrato(models.Model):
     def action_cancela_contrato(self):
         self._cancela_parcelas_financeiro()
         self.curso_matricula_id.write({
-            'contrato_gerado' : False
+            'contrato_gerado' : False,
+            
         })
         self.write({
+            'parcelas_geradas' : False,
             'state': 'draft',
-           })
+        })
+       
     
     def action_suspender_contrato(self):
-        self._sespende_parcelas_financeiro()
+        self._sspende_parcelas_financeiro()
         self.curso_matricula_id.write({
             'contrato_gerado' : True
         })

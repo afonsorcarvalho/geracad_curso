@@ -7,12 +7,12 @@
       <field name="model">geracad.curso.nota.disciplina</field>
       <field name="arch" type="xml">
         <tree 
-         create="true"
-         
+         create="false"
          delete="false"
-         
+         edit="true"
          duplicate="false"
          
+       
          
          
          class="oe_edit_only"

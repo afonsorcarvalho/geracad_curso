@@ -162,11 +162,11 @@ class GeracadCursoNotaDisciplina(models.Model):
     
     _sql_constraints = [ ('curso_disciplina_matricula_id_turma_disciplina_id_unique','UNIQUE(disciplina_matricula_id, turma_disciplina_id)','Aluno já com notas nessa turma disciplina') ]
    
-    # @api.constrains('faltas')
-    # def _check_faltas(self):  
-    #     for record in self:
-    #         if record.faltas < 0 or record.faltas > record.disciplina_id.carga_horaria:
-    #             raise ValidationError("As faltas devem estar entre 0 e " + str(record.disciplina_id.carga_horaria) )
+    @api.constrains('faltas')
+    def _check_faltas(self):  
+        for record in self:
+            if record.faltas < 0 or record.faltas > record.disciplina_id.carga_horaria:
+                raise ValidationError("As faltas devem estar entre 0 e " + str(record.disciplina_id.carga_horaria) )
     
     @api.constrains('nota_1')
     def _check_nota_1(self):  

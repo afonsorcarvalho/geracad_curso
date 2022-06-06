@@ -52,7 +52,7 @@
                 </group>
                 <group string="Datas">
                   <field name="data_vencimento"/>
-                  <field name="data_pagamento"/>
+                  <field name="data_pagamento" />
                 </group>
               </group>         
               <group>
