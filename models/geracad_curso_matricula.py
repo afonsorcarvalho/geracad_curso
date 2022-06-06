@@ -112,6 +112,11 @@ class GeracadCursoMatricula(models.Model):
         compute='_compute_contratos',
             
         )
+    parcelas_count = fields.Integer(
+        string='Qtd. Parcelas', 
+        compute='_compute_parcelas',
+            
+        )
     
     contrato_gerado = fields.Boolean("Gerado Contrato?",tracking=True ,readonly=True)
 

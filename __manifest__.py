@@ -44,6 +44,7 @@
         'reports/report_historico_aluno_notas_template.xml',
         'reports/report_historico_aluno_template.xml',
         'reports/report_turma_disciplina_diario_template.xml',
+        'reports/report_turma_disciplina_ata_avaliacao_template.xml',
         'reports/report_actions.xml',
     ],
     # only loaded in demonstration mode

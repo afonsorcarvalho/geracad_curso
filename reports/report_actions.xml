@@ -76,6 +76,21 @@
     <!-- <field name="paperformat_id" ref="report.paperformat_euro" /> --> 
     <field name="help">Diário</field>
 </record>
+<record id="action_ata_avaliação_turma_disciplina_report" model="ir.actions.report">
+    <field name="name">Ata de Avaliação Turma</field>
+    <field name="model">geracad.curso.turma.disciplina</field>
+    <field name="report_type">qweb-html</field>
+    <field name="report_name">geracad_curso.report_turma_disciplina_ata_avaliacao_template</field>
+    <field name="report_file">geracad_curso.report_turma_disciplina_ata_avaliacao_template</field>
+    <field name="attachment_use" eval="False"/>
+    
+     <field name="print_report_name">'Ata Avaliação Turma - %s' % (object.name)</field> 
+     <field name="binding_model_id" ref="model_geracad_curso_turma_disciplina"/> 
+     <field name="paperformat_id" ref="paperformat_ata_avaliacao"/> 
+    
+    <!-- <field name="paperformat_id" ref="report.paperformat_euro" /> --> 
+    <field name="help">Diário</field>
+</record>
 
  
  </odoo>
