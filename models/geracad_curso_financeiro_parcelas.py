@@ -53,6 +53,12 @@ class GeracadCursoFinanceiroParcelas(models.Model):
         readonly=True,
         store=True
         )
+    curso_turma_codigo = fields.Char(
+        related = 'curso_matricula_id.curso_turma_codigo',
+        string='Curso Turma',
+        readonly=True,
+        store=True
+        )
    
     data_vencimento = fields.Date(
         string='Data Vencimento',
