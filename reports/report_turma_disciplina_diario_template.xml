@@ -180,7 +180,7 @@
                         </div>
                         <div class="col-6 diario_date" >
                              
-                            <t t-esc="o.get_diario_date()"/>
+                           <!-- <t t-esc="o.get_diario_date()"/> -->
                            
                         </div>
                     </div>
