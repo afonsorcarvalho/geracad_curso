@@ -12,6 +12,7 @@ class GeracadCursoFinanceiroParcelas(models.Model):
     _name = "geracad.curso.financeiro.parcelas"
     _description = "Parcelas do curso"
     _check_company_auto = True
+    _order = "id desc"
 
     
     _inherit = ['mail.thread']

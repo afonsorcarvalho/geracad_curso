@@ -10,6 +10,7 @@ class GeracadCursoTurma(models.Model):
     _name = "geracad.curso.turma"
     _description = "Turmas de Cursos"
     _check_company_auto = True
+    _order = "data_abertura DESC"
 
     
     _inherit = ['mail.thread']

@@ -10,6 +10,7 @@ class GeracadCurso(models.Model):
     _description = "Gerenciamento de cursos"
 
     _inherit = ['mail.thread']
+  
     
 
     name = fields.Char()
