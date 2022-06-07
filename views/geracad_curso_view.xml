@@ -451,9 +451,10 @@
 
     <!-- menu categories -->
 
-    <menuitem name="Matriculas" id="geracad_curso.menu_matricular" sequence="1" parent="geracad_curso.menu_root"/>
-    <menuitem name="Turmas" id="geracad_curso.menu_turmas" sequence="2" parent="geracad_curso.menu_root"/>
-    <menuitem name="Financeiro" id="geracad_curso.financeiro" sequence="3" 
+    <menuitem name="Alunos" id="geracad_curso.menu_alunos" sequence="1" parent="geracad_curso.menu_root"  action="geracad_aluno.geracad_aluno_action_window"/>
+    <menuitem name="Matriculas" id="geracad_curso.menu_matricular" sequence="2" parent="geracad_curso.menu_root"/>
+    <menuitem name="Turmas" id="geracad_curso.menu_turmas" sequence="3" parent="geracad_curso.menu_root"/>
+    <menuitem name="Financeiro" id="geracad_curso.financeiro" sequence="4" 
     groups="group_geracad_curso_finaceiro"
       parent="geracad_curso.menu_root"/>
     <menuitem name="Configuração" id="geracad_curso.configuracao" sequence="100" parent="geracad_curso.menu_root"/>

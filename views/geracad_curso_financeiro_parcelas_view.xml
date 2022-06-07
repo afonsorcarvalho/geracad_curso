@@ -6,8 +6,18 @@
       <field name="name">cursos.financeiro.parcelas.list</field>
       <field name="model">geracad.curso.financeiro.parcelas</field>
       <field name="arch" type="xml">
-        <tree>
+        <tree  create="false">
+        <header> <button name="action_pagar_parcela" string="Receber Pagamento" type="object" class="oe_highlight"/></header>
+         
+          <button name="action_pagar_parcela" string="Receber Pagamento" type="object" class="oe_highlight" attrs="{'invisible': [('state', '=', 'recebido')]}"/>
+          <!-- <button name="action_cancelar_pagamento_parcela" string="Cancelar Pagamento" type="object" class="btn-primary"/> -->
+          
+          
+         
+          
+          
          <field name="name" optional="hide"/>
+         
          <field name="curso_matricula_id" optional="show"/>
          <field name="aluno_id" optional="hide"/>
          <field name="sacado" optional="show"/>
@@ -25,6 +35,9 @@
 
          
         <field name="state" optional="show"/>
+       
+        
+      
         </tree>
    
       </field>
@@ -34,7 +47,13 @@
       <field name="name">geracad.curso.financeiro.parcelas.form</field>
       <field name="model">geracad.curso.financeiro.parcelas</field>
       <field name="arch" type="xml">
-          <form string="Parcelas">
+          <form string="Parcelas" 
+          
+          create="false"
+          
+          
+          
+           >
             <header>
               <!--   <button name="action_confirma_contrato" string="Confirmar" class="oe_highlight" states="draft" type="object"/>
            <button name="action_cancela_contrato" string="Cancelar"  states="vigente" type="object"/>
@@ -42,32 +61,39 @@
               <field name="state" widget="statusbar" statusbar_visible="draft, vigente, finalizado" statusbar_colors="{'KEY_IS_STATE':'VALUE_IS_COLOR'}"/> -->
             </header>
             <sheet>
+              <widget name="web_ribbon" title="Recebido" attrs="{'invisible': [('state', '!=', 'recebido')]}"/>
               <h1>
-                <field name="name"></field>
+                <field name="name" readonly="1"></field>
+                <field name="state" invisible="1"></field>
               </h1>
               <group >
-                <group string="Aluno">
-                  <field name="curso_matricula_id"/>
+                <group string="Aluno" readonly="1">
+                  <field name="curso_matricula_id" readonly="1"/>
                   <field name="aluno_id"/>
                   <field name="curso_nome"/>
                 </group>
                 <group string="Datas">
-                  <field name="data_vencimento"/>
-                  <field name="data_pagamento" />
+                  <field name="data_vencimento" attrs="{'invisible': [('state', '=', 'recebido')]}"/>
+                  <field name="data_pagamento" readonly="1" />
                 </group>
               </group>         
               <group>
-                <group string="Condições de Pagamento">
+                <group string="Condições de Pagamento" >
 
-                  <field name="valor"/>
-                  <field name="valor_pago"/>
-                  <field name="esta_pago"/>
-                  <field name="forma_de_pagamento"/>
+                  <field name="valor" attrs="{'readonly':[('state','=','recebido')]}"/>
+                  <field name="valor_pago" readonly="1"/>
+                  <field name="esta_pago" readonly="1"/>
+                  <field name="forma_de_pagamento" attrs="{'readonly':[('state','=','recebido')]}"/>
 
                 </group>
                 <group string="Dados Sacado">
-                  <field name="sacado"/>     
-                  <field name="sacado_cpf"/>     
+                  <field name="sacado" attrs="{'readonly':[('state','=','recebido')]}"/>     
+                  <field name="sacado_cpf" attrs="{'readonly':[('state','=','recebido')]}"/>     
+                              
+                </group>
+                <group string="Anotações" >
+                  <field name="observacao" attrs="{'readonly':[('state','=','recebido')]}"/>     
+                 
                               
                 </group>
               </group>         
@@ -125,11 +151,22 @@
       </field>
     </record>
 
+    <record id="view_account_invoice_report_graph" model="ir.ui.view">
+      <field name="name">geracad.curso.financeiro.parcelas.graph</field>
+      <field name="model">geracad.curso.financeiro.parcelas</field>
+      <field name="arch" type="xml">
+          <graph string="Análise de Parcelas" type="line" sample="1" disable_linking="1">
+              <field name="company_id" />
+              <field name="valor_pago" type="measure"/>
+              <field name="valor" type="measure"/>
+          </graph>
+      </field>
+ </record>
     <record model="ir.actions.act_window" id="geracad_curso_financeiro_parcelas_action_window">
       <field name="name">Parcelas</field>
       <field name="type">ir.actions.act_window</field>
       <field name="res_model">geracad.curso.financeiro.parcelas</field>
-      <field name="view_mode">tree,form,pivot</field>
+      <field name="view_mode">tree,form,pivot,graph</field>
    
       <field name="search_view_id" ref="geracad_curso_financeiro_parcelas_search"/>
     

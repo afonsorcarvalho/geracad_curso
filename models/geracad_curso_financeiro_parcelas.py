@@ -71,12 +71,13 @@ class GeracadCursoFinanceiroParcelas(models.Model):
         track_visibility='true'
     )
     numero_parcela = fields.Integer("Parcela")
-    valor = fields.Monetary(string='Valor', required=True)
-    valor_pago = fields.Monetary(string='Valor Pago', required=True, default=0)
+    valor = fields.Monetary(string='Valor', required=True, track_visibility='true')
+    valor_pago = fields.Monetary(string='Valor Pago', required=True, default=0, track_visibility='true')
     esta_pago = fields.Boolean("Pago", default=0)
     juros = fields.Float("Juros")
     multa = fields.Float("Multa")
     desconto = fields.Float("Desconto")
+    observacao = fields.Text("Anotações")
     
 
     forma_de_pagamento = fields.Selection(
@@ -91,7 +92,8 @@ class GeracadCursoFinanceiroParcelas(models.Model):
             ('tribunal','Tribunal'), 
             
             ],
-        required=True
+        required=True,
+        track_visibility='true'
 
     )
     
@@ -104,7 +106,7 @@ class GeracadCursoFinanceiroParcelas(models.Model):
         ('draft', 'Rascunho'),
         ('vigente', 'Vigente'),
         ('cancelado', 'Cancelado'),
-        ('finalizado', 'Finalizado'),
+        ('recebido', 'Recebido'),
         ('suspenso', 'Suspenso'),
     ], string="Status", default="draft", track_visibility='true')
 
@@ -114,8 +116,8 @@ class GeracadCursoFinanceiroParcelas(models.Model):
     def _compute_codigo_parcela(self):
         _logger.info("gerando codigo parcela")
         self.name = self.contrato_id.name + ""
+    
 
-   
     
   
     """
@@ -124,12 +126,33 @@ class GeracadCursoFinanceiroParcelas(models.Model):
 
     """
 
-    
+    def action_pagar_parcela(self):
+        if self.state == 'recebido' or self.esta_pago:
+            raise ValidationError('Parcela já está paga!')
 
-            
-
-
+        dummy, act_id = self.env["ir.model.data"].get_object_reference(
+            "geracad_curso", "action_geracad_curso_pagamento_parcela"
+        )
         
-
+        vals = self.env["ir.actions.act_window"].browse(act_id).read()[0]
+        vals["context"] = {
+            "default_valor_devido": self.valor,
+            "default_valor_pago": self.valor,
+            "default_company_id": self.company_id.id,
+            
+            "default_aluno_id": self.aluno_id.id,
+           
+            "default_parcela_id": self.id,
+            "default_forma_de_pagamento": self.forma_de_pagamento,
+            "default_comunication": self.observacao,
+        }
+        return vals
     
-       
+    def action_cancelar_pagamento_parcela(self):
+        _logger.debug("CANCELAR PAGAMENTO DE PARCELA")
+        self.write({
+            'state': 'recebido',
+            'valor_pago': 0,
+            'esta_pago' : False,
+
+        })
