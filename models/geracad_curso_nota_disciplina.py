@@ -15,6 +15,7 @@ class GeracadCursoNotaDisciplina(models.Model):
     _name = "geracad.curso.nota.disciplina"
     _description = "Notas de Disciplinas de Cursos"
     _check_company_auto = True
+    _order = 'aluno_nome'
   
     _inherit = ['mail.thread']
   
@@ -35,6 +36,15 @@ class GeracadCursoNotaDisciplina(models.Model):
         string="Matricula Curso",
         
         related='disciplina_matricula_id.curso_matricula_id',
+        readonly=True,
+        store=True
+        
+        )
+    aluno_nome = fields.Char(
+       
+        string="Nome do Aluno",
+        
+        related='disciplina_matricula_id.curso_matricula_id.aluno_id.name',
         readonly=True,
         store=True
         

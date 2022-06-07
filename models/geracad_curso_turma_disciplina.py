@@ -235,6 +235,7 @@ class GeracadCursoTurmDisciplina(models.Model):
         _logger.debug("ADICIONANDO ALUNOS PELA TURMA CURSOS")
         _logger.debug(self.curso_turma_id.name)
         _logger.debug(self.name)
+        self.message_post(body="Atualizado Lista de Alunos da disciplina!!")
        
         if self.curso_turma_id:
             _logger.debug("ADICIONADA A TURMA NO FORMULARIO")
