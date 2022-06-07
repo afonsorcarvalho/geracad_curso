@@ -135,7 +135,7 @@ class GeracadCursoFinanceiroParcelas(models.Model):
             "geracad_curso", "action_geracad_curso_pagamento_parcela"
         )
         
-        vals = self.env["ir.actions.act_window"].browse(act_id).read()[0]
+        vals = self.env["ir.actions.act_window"].sudo().browse(act_id).read()[0]
         vals["context"] = {
             "default_valor_devido": self.valor,
             "default_valor_pago": self.valor,
