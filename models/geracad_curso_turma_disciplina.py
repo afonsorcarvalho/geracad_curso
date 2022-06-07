@@ -170,8 +170,7 @@ class GeracadCursoTurmDisciplina(models.Model):
     def get_fields_to_ignore_in_search(self): 
         
         return [ 'message_needaction',
-            'active',
-            'active',
+           
             'create_date',
             'create_uid',
             'message_channel_ids',
