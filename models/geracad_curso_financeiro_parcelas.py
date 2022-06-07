@@ -131,7 +131,7 @@ class GeracadCursoFinanceiroParcelas(models.Model):
         if self.state == 'recebido' or self.esta_pago:
             raise ValidationError('Parcela já está paga!')
 
-        dummy, act_id = self.env["ir.model.data"].get_object_reference(
+        dummy, act_id = self.env["ir.model.data"].sudo().get_object_reference(
             "geracad_curso", "action_geracad_curso_pagamento_parcela"
         )
         

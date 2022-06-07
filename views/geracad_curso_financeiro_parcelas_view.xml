@@ -9,7 +9,7 @@
         <tree  create="false">
        
          
-          <button name="%(action_pagar_parcela)d"  groups="geracad_curso.group_geracad_curso_finaceiro" string="Receber Pagamento" type="object" class="oe_highlight" attrs="{'invisible': [('state', '=', 'recebido')]}"/>
+          <button name="action_pagar_parcela"  groups="geracad_curso.group_geracad_curso_finaceiro" string="Receber Pagamento" type="object" class="oe_highlight" attrs="{'invisible': [('state', '=', 'recebido')]}"/>
           <!-- <button name="action_cancelar_pagamento_parcela" string="Cancelar Pagamento" type="object" class="btn-primary"/> -->
           
           
