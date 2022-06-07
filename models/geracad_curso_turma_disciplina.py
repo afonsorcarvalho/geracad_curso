@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from ast import For
 from odoo import models, fields, api, _
 from datetime import date
 from babel.dates import format_datetime, format_date
@@ -224,10 +225,54 @@ class GeracadCursoTurmDisciplina(models.Model):
         vals['name'] = self._gera_codigo_turma(vals) or _('New')
         vals['state'] = 'aberta'
         
+        
         result = super(GeracadCursoTurmDisciplina, self).create(vals)
+       
         return result
     
-    
+
+    def action_adiciona_alunos_turma_curso(self):
+        _logger.debug("ADICIONANDO ALUNOS PELA TURMA CURSOS")
+        _logger.debug(self.curso_turma_id.name)
+        _logger.debug(self.name)
+       
+        if self.curso_turma_id:
+            _logger.debug("ADICIONADA A TURMA NO FORMULARIO")
+            _logger.debug(self.curso_turma_id.name)
+            #pega todos os alunos inscritos na turma do curso desta turma de disciplina
+            matriculas_cursos_alunos = self.env['geracad.curso.matricula'].search([('curso_turma_id','=',self.curso_turma_id.id)])
+            _logger.debug("MATRICULAS DE CURSOS ENCONTRADAS:")
+            _logger.debug(matriculas_cursos_alunos)
+           
+            
+            for matricula_curso in matriculas_cursos_alunos:     
+                _logger.debug(matricula_curso.name)
+
+                if matricula_curso.state == 'inscrito': 
+                    _logger.debug("PROCURANDO SE MATRICULA JA ESTA ADICIONADA")
+                    
+                    matriculas_disciplinas_alunos = self.env['geracad.curso.matricula.disciplina'].search([
+                       
+                        '&',
+                        ('turma_disciplina_id','=',self.id),
+                        ('state','=','inscrito'),
+                   
+                    ])  
+                    _logger.debug(matriculas_disciplinas_alunos)
+                    ids_matriculas_cursos_alunos = list(map(lambda x: x.curso_matricula_id.id,matriculas_disciplinas_alunos))
+                    _logger.debug(ids_matriculas_cursos_alunos)
+                    if matricula_curso.id not in ids_matriculas_cursos_alunos:
+                        _logger.debug("MATRICULANDO ALUNO")
+                        _logger.debug("ADICIONANDO MATRICULA: " + str(matricula_curso.name))
+                        self.env['geracad.curso.matricula.disciplina'].create({
+                            'curso_matricula_id': matricula_curso.id,
+                            'turma_disciplina_id': self.id,
+                            'state': 'inscrito'
+                        })
+                    else:
+                         _logger.debug("ALUNO JA MATRICULADO")
+
+            
     
     @api.depends('name', 'disciplina_id')
     def name_get(self):

@@ -10,6 +10,7 @@ class GeracadCursoMatriculaDisciplina(models.Model):
     _name = "geracad.curso.matricula.disciplina"
     _description = "matricula de Disciplinas de Cursos"
     _check_company_auto = True
+    _order = "aluno_id"
 
     
     _inherit = ['mail.thread']
@@ -72,6 +73,7 @@ class GeracadCursoMatriculaDisciplina(models.Model):
         ('expulso', 'Expulso'), 
         ('falecido', 'Falecido'),
         ('formado', 'Formado'),
+        ('transferido', 'Transferido'),
         
     ], string="Status", default="draft", readonly=False)
 

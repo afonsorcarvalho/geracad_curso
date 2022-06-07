@@ -85,6 +85,7 @@ class GeracadCursoMatricula(models.Model):
         ('expulso', 'Expulso'), 
         ('falecido', 'Falecido'),
         ('formado', 'Formado'),
+        ('transferido', 'Transferido'),
         
     ], string="Status", default="draft", readonly=False, tracking=True
     
