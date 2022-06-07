@@ -45,6 +45,7 @@
         'reports/report_historico_aluno_template.xml',
         'reports/report_turma_disciplina_diario_template.xml',
         'reports/report_turma_disciplina_ata_avaliacao_template.xml',
+        'reports/report_turma_disciplina_ata_frequencia_avaliacao_template.xml',
         'reports/report_actions.xml',
         'wizard/pagamento_parcela.xml',
     ],

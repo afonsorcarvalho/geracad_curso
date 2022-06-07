@@ -274,11 +274,11 @@
           <header>
             
             <button name="action_encerrar_matricula" string="Encerrar" class="oe_highlight" states="aberta" type="object"
-                special="cancel"
+               
                 confirm="Tem certeza que deseja encerrar matriculas nessa turma? Esta ação não poderá ser defeita"
             />
             <button name="action_cancelar_matricula" string="Cancelar"  states="aberta" type="object"
-                special="cancel"
+                
                 confirm="Tem certeza que deseja cancelar essa turma? Esta ação não poderá ser defeita"
             />
             <button name="action_suspender_matricula" string="Suspender" states="aberta" type="object"/>
@@ -307,7 +307,7 @@
             </div>
             
             <h1>
-                <field name="name" string="Código" />
+                <field name="name" string="Código" readonly="1"/>
             </h1>
             <group>
              
@@ -321,7 +321,9 @@
 
               </group>
               <group>
-                <field name="data_abertura" attrs="{'readonly':[('state','!=','draft')]  }"/>
+                <field name="data_abertura" attrs="{'readonly':[('state','!=','draft')]  }" 
+                required="1"
+                />
                 <field name="data_encerramento"/>
                 <field name="vagas" />
                 <field name="active" invisible="1" />

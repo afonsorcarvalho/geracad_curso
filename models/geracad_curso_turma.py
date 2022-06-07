@@ -149,11 +149,14 @@ class GeracadCursoTurma(models.Model):
         })
 
     def action_encerrar_matricula(self):
+        _logger.debug("ENCERRANDO MATRICULA")
         self.write({
             'state': 'encerrada',
             'matricula_aberta': False,
             })
-    
+    #TODO
+    # - verficar se tem matriculas no curso e cancelar todas as matrícurlas
+    # - verificar pendencias financeiras e cancelar todas as parcelas também
     def action_cancelar_matricula(self):
         self.write({
             'state': 'cancelada',

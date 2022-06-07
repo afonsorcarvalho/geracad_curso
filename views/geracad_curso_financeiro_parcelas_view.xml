@@ -7,9 +7,9 @@
       <field name="model">geracad.curso.financeiro.parcelas</field>
       <field name="arch" type="xml">
         <tree  create="false">
-        <header> <button name="action_pagar_parcela" string="Receber Pagamento" type="object" class="oe_highlight"/></header>
+       
          
-          <button name="action_pagar_parcela" string="Receber Pagamento" type="object" class="oe_highlight" attrs="{'invisible': [('state', '=', 'recebido')]}"/>
+          <button name="action_pagar_parcela"  groups="geracad_curso.group_geracad_curso_finaceiro" string="Receber Pagamento" type="object" class="oe_highlight" attrs="{'invisible': [('state', '=', 'recebido')]}"/>
           <!-- <button name="action_cancelar_pagamento_parcela" string="Cancelar Pagamento" type="object" class="btn-primary"/> -->
           
           
@@ -17,6 +17,7 @@
           
           
          <field name="name" optional="hide"/>
+         <field name="numero_parcela" optional="show"/>
          
          <field name="curso_matricula_id" optional="show"/>
          <field name="aluno_id" optional="hide"/>
@@ -25,8 +26,8 @@
          <field name="data_vencimento" optional="show"/>
          <field name="data_pagamento" optional="show"/>
          
-         <field name="valor" sum="Total" optional="show"/>
-         <field name="valor_pago" sum="Total Pago" optional="show"/>
+         <field name="valor" sum="Total" widget="monetary" optional="show"/>
+         <field name="valor_pago" sum="Total Pago" widget="monetary" optional="show"/>
          <field name="esta_pago" optional="show"/>
          <field name="juros" sum="Juros" optional="show"/>
          <field name="multa" sum="Multas" optional="show"/>
@@ -55,6 +56,9 @@
           
            >
             <header>
+              <button name="action_pagar_parcela" 
+              groups="geracad_curso.group_geracad_curso_finaceiro"
+               string="Receber Pagamento" type="object" class="oe_highlight" attrs="{'invisible': [('state', '=', 'recebido')]}"/>
               <!--   <button name="action_confirma_contrato" string="Confirmar" class="oe_highlight" states="draft" type="object"/>
            <button name="action_cancela_contrato" string="Cancelar"  states="vigente" type="object"/>
               <button name="action_finaliza_contrato" string="Finalizar" class="oe_highlight" states="vigente" type="object"/>
@@ -80,8 +84,8 @@
               <group>
                 <group string="Condições de Pagamento" >
 
-                  <field name="valor" attrs="{'readonly':[('state','=','recebido')]}"/>
-                  <field name="valor_pago" readonly="1"/>
+                  <field name="valor" widget="monetary" attrs="{'readonly':[('state','=','recebido')]}"/>
+                  <field name="valor_pago" widget="monetary" readonly="1" />
                   <field name="esta_pago" readonly="1"/>
                   <field name="forma_de_pagamento" attrs="{'readonly':[('state','=','recebido')]}"/>
 
