@@ -14,6 +14,7 @@
           <field name="sigla" placeholder="Sigla do Curso" optional="show"
             options="{'always_reload': True, 'show':True}"
           />
+          
           <field name="display_name" string="Nome"/>
           
           <field name="type_curso" placeholder="Tipo do Curso"
@@ -41,6 +42,7 @@
                 <group>
                   
                   <field name="sigla" placeholder="Sigla do Curso"/>
+                  <field name="resolucao" placeholder="Resolução"/>
                   <field name="type_curso" placeholder="Tipo do Curso" options="{'no_create': True}" />
                   <field name="quantidade_de_periodos" string="Períodos" placeholder="Períodos"/>
                   <field name="carga_horaria_total" placeholder="Carga horária"/>
@@ -440,6 +442,7 @@
     
    
     <!-- Top menu item -->
+    <menuitem name="Alunos" id="geracad_curso.menu_alunos" sequence="1" parent="geracad_curso.menu_root"  />
 
     <menuitem name="Cursos" id="geracad_curso.menu_root" web_icon="geracad_curso,static/description/icon.png"
     action="geracad_curso_matricula_action_window" 
@@ -453,7 +456,7 @@
 
     <!-- menu categories -->
 
-    <menuitem name="Alunos" id="geracad_curso.menu_alunos" sequence="1" parent="geracad_curso.menu_root"  action="geracad_aluno.geracad_aluno_action_window"/>
+    
     <menuitem name="Matriculas" id="geracad_curso.menu_matricular" sequence="2" parent="geracad_curso.menu_root"/>
     <menuitem name="Turmas" id="geracad_curso.menu_turmas" sequence="3" parent="geracad_curso.menu_root"/>
     <menuitem name="Financeiro" id="geracad_curso.financeiro" sequence="4" 
@@ -461,13 +464,19 @@
       parent="geracad_curso.menu_root"/>
     <menuitem name="Configuração" id="geracad_curso.configuracao" sequence="100" parent="geracad_curso.menu_root"/>
 
-    <!-- actions -->
-
+    
+    <!-- SUBMENU ALUNOS --> 
+    <menuitem name="Visualizar Alunos" id="geracad_curso.menu_visualiza_aluno" sequence="1" parent="geracad_curso.menu_alunos"  action="geracad_aluno.geracad_aluno_action_window"/>
+    <menuitem name="Histórico" id="geracad_curso.menu_alunos_historico" sequence="2" parent="geracad_curso.menu_alunos"
+              action="geracad_curso_matricula_action_window"/>
+    <menuitem name="Notas" id="geracad_curso.menu_alunos_notas" sequence="2" parent="geracad_curso.menu_alunos"
+              action="geracad_curso_notas_disciplina_action_window"/>
+    <!-- SUBMENU MATRICULAS --> 
     <menuitem name="Curso" id="geracad_curso.matricular_curso_menu_list" parent="geracad_curso.menu_matricular"
               action="geracad_curso_matricula_action_window"/>
     <menuitem name="Disciplina" id="geracad_curso.matricular_disciplina_menu_list" parent="geracad_curso.menu_matricular"
               action="geracad_curso_matricula_disciplina_action_window"/>
-
+    <!-- SUBMENU TURMAS --> 
     <menuitem name="Curso" id="geracad_curso.turma_curso_menu_list" parent="geracad_curso.menu_turmas"
               action="geracad_curso_turma_action_window"/>
     <menuitem name="Disciplina" id="geracad_curso.turma_disciplina_menu_list" parent="geracad_curso.menu_turmas"

@@ -6,7 +6,7 @@
       <field name="name">cursos.financeiro.parcelas.list</field>
       <field name="model">geracad.curso.financeiro.parcelas</field>
       <field name="arch" type="xml">
-        <tree  create="false">
+        <tree  create="false" >
        
          
           <button name="action_pagar_parcela"  groups="geracad_curso.group_geracad_curso_finaceiro" string="Receber Pagamento" type="object" class="oe_highlight" attrs="{'invisible': [('state', '=', 'recebido')]}"/>
@@ -125,6 +125,8 @@
           <field name="contrato_id"/>
           <field name="curso_nome"/>
           <field name="company_id"/>
+          <field name="data_vencimento"/>
+          
       
             <filter name="filter_data_vencimento" date="data_vencimento" 
               string="Data de vencimento" default_period="this_week" />
@@ -137,13 +139,14 @@
           <filter name="filter_esta_pago" string="Está paga" domain="[('esta_pago','=',True)]"/>
           <filter name="filter_nao_esta_pago" string="Não está paga"
           domain="[('esta_pago','=',False)]"/>
-      
+          <group expand="1" string="Group By">
           <filter name="groupby_unidade" string="Unidade" context="{'group_by' : 'company_id'}" groups="base.group_multi_company"></filter>
           <filter name="groupby_curso_turma_codigo" string="Curso Turma" context="{'group_by' : 'curso_turma_codigo'}"></filter>
           <filter name="groupby_curso_nome" string="Nome do curso" context="{'group_by' : 'curso_nome'}"></filter>
-          <filter name="groupby_data_vencimento" string="Data de vencimento" context="{'group_by' : 'data_vencimento'}"></filter> 
-          <filter name="groupby_data_pagamento" string="Data do Pagamento" context="{'group_by' : 'data_pagamento'}"></filter>
-
+          <separator/>
+          <filter name="groupby_data_vencimento" string="Data de vencimento" context="{'group_by' : 'data_vencimento:month'}"></filter> 
+          <filter name="groupby_data_pagamento" string="Data do Pagamento" context="{'group_by' : 'data_pagamento:month'}"></filter>
+        </group>
         
           <searchpanel>
             <field name="state" string="Status" enable_counters="1" select="multi" />
@@ -189,16 +192,16 @@
       <field name="model">geracad.curso.financeiro.parcelas</field>
       <field name="arch" type="xml">
           <pivot string="Finaceiro Parcelas" disable_linking="True">
-            <field name="curso_turma_codigo"/>
+            <field name="curso_turma_codigo" type="row"/>
             <field name="name" />
             <field name="curso_matricula_id" />
             <field name="aluno_id"  />
-            <field name="curso_nome" type="row"/>
-            <field name="data_vencimento" type="col"/>
+            <field name="curso_nome" />
+            <field name="data_vencimento" type="col" interval="month"/>
             <field name="data_pagamento" />
             
-            <field name="valor" type="measure" />
-            <field name="valor_pago" type="measure" />
+            <field name="valor" type="measure" widget="monetary" />
+            <field name="valor_pago"  widget="monetary"/>
             <field name="esta_pago" />
          
             <field name="forma_de_pagamento"/>

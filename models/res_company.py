@@ -9,7 +9,9 @@ class ResCompany(models.Model):
 
     sigla = fields.Char()
     diretor = fields.Char()
+    diretor_formacao = fields.Char()
     secretaria = fields.Char()
+    secretaria_formacao = fields.Char()
 
     @api.onchange('sigla')
     def set_caps_sigla(self):
