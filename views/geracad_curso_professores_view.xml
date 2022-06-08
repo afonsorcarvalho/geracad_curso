@@ -1,0 +1,180 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="geracad_curso_professores_list">
+      <field name="name">Lista de Professores</field>
+      <field name="model">res.partner</field>
+      <field name="arch" type="xml">
+        <tree 
+        edit="true"
+        create="true"
+        
+        delete="false"
+        
+        
+        >
+          <field name="display_name" string="Nome"/>
+          <field name="function" invisible="1"/>
+          <field name="phone" class="o_force_ltr" optional="show"/>
+          <field name="email" optional="show"/>
+          <field name="city" optional="show"/>
+          <field name="state_id" optional="hide" readonly="1"/>
+          <field name="country_id" optional="show" readonly="1" invisible="1"/>
+         
+          <field name="company_id" groups="base.group_multi_company" readonly="1"/>
+          <field name="is_company" invisible="1"/>
+          <field name="parent_id" invisible="1" readonly="1"/>
+          <field name="active" invisible="1"/>
+          <field name="e_aluno" invisible="1"/>
+          <field name="e_professor" invisible="1"/>
+        </tree>
+    
+      </field>
+    </record>
+    <record model="ir.ui.view" id="geracad_curso_professores_form_view">
+      <field name="name">geracad.curso.professores.form</field>
+      <field name="model">res.partner</field>
+     
+      <field name="arch" type="xml">
+          <form string="Professores">
+            <sheet>
+              <div class="oe_button_box" name="button_box">
+                <button name="action_go_turmas_disciplinas_ministradas" class="oe_stat_button" icon="fa-file-text-o"
+                type="object" >
+                <field name="turmas_disciplinas_ministradas_count"  class="o_state_value"/> 
+                <span class="o_stat_text">Disciplinas</span>
+                </button>
+              
+            </div>
+              <div class="oe_title">
+                
+                <field name="is_company" invisible="1"/>
+                <field name="commercial_partner_id" invisible="1"/>
+                <field name="active" invisible="1"/>
+                <h1>
+                  <field name="name" default_focus="1" placeholder="Nome do Aluno" required="1" />
+                </h1>
+                <span class="o_form_label" name="label_cpf">
+                  CPF
+               </span>
+                <h3>
+                  <field name="l10n_br_cnpj_cpf" placeholder="CPF" nolabel="1" required="1"/>
+                </h3>
+                <span class="o_form_label" name="label_data_nascimento">
+                  Data de Nascimento
+               </span>
+                <h3>
+                  <field name="data_nascimento" placeholder="Data de Nascimento" required="1"/>
+                </h3>
+              </div>
+              <group>
+                <group>
+                    <field name="type" groups="base.group_no_one" invisible="1"/>
+                    <span class="o_form_label o_td_label" name="address_name">
+                       <b>Endereço</b>
+                    </span>
+                    <div class="o_address_format">
+                     
+                      <field name="zip" placeholder="CEP" class="o_address_zip"/>
+                        <field name="street" placeholder="Rua..." class="o_address_street"/>
+                        <field name="street2" placeholder="Complemento ..." class="o_address_street"/>
+                        <field name="l10n_br_district" placeholder="Bairro" class="o_address_city" />
+                        <field name="l10n_br_number" placeholder="Número" class="o_address_city" />  
+                        <field name="ponto_referencia_endereco" placeholder="Ponto de referência" />
+                        <field name="city" placeholder="City" class="o_address_city"/>
+                        <field name="state_id" class="o_address_state" placeholder="Estado" options="{'no_open': True, 'no_quick_create': True}"/>
+                        <field name="country_id" placeholder="País" class="o_address_country" options='{"no_open": True, "no_create": True}'/>
+                    </div>
+                    <field name="e_professor" invisible="1" />
+                </group>
+                <group string="Contatos">
+                   
+                    <field name="phone" />
+                    <field name="mobile"/>
+                    <field name="user_ids" invisible="1"/>
+                    <field name="email" widget="email" context="{'gravatar_image': True}" attrs="{'required': [('user_ids','!=', [])]}"/>
+                    <field name="website" widget="url" placeholder="e.g. https://www.jgma.com.br"/>
+                    
+                    
+                    
+                </group>
+            </group>
+            <group name= "outros">
+              <!-- <group string="Filiação">
+                  
+                  
+                    <field name="nome_pai" placeholder="Nome do pai..."/>
+                    <field name="nome_mae" placeholder="Nome do mãe..."/>
+              </group> -->
+              <group string="Outros">
+                  
+                    <field name="sexo" placeholder="Sexo..."/>
+                    <field name="rg" placeholder="RG..."/>
+                    <field name="escolaridade" placeholder="Escolaridade..."/>
+                    <field name="observacoes" placeholder="Observações..."/>
+                    
+              </group>
+              
+            </group>
+            </sheet>
+            <div class="oe_chatter">
+              <field name="message_follower_ids" widget="mail_followers"/>
+              <field name="message_ids" widget="mail_thread"/>
+          </div>
+          </form>
+      </field>
+    </record>
+
+
+    <record id="geracad_curso_professores_search" model="ir.ui.view">
+      <field name="name">geracad.curso.professor.search</field>
+      <field name="model">res.partner</field>
+      <field name="arch" type="xml">
+        <search string="Procura Professores">
+          
+          <field name="name"></field>
+      </search>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="geracad_curso_professores_action_window">
+      <field name="name">Professores</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">res.partner</field>
+      <field name="view_mode">tree,form</field>
+   
+      <field name="search_view_id" ref="geracad_curso_professores_search"/>
+      <field name="domain">[('e_professor','=',1)]</field>
+      <field name="context">{'default_e_professor':True}</field>
+      <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+          Crie um novo professor
+        </p>
+      </field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record id="action_geracad_curso_professores_form_view" model="ir.actions.act_window.view">
+      <field eval="11" name="sequence"/>
+      <field name="view_mode">form</field>
+      <field name="view_id" ref="geracad_curso_professores_form_view"/>
+      <field name="act_window_id" ref="geracad_curso_professores_action_window"/>
+      
+    </record>
+    <record id="action_geracad_aluno_tree_view" model="ir.actions.act_window.view">
+      <field eval="10" name="sequence"/>
+      <field name="view_mode">tree</field>
+      <field name="view_id" ref="geracad_curso_professores_list"/>
+      <field name="act_window_id" ref="geracad_curso_professores_action_window"/>
+    </record>
+
+    <!-- Top menu item
+
+    <menuitem name="Professores" id="geracad_aluno.menu_root" web_icon="geracad_aluno,static/description/icon.png"
+    action="geracad_aluno_action_window"
+    /> -->
+
+
+  </data>
+</odoo>
