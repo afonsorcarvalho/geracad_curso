@@ -45,7 +45,9 @@
 												</h4>
 												<h5 class="text-center" t-field="o.curso_nome" />
 												
-												<t t-if="o.curso_id.resolucao"><h6 class="text-center" t-field="o.curso_id.resolucao" /></t>
+												<t t-if="o.curso_id.resolucao"><h6 class="text-center"  >
+												RESOLUÇÃO <span t-field="o.curso_id.resolucao" />
+												</h6></t>
 												
 												
 													
