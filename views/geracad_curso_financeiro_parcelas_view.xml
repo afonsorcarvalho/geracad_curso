@@ -21,21 +21,21 @@
          
          <field name="curso_matricula_id" optional="show"/>
          <field name="aluno_id" optional="hide"/>
-         <field name="sacado" optional="show"/>
-         <field name="curso_nome" optional="show"/>
+         <field name="sacado" optional="hide"/>
+         <field name="curso_nome" optional="hide"/>
          <field name="data_vencimento" optional="show"/>
          <field name="data_pagamento" optional="show"/>
          
          <field name="valor" sum="Total" widget="monetary" optional="show"/>
          <field name="valor_pago" sum="Total Pago" widget="monetary" optional="show"/>
          <field name="esta_pago" optional="show"/>
-         <field name="juros" sum="Juros" optional="show"/>
-         <field name="multa" sum="Multas" optional="show"/>
-         <field name="desconto" sum="descontos" optional="show"/>
+         <field name="juros" sum="Juros" optional="hide"/>
+         <field name="multa" sum="Multas" optional="hide"/>
+         <field name="desconto" sum="descontos" optional="hide"/>
          <field name="forma_de_pagamento" optional="show"/>
 
          
-        <field name="state" optional="show"/>
+        <field name="state" optional="hide"/>
        
         
       
@@ -116,25 +116,28 @@
       <field name="model">geracad.curso.financeiro.parcelas</field>
       <field name="arch" type="xml">
         <search string="Procura parcelas">
+
+          <field name="curso_turma_codigo"/>
           <field name="name"/>
-          <field name="sacado" optional="show"/>
+          <field name="sacado" />
           <field name="aluno_id"/>
           <field name="curso_matricula_id"/>
           <field name="contrato_id"/>
           <field name="curso_nome"/>
           <field name="company_id"/>
-          <group expand="0" string="Datas ..."> 
+      
             <filter name="filter_data_vencimento" date="data_vencimento" 
-              string="Data de vencimento"/>
+              string="Data de vencimento" default_period="this_week" />
           <filter name="filter_data_pagamento" date="data_pagamento" 
               string="Data do Pagamento"/>
+          <separator/>
             
-          </group> 
+          
       
           <filter name="filter_esta_pago" string="Está paga" domain="[('esta_pago','=',True)]"/>
           <filter name="filter_nao_esta_pago" string="Não está paga"
           domain="[('esta_pago','=',False)]"/>
- 
+      
           <filter name="groupby_unidade" string="Unidade" context="{'group_by' : 'company_id'}" groups="base.group_multi_company"></filter>
           <filter name="groupby_curso_turma_codigo" string="Curso Turma" context="{'group_by' : 'curso_turma_codigo'}"></filter>
           <filter name="groupby_curso_nome" string="Nome do curso" context="{'group_by' : 'curso_nome'}"></filter>
@@ -186,6 +189,7 @@
       <field name="model">geracad.curso.financeiro.parcelas</field>
       <field name="arch" type="xml">
           <pivot string="Finaceiro Parcelas" disable_linking="True">
+            <field name="curso_turma_codigo"/>
             <field name="name" />
             <field name="curso_matricula_id" />
             <field name="aluno_id"  />
@@ -196,9 +200,7 @@
             <field name="valor" type="measure" />
             <field name="valor_pago" type="measure" />
             <field name="esta_pago" />
-            <field name="juros" type="measure"/>
-            <field name="multa" type="measure"/>
-            <field name="desconto" type="measure" />
+         
             <field name="forma_de_pagamento"/>
    
             <field name="sacado" />

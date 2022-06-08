@@ -8,6 +8,8 @@ class ResCompany(models.Model):
     _inherit = 'res.company'
 
     sigla = fields.Char()
+    diretor = fields.Char()
+    secretaria = fields.Char()
 
     @api.onchange('sigla')
     def set_caps_sigla(self):
