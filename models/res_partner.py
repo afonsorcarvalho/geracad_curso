@@ -24,12 +24,22 @@ class geracadCursoAluno(models.Model):
         inverse_name="aluno_id",
 
     )
+    turma_disciplina_ids = fields.One2many(
+       
+        comodel_name="geracad.curso.turma.disciplina",
+        inverse_name="professor_id",
+
+    )
 
     matriculas_curso_count = fields.Integer("Cursos Matriculados", compute="_compute_matriculas_curso_count")
+    turmas_disciplinas_ministradas_count = fields.Integer("Disciplinas Ministradas", compute="_compute_turmas_disciplinas_ministradas_count")
 
     
     def _compute_matriculas_curso_count(self):
         self.matriculas_curso_count = len(self.matriculas_ids)
+    
+    def _compute_turmas_disciplinas_ministradas_count(self):
+        self.turmas_disciplinas_ministradas_count = len(self.turma_disciplina_ids)
     
     def action_go_matriculas_disciplinas(self):
         _logger.info("action aluno open matriculas disciplinas")
@@ -43,6 +53,22 @@ class geracadCursoAluno(models.Model):
             'domain': [('aluno_id', '=', self.id)],
             'context': {
                 'default_aluno_id': self.id,
+                
+            }
+        }
+        
+    def action_go_turmas_disciplinas_ministradas(self):
+        _logger.info("action professor open matriculas disciplinas")
+        
+        return {
+            'name': _('Cursos Ministrados'),
+            'type': 'ir.actions.act_window',
+            'target':'current',
+            'view_mode': 'tree,form',
+            'res_model': 'geracad.curso.turma.disciplina',
+            'domain': [('professor_id', '=', self.id)],
+            'context': {
+                'default_professor_id': self.id,
                 
             }
         }

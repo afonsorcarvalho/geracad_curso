@@ -485,6 +485,8 @@
               />
 
               <!-- configuração -->
+    <menuitem name="Professores" id="geracad_curso.professores_menu" parent="geracad_curso.configuracao"
+              action="geracad_curso_professores_action_window" sequence="0"/>
     <menuitem name="Cursos" id="geracad_curso.curso_menu" parent="geracad_curso.configuracao"
               action="geracad_curso_action_window" sequence="0"/>
     <menuitem name="Tipos de Curso" id="geracad_curso.tipo_curso_menu" parent="geracad_curso.configuracao"
