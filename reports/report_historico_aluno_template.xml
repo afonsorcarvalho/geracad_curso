@@ -44,9 +44,9 @@
 													HISTÓRICO ESCOLAR
 												</h4>
 												<h5 class="text-center" t-field="o.curso_nome" />
-												<h6 class="text-center">
-													Resolução n° 144/2017-CEE/MA
-												</h6>
+												<h6 class="text-center" t-field="o.curso_id.resolucao" />
+													
+												
 											</div>
 										</div>
 									</th>
@@ -109,9 +109,9 @@
 							<div class="col-6 text-center">
 								_____________________________________________
 								<br />
-								<strong>Carlos Cesar Bezerra de Carvalho</strong>
+								<strong><t t-esc="o.company_id.diretor" /></strong>
 								<br />
-								<span>Engº Eletricista - CREA 6091/D</span>
+								<span><t t-esc="o.company_id.diretor_formacao" /></span>
 								<br />
 								<span>Diretor</span>
 								<br />
@@ -121,7 +121,9 @@
 							<div class="col-6 text-center">
 								_____________________________________________
 								<br />
-								<strong>Samara Maria Soares Prazeres</strong>
+								<strong> 
+								<t t-esc="o.company_id.secretaria" />
+								  </strong>
 								<br />
 								<span>Secretária Escolar</span>
 								<br />
