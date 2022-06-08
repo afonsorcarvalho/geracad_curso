@@ -44,7 +44,10 @@
 													HISTÓRICO ESCOLAR
 												</h4>
 												<h5 class="text-center" t-field="o.curso_nome" />
-												<h6 class="text-center" t-field="o.curso_id.resolucao" />
+												
+												<t t-if="o.curso_id.resolucao"><h6 class="text-center" t-field="o.curso_id.resolucao" /></t>
+												
+												
 													
 												
 											</div>
