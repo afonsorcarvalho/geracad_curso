@@ -268,14 +268,53 @@ class GeracadCursoMatricula(models.Model):
             }
         }
     #TODO
-    # - Fazer todas as disciplinas ainda nao cursadas ficarem
-    # tambem trancada
+    # 
+    #  FAZER ACTION FALECIMENTO
+    #  
+
     def action_trancar(self):
         _logger.info("Matrícula Trancada")
+        for matricula_disciplina in self.matriculas_disciplina_ids:
+            _logger.info(matricula_disciplina.name)
+
+            for nota in matricula_disciplina.turma_disciplina_id.notas:
+                if nota.situation == 'IN':
+                    _logger.info("trancada")
+                    nota.write({
+                        'situation': 'TR',
+                        
+                    })
+                    matricula_disciplina.write({
+                        'state': 'trancado'
+
+                    })
         self.write({'state': 'trancado'})
 
     def action_destrancar(self):
         _logger.info("Matrícula Destrancada")
+        self.write({'state': 'inscrito'})
+    
+    def action_abandono(self):
+        _logger.info("Matrícula Abandonada")
+        for matricula_disciplina in self.matriculas_disciplina_ids:
+            _logger.info(matricula_disciplina.name)
+
+            for nota in matricula_disciplina.turma_disciplina_id.notas:
+                if nota.situation == 'IN':
+                    _logger.info("abandonada")
+                    nota.write({
+                        'situation': 'AB',
+                        'state': 'concluida',
+                    })
+                    matricula_disciplina.write({
+                        'state': 'abandono'
+
+                    })
+
+        self.write({'state': 'abandono'})
+
+    def action_reativar(self):
+        _logger.info("Matrícula Retivar")
         self.write({'state': 'inscrito'})
     
 

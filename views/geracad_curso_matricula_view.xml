@@ -47,10 +47,10 @@
         <field name="arch" type="xml">
          
           <search string="Procure">
+            <field name="aluno_id" string="Nome do Aluno"/>
             <field name="name" string="Matrícula do Aluno"  />
             <field name="curso_turma_codigo"  />
             <field name="curso_id" />
-            <field name="aluno_id" />
             <field name="data_matricula" />
             <field name="data_conclusao" />
             <field name="company_id" />
@@ -124,6 +124,10 @@
               <button type="object" name="action_destrancar" string="Destrancar"
                         class="oe_highlight"
                         attrs="{'invisible': [('state', '!=', 'trancado')]}"/>
+              <button type="object" name="action_abandono" string="Abandono"
+                        class="oe_highlight"
+                        attrs="{'invisible': [('state', '=', 'abandono')]}"/>
+              
               <button type="object" name="action_gerar_contrato" string="Gerar Contrato"
                         class="oe_highlight"
                         attrs="{'invisible': [('state', '!=', 'inscrito'),]}"/>

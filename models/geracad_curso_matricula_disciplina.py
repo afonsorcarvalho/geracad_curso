@@ -40,7 +40,25 @@ class GeracadCursoMatriculaDisciplina(models.Model):
         required=True
         
         )
+    turma_disciplina_id = fields.Many2one(
+        "geracad.curso.turma.disciplina",
+        string='Turma Disciplina',
+        required=True
+        
+        )
+    nota = fields.One2many(string='Nota',comodel_name='geracad.curso.nota.disciplina',inverse_name='disciplina_matricula_id' )
     
+    notas_disciplinas_count = fields.Integer(
+        string='Disciplinas', 
+        compute='_compute_notas_disciplinas',
+            
+        )
+    
+    def _compute_notas_disciplinas(self):
+        for record in self:    
+            record.notas_disciplinas_count = self.env["geracad.curso.nota.disciplina"].search(
+                [('curso_matricula_id', '=', record.curso_matricula_id.id)],
+                offset=0, limit=None, order=None, count=True)
 
     aluno_id = fields.Many2one(
         
@@ -127,6 +145,22 @@ class GeracadCursoMatriculaDisciplina(models.Model):
 
     """
 
+    def action_go_notas_disciplinas(self):
+
+        _logger.info("action open notas disciplinas")
+        
+        return {
+            'name': _('Notas Disciplinas'),
+            'type': 'ir.actions.act_window',
+            'target':'current',
+            'view_mode': 'tree,form',
+            'res_model': 'geracad.curso.nota.disciplina',
+            'domain': [('curso_matricula_id', '=', self.curso_matricula_id.id)],
+            'context': {
+                'default_curso_matricula_id': self.curso_matricula_id.id,
+     
+            }
+        }
     
 
         

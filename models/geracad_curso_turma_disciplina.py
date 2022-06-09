@@ -127,6 +127,7 @@ class GeracadCursoTurmDisciplina(models.Model):
         ('suspensa', 'Matrícula Suspensa'), 
         ('em_andamento', 'Em andamento'), 
         ('cancelada', 'Cancelada'),
+        
     ], string="Status", default="draft", track_visibility='true')
 
     sala_id = fields.Many2one(

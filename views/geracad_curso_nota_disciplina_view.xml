@@ -91,14 +91,14 @@
                   readonly="1" 
                   />
                   <field name="turma_disciplina_id"  readonly="1"/>
-                  <field name="faltas"/>
-                  <field name="nota_1"/>
-                  <field name="nota_2"/>
-                  <field name="final"/>
+                  <field name="faltas" attrs="{'readonly': [('state','in',('concluida'))]}"/>
+                  <field name="nota_1" attrs="{'readonly': [('state','in',('concluida'))]}"/>
+                  <field name="nota_2" attrs="{'readonly': [('state','in',('concluida'))]}"/>
+                  <field name="final" attrs="{'readonly': [('state','in',('concluida'))]}"/>
                   <field name="media"  readonly="1"/>
-                  <field name="situation"/>
+                  <field name="situation" attrs="{'readonly': [('state','in',('concluida'))]}" />
                   <field name="professor_id"/>
-                  <field name="state"/>
+                  <field name="state" attrs="{'readonly': [('state','in',('concluida'))]}"/>
                   
                 </group>
                 <group>
