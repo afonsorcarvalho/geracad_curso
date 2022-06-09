@@ -27,11 +27,20 @@ class GeracadCursoFinanceiroParcelas(models.Model):
     company_id = fields.Many2one(
         'res.company', string="Unidade", required=True, default=lambda self: self.env.company
     )
+    
     curso_matricula_id = fields.Many2one(
         'geracad.curso.matricula',
         string='Matricula',
         required=True
         )
+
+    type_curso =   fields.Many2one(
+        string="Tipo do Curso",
+        related="curso_matricula_id.curso_id.type_curso",
+        readonly=True,
+        store=True,
+
+    )
     contrato_id = fields.Many2one(
         'geracad.curso.contrato',
         string='Contrato',
