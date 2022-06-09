@@ -155,7 +155,7 @@
             <field name="type_curso" string="Tipo" enable_counters="1" select="multi"/>
             <field name="company_id" string="Unidade" enable_counters="1" select="multi"/>
             <field name="forma_de_pagamento" string="Forma de pagamento" enable_counters="1" select="multi"/>
-            <field name="state" string="Status" enable_counters="1" select="multi" />
+          <!--  <field name="state" string="Status" enable_counters="1" select="multi" /> -->
            
            
           
