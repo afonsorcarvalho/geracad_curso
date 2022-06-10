@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
-from datetime import date
-import logging
+from datetime import date, timedelta
 
+
+
+from odoo.exceptions import UserError
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT, misc
+
+import logging
 _logger = logging.getLogger(__name__)
 
 class GeracadCursoMatricula(models.Model):
@@ -267,10 +272,102 @@ class GeracadCursoMatricula(models.Model):
              
             }
         }
-    #TODO
+
+    
+    #TODO.
     # 
     #  FAZER ACTION FALECIMENTO
     #  
+    
+    def _muda_situacao_nota_e_matricula_disciplina(nota_id,situacao):
+        _logger.debug("mudando situação da nota")
+    
+    def _tem_contrato_vigente(self):
+        contratos_vigentes_count = self.env["geracad.curso.contrato"].search([ 
+        '&',
+        ('curso_matricula_id','=', self.id),
+        '|',
+        ('state','=', 'vigente'),
+        ('state','=', 'draft'),
+            ], offset=0, limit=None, order=None, count=True)
+        if contratos_vigentes_count > 0:
+            return True
+        else:
+            return False
+
+    def _suspende_contrato(self):
+        self._muda_state_contrato('suspenso')
+
+    def _cancela_contrato(self):
+        self._muda_state_contrato('cancelado')
+
+
+    def _muda_state_contrato(self,state):
+        
+        contrato_ids = self.env["geracad.curso.contrato"].search([
+        
+        ('curso_matricula_id','=', self.id)
+            ], offset=0, limit=None, order=None, count=False)
+        for contrato in contrato_ids:
+            if contrato.state == 'vigente' or contrato.state == 'draft':
+                contrato.write({
+                    'state': state
+                })
+    
+    # MUDA TODAS AS PARCELAS COM DATA DE VENCIMENTO DEPOIS DO DIA ATUAL
+    
+    def _cancela_parcelas_a_vencer(self):
+        _logger.debug("cancelando parcelas")
+        self._muda_state_parcelas_a_vencer('cancelado', True)
+
+
+    def _suspende_parcelas_a_vencer(self):
+        _logger.debug("suspendendo parcelas")
+        self._muda_state_parcelas_a_vencer('suspenso', True)
+
+    def _muda_state_parcelas_a_vencer(self,state, active):
+        _logger.debug("mudando situação das parcelas a vencer")
+        date_atual = (date.today() - timedelta(days=1)).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+        
+        parcelas_ids = self.env["geracad.curso.financeiro.parcelas"].search([
+            '&',('data_vencimento', '>', date_atual),
+            ('curso_matricula_id','=', self.id)
+            
+            
+            ], offset=0, limit=None, order=None, count=False)
+        _logger.debug(parcelas_ids)
+        for parcela in parcelas_ids:
+            _logger.debug(parcela)
+            if not parcela.esta_pago:
+                _logger.debug(state)
+                parcela.write({
+                    'state': state,
+                    'active': active,
+
+                })
+    def _muda_state_parcelas(self,state,active):
+        _logger.debug("mudando situação das parcelas")
+        
+        
+        parcelas_ids = self.env["geracad.curso.financeiro.parcelas"].search([
+            '&',
+            ('curso_matricula_id','=', self.id),
+            '|',
+            ('active','=', False),
+            ('active','=', True),
+            
+            
+            ], offset=0, limit=None, order=None, count=False)
+        _logger.debug(parcelas_ids)
+        for parcela in parcelas_ids:
+            _logger.debug(parcela)
+            if not parcela.esta_pago:
+                _logger.debug(state)
+                parcela.write({
+                    'state': state,
+                    'active': active,
+
+                })
 
     def action_trancar(self):
         _logger.info("Matrícula Trancada")
@@ -289,10 +386,14 @@ class GeracadCursoMatricula(models.Model):
 
                     })
         self.write({'state': 'trancado'})
+        self._suspende_parcelas_a_vencer()
+        self._suspende_contrato()
 
     def action_destrancar(self):
         _logger.info("Matrícula Destrancada")
+
         self.write({'state': 'inscrito'})
+        self._muda_state_parcelas('vigente',True)
     
     def action_abandono(self):
         _logger.info("Matrícula Abandonada")
@@ -312,6 +413,9 @@ class GeracadCursoMatricula(models.Model):
                     })
 
         self.write({'state': 'abandono'})
+        self._cancela_parcelas_a_vencer()
+        self._cancela_contrato()
+
 
     def action_reativar(self):
         _logger.info("Matrícula Retivar")
@@ -356,12 +460,31 @@ class GeracadCursoMatricula(models.Model):
             }
         }
     
-    def action_go_contratos(self):
+    
+    def action_go_gera_contrato(self):
 
         _logger.info("action open notas disciplinas")
+        self._tem_contrato_vigente()
         
         return {
             'name': _('Gerar Contrato'),
+            'type': 'ir.actions.act_window',
+            'target':'current',
+            'view_mode': 'form',
+            'res_model': 'geracad.curso.contrato',
+            'domain': [('curso_matricula_id', '=', self.id)],
+            'context': {
+                'default_curso_matricula_id': self.id,
+             
+            }
+        }
+    def action_go_contratos(self):
+
+        _logger.info("action open notas disciplinas")
+        self._tem_contrato_vigente()
+        
+        return {
+            'name': _('Contratos'),
             'type': 'ir.actions.act_window',
             'target':'current',
             'view_mode': 'tree,form',

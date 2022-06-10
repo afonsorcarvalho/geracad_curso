@@ -182,7 +182,37 @@ class GeracadCursoTurma(models.Model):
             'res_model': 'geracad.curso.matricula',
             'domain': [('curso_turma_id', '=', self.id)],
         }
+
+    # action button pra ajeitar as turmas de curso
+    #
+    #
+    def action_ajeita_unidade_turma_cursos(self):
+        _logger.debug("AJEITANDO TURMA  ")
+        for rec in self:
+            codigo_turma = rec.name
+            _logger.debug( codigo_turma )
+            sigla_curso = rec.curso_id.sigla
+            _logger.debug( sigla_curso )
+            
+            codigo_unidade = codigo_turma[:-(5+len(sigla_curso))]
+            todas_unidades = self.env['res.company'].search([], offset=0, limit=None, order=None, count=False)
+
+            for unidade in todas_unidades:
+                _logger.debug(unidade.sigla)
+                if unidade.sigla:
+                    if unidade.sigla in codigo_turma[:len(unidade.sigla)]:
+                        _logger.debug( "achei" )
+                        company_id = self.env['res.company'].search([('sigla', '=', unidade.sigla )], offset=0, limit=None, order=None, count=False)
+                        _logger.debug(company_id.name)
+                        rec.company_id = company_id.id
+
+           
+
+            
+
         
+
+
 
 
         

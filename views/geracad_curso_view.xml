@@ -10,7 +10,7 @@
         delete="false"
         >
          
-         
+       
           <field name="sigla" placeholder="Sigla do Curso" optional="show"
             options="{'always_reload': True, 'show':True}"
           />
@@ -116,6 +116,7 @@
           <field name="name" string="nome"/>
           <field name="sigla" string="Sigla"/>
           <field name="type_curso" string="Tipo de Curso"/>
+          <field name="company_id" string="Unidade"/>
       </search>
       </field>
     </record>
@@ -253,6 +254,13 @@
       <field name="model">geracad.curso.turma</field>
       <field name="arch" type="xml">
         <tree default_order='data_abertura desc'>        
+          <header>
+            <button name="action_ajeita_unidade_turma_cursos" string="ajeita unidade" class="oe_highlight" type="object"
+            
+             groups="base.group_system"
+            
+            />
+          </header>
           <field name="name" string="Nome"/>
           <field name="curso_id" string="Curso"/>
           <field name="turno" string="Turno"/>

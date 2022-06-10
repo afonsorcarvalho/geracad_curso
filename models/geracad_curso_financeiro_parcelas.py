@@ -27,7 +27,7 @@ class GeracadCursoFinanceiroParcelas(models.Model):
     company_id = fields.Many2one(
         'res.company', string="Unidade", required=True, default=lambda self: self.env.company
     )
-    
+
     curso_matricula_id = fields.Many2one(
         'geracad.curso.matricula',
         string='Matricula',
@@ -139,6 +139,10 @@ class GeracadCursoFinanceiroParcelas(models.Model):
     def action_pagar_parcela(self):
         if self.state == 'recebido' or self.esta_pago:
             raise ValidationError('Parcela já está paga!')
+        if self.state == 'suspenso':
+            raise ValidationError('Parcela está suspensa. Provavelmente a matrícula do aluno está trancada!')
+        if self.state == 'cancelada':
+            raise ValidationError('Parcela está cancelada. Não pode ser paga!')
 
         dummy, act_id = self.env["ir.model.data"].sudo().get_object_reference(
             "geracad_curso", "action_geracad_curso_pagamento_parcela"
@@ -159,6 +163,13 @@ class GeracadCursoFinanceiroParcelas(models.Model):
         return vals
     
     def action_cancelar_pagamento_parcela(self):
+        if self.state != 'recebido' or not self.esta_pago:
+            raise ValidationError('A Parcela não foi paga ainda! ')
+        if self.state == 'suspenso':
+            raise ValidationError('Parcela está suspensa. Provavelmente a matrícula do aluno está trancada!')
+        if self.state == 'cancelada':
+            raise ValidationError('Parcela está cancelada. Não pode ser paga!')
+
         _logger.debug("CANCELAR PAGAMENTO DE PARCELA")
         self.write({
             'state': 'recebido',

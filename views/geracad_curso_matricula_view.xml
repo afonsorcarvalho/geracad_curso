@@ -128,7 +128,7 @@
                         class="oe_highlight"
                         attrs="{'invisible': [('state', '=', 'abandono')]}"/>
               
-              <button type="object" name="action_gerar_contrato" string="Gerar Contrato"
+              <button type="object" name="action_go_gera_contrato" string="Gerar Contrato"
                         class="oe_highlight"
                         attrs="{'invisible': [('state', '!=', 'inscrito'),]}"/>
               <field name="state"  widget="statusbar"  />

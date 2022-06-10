@@ -16,6 +16,14 @@ class GeracadCurso(models.Model):
     name = fields.Char()
     sigla = fields.Char()
     resolucao = fields.Char("Resolução")
+    
+    company_id = fields.Many2one(
+        string='Unidade', 
+        comodel_name='res.company', 
+        required=True, 
+        default=lambda self: self.env.user.company_id
+    )
+    
     type_curso = fields.Many2one(
         string="Tipo do Curso",
         comodel_name="geracad.curso.type",

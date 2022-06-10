@@ -105,6 +105,7 @@ class GeracadCursoContrato(models.Model):
     state = fields.Selection([
         ('draft', 'Rascunho'),
         ('vigente', 'Vigente'),
+        ('suspenso', 'Suspenso'),
         ('cancelado', 'Cancelado'),
         ('finalizado', 'Finalizado'),
     ], string="Status", default="draft", track_visibility='true')
@@ -157,6 +158,7 @@ class GeracadCursoContrato(models.Model):
                     'forma_de_pagamento': self.forma_de_pagamento,
                     'sacado': self.sacado.id,
                     
+                    
 
                 })]
             })
@@ -201,7 +203,15 @@ class GeracadCursoContrato(models.Model):
     def _tem_parcelas_pagas(self):
         _logger.debug("PROCURANDO PARCELAS PAGAS")
         parcelas_pagas = self.env['geracad.curso.financeiro.parcelas'].search([
-            ('contrato_id','=',self.id),('state','=', 'vigente'),('esta_pago','=', True)])
+           '&', 
+           ('contrato_id','=',self.id),
+           '&',
+           ('esta_pago','=', True),
+           '|',
+           ('state','=', 'vigente'),
+           ('state','=', 'draft')
+           ],)
+           
         _logger.debug(parcelas_pagas)
         return parcelas_pagas
 

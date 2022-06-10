@@ -6,7 +6,13 @@
       <field name="name">cursos.financeiro.parcelas.list</field>
       <field name="model">geracad.curso.financeiro.parcelas</field>
       <field name="arch" type="xml">
-        <tree  create="false" >
+        <tree 
+          create="false" 
+          decoration-success="state=='recebido'"
+         
+                
+        
+        >
        
          
           <button name="action_pagar_parcela"  groups="geracad_curso.group_geracad_curso_finaceiro" string="Receber Pagamento" type="object" class="oe_highlight" attrs="{'invisible': [('state', '=', 'recebido')]}"/>
@@ -17,6 +23,9 @@
           
           
          <field name="name" optional="hide"/>
+         <field name="state" widget="badge" optional="show"
+         decoration-danger="esta_pago == False"
+         />
          <field name="numero_parcela" optional="show"/>
          
          <field name="curso_matricula_id" optional="show"/>
@@ -25,19 +34,18 @@
          <field name="aluno_id" optional="hide"/>
          <field name="sacado" optional="hide"/>
          <field name="curso_nome" optional="hide"/>
-         <field name="data_vencimento" optional="show"/>
+         <field name="data_vencimento" optional="show" widget="remaining_days"/>
          <field name="data_pagamento" optional="show"/>
          
          <field name="valor" sum="Total" widget="monetary" optional="show"/>
          <field name="valor_pago" sum="Total Pago" widget="monetary" optional="show"/>
-         <field name="esta_pago" optional="show"/>
+         <field name="esta_pago" optional="hide"/>
          <field name="juros" sum="Juros" optional="hide"/>
          <field name="multa" sum="Multas" optional="hide"/>
          <field name="desconto" sum="descontos" optional="hide"/>
          <field name="forma_de_pagamento" optional="show"/>
 
          
-        <field name="state" optional="hide"/>
        
         
       
@@ -61,6 +69,9 @@
               <button name="action_pagar_parcela" 
               groups="geracad_curso.group_geracad_curso_finaceiro"
                string="Receber Pagamento" type="object" class="oe_highlight" attrs="{'invisible': [('state', '=', 'recebido')]}"/>
+              <button name="action_cancelar_pagamento_parcela" 
+              groups="geracad_curso.group_geracad_curso_finaceiro"
+               string="Cancelar Pagamento" type="object" class="btn-danger" attrs="{'invisible': ['|',('state', '!=', 'recebido'),('esta_pago', '!=', 1)]}"/>
               <!--   <button name="action_confirma_contrato" string="Confirmar" class="oe_highlight" states="draft" type="object"/>
            <button name="action_cancela_contrato" string="Cancelar"  states="vigente" type="object"/>
               <button name="action_finaliza_contrato" string="Finalizar" class="oe_highlight" states="vigente" type="object"/>
@@ -68,6 +79,8 @@
             </header>
             <sheet>
               <widget name="web_ribbon" title="Recebido" attrs="{'invisible': [('state', '!=', 'recebido')]}"/>
+              <widget name="web_ribbon" title="Cancelado"  bg_color="bg-danger" attrs="{'invisible': [('state', '!=', 'cancelado')]}"/>
+              <widget name="web_ribbon" title="Suspenso"  bg_color="bg-info" attrs="{'invisible': [('state', '!=', 'suspenso')]}"/>
               <h1>
                 <field name="name" readonly="1"></field>
                 <field name="state" invisible="1"></field>
@@ -181,6 +194,8 @@
       <field name="type">ir.actions.act_window</field>
       <field name="res_model">geracad.curso.financeiro.parcelas</field>
       <field name="view_mode">tree,form,pivot,graph</field>
+      <field name="domain">[('state', 'in', ['recebido','draft','vigente'])]</field>
+      <field name="context">{'default_state': ['vigente']}</field>
    
       <field name="search_view_id" ref="geracad_curso_financeiro_parcelas_search"/>
     
@@ -227,6 +242,7 @@
     <record id="action_geracad_cursos_financeiro_parcelas_tree_view" model="ir.actions.act_window.view">
       <field eval="10" name="sequence"/>
       <field name="view_mode">tree</field>
+      
       <field name="view_id" ref="geracad_curso_financeiro_parcelas_list"/>
       <field name="act_window_id" ref="geracad_curso_financeiro_parcelas_action_window"/>
     </record>
