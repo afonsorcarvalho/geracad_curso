@@ -47,7 +47,9 @@
                <div class="col-6">
                </div>
                <div class="col-6" align="right">
-                <p>São Luís - MA, 13 de maio de 2000.</p>
+                <p>
+                <t t-esc="o.get_date_str()" />
+                </p>
                </div>
                </div>
    <div class="row center">

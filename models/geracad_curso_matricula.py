@@ -3,12 +3,14 @@
 from odoo import models, fields, api, _
 from datetime import date, timedelta
 
-
+from babel.dates import format_datetime, format_date
+from odoo.tools.misc import formatLang, format_date as odoo_format_date, get_lang
 
 from odoo.exceptions import UserError
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT, misc
 
 import logging
+
 _logger = logging.getLogger(__name__)
 
 class GeracadCursoMatricula(models.Model):
@@ -314,6 +316,15 @@ class GeracadCursoMatricula(models.Model):
                     'state': state
                 })
     
+    #usado na impressão 
+    def get_date_str(self):
+        date_hoje = date.today()
+        locale = get_lang(self.env).code
+
+        _logger.info(self.company_id.city_id.name + '-' + self.company_id.state_id.code)
+        date_str = self.company_id.city_id.name + '-' + self.company_id.state_id.code + ', ' + format_date(date_hoje,format="long",locale=locale)
+        return   date_str
+
     # MUDA TODAS AS PARCELAS COM DATA DE VENCIMENTO DEPOIS DO DIA ATUAL
     
     def _cancela_parcelas_a_vencer(self):

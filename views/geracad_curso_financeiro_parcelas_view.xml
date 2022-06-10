@@ -197,7 +197,7 @@
 
 
     <record model="ir.actions.act_window" id="geracad_curso_financeiro_parcelas_action_window">
-      <field name="name">Parcelas</field>
+      <field name="name">A receber</field>
       <field name="type">ir.actions.act_window</field>
       <field name="res_model">geracad.curso.financeiro.parcelas</field>
       <field name="view_mode">tree,form,pivot,graph</field>
