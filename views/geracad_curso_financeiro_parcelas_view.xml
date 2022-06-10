@@ -8,12 +8,14 @@
       <field name="arch" type="xml">
         <tree 
           create="false" 
-          decoration-success="state=='recebido'"
+          
          
                 
         
         >
-       
+       <header>
+         <button name="action_ajeita_status_parcela"  groups="geracad_curso.group_geracad_curso_finaceiro" string="Ajeita status parcela" type="object" class="oe_highlight" />
+       </header>
          
           <button name="action_pagar_parcela"  groups="geracad_curso.group_geracad_curso_finaceiro" string="Receber Pagamento" type="object" class="oe_highlight" attrs="{'invisible': [('state', '=', 'recebido')]}"/>
           <!-- <button name="action_cancelar_pagamento_parcela" string="Cancelar Pagamento" type="object" class="btn-primary"/> -->
@@ -24,11 +26,13 @@
           
          <field name="name" optional="hide"/>
          <field name="state" widget="badge" optional="show"
-         decoration-danger="esta_pago == False"
+         
+         decoration-success="state=='recebido'"
          />
          <field name="numero_parcela" optional="show"/>
          
-         <field name="curso_matricula_id" optional="show"/>
+         <field name="curso_matricula_id"  optional="show"/>
+         <field name="unidade_curso_turma_id" optional="hiden"/>
          <field name="type_curso" optional="hide"/>
          
          <field name="aluno_id" optional="hide"/>
@@ -139,24 +143,23 @@
           <field name="curso_matricula_id"/>
           <field name="contrato_id"/>
           <field name="curso_nome"/>
-          <field name="company_id"/>
+          <field name="unidade_curso_turma_id" />
           <field name="data_vencimento"/>
           <field name="type_curso"/>
           
       
-            <filter name="filter_data_vencimento" date="data_vencimento" 
+          <filter name="filter_data_vencimento" date="data_vencimento" 
               string="Data de vencimento" default_period="this_week" />
           <filter name="filter_data_pagamento" date="data_pagamento" 
               string="Data do Pagamento"/>
           <separator/>
-            
-          
-      
           <filter name="filter_esta_pago" string="Está paga" domain="[('esta_pago','=',True)]"/>
           <filter name="filter_nao_esta_pago" string="Não está paga"
           domain="[('esta_pago','=',False)]"/>
+          
+          
           <group expand="1" string="Group By">
-          <filter name="groupby_unidade" string="Unidade" context="{'group_by' : 'company_id'}" groups="base.group_multi_company"></filter>
+          <filter name="groupby_unidade" string="Unidade" context="{'group_by' : 'unidade_curso_turma_id'}" groups="base.group_multi_company"></filter>
           <filter name="groupby_curso_turma_codigo" string="Curso Turma" context="{'group_by' : 'curso_turma_codigo'}"></filter>
           <filter name="groupby_curso_nome" string="Nome do curso" context="{'group_by' : 'curso_nome'}"></filter>
           <separator/>
@@ -166,7 +169,7 @@
         
           <searchpanel>
             <field name="type_curso" string="Tipo" enable_counters="1" select="multi"/>
-            <field name="company_id" string="Unidade" enable_counters="1" select="multi"/>
+            <field name="unidade_curso_turma_id" string="Unidade" enable_counters="1" select="multi"/>
             <field name="forma_de_pagamento" string="Forma de pagamento" enable_counters="1" select="multi"/>
           <!--  <field name="state" string="Status" enable_counters="1" select="multi" /> -->
            
@@ -183,12 +186,15 @@
       <field name="model">geracad.curso.financeiro.parcelas</field>
       <field name="arch" type="xml">
           <graph string="Análise de Parcelas" type="line" sample="1" disable_linking="1">
-              <field name="company_id" />
+              <field name="unidade_curso_turma_id" />
+
               <field name="valor_pago" type="measure"/>
               <field name="valor" type="measure"/>
           </graph>
       </field>
  </record>
+
+
     <record model="ir.actions.act_window" id="geracad_curso_financeiro_parcelas_action_window">
       <field name="name">Parcelas</field>
       <field name="type">ir.actions.act_window</field>
@@ -212,6 +218,7 @@
       <field name="arch" type="xml">
           <pivot string="Finaceiro Parcelas" disable_linking="True">
             <field name="curso_turma_codigo" type="row"/>
+            <field name="unidade_curso_turma_id" type="row" />
             <field name="name" />
             <field name="curso_matricula_id" />
             <field name="aluno_id"  />

@@ -69,6 +69,13 @@ class GeracadCursoFinanceiroParcelas(models.Model):
         readonly=True,
         store=True
         )
+
+    unidade_curso_turma_id = fields.Many2one(
+        related = 'curso_matricula_id.curso_turma_id.company_id',
+        string='Unidade do Aluno',
+        readonly=True,
+        store=True,
+    )
    
     data_vencimento = fields.Date(
         string='Data Vencimento',
@@ -114,7 +121,7 @@ class GeracadCursoFinanceiroParcelas(models.Model):
   
     state = fields.Selection([
         ('draft', 'Rascunho'),
-        ('vigente', 'Vigente'),
+        ('vigente', 'A receber'),
         ('cancelado', 'Cancelado'),
         ('recebido', 'Recebido'),
         ('suspenso', 'Suspenso'),
@@ -126,6 +133,15 @@ class GeracadCursoFinanceiroParcelas(models.Model):
     def _compute_codigo_parcela(self):
         _logger.info("gerando codigo parcela")
         self.name = self.contrato_id.name + ""
+    
+    
+    def action_ajeita_status_parcela(self):
+        
+        _logger.info("ajeitando estatus da parcela")
+        for rec in self:
+            if rec.esta_pago and (rec.state == 'vigente' or rec.state == 'draft') :
+                rec.state = 'recebido'
+                
     
 
     
