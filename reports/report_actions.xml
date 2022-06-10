@@ -24,6 +24,8 @@
     
      <field name="print_report_name">'Histórico Aluno - %s - %s' % (object.aluno_id.name, object.name)</field> 
      <field name="binding_model_id" ref="model_geracad_curso_matricula"/> 
+     <field name="paperformat_id" ref="paperformat_historico"/>
+     
     <!-- <field name="paperformat_id" ref="report.paperformat_euro" /> --> 
     <field name="help">Histórico aluno</field>
 </record>

@@ -87,10 +87,10 @@ class GeracadCursoFinanceiroParcelas(models.Model):
         
         track_visibility='true'
     )
-    numero_parcela = fields.Integer("Parcela")
+    numero_parcela = fields.Integer("Parcela",group_operator=False)
     valor = fields.Monetary(string='Valor', required=True, track_visibility='true')
     valor_pago = fields.Monetary(string='Valor Pago', required=True, default=0, track_visibility='true')
-    esta_pago = fields.Boolean("Pago", default=0)
+    esta_pago = fields.Boolean("Pago", default=0, track_visibility='true')
     juros = fields.Float("Juros")
     multa = fields.Float("Multa")
     desconto = fields.Float("Desconto")
