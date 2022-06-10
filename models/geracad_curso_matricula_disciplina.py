@@ -92,6 +92,7 @@ class GeracadCursoMatriculaDisciplina(models.Model):
         ('falecido', 'Falecido'),
         ('formado', 'Formado'),
         ('transferido', 'Transferido'),
+        ('finalizado', 'Finalizada'),
         
     ], string="Status", default="draft", readonly=False)
 

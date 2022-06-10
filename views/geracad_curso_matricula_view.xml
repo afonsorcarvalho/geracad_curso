@@ -52,6 +52,7 @@
             <field name="curso_turma_codigo"  />
             <field name="curso_id" />
             <field name="data_matricula" />
+            <field name="data_previsao_conclusao" />
             <field name="data_conclusao" />
             <field name="company_id" />
             <field name="state" />
@@ -189,6 +190,7 @@
                     options="{'no_create': True}"
                   />
                   <field name="data_matricula" attrs="{'readonly':[('state','!=','draft')]  }"/>
+                  <field name="data_previsao_conclusao" />
                   <field name="data_conclusao" />
                   
                   

@@ -4,64 +4,122 @@
 ]>
 <odoo>
   <template id='view_declaracao_aluno_template'>
-    
+
     <t t-call='web.html_container'>
       <t t-foreach='docs' t-as='o'>
         <t t-call='web.external_layout'>
-        <style>
+          <style>
       p{ margin-left:16px;
       font-size:24px;
+      align:justify;
       }
       div{ 
       font-size:24px;
+      }
+      div .watermark{
+        margin-top: 300px;
+        width: 1000px;
+        height: 180px;
+        color: red;
+        position:absolute;
+        text-align:center;
+        z-index:1000;
+        font-size:82px;
+        -ms-transform: rotate(30deg); 
+        -webkit-transform: rotate(30deg); 
+        transform: rotate(30deg);
       }
       
 
     </style>
           <div class="page">
 
+            <t t-if="o.state=='cancelada'">
+              <div class="watermark" style=";opacity:0.25;">
+                <span>MATRICULA CANCELADA</span>
+              </div>
+            </t>
+            <t t-if="o.state=='trancado'">
+              <div class="watermark" style=";opacity:0.25;">
+                <span>MATRICULA TRANCADA</span>
+              </div>
+            </t>
+            <t t-if="o.state=='abandono'">
+              <div class="watermark" style=";opacity:0.25;">
+                <span>MATRICULA ABANDONADA</span>
+              </div>
+            </t>
+            <t t-if="o.state=='expulso'">
+              <div class="watermark" style=";opacity:0.25;">
+                <span>ALUNO EXPULSO</span>
+              </div>
+            </t>
+            <t t-if="o.state=='falecido'">
+              <div class="watermark" style=";opacity:0.25;">
+                <span>ALUNO FALECIDO</span>
+              </div>
+            </t>
+            <t t-if="o.state=='transferido'">
+              <div class="watermark" style=";opacity:0.25;">
+                <span>MATRICULA TRANSFERIADA</span>
+              </div>
+            </t>
+
+
             <h1 align="center">DECLARAÇÃO</h1>
 
 
-       
-
             <br />
             <br />
             <br />
-           
-              <p align="justify">
-               Declaramos para os devidos fins que o aluno 
-               <span t-field="o.aluno_id.name" />
-               , RG nº 
-               <span t-field="o.aluno_id.rg" />
-               , encontra-se regularmente matriculado nesta instituição de ensino técnico profissionalizante, cursando atualmente o 4° período do curso <span t-field="o.curso_id.name" />.</p>
 
-<p>A Carga Horária total do <span t-field="o.curso_id.name" /> é de <span t-field="o.curso_id.carga_horaria_total" />  horas, dentre as quais estão inclusas as 300 horas de estágio supervisionado obrigatório.</p>
+            <p >
+              Declaramos para os devidos fins que o aluno
+              <span style="text-transform:uppercase; font-weight: 800" t-field="o.aluno_id.name" />
+              , RG nº
+              <span t-field="o.aluno_id.rg" />
+              , encontra-se regularmente matriculado nesta instituição de ensino técnico profissionalizante, cursando atualmente o
+              <t t-esc="o.get_periodo_cursado()" />
+              ° período do curso
+              <span style="text-transform:uppercase; font-weight: 800" t-field="o.curso_id.name" />
+              .
+            </p>
 
-<p>Informamos ainda que o referido curso é reconhecido pelo Conselho de Educação do Estado do Maranhão e registrado no Conselho Regional de Engenharia, Arquitetura e Agronomia do Maranhão (CREA-MA).</p>
+            <p>
+              A Carga Horária total do
+              <span style="text-transform:uppercase" t-field="o.curso_id.name" />
+              é de
+              <span style="text-transform:uppercase; font-weight: 800" t-field="o.curso_id.carga_horaria_total" />
+              horas, dentre as quais estão inclusas as 300 horas de estágio supervisionado obrigatório.
+            </p>
 
-<p>Esta declaração terá validade de 30 (trinta) dias após a data de sua emissão.</p>
-               <br/>
-               <br/>
-               <div class="row">
-               <div class="col-6">
-               </div>
-               <div class="col-6" align="right">
+            <p>Informamos ainda que o referido curso é reconhecido pelo Conselho de Educação do Estado do Maranhão e registrado no Conselho Regional de Engenharia, Arquitetura e Agronomia do Maranhão (CREA-MA).</p>
+
+            <p>Esta declaração terá validade de 30 (trinta) dias após a data de sua emissão.</p>
+            <br />
+            <br />
+            <div class="row">
+              <div class="col-6"></div>
+              <div class="col-6" align="right">
                 <p>
-                <t t-esc="o.get_date_str()" />
+                  <t t-esc="o.get_date_str()" />
                 </p>
-               </div>
-               </div>
-   <div class="row center">
-   <div class="col-12 center" align="center">
-   _________________________________________________<br/>
-   Carlos Cesar Bezerra de Carvalho<br/>
-Engenheiro Eletricista<br/>
-Diretor Geral<br/>
-CREA 6091-D<br/>
-</div>
-   </div>        
-             
+              </div>
+            </div>
+            <div class="row center">
+              <div class="col-12 center" align="center">
+                _________________________________________________
+                <br />
+                Carlos Cesar Bezerra de Carvalho
+                <br />
+                Engenheiro Eletricista
+                <br />
+                Diretor Geral
+                <br />
+                CREA 6091-D
+                <br />
+              </div>
+            </div>
 
 
           </div>

@@ -77,6 +77,17 @@ class GeracadCursoMatricula(models.Model):
         track_visibility='true'
     )
 
+    data_previsao_conclusao = fields.Date(
+        string='Data Prevista Conclusão',
+        
+        track_visibility='true'
+    )
+
+    def _default_data_previsao_conclusao(self):
+        date_prevista = (date.today() + timedelta(month=24)).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+        
+        return date_prevista
+   
     data_conclusao = fields.Date(
         string='Data Conclusão',
         default=fields.Date.context_today,
@@ -315,8 +326,30 @@ class GeracadCursoMatricula(models.Model):
                 contrato.write({
                     'state': state
                 })
+    ##########################################
+    #  FUNCOES USADAS NA IMPRESSAO
+    ##########################################
     
-    #usado na impressão 
+    
+    def get_periodo_cursado(self):
+        
+        matricula_disciplina_ids = self.env["geracad.curso.matricula.disciplina"].search([
+            '&',
+            ('curso_matricula_id','=', self.id),
+            
+            ('state','not in', ['cancelada','trancado','expulso']),
+            
+
+            ],order='data_matricula DESC',limit=1)
+        if len(matricula_disciplina_ids):
+            periodo = matricula_disciplina_ids[0].turma_disciplina_id.periodo
+        else:
+            periodo = 1
+        return periodo
+        
+        
+        
+
     def get_date_str(self):
         date_hoje = date.today()
         locale = get_lang(self.env).code
@@ -324,6 +357,9 @@ class GeracadCursoMatricula(models.Model):
         _logger.info(self.company_id.city_id.name + '-' + self.company_id.state_id.code)
         date_str = self.company_id.city_id.name + '-' + self.company_id.state_id.code + ', ' + format_date(date_hoje,format="long",locale=locale)
         return   date_str
+
+    #########################################
+
 
     # MUDA TODAS AS PARCELAS COM DATA DE VENCIMENTO DEPOIS DO DIA ATUAL
     
