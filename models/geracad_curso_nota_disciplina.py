@@ -199,4 +199,29 @@ class GeracadCursoNotaDisciplina(models.Model):
     @api.depends('nota_1', 'nota_2','final')
     def _compute_media(self):
         for record in self:
-            record.media = (record.nota_1 + record.nota_2)/2
+            record.media = self._calcula_media(record.nota_1,record.nota_2,record.final)
+
+    def _calcula_media(self,n1,n2,final):
+
+        media = (n1 + n2)/2
+        
+        if(media < 7):
+            media = (media + final)/2
+        return media
+        
+
+    @api.onchange('nota_1','nota_1','final')
+    def _onchange_categ_id(self):    
+        _logger.debug("mudou nota")
+        for record in self:
+            if record.state != 'concluida':
+                media = self._calcula_media(record.nota_1,record.nota_2, record.final)
+                if media > 7:
+                    if (record.nota_1 + record.nota_2) > 14:
+                        record.situation = 'AM'
+                    else:
+                        record.situation = 'AP'
+                else:
+                    record.situation = 'RC'
+
+                

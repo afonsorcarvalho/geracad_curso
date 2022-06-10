@@ -22,11 +22,12 @@
           <field name="curso_id" readonly="1" optional="hide" />
           <field name="curso_matricula_id" readonly="1" optional="show" />
           <field name="curso_matricula_state" readonly="1" optional="show" widget="badge"
-          decoration-info="state == 'inscrito'"
+              decoration-info="state == 'inscrito'"
 
               decoration-success="state == 'formado'"
               decoration-danger="state == 'cancelada'"
-              decoration-warning="state == 'trancado'"
+           
+              
           />
         
           <field name="aluno_nome" optional="hide" />
@@ -81,6 +82,7 @@
           
           >
             <sheet> 
+              <widget name="web_ribbon" title="Lançada" attrs="{'invisible': [('state', '!=', 'concluida')]}"/>
               <h2><field name="curso_matricula_id" readonly="1"/></h2>
               <group>
                
