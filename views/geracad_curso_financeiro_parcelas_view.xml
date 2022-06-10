@@ -162,6 +162,7 @@
           <filter name="groupby_unidade" string="Unidade" context="{'group_by' : 'unidade_curso_turma_id'}" groups="base.group_multi_company"></filter>
           <filter name="groupby_curso_turma_codigo" string="Curso Turma" context="{'group_by' : 'curso_turma_codigo'}"></filter>
           <filter name="groupby_curso_nome" string="Nome do curso" context="{'group_by' : 'curso_nome'}"></filter>
+          <filter name="groupby_type_curso" string="Tipo" context="{'group_by' : 'type_curso'}"></filter>
           <separator/>
           <filter name="groupby_data_vencimento" string="Data de vencimento" context="{'group_by' : 'data_vencimento:month'}"></filter> 
           <filter name="groupby_data_pagamento" string="Data do Pagamento" context="{'group_by' : 'data_pagamento:month'}"></filter>
