@@ -95,7 +95,15 @@
       <field name="model">geracad.curso.matricula.disciplina</field>
       <field name="arch" type="xml">
           <form string="Disciplina">
+            <header>
+            <!--   <button name="" string="Finalizar" class="oe_highlight" states="inscrito" type=""/> -->
+              <field name="state" widget="statusbar" statusbar_visible="inscrito" statusbar_colors="{'finalizado':'green'}"/>
+            </header>
             <sheet>
+              
+              
+              
+              
               <!-- *****************  SMART BUTTONS ********************* -->
               <div class="oe_button_box" name="button_box">
                 <button name="action_go_notas_disciplinas" type="object" class="oe_stat_button" icon="fa-list-alt">
@@ -112,20 +120,38 @@
             </h4>
               <group>
                 <group>
-                  <field name="curso_matricula_id" options="{'no_create': True}"/>
-                  <field name="aluno_id" />
-                  <field name="curso_nome"/>
-                  <field name="turma_disciplina_id"  options="{'no_create': True}"/>
+                  
+                  
+                  
+                  <field name="curso_matricula_id" attrs="{'readonly' : [('state','!=', 'draft')]  }"
+                   options="{'no_create': True}"/>
+                  <field name="aluno_id" attrs="{'readonly' : [('state','!=', 'draft')]  }" />
+                  <field name="curso_nome" />
+                  <field name="turma_disciplina_id"  options="{'no_create': True}" attrs="{'readonly' : [('state','!=', 'draft')]  }"/>
                   
                 </group>
                 <group >
-                    <field name="data_matricula" />
+                    <field name="data_matricula" attrs="{'readonly' : [('state','!=', 'draft')]  }"/>
                     <field name="company_id"  groups="base.group_multi_company"/>
                   </group>
                 </group>    
                 <group>
                   
-                  <field name="nota" />
+                 
+                  
+                  <field name="nota" nolabel="0"  >
+                    <tree create="false" delete="false" nolabel="0">
+                      <field name="faltas"/>
+                      <field name="nota_1"/>
+                      <field name="nota_2"/>
+                      <field name="final"/>
+                      <field name="media"/>
+                      <field name="situation"/>
+                      <field name="state" widget="badge"/>
+                      
+                    </tree>
+                  </field>
+                  
               </group>     
             </sheet>
             <div class="oe_chatter">

@@ -2,7 +2,11 @@
 
 from re import M
 from odoo import models, fields, api, _
-from datetime import date
+from datetime import date, timedelta
+from babel.dates import format_datetime, format_date
+from odoo.tools.misc import formatLang, format_date as odoo_format_date, get_lang
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT, misc
+
 from odoo.exceptions import UserError, ValidationError
 import logging
 
@@ -141,8 +145,21 @@ class GeracadCursoFinanceiroParcelas(models.Model):
         for rec in self:
             if rec.esta_pago and (rec.state == 'vigente' or rec.state == 'draft') :
                 rec.state = 'recebido'
-                
-    
+    #################################
+    # 
+    # USADO NA IMPRESSAO            
+
+    def get_date_str(self):
+        data_pagamento = self.data_pagamento
+        locale = get_lang(self.env).code
+
+        _logger.info(self.company_id.city_id.name + '-' + self.company_id.state_id.code)
+        try:
+            date_str = self.company_id.city_id.name + '-' + self.company_id.state_id.code + ', ' + format_date(data_pagamento,format="long",locale=locale)
+        except:
+            date_str = "SEM DATA"
+        return   date_str
+
 
     
   

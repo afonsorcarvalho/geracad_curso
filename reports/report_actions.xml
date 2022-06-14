@@ -43,6 +43,19 @@
     <!-- <field name="paperformat_id" ref="report.paperformat_euro" /> --> 
     <field name="help">Declaração aluno</field>
 </record>
+<record id="action_recibo_parcela_report" model="ir.actions.report">
+    <field name="name">Recibo parcela</field>
+    <field name="model">geracad.curso.financeiro.parcelas</field>
+    <field name="report_type">qweb-html</field>
+    <field name="report_name">geracad_curso.view_recibo_parcela_template</field>
+    <field name="report_file">geracad_curso.view_recibo_parcela_template</field>
+    <field name="attachment_use" eval="False"/>
+    
+     <field name="print_report_name">'Recibo Parcela - %s - %s' % (object.numero_parcela, object.curso_matricula_id.name)</field> 
+     <field name="binding_model_id" ref="model_geracad_curso_financeiro_parcelas"/> 
+    <!-- <field name="paperformat_id" ref="report.paperformat_euro" /> --> 
+    <field name="help">Recibo Parcela</field>
+</record>
 
 
 <!-- <record id="paperformat_Portrait" model="report.paperformat" >

@@ -80,6 +80,11 @@ class GeracadCursoMatriculaDisciplina(models.Model):
         default=fields.Date.context_today,
         track_visibility='true'
     )
+    data_conclusao = fields.Date(
+        string='Data Conclusão',
+       
+        track_visibility='true'
+    )
 
    
     state = fields.Selection([
@@ -90,9 +95,8 @@ class GeracadCursoMatriculaDisciplina(models.Model):
         ('cancelada', 'Cancelada'),
         ('expulso', 'Expulso'), 
         ('falecido', 'Falecido'),
-        ('formado', 'Formado'),
         ('transferido', 'Transferido'),
-        ('finalizado', 'Finalizada'),
+        ('finalizado', 'Concluído'),
         
     ], string="Status", default="draft", readonly=False)
 
@@ -137,7 +141,21 @@ class GeracadCursoMatriculaDisciplina(models.Model):
 
         return result
     
+    """
+
+            PRIVATE FUNCTIONS
+
+    """
     
+    def _finaliza_matricula_disciplina(self):
+        self.write({
+            'state':'finalizado'
+        })
+
+    def _set_data_conclusao_matricula_disciplina(self):
+        data_hoje = date.today()
+        self.write({'data_conclusao' : data_hoje})
+        
   
     
     """
@@ -146,6 +164,11 @@ class GeracadCursoMatriculaDisciplina(models.Model):
 
     """
 
+    def action_finaliza_matricula_disciplina(self):
+        for rec in self:
+            rec._set_data_conclusao_matricula_disciplina()
+            rec._finaliza_matricula_disciplina()
+            
     def action_go_notas_disciplinas(self):
 
         _logger.info("action open notas disciplinas")

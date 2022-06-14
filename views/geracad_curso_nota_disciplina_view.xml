@@ -18,6 +18,9 @@
          class="oe_edit_only"
          
          >
+         <header>
+
+         </header>
           
           <field name="curso_id" readonly="1" optional="hide" />
           <field name="curso_matricula_id" readonly="1" optional="show" />
@@ -81,6 +84,13 @@
           
           
           >
+          
+          
+          <header>
+          
+          <button name="action_lancar_nota" states="inscrito,draft" confirm="Despois de lançada, a nota não poderá mais ser alterada!" string="Lançar Nota" type="object" class="oe_highlight"/>
+          
+          </header>
             <sheet> 
               <widget name="web_ribbon" title="Lançada" attrs="{'invisible': [('state', '!=', 'concluida')]}"/>
               <h2><field name="curso_matricula_id" readonly="1"/></h2>
@@ -99,8 +109,8 @@
                   <field name="final" attrs="{'readonly': [('state','in',('concluida'))]}"/>
                   <field name="media"  readonly="1"/>
                   <field name="situation" attrs="{'readonly': [('state','in',('concluida'))]}" />
-                  <field name="professor_id"/>
-                  <field name="state" attrs="{'readonly': [('state','in',('concluida'))]}"/>
+                  <field name="professor_id" attrs="{'readonly': [('state','in',('concluida'))]}"/>
+                  <field name="state" invisible="1" attrs="{'readonly': [('state','in',('concluida'))]}"/>
                   
                 </group>
                 <group>

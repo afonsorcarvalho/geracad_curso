@@ -120,10 +120,15 @@
         <form string="Disciplina">
           <header>
 
-            <button name="action_encerrar_matricula" string="Encerrar" class="oe_highlight" states="aberta" type="object" special="cancel" confirm="Tem certeza que deseja encerrar matriculas nessa turma? Esta ação não poderá ser defeita" />
-            <button name="action_cancelar_matricula" string="Cancelar" states="aberta" type="object" special="cancel" confirm="Tem certeza que deseja cancelar essa turma? Esta ação não poderá ser defeita" />
-            <button name="action_suspender_matricula" string="Suspender" states="aberta" type="object" />
-            <button name="action_abrir_matricula" string="Abrir" states="suspensa" type="object" />
+            <button name="action_encerrar_turma_disciplina" string="Encerrar" class="oe_highlight" states="aberta" type="object"  
+            confirm="Tem certeza que deseja finalizar essa turma?
+            Todas as notas serão dadas como lançadas e não poderão ser modificadas.
+            Todas as matr[i]culas na disciplina dos alunos irão para o status de concluída.
+            Esta ação não poderá ser desfeita!!!
+            " />
+            <button name="action_cancelar_turma_disciplina" string="Cancelar" states="aberta" type="object"  confirm="Tem certeza que deseja cancelar essa turma? Esta ação não poderá ser defeita" />
+            <button name="action_suspender_turma_disciplina" string="Suspender" states="aberta" type="object" />
+            <button name="action_abrir_turma_disciplina" string="Abrir" states="suspensa" type="object" />
             <field name="state" widget="statusbar" statusbar_visible="aberta, encerrada" />
           </header>
           <sheet>

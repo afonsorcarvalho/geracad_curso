@@ -384,26 +384,48 @@ class GeracadCursoTurmDisciplina(models.Model):
         }
 
 
-    def action_suspender_matricula(self):
+    def action_suspender_turma_disciplina(self):
         self.write({
             'state': 'suspensa',
             'matricula_aberta': False,
 
         })
 
-    def action_encerrar_matricula(self):
+    def _encerra_notas_turma_disciplina(self):
+        nota_ids = self.env['geracad.curso.nota.disciplina'].search([('turma_disciplina_id','=',self.id)])
+        for nota in nota_ids:
+            nota.action_lancar_nota()
+
+    def _set_data_encerramento_turma_disciplina(self):
+        data_hoje = date.today()
+        self.write({'data_encerramento' : data_hoje})
+    
+    def _finaliza_matricula_turma_disciplina(self):
+        matricula_disciplina_ids = self.env['geracad.curso.matricula.disciplina'].search([('turma_disciplina_id','=',self.id)])
+        for matricula_disciplina in matricula_disciplina_ids:
+            matricula_disciplina.action_finaliza_matricula_disciplina()
+
+
+
+
+
+
+    def action_encerrar_turma_disciplina(self):
+        self._encerra_notas_turma_disciplina()
+        self._finaliza_matricula_turma_disciplina()
+        self._set_data_encerramento_turma_disciplina()
         self.write({
             'state': 'encerrada',
             'matricula_aberta': False,
             })
     
-    def action_cancelar_matricula(self):
+    def action_cancelar_turma_disciplina(self):
         self.write({
             'state': 'cancelada',
             'matricula_aberta': False,
             })
 
-    def action_abrir_matricula(self):
+    def action_abrir_turma_disciplina(self):
         self.write({
             'state': 'aberta',
             'matricula_aberta': True,

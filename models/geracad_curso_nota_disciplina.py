@@ -175,8 +175,8 @@ class GeracadCursoNotaDisciplina(models.Model):
     @api.constrains('faltas')
     def _check_faltas(self):  
         for record in self:
-            if record.faltas < 0 or record.faltas > record.disciplina_id.carga_horaria:
-                raise ValidationError("As faltas devem estar entre 0 e " + str(record.disciplina_id.carga_horaria) )
+            if record.faltas < 0 or record.faltas >= record.turma_disciplina_id.carga_horaria:
+                raise ValidationError("As faltas devem estar entre 0 e " + str(record.turma_disciplina_id.carga_horaria) )
     
     @api.constrains('nota_1')
     def _check_nota_1(self):  
@@ -216,7 +216,7 @@ class GeracadCursoNotaDisciplina(models.Model):
         for record in self:
             if record.state != 'concluida':
                 media = self._calcula_media(record.nota_1,record.nota_2, record.final)
-                if media > 7:
+                if media >= 7:
                     if (record.nota_1 + record.nota_2) > 14:
                         record.situation = 'AM'
                     else:
@@ -224,4 +224,15 @@ class GeracadCursoNotaDisciplina(models.Model):
                 else:
                     record.situation = 'RC'
 
-                
+    """
+
+            BUTTON ACTIONS
+
+    """
+    def action_lancar_nota(self):    
+        _logger.debug("Nota Lançada")
+        self.write({
+            'state': 'concluida'
+        })
+        
+

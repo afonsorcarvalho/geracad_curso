@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+ 
+  <template id='view_recibo_parcela_template'>
+
+    <t t-call='web.html_container'>
+      <t t-foreach='docs' t-as='o'>
+        <t t-call='web.external_layout'>
+          <style>
+      p{ margin-left:16px;
+      font-size:24px;
+      align:justify;
+      }
+      div{ 
+      font-size:24px;
+      }
+      div .watermark{
+        margin-top: 200px;
+        margin-left: 50px;
+        width: 1000px;
+        height: 180px;
+        color: red;
+        position:absolute;
+        text-align:center;
+        z-index:1000;
+        font-size:82px;
+        -ms-transform: rotate(30deg); 
+        -webkit-transform: rotate(30deg); 
+        transform: rotate(30deg);
+      }
+      
+
+    </style>
+          <!-- <div class="page"> -->
+
+            <t t-if="o.state!='recebido'">
+              <div class="watermark" style=";opacity:0.25;">
+                <span>PARCELA NÃO ESTÁ PAGA</span>
+              </div>
+            </t>
+
+
+            <h1 align="center">RECIBO </h1>
+
+
+            <br />
+            <br />
+            <br />
+
+            <p >
+              Recebemos do(a) Sr.(a)
+              <span style="text-transform:uppercase; font-weight: 800" t-field="o.aluno_id.name" />
+              , CPF nº
+              <span t-field="o.aluno_id.l10n_br_cnpj_cpf" />
+              , a importância de R$ 
+              <span t-field="o.valor_pago" />
+              referente a  
+              <span style="text-transform:uppercase; font-weight: 800" t-field="o.numero_parcela" />º
+              parcela do curso  <span style="text-transform:uppercase;; font-weight: 800" t-field="o.curso_matricula_id.curso_id.name" />
+            </p>
+
+            
+
+            
+            <br />
+            <br />
+            <div class="row">
+              <div class="col-6"></div>
+              <div class="col-6" align="right">
+                <p>
+                  <t t-esc="o.get_date_str()" />
+                </p>
+              </div>
+            </div>
+           
+
+
+          <!-- </div> -->
+        </t>
+      </t>
+    </t>
+  </template>
+</odoo>
+ 
+
+ 
+ 
+ 
+ 
