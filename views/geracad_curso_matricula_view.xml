@@ -135,6 +135,12 @@
               <button type="object" name="action_go_gera_contrato" string="Gerar Contrato"
                         class="oe_highlight"
                         attrs="{'invisible': [('state', '!=', 'inscrito'),]}"/>
+              <button type="object" name="action_habilita_edit_turma_curso" string="Habilita Transferência"
+                        class="oe_highlight"
+                        attrs="{'invisible': [('edit_turma_curso', '==', True),]}"/>
+              <button type="object" name="action_desabilita_edit_turma_curso" string="Desabilita Transferência"
+                        class="oe_highlight"
+                        attrs="{'invisible': [('edit_turma_curso', '==', False),]}"/>
               <field name="state"  widget="statusbar"  />
             </header>
             <sheet>
@@ -186,7 +192,7 @@
                
                 <group>
                                      
-                  <field name="curso_turma_id" string="Turma do Curso" attrs="{'readonly':[('state','!=','draft')]  }"
+                  <field name="curso_turma_id" string="Turma do Curso" attrs="{'readonly':[('state','!=','draft'),('edit_turma_curso', '!=', True)]  }"
                     options="{'no_create': True}"
                   />
                   <field name="aluno_id" string="Aluno" attrs="{'readonly':[('state','!=','draft')]  }"

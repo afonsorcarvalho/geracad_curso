@@ -30,7 +30,7 @@ class GeracadCursoMatricula(models.Model):
         'res.company', string="Unidade", required=True, default=lambda self: self.env.company
         
     )
-
+    edit_turma_curso =  fields.Boolean()
     curso_turma_id = fields.Many2one(
         'geracad.curso.turma',
         string='Turma',
@@ -467,7 +467,19 @@ class GeracadCursoMatricula(models.Model):
         self.write({'state': 'inscrito'})
     
 
-    
+    def action_habilita_edit_turma_curso(self):
+        _logger.info("Edita Turma Curso")
+        self.write({
+            'edit_turma_curso': True,
+        })
+    def action_desabilita_edit_turma_curso(self):
+        _logger.info("Desbilita Turma Curso")
+        self.write({
+            'edit_turma_curso': False,
+        })
+        
+        
+
     
 
     def action_go_matriculas_disciplinas(self):
