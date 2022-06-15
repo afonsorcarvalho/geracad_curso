@@ -25,16 +25,19 @@ class GeracadCursoMatricula(models.Model):
     
 
 
-    name = fields.Char("Código")
+    name = fields.Char("Código", track_visibility='true')
     company_id = fields.Many2one(
-        'res.company', string="Unidade", required=True, default=lambda self: self.env.company
+        'res.company', string="Unidade", required=True,
+         default=lambda self: self.env.company,
+         track_visibility='true'
         
     )
-    edit_turma_curso =  fields.Boolean()
+    edit_turma_curso =  fields.Boolean(track_visibility='true')
     curso_turma_id = fields.Many2one(
         'geracad.curso.turma',
         string='Turma',
-        required=True
+        required=True,
+        track_visibility='true'
         )
     curso_nome = fields.Char( 
         related='curso_turma_id.curso_id.name',
