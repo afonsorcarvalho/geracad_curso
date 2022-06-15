@@ -4,6 +4,7 @@ from ast import For
 from odoo import models, fields, api, _
 from datetime import date
 from babel.dates import format_datetime, format_date
+from dateutil.relativedelta import relativedelta
 
 
 from odoo.tools.misc import formatLang, format_date as odoo_format_date, get_lang
@@ -98,9 +99,11 @@ class GeracadCursoTurmDisciplina(models.Model):
         default=fields.Date.context_today,
         track_visibility='true'
     )
+   
+    
     data_previsao_termino = fields.Date(
         string='Previsão de término',
-        default=fields.Date.context_today,
+        default= lambda self: date.today() +  relativedelta(months=4),
         track_visibility='true'
        
     )
@@ -353,7 +356,7 @@ class GeracadCursoTurmDisciplina(models.Model):
         _logger.info("action open alunos disciplinas")
 
         return {
-            'name': _('Alunos'),
+            'name': _('Alunos Matriculados'),
             'type': 'ir.actions.act_window',
             'target':'current',
             'view_mode': 'tree,form',
@@ -361,8 +364,7 @@ class GeracadCursoTurmDisciplina(models.Model):
             'domain': [('turma_disciplina_id', '=', self.id)],
             'context': {
                 'default_turma_disciplina_id': self.id,
-                'group_by': ['state'],
-                'expand': True
+               
             }
         }
     def action_go_notas_disciplinas(self):
@@ -396,6 +398,14 @@ class GeracadCursoTurmDisciplina(models.Model):
         for nota in nota_ids:
             nota.action_lancar_nota()
 
+    def _cancela_notas_turma_disciplina(self):
+        nota_ids = self.env['geracad.curso.nota.disciplina'].search([('turma_disciplina_id','=',self.id)])
+        for nota in nota_ids:
+            nota.write({
+                'state':'cancelada',
+                'situation': 'CA'
+            })
+
     def _set_data_encerramento_turma_disciplina(self):
         data_hoje = date.today()
         self.write({'data_encerramento' : data_hoje})
@@ -404,6 +414,10 @@ class GeracadCursoTurmDisciplina(models.Model):
         matricula_disciplina_ids = self.env['geracad.curso.matricula.disciplina'].search([('turma_disciplina_id','=',self.id)])
         for matricula_disciplina in matricula_disciplina_ids:
             matricula_disciplina.action_finaliza_matricula_disciplina()
+    
+    def _cancela_matricula_turma_disciplina(self):
+        matricula_disciplina_ids = self.env['geracad.curso.matricula.disciplina'].search([('turma_disciplina_id','=',self.id)])
+        matricula_disciplina_ids.action_cancela_matricula_disciplina()
 
 
 
@@ -420,6 +434,8 @@ class GeracadCursoTurmDisciplina(models.Model):
             })
     
     def action_cancelar_turma_disciplina(self):
+        self._cancela_notas_turma_disciplina()
+        self._cancela_matricula_turma_disciplina()
         self.write({
             'state': 'cancelada',
             'matricula_aberta': False,

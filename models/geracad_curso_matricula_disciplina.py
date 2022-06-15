@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
+
+from email.policy import default
 from odoo import models, fields, api, _
 from datetime import date
+from dateutil.relativedelta import relativedelta
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -82,8 +85,9 @@ class GeracadCursoMatriculaDisciplina(models.Model):
     )
     data_conclusao = fields.Date(
         string='Data Conclusão',
+        
        
-        track_visibility='true'
+        track_visibility='true',
     )
 
    
@@ -128,7 +132,7 @@ class GeracadCursoMatriculaDisciplina(models.Model):
         _logger.info(result)
 
         #criando as notas do aluno
-        notas_disciplina = self.env['geracad.curso.nota.disciplina'].create(
+        self.env['geracad.curso.nota.disciplina'].create(
              {
                  "company_id": result.company_id.id,
                  "disciplina_matricula_id": result.id,
@@ -152,6 +156,35 @@ class GeracadCursoMatriculaDisciplina(models.Model):
             'state':'finalizado'
         })
 
+    def _cancela_matricula_disciplina(self):
+        self.write({
+            'state':'cancelada'
+        })
+        if self.nota.state != 'concluida':
+            if self.nota.situation == 'IN':
+                self.nota.write({
+                    'state':'cancelada',
+                    'situation' : 'CA',
+                })
+            else:
+                self.nota.write({
+                    'state':'cancelada',  
+                })
+    def _tranca_matricula_disciplina(self):
+        self.write({
+            'state':'trancado'
+        })
+        if self.nota.state != 'concluida':
+            if self.nota.situation == 'IN':
+                self.nota.write({
+                    'state':'concluida',
+                    'situation' : 'TR',
+                })
+            else:
+                self.nota.write({
+                    'state':'concluida',  
+                })
+
     def _set_data_conclusao_matricula_disciplina(self):
         data_hoje = date.today()
         self.write({'data_conclusao' : data_hoje})
@@ -168,6 +201,16 @@ class GeracadCursoMatriculaDisciplina(models.Model):
         for rec in self:
             rec._set_data_conclusao_matricula_disciplina()
             rec._finaliza_matricula_disciplina()
+
+    def action_tranca_matricula_disciplina(self):
+        for rec in self:
+            if rec.state == 'draft' or rec.state == 'inscrito':
+                rec._tranca_matricula_disciplina()
+
+    def action_cancela_matricula_disciplina(self):
+        for rec in self:
+            if rec.state == 'draft' or rec.state == 'inscrito':
+                rec._cancela_matricula_disciplina()
             
     def action_go_notas_disciplinas(self):
 

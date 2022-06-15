@@ -121,11 +121,14 @@
             <header>
               <button type="object" name="action_trancar" string="Trancar"
                         class="oe_highlight"
+                        confirm="Tem certeza que deseja TRANCAR matrícula do aluno? Essa matrícula poderá ser DESTRANCADA posteriormente"
                         attrs="{'invisible': [('state', '=', 'trancado')]}"/>
               <button type="object" name="action_destrancar" string="Destrancar"
                         class="oe_highlight"
+                        confirm="Tem certeza que deseja DESTRANCAR matrícula do aluno?"
                         attrs="{'invisible': [('state', '!=', 'trancado')]}"/>
               <button type="object" name="action_abandono" string="Abandono"
+                        confirm="Tem certeza que deseja ABANDONAR matrícula do aluno? Essa ação não poderá ser desfeita."
                         class="oe_highlight"
                         attrs="{'invisible': [('state', '=', 'abandono')]}"/>
               

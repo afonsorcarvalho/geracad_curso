@@ -5,6 +5,7 @@ from datetime import date, timedelta
 
 from babel.dates import format_datetime, format_date
 from odoo.tools.misc import formatLang, format_date as odoo_format_date, get_lang
+from dateutil.relativedelta import relativedelta
 
 from odoo.exceptions import UserError
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT, misc
@@ -79,18 +80,15 @@ class GeracadCursoMatricula(models.Model):
 
     data_previsao_conclusao = fields.Date(
         string='Data Prevista Conclusão',
-        
+        default= lambda self: date.today() +  relativedelta(months=24),
         track_visibility='true'
     )
 
-    def _default_data_previsao_conclusao(self):
-        date_prevista = (date.today() + timedelta(month=24)).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
-        
-        return date_prevista
+    
    
     data_conclusao = fields.Date(
         string='Data Conclusão',
-        default=fields.Date.context_today,
+        
         track_visibility='true'
     )
    
@@ -477,7 +475,7 @@ class GeracadCursoMatricula(models.Model):
         _logger.info("action open matriculas disciplinas")
         
         return {
-            'name': _('Disciplinas'),
+            'name': _('Matrículas em Disciplinas'),
             'type': 'ir.actions.act_window',
             'target':'current',
             'view_mode': 'tree,form',
@@ -531,7 +529,7 @@ class GeracadCursoMatricula(models.Model):
         self._tem_contrato_vigente()
         
         return {
-            'name': _('Contratos'),
+            'name': _('Contratos do Aluno'),
             'type': 'ir.actions.act_window',
             'target':'current',
             'view_mode': 'tree,form',

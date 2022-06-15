@@ -49,9 +49,9 @@ class GeracadCursoNotaDisciplina(models.Model):
         store=True
         
         )
-    curso_matricula_state = fields.Selection(
+    disciplina_matricula_state = fields.Selection(
        
-        string="State Curso",
+        string="Status",
         
         related='disciplina_matricula_id.state',
         readonly=True,
@@ -165,6 +165,7 @@ class GeracadCursoNotaDisciplina(models.Model):
     state = fields.Selection([
         ('draft', 'Rascunho'),
         ('atualizando', 'Em atualização'),
+        ('cancelada', 'Cancelada'),
         ('concluida', 'Concluída'),
     ], string="Status", default="draft", tracking=True)
     

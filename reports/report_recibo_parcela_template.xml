@@ -53,7 +53,7 @@
               <span style="text-transform:uppercase; font-weight: 800" t-field="o.aluno_id.name" />
               , CPF nº
               <span t-field="o.aluno_id.l10n_br_cnpj_cpf" />
-              , a importância de R$ 
+              , a importância de  
               <span t-field="o.valor_pago" />
               referente a  
               <span style="text-transform:uppercase; font-weight: 800" t-field="o.numero_parcela" />º
