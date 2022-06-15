@@ -138,7 +138,7 @@ class GeracadCursoTurmDisciplina(models.Model):
         string='Sala',
     )
 
-    carga_horaria = fields.Char("Carga Horária")
+    carga_horaria = fields.Integer("Carga Horária")
     e_pendencia = fields.Boolean("É pendência")
     e_aproveitamento = fields.Boolean("É aproveitamento")
 
