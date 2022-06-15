@@ -83,7 +83,7 @@ class GeracadCursoTurmDisciplina(models.Model):
                 offset=0, limit=1, order=None, count=False)
             
             record.periodo = grade_id.periodo
-            record.carga_horaria = grade_id.disciplina_id_carga_horaria
+            record.carga_horaria = record.disciplina_id.carga_horaria
         
   
    
