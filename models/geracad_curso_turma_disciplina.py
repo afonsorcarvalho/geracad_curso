@@ -56,34 +56,48 @@ class GeracadCursoTurmDisciplina(models.Model):
         store=True
     )
     
-    
+    #TODO
+    #mudar esse periodo da turma para default em vez de compute
     periodo = fields.Integer(
         string = "Periodo", 
-        compute = "_compute_dados_grade",
-        readonly=True,
-        store=True
+       
         
     )
 
+    #TODO
+    #mudar esse periodo da turma para default em vez de compute
     carga_horaria = fields.Integer(
-        string = "Periodo", 
-        compute = "_compute_dados_grade",
-        readonly=True,
-        store=True
+        string = "Carga horária", 
+        
+       
+        
         
     )
    
-    
-    @api.depends('curso_turma_id','disciplina_id') 
-    def _compute_dados_grade(self):
-        for record in self:
-            grade_id = self.env['geracad.curso.grade'].search([
-                ('disciplina_id', '=', record.disciplina_id.id  ),
-                ('curso_id', '=', record.curso_id.id  )], 
+    @api.onchange('disciplina_id','curso_turma_id')
+    def onchange_disciplina_id_curso_id(self):
+            self.carga_horaria = self.disciplina_id.carga_horaria
+            if self.curso_turma_id:
+                grade_id = self.env['geracad.curso.grade'].search([
+                ('disciplina_id', '=', self.disciplina_id.id  ),
+                ('curso_id', '=', self.curso_turma_id.curso_id.id  )], 
                 offset=0, limit=1, order=None, count=False)
+                for grade in grade_id:
+                    self.periodo = grade.periodo
+
+    
+    #TODO
+    # verificar essa funcao se esta correta
+    # @api.depends('curso_turma_id','disciplina_id') 
+    # def _compute_dados_grade(self):
+    #     for record in self:
+    #         grade_id = self.env['geracad.curso.grade'].search([
+    #             ('disciplina_id', '=', record.disciplina_id.id  ),
+    #             ('curso_id', '=', record.curso_id.id  )], 
+    #             offset=0, limit=1, order=None, count=False)
             
-            record.periodo = grade_id.periodo
-            record.carga_horaria = record.disciplina_id.carga_horaria
+    #         record.periodo = grade_id.periodo
+    #         record.carga_horaria = record.disciplina_id.carga_horaria
         
   
    
