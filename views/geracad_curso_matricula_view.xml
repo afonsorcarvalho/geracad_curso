@@ -201,6 +201,7 @@
                   <field name="data_matricula" attrs="{'readonly':[('state','!=','draft')]  }"/>
                   <field name="data_previsao_conclusao" />
                   <field name="data_conclusao" />
+                  <field name="edit_turma_curso" />
                   
                   
                 </group>
