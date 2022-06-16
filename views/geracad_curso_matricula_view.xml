@@ -186,7 +186,7 @@
               </div>
               
               <h1>
-                  <field name="name" string="Código" readonly="1"/>
+                  <field name="name" string="Código" attrs="{'readonly':[('edit_turma_curso', '==', False)]  }"/>
               </h1>
               <group>
                
