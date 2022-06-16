@@ -198,11 +198,12 @@ class GeracadCursoMatricula(models.Model):
     
     @api.model
     def write(self, vals):
+        res = super(GeracadCursoMatricula, self).write(vals)
         # Agregar codigo de validacion aca
         if self.edit_turma_curso:
             vals['edit_turma_curso'] = False
         
-        return super(GeracadCursoMatricula, self).write(vals)
+        return res
     
     @api.depends('name', 'curso_turma_id')
     def name_get(self):
