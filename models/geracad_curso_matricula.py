@@ -196,7 +196,7 @@ class GeracadCursoMatricula(models.Model):
         result = super(GeracadCursoMatricula, self).create(vals)
         return result
     
-    @api.multi
+    @api.model
     def write(self, vals):
         # Agregar codigo de validacion aca
         if self.edit_turma_curso:
