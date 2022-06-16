@@ -169,7 +169,15 @@ class GeracadCursoMatricula(models.Model):
             record.parcelas_count = self.env["geracad.curso.financeiro.parcelas"].search(
                 [('curso_matricula_id', '=', record.id)],
                 offset=0, limit=None, order=None, count=True)
-
+    
+    
+    
+    @api.onchange('curso_turma_id')
+    def _onchange_curso_turma_id(self):
+        _logger.debug("MUDANCA NA TURMA DE CURSO")
+        self.name = self._gera_codigo_matricula(self.curso_turma_id.id)
+        
+        
     @api.model
     def create(self, vals):
         if 'company_id' in vals:
