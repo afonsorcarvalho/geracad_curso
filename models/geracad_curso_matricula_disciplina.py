@@ -168,7 +168,7 @@ class GeracadCursoMatriculaDisciplina(models.Model):
                 })
             else:
                 self.nota.write({
-                    'state':'cancelada',  
+                    'state':'concluida',  
                 })
     def _tranca_matricula_disciplina(self):
         self.write({
