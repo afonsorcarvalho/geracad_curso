@@ -11,6 +11,7 @@
           
           <field name="curso_matricula_id" optional="hide"/>
           <field name="curso_nome" optional="hide"/>
+          <field name="curso_matricula_codigo" optional="show"/>
           <field name="aluno_id" optional="show"/>
           <field name="state" optional="show" widget="badge"
           decoration-danger="state == 'cancelada'"

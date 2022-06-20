@@ -31,6 +31,13 @@ class GeracadCursoMatriculaDisciplina(models.Model):
         string='Matricula',
         required=True
         )
+    curso_matricula_codigo = fields.Char(
+       
+        related='curso_matricula_id.name',
+        string='Matricula',
+        required=True,
+        store=True
+        )
     curso_nome = fields.Char( 
         related='curso_matricula_id.curso_turma_id.curso_id.name',
         string="Nome do curso",
