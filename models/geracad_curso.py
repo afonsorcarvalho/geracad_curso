@@ -93,7 +93,22 @@ class GeracadCursoDisciplina(models.Model):
     ementa = fields.Html(
         string='Ementa',
     )
-   
+    
+    @api.model
+    @api.depends('name', 'codigo')
+    def name_get(self):
+        result = []
+        for record in self:
+            if record.codigo:
+                name = '[' + record.codigo + '] ' + record.name
+            else:
+                name = record.name
+            result.append((record.id, name))
+        return result
+    
+  
+    
+    
     @api.model
     def create(self, values):
         if values.get('codigo', _('New')) == _('New'):
