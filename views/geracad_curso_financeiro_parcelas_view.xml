@@ -57,6 +57,20 @@
    
       </field>
     </record>
+    <record id="inherit_geracad_curso_financeiro_parcelas_form_view" model="ir.ui.view">
+      <field name="name">inherit.cursos.financeiro.parcelas.form</field>
+      <field name="model">geracad.curso.financeiro.parcelas</field>
+      <field name="inherit_id" ref="geracad_curso.geracad_curso_financeiro_parcelas_form_view"/>
+      <field name="groups_id" eval="[(4, ref('geracad_curso.group_geracad_curso_finaceiro'))]"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='valor_pago']" position="attributes">
+          <attribute name="readonly">0</attribute>
+        </xpath>
+        <xpath expr="//field[@name='data_pagamento']" position="attributes">
+          <attribute name="readonly">0</attribute>
+        </xpath>
+      </field>
+    </record>
 
     <record model="ir.ui.view" id="geracad_curso_financeiro_parcelas_form_view">
       <field name="name">geracad.curso.financeiro.parcelas.form</field>
