@@ -30,7 +30,7 @@ class GeracadCursoNotaDisciplina(models.Model):
         string='Matricula Disciplina',
         required=True
         )
-    
+   
 
     curso_matricula_id = fields.Many2one(
         'geracad.curso.matricula',
@@ -90,9 +90,36 @@ class GeracadCursoNotaDisciplina(models.Model):
         related='disciplina_matricula_id.turma_disciplina_id',
         readonly=True,
         store=True,
-        
-        
-        
+        )
+    turma_disciplina_data_abertura = fields.Date(
+        string='Data de Abertura',
+        related='disciplina_matricula_id.turma_disciplina_id.data_abertura',
+        readonly=True,
+        store=True,
+        )
+    turma_disciplina_data_inicio = fields.Date(
+        string='Data de início',
+        related='disciplina_matricula_id.turma_disciplina_id.data_inicio',
+        readonly=True,
+        store=True,
+        )
+    turma_disciplina_data_encerramento = fields.Date(
+        string='Data de encerramento',
+        related='disciplina_matricula_id.turma_disciplina_id.data_encerramento',
+        readonly=True,
+        store=True,
+        )
+    turma_disciplina_data_previsao_termino = fields.Date(
+        string='Previsão de Término',
+        related='disciplina_matricula_id.turma_disciplina_id.data_previsao_termino',
+        readonly=True,
+        store=True,
+        )
+    turma_disciplina_carga_horaria = fields.Integer(
+        string='Carga Horária',
+        related='disciplina_matricula_id.turma_disciplina_id.carga_horaria',
+        readonly=True,
+        store=True,
         )
     professor_id = fields.Many2one(
         "res.partner",
@@ -218,19 +245,23 @@ class GeracadCursoNotaDisciplina(models.Model):
         return media
         
 
-    @api.onchange('nota_1','nota_1','final')
+    @api.onchange('nota_1','nota_2','final','faltas')
     def _onchange_categ_id(self):    
         _logger.debug("mudou nota")
+        
         for record in self:
             if record.state != 'concluida':
-                media = self._calcula_media(record.nota_1,record.nota_2, record.final)
-                if media >= 7:
-                    if (record.nota_1 + record.nota_2) > 14:
-                        record.situation = 'AM'
-                    else:
-                        record.situation = 'AP'
+                if record.faltas > 0.25*record.turma_disciplina_id.carga_horaria:
+                    record.situation = 'RF'
                 else:
-                    record.situation = 'RC'
+                    media = self._calcula_media(record.nota_1,record.nota_2, record.final)
+                    if media >= 7:
+                        if (record.nota_1 + record.nota_2) > 14:
+                            record.situation = 'AM'
+                        else:
+                            record.situation = 'AP'
+                    else:
+                        record.situation = 'RC'
 
     """
 

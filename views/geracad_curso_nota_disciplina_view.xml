@@ -103,16 +103,17 @@
                   
                   
                   <field name="disciplina_matricula_id" 
-                  readonly="1" 
+                  readonly="1" invisible="1"
                   />
                   <field name="turma_disciplina_id"  readonly="1"/>
+                  <field name="turma_disciplina_carga_horaria"  readonly="1"/>
                   <field name="faltas" attrs="{'readonly': [('state','in',('concluida'))]}"/>
                   <field name="nota_1" attrs="{'readonly': [('state','in',('concluida'))]}"/>
                   <field name="nota_2" attrs="{'readonly': [('state','in',('concluida'))]}"/>
                   <field name="final" attrs="{'readonly': [('state','in',('concluida'))]}"/>
                   <field name="media"  readonly="1"/>
                   <field name="situation" attrs="{'readonly': [('state','in',('concluida'))]}" />
-                  <field name="professor_id" attrs="{'readonly': [('state','in',('concluida'))]}"/>
+                  <field name="professor_id" readonly="1"/>
                
                   
                 </group>
@@ -144,7 +145,16 @@
           <field name="disciplina_id"  />
           <field name="curso_turma_id"  />
 
+          <filter name="filter_data_abertura" date="turma_disciplina_data_abertura" 
+              string="Data de Abertura" default_period="this_week" />
+          <filter name="groupby_turma_disciplina" string="Turma de Disciplina" context="{'group_by' : 'turma_disciplina_id'}"></filter>
+          
+        
+
+     
+
       </search>
+      
       </field>
     </record>
 

@@ -144,7 +144,7 @@ class GeracadCursoContrato(models.Model):
         
         for number in range(qtd_parcelas):
             _logger.info(self.data_vencimento_parcelas + relativedelta(months=(number)))
-            self.write({
+            self.sudo().write({
                 'parcelas_contrato_ids':[(0,0,{
                     'name': self.name + "-"+ str(number),
                     'curso_matricula_id': self.curso_matricula_id.id,
@@ -240,7 +240,7 @@ class GeracadCursoContrato(models.Model):
             _logger.debug("Verificando Parcelas do Contrato")
             _logger.debug(record)
             for parcela in record.parcelas_contrato_ids:
-                parcela.write({
+                parcela.sudo().write({
                     'state': state
                 })
 
