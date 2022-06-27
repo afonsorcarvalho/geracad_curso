@@ -31,6 +31,15 @@ class geracadCursoAluno(models.Model):
 
     )
     hora_aula = fields.Monetary(string='Valor Hora Aula')
+    tipo_chave_pix = fields.Selection([
+        ('cpf', 'CPF'),
+        ('cnpj', 'CNPJ'),
+        ('celular', 'Celular'),
+        ('email', 'E-mail'),
+        ('aleatorio', 'Aleatório')
+        ], string = "Tipo de Chave")
+        
+    chave_pix = fields.Char(string='Chave Pix')
     banco = fields.Char(string='Banco')
     agencia = fields.Char(string='Agência')
     conta = fields.Char(string='Conta')
