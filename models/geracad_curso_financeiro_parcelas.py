@@ -59,7 +59,7 @@ class GeracadCursoFinanceiroParcelas(models.Model):
         )   
     aluno_telefone = fields.Char(
         related = 'curso_matricula_id.aluno_id.phone',
-        string='Celular',
+        string='Telefone',
         readonly=True,
         
         )

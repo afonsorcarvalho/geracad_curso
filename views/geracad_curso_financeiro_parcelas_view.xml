@@ -28,7 +28,7 @@
          
          <field name="aluno_id" optional="hide"/>
          <field name="aluno_mobile" optional="hide"/>
-         <field name="aluno_telefone" optional="hide"/>
+         <field name="aluno_telefone" string="Telefone" optional="hide"/>
          <field name="aluno_email" optional="hide"/>
          <field name="sacado" optional="hide"/>
          <field name="curso_nome" optional="hide"/>
