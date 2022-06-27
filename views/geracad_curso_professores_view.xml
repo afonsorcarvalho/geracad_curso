@@ -122,9 +122,9 @@
                   
                     <field name="tipo_chave_pix" placeholder="Tipo de Chave"/>
                     <field name="chave_pix" placeholder="Chave Pix"/>
-                    <field name="Banco" placeholder="Nome do Banco..."/>
-                    <field name="Agência" placeholder="Agência..."/>
-                    <field name="Conta" placeholder="Conta..."/>
+                    <field name="banco" placeholder="Nome do Banco..."/>
+                    <field name="agencia" placeholder="Agência..."/>
+                    <field name="conta" placeholder="Conta..."/>
                     
               </group>
               
