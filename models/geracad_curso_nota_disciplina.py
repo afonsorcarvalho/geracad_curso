@@ -210,7 +210,7 @@ class GeracadCursoNotaDisciplina(models.Model):
     @api.constrains('faltas')
     def _check_faltas(self):  
         for record in self:
-            if record.faltas < 0 or record.faltas >= record.turma_disciplina_id.carga_horaria:
+            if record.faltas < 0 or record.faltas > record.turma_disciplina_id.carga_horaria:
                 raise ValidationError("As faltas devem estar entre 0 e " + str(record.turma_disciplina_id.carga_horaria) )
     
     @api.constrains('nota_1')
