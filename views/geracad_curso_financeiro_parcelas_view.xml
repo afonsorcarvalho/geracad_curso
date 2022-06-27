@@ -8,10 +8,6 @@
       <field name="arch" type="xml">
         <tree 
           create="false" 
-          
-         
-                
-        
         >
        <header>
          <button name="action_ajeita_status_parcela"  groups="geracad_curso.group_geracad_curso_finaceiro" string="Ajeita status parcela" type="object" class="oe_highlight" />
@@ -19,11 +15,6 @@
          
           <button name="action_pagar_parcela"  groups="geracad_curso.group_geracad_curso_finaceiro" string="Receber Pagamento" type="object" class="oe_highlight" attrs="{'invisible': [('state', '=', 'recebido')]}"/>
           <!-- <button name="action_cancelar_pagamento_parcela" string="Cancelar Pagamento" type="object" class="btn-primary"/> -->
-          
-          
-         
-          
-          
          <field name="name" optional="hide"/>
          <field name="state" widget="badge" optional="show"
          
@@ -36,6 +27,9 @@
          <field name="type_curso" optional="hide"/>
          
          <field name="aluno_id" optional="hide"/>
+         <field name="aluno_mobile" optional="hide"/>
+         <field name="aluno_telefone" optional="hide"/>
+         <field name="aluno_email" optional="hide"/>
          <field name="sacado" optional="hide"/>
          <field name="curso_nome" optional="hide"/>
          <field name="data_vencimento" optional="show" widget="remaining_days"/>
