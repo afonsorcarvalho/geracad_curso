@@ -112,15 +112,19 @@
                     <field name="sexo" placeholder="Sexo..."/>
                     <field name="rg" placeholder="RG..."/>
                     <field name="escolaridade" placeholder="Escolaridade..."/>
+                    <field name="area_conheciemento" placeholder="Área de Conhecimento..."/>
+                    <field name="formacao_academica" placeholder="Formação Acadêmica..."/>
+
                     <field name="observacoes" placeholder="Observações..."/>
                     
               </group>
-              <group >
+              <group string="Dados Bancários" >
                   
-                    <field name="sexo" placeholder="Sexo..."/>
-                    <field name="rg" placeholder="RG..."/>
-                    <field name="escolaridade" placeholder="Escolaridade..."/>
-                    <field name="observacoes" placeholder="Observações..."/>
+                    <field name="tipo_chave_pix" placeholder="Tipo de Chave"/>
+                    <field name="chave_pix" placeholder="Chave Pix"/>
+                    <field name="Banco" placeholder="Nome do Banco..."/>
+                    <field name="Agência" placeholder="Agência..."/>
+                    <field name="Conta" placeholder="Conta..."/>
                     
               </group>
               
