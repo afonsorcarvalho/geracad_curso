@@ -30,10 +30,16 @@ class geracadCursoAluno(models.Model):
         inverse_name="professor_id",
 
     )
+    hora_aula = fields.Monetary(string='Valor Hora Aula')
+    banco = fields.Char(string='Banco')
+    agencia = fields.Char(string='Agência')
+    conta = fields.Char(string='Conta')
+    area_conheciemento = fields.Char("Área de conhecimento")
+    formacao_academica = fields.Char("Formação Acadêmica")
 
     matriculas_curso_count = fields.Integer("Cursos Matriculados", compute="_compute_matriculas_curso_count")
     turmas_disciplinas_ministradas_count = fields.Integer("Disciplinas Ministradas", compute="_compute_turmas_disciplinas_ministradas_count")
-
+    
     
     def _compute_matriculas_curso_count(self):
         self.matriculas_curso_count = len(self.matriculas_ids)

@@ -57,6 +57,24 @@ class GeracadCursoFinanceiroParcelas(models.Model):
         readonly=True,
         store=True,
         )   
+    aluno_telefone = fields.Char(
+        related = 'curso_matricula_id.aluno_id.phone',
+        string='Celular',
+        readonly=True,
+        
+        )
+    aluno_mobile = fields.Char(
+        related = 'curso_matricula_id.aluno_id.mobile',
+        string='Celular',
+        readonly=True,
+        
+        )
+    aluno_email = fields.Char(
+        related = 'curso_matricula_id.aluno_id.email',
+        string='Email',
+        readonly=True,
+        
+        )
     currency_id = fields.Many2one(
         'res.currency', related='company_id.currency_id',
         string="Company Currency", readonly=True)

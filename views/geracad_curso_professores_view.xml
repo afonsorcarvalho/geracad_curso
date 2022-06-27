@@ -115,6 +115,14 @@
                     <field name="observacoes" placeholder="Observações..."/>
                     
               </group>
+              <group >
+                  
+                    <field name="sexo" placeholder="Sexo..."/>
+                    <field name="rg" placeholder="RG..."/>
+                    <field name="escolaridade" placeholder="Escolaridade..."/>
+                    <field name="observacoes" placeholder="Observações..."/>
+                    
+              </group>
               
             </group>
             </sheet>
