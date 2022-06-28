@@ -41,6 +41,7 @@ class geracadCursoAluno(models.Model):
         
     chave_pix = fields.Char(string='Chave Pix')
     banco = fields.Char(string='Banco')
+    tipo_conta = fields.Selection([('conta_corrente','Conta Corrente'),('conta_poupanca','Conta Poupança')],string = "Tipo de Conta")
     agencia = fields.Char(string='Agência')
     conta = fields.Char(string='Conta')
     area_conheciemento = fields.Char("Área de conhecimento")

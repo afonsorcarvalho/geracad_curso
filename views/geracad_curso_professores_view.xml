@@ -125,6 +125,7 @@
                     <field name="banco" placeholder="Nome do Banco..."/>
                     <field name="agencia" placeholder="Agência..."/>
                     <field name="conta" placeholder="Conta..."/>
+		    <field name="tipo_conta" placeholder="Tipo de Conta ..."/>
                     
               </group>
               
