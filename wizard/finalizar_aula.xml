@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_geracad_curso_pagamento_parcela_form" model="ir.ui.view">
+        <field name="name">wizard.geracad.curso.finalizar.aula</field>
+        <field name="model">geracad.curso.finalizar.aula</field>
+        <field name="arch" type="xml">
+            <form string="Finalizar Aulas">
+                <sheet>
+                    <group>
+                        <group>
+                           
+                            <field name="turma_disciplina_id" readonly="1"/>
+                            <field name="data_termino"/>
+                            
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Confirmar" name="action_confirm" type="object" class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_geracad_curso_finalizar_aula" model="ir.actions.act_window">
+        <field name="name">Finalizar Aula de disciplinas</field>
+        <field name="res_model">geracad.curso.finalizar.aula</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_geracad_curso_pagamento_parcela_form"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>
