@@ -113,6 +113,11 @@ class GeracadCursoTurmDisciplina(models.Model):
         default=fields.Date.context_today,
         track_visibility='true'
     )
+    data_termino = fields.Date(
+        string='Término das aulas',
+        
+        track_visibility='true'
+    )
    
     
     data_previsao_termino = fields.Date(
@@ -140,6 +145,7 @@ class GeracadCursoTurmDisciplina(models.Model):
     state = fields.Selection([
         ('draft', 'Rascunho'),
         ('aberta', 'Matrícula Aberta'),
+        ('aulas_encerradas', 'Aulas Encerradas'),
         ('encerrada', 'Matrícula Encerrada'),
         ('suspensa', 'Matrícula Suspensa'), 
         ('em_andamento', 'Em andamento'), 
@@ -435,6 +441,18 @@ class GeracadCursoTurmDisciplina(models.Model):
 
 
 
+    def action_finalizar_aulas(self):
+        dummy, act_id = self.env["ir.model.data"].sudo().get_object_reference(
+            "geracad_curso", "action_geracad_curso_finalizar_aula"
+        )
+        vals = self.env["ir.actions.act_window"].sudo().browse(act_id).read()[0]
+        vals["context"] = {
+           
+           
+            "default_turma_disciplina_id": self.id,
+            
+        }
+        return vals
 
 
 

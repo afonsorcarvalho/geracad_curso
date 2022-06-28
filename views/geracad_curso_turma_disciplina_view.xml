@@ -120,16 +120,22 @@
         <form string="Disciplina">
           <header>
 
-            <button name="action_encerrar_turma_disciplina" string="Encerrar" class="oe_highlight" states="aberta" type="object"  
+            <button name="action_encerrar_turma_disciplina" string="Encerrar Turma" class="oe_highlight" states="aulas_encerradas" type="object" 
+            groups="geracad_curso.group_geracad_curso_secretaria" 
             confirm="Tem certeza que deseja finalizar essa turma?
             Todas as notas serão dadas como lançadas e não poderão ser modificadas.
-            Todas as matr[i]culas na disciplina dos alunos irão para o status de concluída.
+            Todas as matrículas na disciplina dos alunos irão para o status de concluída.
             Esta ação não poderá ser desfeita!!!
             " />
-            <button name="action_cancelar_turma_disciplina" string="Cancelar" states="aberta" type="object"  confirm="Tem certeza que deseja cancelar essa turma? Esta ação não poderá ser defeita" />
-            <button name="action_suspender_turma_disciplina" string="Suspender" states="aberta" type="object" />
-            <button name="action_abrir_turma_disciplina" string="Abrir" states="suspensa" type="object" />
-            <field name="state" widget="statusbar" statusbar_visible="aberta, encerrada" />
+            <button name="action_finalizar_aulas" string="Finalizar Aulas" states="aberta" type="object" 
+            groups = "geracad_curso.group_geracad_curso_secretaria" />
+            <button name="action_cancelar_turma_disciplina" string="Cancelar" states="aberta" type="object"  confirm="Tem certeza que deseja cancelar essa turma? Esta ação não poderá ser defeita" 
+            groups="geracad_curso.group_geracad_curso_secretaria"/>
+            <button name="action_suspender_turma_disciplina" string="Suspender" states="aberta" type="object"
+            groups="geracad_curso.group_geracad_curso_secretaria" />
+            <button name="action_abrir_turma_disciplina" string="Abrir" states="suspensa" type="object"
+            groups="geracad_curso.group_geracad_curso_secretaria" />
+            <field name="state" widget="statusbar" statusbar_visible="aberta,aulas_encerradas,encerrada" />
           </header>
           <sheet>
             <div class="oe_button_box" name="button_box">
@@ -174,6 +180,7 @@
                 <field name="data_abertura" attrs="{'readonly' : [('state','!=', 'draft')]  }" />
                 <field name="data_inicio" />
                 <field name="data_previsao_termino" />
+                <field name="data_termino" />
                 <field name="data_encerramento" />
 
               </group>

@@ -251,17 +251,20 @@ class GeracadCursoNotaDisciplina(models.Model):
         
         for record in self:
             if record.state != 'concluida':
-                if record.faltas > 0.25*record.turma_disciplina_id.carga_horaria:
-                    record.situation = 'RF'
+                if record.turma_disciplina_id.e_aproveitamento:
+                    record.situation = 'EA'
                 else:
-                    media = self._calcula_media(record.nota_1,record.nota_2, record.final)
-                    if media >= 7:
-                        if (record.nota_1 + record.nota_2) > 14:
-                            record.situation = 'AM'
-                        else:
-                            record.situation = 'AP'
+                    if record.faltas > 0.25*record.turma_disciplina_id.carga_horaria:
+                        record.situation = 'RF'
                     else:
-                        record.situation = 'RC'
+                        media = self._calcula_media(record.nota_1,record.nota_2, record.final)
+                        if media >= 7:
+                            if (record.nota_1 + record.nota_2) > 14:
+                                record.situation = 'AM'
+                            else:
+                                record.situation = 'AP'
+                        else:
+                            record.situation = 'RC'
 
     """
 

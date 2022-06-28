@@ -50,6 +50,7 @@
         'reports/report_recibo_parcela_template.xml',
         'reports/report_actions.xml',
         'wizard/pagamento_parcela.xml',
+        'wizard/finalizar_aula.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
