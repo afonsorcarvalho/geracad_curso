@@ -44,7 +44,7 @@ class geracadCursoAluno(models.Model):
     tipo_conta = fields.Selection([('conta_corrente','Conta Corrente'),('conta_poupanca','Conta Poupança')],string = "Tipo de Conta")
     agencia = fields.Char(string='Agência')
     conta = fields.Char(string='Conta')
-    area_conheciemento = fields.Char("Área de conhecimento")
+    area_conhecimento = fields.Char("Área de conhecimento")
     formacao_academica = fields.Char("Formação Acadêmica")
 
     matriculas_curso_count = fields.Integer("Cursos Matriculados", compute="_compute_matriculas_curso_count")

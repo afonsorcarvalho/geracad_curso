@@ -111,8 +111,9 @@
                   
                     <field name="sexo" placeholder="Sexo..."/>
                     <field name="rg" placeholder="RG..."/>
+                    <field name="rg_data_expedicao" placeholder="Data de Exp. ..."/>
                     <field name="escolaridade" placeholder="Escolaridade..."/>
-                    <field name="area_conheciemento" placeholder="Área de Conhecimento..."/>
+                    <field name="area_conhecimento" placeholder="Área de Conhecimento..."/>
                     <field name="formacao_academica" placeholder="Formação Acadêmica..."/>
 
                     <field name="observacoes" placeholder="Observações..."/>
