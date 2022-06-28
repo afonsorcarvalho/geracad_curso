@@ -146,7 +146,7 @@ class GeracadCursoTurmDisciplina(models.Model):
         ('draft', 'Rascunho'),
         ('aberta', 'Matrícula Aberta'),
         ('aulas_encerradas', 'Aulas Encerradas'),
-        ('encerrada', 'Matrícula Encerrada'),
+        ('encerrada', 'Disciplina Encerrada'),
         ('suspensa', 'Matrícula Suspensa'), 
         ('em_andamento', 'Em andamento'), 
         ('cancelada', 'Cancelada'),

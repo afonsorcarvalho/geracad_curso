@@ -147,7 +147,51 @@
 
           <filter name="filter_data_abertura" date="turma_disciplina_data_abertura" 
               string="Data de Abertura" default_period="this_week" />
+          
+          <separator  />
+              
+          
+          <filter name="filter_inscritos"  
+              string="Inscritos" 
+              domain="[('situation', '=', 'IN')]"
+               />
+          <filter name="filter_reprovado_conteudo"  
+              string="Reprovado Conteúdo" 
+              domain="[('situation', '=', 'RC')]"
+               />
+          <filter name="filter_reprovado_falta"  
+              string="Reprovado Falta" 
+              domain="[('situation', '=', 'RF')]"
+               />
+          <filter name="filter_aprovado_media"  
+                   string="Aprovado Média" 
+                   domain="[('situation', '=', 'AM')]"
+                    />
+          <filter name="filter_aprovado_final"  
+              string="Aprovado Final" 
+              domain="[('situation', '=', 'AP')]"
+               />
+          <filter name="filter_estudos_aproveitados"  
+              string="Estudos Aproveitados" 
+              domain="[('situation', '=', 'EA')]"
+               />
+          <filter name="filter_trancado"  
+              string="Trancado" 
+              domain="[('situation', '=', 'TR')]"
+               />
+          <filter name="filter_abandonado"  
+              string="Abandonado" 
+              domain="[('situation', '=', 'AB')]"
+               />
+          <filter name="filter_cancelado"  
+              string="Cancelado" 
+              domain="[('situation', '=', 'CA')]"
+               />
+          <filter name="groupby_periodo" string="Período" context="{'group_by' : 'periodo'}"></filter>
           <filter name="groupby_turma_disciplina" string="Turma de Disciplina" context="{'group_by' : 'turma_disciplina_id'}"></filter>
+          <filter name="groupby_disciplina_id" string="Disciplina" context="{'group_by' : 'disciplina_id'}"></filter>
+          <filter name="groupby_curso_matricula_id" string="Matrícula" context="{'group_by' : 'curso_matricula_id'}"></filter>
+          <filter name="groupby_situation" string="Situação" context="{'group_by' : 'situation'}"></filter>
           
         
 
