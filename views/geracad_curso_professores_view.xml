@@ -53,7 +53,7 @@
                 <field name="commercial_partner_id" invisible="1"/>
                 <field name="active" invisible="1"/>
                 <h1>
-                  <field name="name" default_focus="1" placeholder="Nome do Aluno" required="1" />
+                  <field name="name" default_focus="1" placeholder="Nome do Professor" required="1" />
                 </h1>
                 <span class="o_form_label" name="label_cpf">
                   CPF
