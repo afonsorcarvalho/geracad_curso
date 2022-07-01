@@ -54,7 +54,7 @@
             <notebook>
               <page string="Grade Curricular">
                
-                  <field name="grade_id" context="{'default_curso_id':id}" widget="one2many"
+                  <field name="grade_id" context="{'default_curso_id':id,'search_default_group_periodo': 1}" widget="one2many"
                  
                   >
                     <tree editable="bottom" multi_edit="1" >
@@ -66,6 +66,7 @@
                       <field name="curso_id" invisible="1"/>
                       <field name="disciplina_id" />
                       <field name="disciplina_id_carga_horaria"/>
+                      <field name="e_obrigatoria"/>
                       
                     </tree>
                     <form>
@@ -75,6 +76,7 @@
                           <field name="periodo" widget="integer"/>
                           <field name="curso_id"/>
                           <field name="disciplina_id" options="{'no_create': True}"/>
+                          <field name="e_obrigatoria"/>
                         </group>
                       </sheet>
 

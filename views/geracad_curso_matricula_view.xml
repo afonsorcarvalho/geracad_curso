@@ -170,6 +170,14 @@
                 <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}" attrs="{'readonly':[('state','!=','draft')]  }" />
               </group>
             </group>
+            <notebook>
+             
+              <page string="Disciplinas cursando">
+                
+                  <field name="notas_disciplina_cursando_ids" widget="one2many"/>
+                
+              </page>
+            </notebook>
           </sheet>
 
           <div class="oe_chatter">

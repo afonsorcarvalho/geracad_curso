@@ -42,7 +42,8 @@ class GeracadCurso(models.Model):
         inverse_name="curso_id",
         domain="[]",
         context={},
-        help="Explain your field.",
+        help="Explain your field.s",
+        tracking=True,
     )
     carga_horaria_total = fields.Integer(string="Carga Horária", compute='_compute_carga_horaria_total')
 

@@ -106,25 +106,33 @@ class GeracadCursoMatricula(models.Model):
         ('formado', 'Formado'),
         ('transferido', 'Transferido'),
         
-    ], string="Status", default="draft", readonly=False, tracking=True
-    
+    ], string="Status", default="draft", readonly=False, tracking=True 
     )
-    # @api.depends('id')
-    # def _compute_notas_disciplinas_cursando(self):
-    #     for record in self:
-    #         record.field = 
 
-    matriculas_disciplina_ids = fields.One2many(
+    notas_disciplina_cursando_ids = fields.One2many(
         "geracad.curso.nota.disciplina",
-        compute='_compute_notas_disciplinas_cursando',
-        readonly=True 
-         )
-        
-       
-     
+        inverse_name = "curso_matricula_id"
+        compute='_compute_disciplinas_faltantes' )
 
+    @api.depends('id')
+    def _compute_disciplinas_faltantes(self):
+        _logger.debug("calculando disciplinas faltantes")
+        
+        
+        for record in self:
+            vals = {}
+            vals.update({
+                'notas_disciplina_cursando_ids':[(0,0,
+                {'curso_matricula_id':record.id,'so_qty':35})]
+                
+                })
+            record.write(vals)
     
-    # disciplinas_concluidas_ids = fields.One2many('', '')
+       
+    
+    matriculas_disciplina_ids = fields.One2many(
+        "geracad.curso.matricula.disciplina", inverse_name = 'curso_matricula_id',
+        readonly=True)
 
     matriculas_disciplinas_count = fields.Integer(
         string='Disciplinas', 
