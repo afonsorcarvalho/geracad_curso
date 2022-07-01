@@ -1,225 +1,185 @@
 <odoo>
   <data>
-   
-  <!-- 
+
+    <!-- 
           MATRICULA DE CURSO
 
       -->
-      <record model="ir.ui.view" id="geracad_curso_matricula_list">
-        <field name="name">geracad.curso.matricula.list</field>
-        <field name="model">geracad.curso.matricula</field>
-        <field name="arch" type="xml">
-          <tree 
-          default_order="data_matricula desc"
-          >        
-           
-            <field name="name" string="Código" optional="show" />
-            
-            
-            <field name="aluno_id" optional="show" />
-            <field name="aluno_mobile" string="Celular" optional="hide" />
-            <field name="curso_turma_codigo" optional="show"  />
-            <field name="curso_nome" optional="show" />
-            <field name="curso_type" optional="hide" />
-           
-            <field name="data_matricula" />
-            <field name="data_conclusao" optional="show"  />
-            <field name="state" widget="badge" decoration-info="state == 'inscrito'"
+    <record model="ir.ui.view" id="geracad_curso_matricula_list">
+      <field name="name">geracad.curso.matricula.list</field>
+      <field name="model">geracad.curso.matricula</field>
+      <field name="arch" type="xml">
+        <tree default_order="data_matricula desc">
 
-              decoration-success="state == 'formado'"
-              decoration-danger="state == 'cancelada'"
-              decoration-warning="state == 'trancado'"
-              optional="show" 
-            
-            />
-          
-            <field name="company_id" groups="base.group_multi_company" optional="show"  />
-            
-  
-          </tree>   
-        </field>
-      </record>
+          <field name="name" string="Código" optional="show" />
 
 
-      <record id="geracad_curso_matricula_search" model="ir.ui.view">
-        <field name="name">geracad_curso.matricula.search</field>
-        <field name="model">geracad.curso.matricula</field>
-        <field name="arch" type="xml">
-         
-          <search string="Procure">
-            <field name="aluno_id" string="Nome do Aluno"/>
-            <field name="name" string="Matrícula do Aluno"  />
-            <field name="curso_turma_codigo"  />
-            <field name="curso_id" />
-            <field name="data_matricula" />
-            <field name="data_previsao_conclusao" />
-            <field name="data_conclusao" />
-            <field name="company_id" />
-            <field name="state" />
-            
-            <filter name="filter_data_matricula" date="data_matricula" 
-              
-              string="Data da Matrícula"/>
-            <filter name="filter_data_conclusao" date="data_conclusao" 
-              
-              string="Data da Conclusão"/>
-            
-            <filter name="groupby_unidade" string="Unidade" context="{'group_by' : 'company_id'}" groups="base.group_multi_company"></filter>
-            <filter name="groupby_curso_turma_id" string="Código Turma" context="{'group_by' : 'curso_turma_id'}"></filter>
-            <separator orientation="vertical"/>
-            <filter name="data_matricula" string="Data da Matrícula" domain="[]" context="{'group_by':'data_matricula'}"/>
-            <filter name="data_conclusao" string="Data da conclusão" domain="[]" context="{'group_by':'data_conclusao'}"/>
-            <separator orientation="vertical"/>
-            <filter name="curso_id" string="Curso" domain="[]" context="{'group_by':'curso_id'}"/>
-            <filter name="state" string="Status" domain="[]" context="{'group_by':'state'}"/>
-            <filter name="curso_type" string="Tipo de Curso" domain="[]" context="{'group_by':'curso_type'}"/>
-            
-            
-          
-            
-            
-           
-            <searchpanel>
-              <field name="state" string="Status" enable_counters="1" select="multi"/>
-              <field name="company_id" string="Unidade" enable_counters="1" select="multi"/>
-            
-              
+          <field name="aluno_id" optional="show" />
+          <field name="aluno_mobile" string="Celular" optional="hide" />
+          <field name="curso_turma_codigo" optional="show" />
+          <field name="curso_nome" optional="show" />
+          <field name="curso_type" optional="hide" />
+
+          <field name="data_matricula" />
+          <field name="data_conclusao" optional="show" />
+          <field name="state" widget="badge" decoration-info="state == 'inscrito'" decoration-success="state == 'formado'" decoration-danger="state == 'cancelada'" decoration-warning="state == 'trancado'" optional="show" />
+
+          <field name="company_id" groups="base.group_multi_company" optional="show" />
+
+
+        </tree>
+      </field>
+    </record>
+
+
+    <record id="geracad_curso_matricula_search" model="ir.ui.view">
+      <field name="name">geracad_curso.matricula.search</field>
+      <field name="model">geracad.curso.matricula</field>
+      <field name="arch" type="xml">
+
+        <search string="Procure">
+          <field name="aluno_id" string="Nome do Aluno" />
+          <field name="name" string="Matrícula do Aluno" />
+          <field name="curso_turma_codigo" />
+          <field name="curso_id" />
+          <field name="data_matricula" />
+          <field name="data_previsao_conclusao" />
+          <field name="data_conclusao" />
+          <field name="company_id" />
+          <field name="state" />
+
+          <filter name="filter_data_matricula" date="data_matricula" string="Data da Matrícula" />
+          <filter name="filter_data_conclusao" date="data_conclusao" string="Data da Conclusão" />
+
+          <filter name="groupby_unidade" string="Unidade" context="{'group_by' : 'company_id'}" groups="base.group_multi_company"></filter>
+          <filter name="groupby_curso_turma_id" string="Código Turma" context="{'group_by' : 'curso_turma_id'}"></filter>
+          <separator orientation="vertical" />
+          <filter name="data_matricula" string="Data da Matrícula" domain="[]" context="{'group_by':'data_matricula'}" />
+          <filter name="data_conclusao" string="Data da conclusão" domain="[]" context="{'group_by':'data_conclusao'}" />
+          <separator orientation="vertical" />
+          <filter name="curso_id" string="Curso" domain="[]" context="{'group_by':'curso_id'}" />
+          <filter name="state" string="Status" domain="[]" context="{'group_by':'state'}" />
+          <filter name="curso_type" string="Tipo de Curso" domain="[]" context="{'group_by':'curso_type'}" />
+
+
+          <searchpanel>
+            <field name="state" string="Status" enable_counters="1" select="multi" />
+            <field name="company_id" string="Unidade" enable_counters="1" select="multi" />
+
+
           </searchpanel>
 
-          </search>
-        </field>
-      </record>
+        </search>
+      </field>
+    </record>
 
 
-      <record model="ir.ui.view" id="geracad_curso_matricula_pivot">
-        <field name="name">geracad.curso.matricula.pivot</field>
-        <field name="model">geracad.curso.matricula</field>
-        <field name="arch" type="xml">
-            <pivot string="Matrículas Cursos" disable_linking="True">
-                <field name="curso_id" type="row"/>
-                <field name="aluno_id" type="measure"/>
-                
-            </pivot>
-        </field>
+    <record model="ir.ui.view" id="geracad_curso_matricula_pivot">
+      <field name="name">geracad.curso.matricula.pivot</field>
+      <field name="model">geracad.curso.matricula</field>
+      <field name="arch" type="xml">
+        <pivot string="Matrículas Cursos" disable_linking="True">
+          <field name="curso_id" type="row" />
+          <field name="aluno_id" type="measure" />
+
+        </pivot>
+      </field>
     </record>
     <record model="ir.ui.view" id="geracad_curso_matricula_graph">
       <field name="name">geracad.curso.matricula.graph</field>
       <field name="model">geracad.curso.matricula</field>
-        <field name="arch" type="xml">
-            <graph string="Matrículas Cursos">
-                <field name="curso_id" type="row"/>
-                <field name="aluno_id" type="measure"/>
-            </graph>
-        </field>
+      <field name="arch" type="xml">
+        <graph string="Matrículas Cursos">
+          <field name="curso_id" type="row" />
+          <field name="aluno_id" type="measure" />
+        </graph>
+      </field>
     </record>
 
-      <record model="ir.ui.view" id="geracad_curso_matricula_form">
-        <field name="name">geracad.curso.matricula.form</field>
-        <field name="model">geracad.curso.matricula</field>
-        <field name="arch" type="xml">
-          <form string="Matricula Curso">      
-            <header>
-              <button type="object" name="action_trancar" string="Trancar"
-                        class="oe_highlight"
-                        confirm="Tem certeza que deseja TRANCAR matrícula do aluno? Essa matrícula poderá ser DESTRANCADA posteriormente"
-                        attrs="{'invisible': [('state', '=', 'trancado')]}"/>
-              <button type="object" name="action_destrancar" string="Destrancar"
-                        class="oe_highlight"
-                        confirm="Tem certeza que deseja DESTRANCAR matrícula do aluno?"
-                        attrs="{'invisible': [('state', '!=', 'trancado')]}"/>
-              <button type="object" name="action_abandono" string="Abandono"
-                        confirm="Tem certeza que deseja ABANDONAR matrícula do aluno? Essa ação não poderá ser desfeita."
-                        class="oe_highlight"
-                        attrs="{'invisible': [('state', '=', 'abandono')]}"/>
-              
-              <button type="object" name="action_go_gera_contrato" string="Gerar Contrato"
-                        class="oe_highlight"
-                        attrs="{'invisible': [('state', '!=', 'inscrito'),]}"/>
-              <button type="object" name="action_habilita_edit_turma_curso" string="Habilita Transferência"
-                        class="oe_highlight"
-                        attrs="{'invisible': [('edit_turma_curso', '==', True),]}"/>
-              <button type="object" name="action_desabilita_edit_turma_curso" string="Desabilita Transferência"
-                        class="oe_highlight"
-                        attrs="{'invisible': [('edit_turma_curso', '==', False),]}"/>
-              <field name="state"  widget="statusbar"  />
-            </header>
-            <sheet>
-              
-              <!-- <widget name="web_ribbon" title="Arquivada" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+    <record model="ir.ui.view" id="geracad_curso_matricula_form">
+      <field name="name">geracad.curso.matricula.form</field>
+      <field name="model">geracad.curso.matricula</field>
+      <field name="arch" type="xml">
+        <form string="Matricula Curso">
+          <header>
+            <button type="object" name="action_go_gera_contrato" string="Gerar Contrato" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'inscrito'),]}" />
+
+            <button type="object" name="action_habilita_edit_turma_curso" string="Habilita Transferência"  class="btn-secondary" attrs="{'invisible': ['|',('edit_turma_curso', '==', True),('state', '!=', 'inscrito')]}" />
+            <button type="object" name="action_desabilita_edit_turma_curso" string="Desabilita Transferência" class="btn btn-default" attrs="{'invisible': [('edit_turma_curso', '==', False),]}" />
+            <button type="object" name="action_trancar" string="Trancar" class="btn btn-default" confirm="Tem certeza que deseja TRANCAR matrícula do aluno? Essa matrícula poderá ser DESTRANCADA posteriormente" attrs="{'invisible': [('state', '=', 'trancado')]}" />
+            <button type="object" name="action_destrancar" string="Destrancar" class="btn btn-default" confirm="Tem certeza que deseja DESTRANCAR matrícula do aluno?" attrs="{'invisible': [('state', '!=', 'trancado')]}" />
+            <button type="object" name="action_abandono" string="Abandonar" class="btn btn-default" confirm="Tem certeza que deseja ABANDONAR matrícula do aluno? Essa ação não poderá ser desfeita."  attrs="{'invisible': [('state', '=', 'abandono')]}" />
+            <field name="state" widget="statusbar" />
+          </header>
+          <sheet>
+
+            <!-- <widget name="web_ribbon" title="Arquivada" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
               <widget name="web_ribbon" title="Cancelada" bg_color="bg-danger" attrs="{'invisible': [('state', '!=', 'cancelada')]}"/>
               <widget name="web_ribbon" title="Encerrada" bg_color="bg-warning" attrs="{'invisible': [('state', '!=', 'encerrada')]}"/> -->
-              
-              <div class="oe_button_box" name="button_box">
-                <button name="action_go_contratos" type="object" class="oe_stat_button" icon="fa-file-text-o"
-                    >
-                    <div class="o_field_widget o_stat_info">
-                     
-                      <field name="contratos_count" class="o_state_value" />
-                      <span class="o_stat_text">Contratos</span>
-                    </div>
-                </button>
-                <button name="action_go_parcelas" type="object" class="oe_stat_button" icon="fa-money"
-                    >
-                    <div class="o_field_widget o_stat_info">
-                     
-                      <field name="parcelas_count" class="o_state_value" />
-                      <span class="o_stat_text">Parcelas</span>
-                    </div>
-                </button>
-                <button name="action_go_matriculas_disciplinas" type="object" class="oe_stat_button" icon="fa-list-ol"
-                    >
-                    <div class="o_field_widget o_stat_info">
-                     
-                      <field name="matriculas_disciplinas_count" class="o_state_value" />
-                      <span class="o_stat_text">Disciplinas</span>
-                    </div>
-                </button>
-                <button name="action_go_notas_disciplinas" type="object" class="oe_stat_button" icon="fa-list-alt"
-                    >
-                    <div class="o_field_widget o_stat_info">
-                     
-                      <field name="notas_disciplinas_count" class="o_state_value" />
-                      <span class="o_stat_text">Notas</span>
-                    </div>
-                </button>
-              
-              </div>
-              
-              <h1>
-                  <field name="name" string="Código" attrs="{'readonly':[('edit_turma_curso', '==', False)]  }"/>
-              </h1>
-              <group>
-               
-                <group>
-                                     
-                  <field name="curso_turma_id" string="Turma do Curso" attrs="{'readonly':[('state','!=','draft'),('edit_turma_curso', '!=', True)]  }"
-                    options="{'no_create': True}"
-                  />
-                  <field name="aluno_id" string="Aluno" attrs="{'readonly':[('state','!=','draft')]  }"
-                    options="{'no_create': True}"
-                  />
-                  <field name="data_matricula" attrs="{'readonly':[('state','!=','draft')]  }"/>
-                  <field name="data_previsao_conclusao" />
-                  <field name="data_conclusao" />
-                  <field name="edit_turma_curso" />
-                  
-                  
-                </group>
-                <group>
-                                 
-                  <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}" attrs="{'readonly':[('state','!=','draft')]  }" />
-                </group>
-              </group>
-            </sheet>  
-        
-            <div class="oe_chatter">
-              <field name="message_follower_ids" widget="mail_followers"/>
-              <field name="message_ids" widget="mail_thread"/>
+
+            <div class="oe_button_box" name="button_box">
+              <button name="action_go_contratos" type="object" class="oe_stat_button" icon="fa-file-text-o">
+                <div class="o_field_widget o_stat_info">
+
+                  <field name="contratos_count" class="o_state_value" />
+                  <span class="o_stat_text">Contratos</span>
+                </div>
+              </button>
+              <button name="action_go_parcelas" type="object" class="oe_stat_button" icon="fa-money">
+                <div class="o_field_widget o_stat_info">
+
+                  <field name="parcelas_count" class="o_state_value" />
+                  <span class="o_stat_text">Parcelas</span>
+                </div>
+              </button>
+              <button name="action_go_matriculas_disciplinas" type="object" class="oe_stat_button" icon="fa-list-ol">
+                <div class="o_field_widget o_stat_info">
+
+                  <field name="matriculas_disciplinas_count" class="o_state_value" />
+                  <span class="o_stat_text">Disciplinas</span>
+                </div>
+              </button>
+              <button name="action_go_notas_disciplinas" type="object" class="oe_stat_button" icon="fa-list-alt">
+                <div class="o_field_widget o_stat_info">
+
+                  <field name="notas_disciplinas_count" class="o_state_value" />
+                  <span class="o_stat_text">Notas</span>
+                </div>
+              </button>
+
             </div>
-         
-          </form>   
-        </field>
-      </record>
+
+            <h1>
+              <field name="name" string="Código" attrs="{'readonly':[('edit_turma_curso', '==', False)]  }" />
+            </h1>
+            <group>
+
+              <group>
+
+                <field name="curso_turma_id" string="Turma do Curso" attrs="{'readonly':[('state','!=','draft'),('edit_turma_curso', '!=', True)]  }" options="{'no_create': True}" />
+                <field name="aluno_id" string="Aluno" attrs="{'readonly':[('state','!=','draft')]  }" options="{'no_create': True}" />
+                <field name="data_matricula" attrs="{'readonly':[('state','!=','draft')]  }" />
+                <field name="data_previsao_conclusao" />
+                <field name="data_conclusao" />
+                <field name="edit_turma_curso" readonly="1" invisible="1"/>
+
+
+              </group>
+              <group>
+
+                <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}" attrs="{'readonly':[('state','!=','draft')]  }" />
+              </group>
+            </group>
+          </sheet>
+
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers" />
+            <field name="message_ids" widget="mail_thread" />
+          </div>
+
+        </form>
+      </field>
+    </record>
 
   </data>
 </odoo>
