@@ -109,13 +109,22 @@ class GeracadCursoMatricula(models.Model):
     ], string="Status", default="draft", readonly=False, tracking=True
     
     )
+    # @api.depends('id')
+    # def _compute_notas_disciplinas_cursando(self):
+    #     for record in self:
+    #         record.field = 
 
     matriculas_disciplina_ids = fields.One2many(
+        "geracad.curso.nota.disciplina",
+        compute='_compute_notas_disciplinas_cursando',
+        readonly=True 
+         )
+        
        
-        comodel_name="geracad.curso.matricula.disciplina",
-        inverse_name="curso_matricula_id",
+     
 
-    )
+    
+    # disciplinas_concluidas_ids = fields.One2many('', '')
 
     matriculas_disciplinas_count = fields.Integer(
         string='Disciplinas', 

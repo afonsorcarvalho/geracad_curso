@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from email.policy import default
 from odoo import models, fields, api, _
 from datetime import datetime, timedelta
 
@@ -141,16 +142,21 @@ class GeracadCursoGrade(models.Model):
     name = fields.Char(compute='_compute_field' )
 
     sequence = fields.Integer(string="Sequência")
-    e_obrigatoria = fields.Boolean("É obrigatória")
+    e_obrigatoria = fields.Boolean("É obrigatória", default=True)
     e_excluida = fields.Boolean("Excluída")
 
-    active = fields.Boolean("Está Ativa")
+    active = fields.Boolean("Está Ativa", default=True),
+    
+  
+    
+    
     periodo = fields.Integer(string="Periodo")
     curso_id = fields.Many2one(comodel_name='geracad.curso', string="Curso") 
     disciplina_id = fields.Many2one(comodel_name='geracad.curso.disciplina', string="Disciplina")
     disciplina_id_carga_horaria = fields.Integer(string="Carga Horária", 
         related='disciplina_id.carga_horaria',
         readonly=True,
+        store=True,
         )
     
     
