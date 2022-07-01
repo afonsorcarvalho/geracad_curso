@@ -109,24 +109,24 @@ class GeracadCursoMatricula(models.Model):
     ], string="Status", default="draft", readonly=False, tracking=True 
     )
 
-    notas_disciplina_cursando_ids = fields.One2many(
-        "geracad.curso.nota.disciplina",
-        inverse_name = "curso_matricula_id"
-        compute='_compute_disciplinas_faltantes' )
+    # notas_disciplina_cursando_ids = fields.One2many(
+    #     "geracad.curso.nota.disciplina",
+    #     inverse_name = "curso_matricula_id",
+    #     compute='_compute_disciplinas_faltantes' )
 
-    @api.depends('id')
-    def _compute_disciplinas_faltantes(self):
-        _logger.debug("calculando disciplinas faltantes")
+   
+    # def _compute_disciplinas_faltantes(self):
+    #     _logger.debug("calculando disciplinas faltantes")
         
         
-        for record in self:
-            vals = {}
-            vals.update({
-                'notas_disciplina_cursando_ids':[(0,0,
-                {'curso_matricula_id':record.id,'so_qty':35})]
+    #     for record in self:
+    #         vals = {}
+    #         vals.update({
+    #             'notas_disciplina_cursando_ids':[(0,0,
+    #             {'curso_matricula_id':record.id,'so_qty':35})]
                 
-                })
-            record.write(vals)
+    #             })
+    #         record.write(vals)
     
        
     
@@ -518,6 +518,28 @@ class GeracadCursoMatricula(models.Model):
         self.write({
             'edit_turma_curso': False,
         })
+    
+    def _get_disciplinas_cursadas_ids(self):
+        self.env["geracad.curso.nota.disciplina"].search([
+            '&',
+            ('curso_matricula_id', '=',self.id ),
+            ('situation', '=',['AP',] )
+            ], offset=0, limit=None, order=None, count=False)
+
+    def _get_disciplinas_curso_obrigatorias_ids(self):
+        self.env["geracad.curso.nota.disciplina"].search([
+            '&',
+            ('curso_matricula_id', '=',self.id ),
+            ('situation', '=',['AP',] )
+            ], offset=0, limit=None, order=None, count=False)
+
+    def action_gera_historico_final(self):
+        _logger.info("Gerando Histórico final")
+        #pega todas as disciplinas do curso obrigatórias
+        #pega todas os codigos disciplinas aprovadas
+        # verifica se todas estao completadas
+        # caso não esteja completadas mostra as não completadas
+
         
         
 
