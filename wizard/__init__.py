@@ -3,4 +3,5 @@
 
 from . import pagamento_parcela
 from . import finalizar_aula
+from . import gerar_historico_final
 

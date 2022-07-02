@@ -86,6 +86,7 @@ class GeracadCursoMatricula(models.Model):
         default= lambda self: date.today() +  relativedelta(months=24),
         track_visibility='true'
     )
+   
 
     
    
@@ -520,21 +521,62 @@ class GeracadCursoMatricula(models.Model):
         })
     
     def _get_disciplinas_cursadas_ids(self):
-        self.env["geracad.curso.nota.disciplina"].search([
+        disciplinas_ids = []
+        res = self.env["geracad.curso.nota.disciplina"].search([
             '&',
             ('curso_matricula_id', '=',self.id ),
-            ('situation', '=',['AP',] )
+            ('situation', 'in',['AP','AM','EA'] )
             ], offset=0, limit=None, order=None, count=False)
 
+        for nota in res:
+            disciplinas_ids.append(nota.disciplina_id)
+        return disciplinas_ids
+
     def _get_disciplinas_curso_obrigatorias_ids(self):
-        self.env["geracad.curso.nota.disciplina"].search([
+        disciplinas_ids = []
+        res = self.env["geracad.curso.grade"].search([
             '&',
-            ('curso_matricula_id', '=',self.id ),
-            ('situation', '=',['AP',] )
+            ('curso_id', '=',self.curso_id.id),
+            ('e_obrigatoria', '=',1 )
             ], offset=0, limit=None, order=None, count=False)
+        for grade in res:
+            disciplinas_ids.append(grade.disciplina_id)
+            
+        return disciplinas_ids
 
     def action_gera_historico_final(self):
         _logger.info("Gerando Histórico final")
+        disciplina_concluida_ids = self._get_disciplinas_cursadas_ids()
+        _logger.info(disciplina_concluida_ids)
+        disciplinas_obrigatorias_id = self._get_disciplinas_curso_obrigatorias_ids()
+        _logger.info(disciplinas_obrigatorias_id)
+        disciplinas_faltantes = []
+        disciplinas_cursadas = []
+        for disciplina_obrigatoria in disciplinas_obrigatorias_id:
+            for disciplina_concluida in disciplina_concluida_ids:
+                if disciplina_obrigatoria.id == disciplina_concluida.id:
+                    disciplinas_cursadas.append(disciplina_obrigatoria)
+                else:
+                    disciplinas_faltantes.append(disciplina_obrigatoria)
+        _logger.info("disciplinas_cursadas")
+        _logger.info(disciplinas_cursadas)
+
+        _logger.info("disciplinas_faltantes")
+        _logger.info(disciplinas_faltantes)
+
+        dummy, act_id = self.env["ir.model.data"].sudo().get_object_reference(
+            "geracad_curso", "action_geracad_curso_gerar_historico_final"
+        )
+        disciplinas_ids=[]
+        for disciplina in disciplinas_faltantes:
+            disciplinas_ids = disciplina.id
+        vals = self.env["ir.actions.act_window"].sudo().browse(act_id).read()[0]
+        vals["context"] = {
+            "default_matricula_id": self.id,
+            "default_disciplina_faltantes_id": [(6, 0, [3686] ) ] 
+          
+        }
+        return vals
         #pega todas as disciplinas do curso obrigatórias
         #pega todas os codigos disciplinas aprovadas
         # verifica se todas estao completadas

@@ -152,15 +152,15 @@ class GeracadCursoNotaDisciplina(models.Model):
     periodo = fields.Integer(
         string='periodo',
         compute="_compute_periodo",
-        store=True
+        
     )
     gerado_historico_final = fields.Boolean("Histórico final?")
    
-    @api.depends('disciplina_matricula_id','curso_matricula_id')
+    #@api.depends('disciplina_matricula_id','curso_matricula_id')
     def _compute_periodo(self):
         for record in self:
-            grade = self.env["geracad.curso.grade"].search([('curso_id','=',record.curso_id.id),('disciplina_id','=',record.disciplina_id.id)])
-            record.periodo = grade.periodo
+            
+            record.periodo = self.turma_disciplina_id.periodo
 
     
     nota_1 = fields.Float(group_operator="avg", tracking=True)

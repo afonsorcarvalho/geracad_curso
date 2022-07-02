@@ -106,6 +106,7 @@
                   readonly="1" invisible="1"
                   />
                   <field name="turma_disciplina_id"  readonly="1"/>
+                  <field name="periodo"  readonly="1"/>
                   <field name="turma_disciplina_carga_horaria"  readonly="1"/>
                   <field name="faltas" attrs="{'readonly': [('state','in',('concluida'))]}"/>
                   <field name="nota_1" attrs="{'readonly': [('state','in',('concluida'))]}"/>

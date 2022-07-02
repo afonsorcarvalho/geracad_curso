@@ -51,6 +51,7 @@
         'reports/report_actions.xml',
         'wizard/pagamento_parcela.xml',
         'wizard/finalizar_aula.xml',
+        'wizard/gerar_historico_final.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
