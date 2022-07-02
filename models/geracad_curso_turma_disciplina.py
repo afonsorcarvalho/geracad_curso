@@ -63,6 +63,15 @@ class GeracadCursoTurmDisciplina(models.Model):
        
         
     )
+    @api.depends('periodo')
+    def onchange_periodo(self):
+        _logger.info("MUDANDO O PERIODO DAS NOTAS")
+        for nota in self.notas:
+            res = nota.write({
+                'periodo': self.periodo
+            })
+            _logger.info(res)
+    
 
     #TODO
     #mudar esse periodo da turma para default em vez de compute
@@ -170,6 +179,22 @@ class GeracadCursoTurmDisciplina(models.Model):
     notas = fields.One2many('geracad.curso.nota.disciplina', 'turma_disciplina_id')
     active = fields.Boolean(default=True)
     
+
+   
+    def write(self, vals):
+        # Agregar codigo de validacion aca
+        
+        res = super(GeracadCursoTurmDisciplina, self).write(vals)
+        if vals['periodo']:
+            nota_ids = self.env['geracad.curso.nota.disciplina'].search([
+                ('turma_disciplina_id','=',self.id)
+                ])
+            for nota in nota_ids:
+                nota.write({
+                    'periodo': self.periodo
+                })
+
+        return res
     
     #usado na impressão do diário
     def get_diario_date(self):
