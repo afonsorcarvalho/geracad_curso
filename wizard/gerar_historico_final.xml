@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_geracad_curso_gerar_historico_final_form" model="ir.ui.view">
+        <field name="name">wizard.geracad.curso.gerar.historico.final</field>
+        <field name="model">geracad.curso.gerar.historico.final</field>
+        <field name="arch" type="xml">
+            <form string="Gerar Histórico Final">
+                <sheet>
+                    <h1>
+                        <field name="matricula_id" readonly="1"/>
+                    </h1>
+                    
+                     
+                           
+                            
+                            <field name="disciplina_faltantes_id" widget="one2many_list" readonly="1"/>
+                            
+                            
+                        
+                    
+                </sheet>
+                <footer>
+                    <button string="Confirmar" name="action_confirm" type="object" class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="geracad_curso_disciplinas_faltantes_historico_final_list" model="ir.ui.view">
+        <field name="name">geracad.curso.disciplinas.faltantes.historico.final.list</field>
+        <field name="model">geracad.curso.disciplinas.faltantes.historico.final</field>
+        <field name="arch" type="xml">
+            <tree string="Disciplinas Faltantes">
+                <field name="disciplina_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_geracad_curso_gerar_historico_final" model="ir.actions.act_window">
+        <field name="name">Gerar Historico Final</field>
+        <field name="res_model">geracad.curso.gerar.historico.final</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_geracad_curso_gerar_historico_final_form"/>
+         <field name="target">new</field>
+    </record>
+
+</odoo>
