@@ -67,6 +67,12 @@
                       <field name="disciplina_id" />
                       <field name="disciplina_id_carga_horaria"/>
                       <field name="e_obrigatoria"/>
+                      <control>
+                        <create
+                          string="Adicione uma disciplina"
+                          context="{'default_curso_id':id,'default_periodo': 1}"
+                        />            
+                      </control>
                       
                     </tree>
                     <form>

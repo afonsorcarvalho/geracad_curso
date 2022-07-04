@@ -184,15 +184,14 @@ class GeracadCursoTurmDisciplina(models.Model):
     def write(self, vals):
         # Agregar codigo de validacion aca
         
-        res = super(GeracadCursoTurmDisciplina, self).write(vals)
-        if vals['periodo']:
-            nota_ids = self.env['geracad.curso.nota.disciplina'].search([
-                ('turma_disciplina_id','=',self.id)
-                ])
-            for nota in nota_ids:
-                nota.write({
-                    'periodo': self.periodo
-                })
+        res = super(GeracadCursoTurmDisciplina, self).write(vals)      
+        nota_ids = self.env['geracad.curso.nota.disciplina'].search([
+            ('turma_disciplina_id','=',self.id)
+            ])
+        for nota in nota_ids:
+            nota.write({
+                'periodo': self.periodo
+            })
 
         return res
     

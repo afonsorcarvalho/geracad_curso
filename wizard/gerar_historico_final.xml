@@ -7,18 +7,51 @@
         <field name="arch" type="xml">
             <form string="Gerar Histórico Final">
                 <sheet>
+                    <div class="oe_title">
                     <h1>
-                        <field name="matricula_id" readonly="1"/>
+                         <field name="matricula_id" readonly="1"/>
                     </h1>
+                    </div>
+                    <p class="alert alert-info">Para gerar o histórico final, o aluno não deve ter nenhuma disciplina faltante no seu curso.
+                        Após a geração do Histórico Final o aluno estará formado.
+                    </p>
+              
                     
-                     
-                           
-                            
-                            <field name="disciplina_faltantes_id" widget="one2many_list" readonly="1"/>
-                            
-                            
-                        
                     
+                    
+                    <group string="Data de conclusão" >
+                        <group> 
+                            <field name="data_conclusao" />
+                        </group>
+                    </group>
+                    
+                    <separator colspan="4" />
+                    <notebook>
+                        <page string="Disciplinas Faltantes" >
+                          <field nolabel="1" name="disciplina_faltantes_id"   readonly="1">
+                            <tree create="false" edit="false" editable="bottom" 
+                      
+                            decoration-danger="1==1"
+                            >
+                                <field  name="disciplina_id" string="Nomes" readonly="1" />
+
+                            </tree>
+                            </field>
+                        </page>
+                        <page string="Disciplinas Concluídas">
+                         <field nolabel="1" string="" name="disciplina_concluidas_id" readonly="1">
+                            <tree create="false" edit="false" editable="bottom" 
+                          
+                            decoration-success="1==1"
+                            >
+                                <field  name="disciplina_id" string="Nomes" readonly="1"/>
+
+                            </tree>
+                            </field> 
+                        </page>
+                      </notebook>    
+                    
+                   
                 </sheet>
                 <footer>
                     <button string="Confirmar" name="action_confirm" type="object" class="btn-primary"/>
@@ -27,22 +60,16 @@
             </form>
         </field>
     </record>
-    <record id="geracad_curso_disciplinas_faltantes_historico_final_list" model="ir.ui.view">
-        <field name="name">geracad.curso.disciplinas.faltantes.historico.final.list</field>
-        <field name="model">geracad.curso.disciplinas.faltantes.historico.final</field>
-        <field name="arch" type="xml">
-            <tree string="Disciplinas Faltantes">
-                <field name="disciplina_id"/>
-            </tree>
-        </field>
-    </record>
+   
+   
 
     <record id="action_geracad_curso_gerar_historico_final" model="ir.actions.act_window">
-        <field name="name">Gerar Historico Final</field>
+        <field name="name">Gerar Histórico Final</field>
         <field name="res_model">geracad.curso.gerar.historico.final</field>
         <field name="view_mode">form</field>
         <field name="view_id" ref="view_geracad_curso_gerar_historico_final_form"/>
          <field name="target">new</field>
     </record>
+
 
 </odoo>

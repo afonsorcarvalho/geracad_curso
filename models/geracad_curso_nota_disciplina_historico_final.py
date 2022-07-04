@@ -30,12 +30,21 @@ class GeracadCursoNotaDisciplinaHistoricoFinal(models.Model):
         string='Matricula Disciplina',
         required=True
         )
+    disciplina_id = fields.Many2one(
+        "geracad.curso.disciplina",
+        related='turma_disciplina_id.disciplina_id',
+        readonly=True, 
+        string='Disciplina',      
+        store=True    
+        )
+    disciplina_nome = fields.Char(
+        "Disciplina",
+         related='turma_disciplina_id.disciplina_id.name',
+        )
    
-
     curso_matricula_id = fields.Many2one(
         'geracad.curso.matricula',
         string="Matricula Curso",
-        
         related='disciplina_matricula_id.curso_matricula_id',
         readonly=True,
         store=True
@@ -48,24 +57,17 @@ class GeracadCursoNotaDisciplinaHistoricoFinal(models.Model):
          )
          
     aluno_nome = fields.Char(
-       
         string="Nome do Aluno",
-        
         related='disciplina_matricula_id.curso_matricula_id.aluno_id.name',
         readonly=True,
         store=True
-        
         )
    
-    
-    
     curso_id = fields.Many2one(
         'geracad.curso',
-        
         related='disciplina_matricula_id.curso_matricula_id.curso_turma_id.curso_id',
         readonly=True,
         store=True
-        
         )
 
     turma_disciplina_id = fields.Many2one(
@@ -76,20 +78,6 @@ class GeracadCursoNotaDisciplinaHistoricoFinal(models.Model):
         readonly=True,
         store=True,
         )
-   
-  
-    disciplina_id = fields.Many2one(
-        "geracad.curso.disciplina",
-        related='turma_disciplina_id.disciplina_id',
-        
-        readonly=True, 
-        
-        string='Disciplina',      
-        store=True    
-        )
-    disciplina_nome = fields.Char(
-        "Disciplina"
-        )
 
     faltas = fields.Integer(
         string='Faltas',
@@ -99,7 +87,11 @@ class GeracadCursoNotaDisciplinaHistoricoFinal(models.Model):
     )
     
     periodo = fields.Integer(
-        string='periodo'
+        string='Período'
+       
+    )
+    carga_horaria = fields.Integer(
+        string='Carga Horária'
        
     )
    

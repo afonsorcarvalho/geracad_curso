@@ -36,6 +36,7 @@
         'views/geracad_curso_financeiro_parcelas_view.xml',
         'views/geracad_curso_professores_view.xml',
         'views/geracad_curso_view.xml',
+        'views/geracad_curso_nota_disciplina_historico_final_view.xml',
         'views/alunos_view.xml',
         'views/res_company.xml',
         'views/portal_templates.xml',
