@@ -7,7 +7,8 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
-
+#TODO
+# essa classe não está sendo usada, verifica se pode pagar-la
 class GeracadCursoHistorioFinal(models.Model):
     _name = "geracad.curso.historico.final"
     _description = "Histórico Final de Cursos"

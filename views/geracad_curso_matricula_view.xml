@@ -110,7 +110,7 @@
             <button type="object" name="action_destrancar" string="Destrancar" class="btn btn-default" confirm="Tem certeza que deseja DESTRANCAR matrícula do aluno?" attrs="{'invisible': [('state', '!=', 'trancado')]}" />
             <button type="object" name="action_abandono" string="Abandonar" class="btn btn-default" confirm="Tem certeza que deseja ABANDONAR matrícula do aluno? Essa ação não poderá ser desfeita."  attrs="{'invisible': [('state', '=', 'abandono')]}" />
             <button type="object" name="action_gera_historico_final"  string="Gerar Histórico Final" 
-             groups="geracad_curso.group_geracad_curso_finaceiro"
+             groups="geracad_curso.group_geracad_curso_finaceiro" attrs="{'invisible': [('state', 'not in', ['inscrito', 'draft'])]}"
              />
             <field name="state" widget="statusbar" />
           </header>

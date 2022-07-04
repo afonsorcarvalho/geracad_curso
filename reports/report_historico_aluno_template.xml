@@ -59,17 +59,16 @@
 										<div class="row cabecalho-historico">
 											<div class="col-12">
 												<h4 class="text-center color-primary">
-													HISTÓRICO ESCOLAR
+													HISTÓRICO ESCOLAR 
+													<span t-if="o.state=='formado'">FINAL</span>
+													
 												</h4>
 												<h5 class="text-center" t-field="o.curso_nome" />
 												
 												<t t-if="o.curso_id.resolucao"><h6 class="text-center"  >
 												RESOLUÇÃO <span t-field="o.curso_id.resolucao" />
 												</h6></t>
-												
-												
-													
-												
+
 											</div>
 										</div>
 									</th>

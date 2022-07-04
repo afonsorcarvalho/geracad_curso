@@ -62,6 +62,7 @@ class GeracadCursoGerarHistoricoFinal(models.TransientModel):
 
             }
             )
+        
 
    
 
@@ -73,7 +74,10 @@ class GeracadCursoGerarHistoricoFinal(models.TransientModel):
         if len(self.disciplina_faltantes_id) > 0:
             raise UserError(_('O histórico final só poderá ser gerado caso o aluno tenha todas as disciplinas do curso concluídas e aprovadas.'))
         self._gera_nota_historico_final_aluno()
-            
+        self.matricula_id.write({
+            'data_conclusao': self.data_conclusao,
+            'state': 'formado'
+            })    
         
     
 

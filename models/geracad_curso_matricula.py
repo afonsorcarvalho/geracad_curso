@@ -26,6 +26,7 @@ class GeracadCursoMatricula(models.Model):
 
 
     name = fields.Char("Código", track_visibility='true')
+
     company_id = fields.Many2one(
         'res.company', string="Unidade", required=True,
          default=lambda self: self.env.company,
@@ -33,6 +34,7 @@ class GeracadCursoMatricula(models.Model):
         
     )
     edit_turma_curso =  fields.Boolean(track_visibility='true')
+
     curso_turma_id = fields.Many2one(
         'geracad.curso.turma',
         string='Turma',
@@ -73,7 +75,7 @@ class GeracadCursoMatricula(models.Model):
         domain=[('e_aluno','=',True)]
         
         )  
-    aluno_mobile =  fields.Char(related='aluno_id.mobile',readonly=True) ;
+    aluno_mobile =  fields.Char(related='aluno_id.mobile',readonly=True) 
    
     data_matricula = fields.Date(
         string='Data Matrícula',
@@ -86,9 +88,6 @@ class GeracadCursoMatricula(models.Model):
         default= lambda self: date.today() +  relativedelta(months=24),
         track_visibility='true'
     )
-   
-
-    
    
     data_conclusao = fields.Date(
         string='Data Conclusão',
@@ -110,27 +109,6 @@ class GeracadCursoMatricula(models.Model):
     ], string="Status", default="draft", readonly=False, tracking=True 
     )
 
-    # notas_disciplina_cursando_ids = fields.One2many(
-    #     "geracad.curso.nota.disciplina",
-    #     inverse_name = "curso_matricula_id",
-    #     compute='_compute_disciplinas_faltantes' )
-
-   
-    # def _compute_disciplinas_faltantes(self):
-    #     _logger.debug("calculando disciplinas faltantes")
-        
-        
-    #     for record in self:
-    #         vals = {}
-    #         vals.update({
-    #             'notas_disciplina_cursando_ids':[(0,0,
-    #             {'curso_matricula_id':record.id,'so_qty':35})]
-                
-    #             })
-    #         record.write(vals)
-    
-       
-    
     matriculas_disciplina_ids = fields.One2many(
         "geracad.curso.matricula.disciplina", inverse_name = 'curso_matricula_id',
         readonly=True)
@@ -138,17 +116,16 @@ class GeracadCursoMatricula(models.Model):
     matriculas_disciplinas_count = fields.Integer(
         string='Disciplinas', 
         compute='_compute_matriculas_disciplinas',
-            
         )
+
     notas_disciplinas_count = fields.Integer(
         string='Disciplinas', 
         compute='_compute_notas_disciplinas',
-            
         )
+
     contratos_count = fields.Integer(
         string='Contratos', 
-        compute='_compute_contratos',
-            
+        compute='_compute_contratos',    
         )
 
     parcelas_ids = fields.One2many('geracad.curso.financeiro.parcelas', 'curso_matricula_id')
@@ -156,15 +133,46 @@ class GeracadCursoMatricula(models.Model):
     parcelas_count = fields.Integer(
         string='Qtd. Parcelas', 
         compute='_compute_parcelas',
-            
         )
     
     contrato_gerado = fields.Boolean("Gerado Contrato?",tracking=True ,readonly=True)
 
     active = fields.Boolean(default=True)
+
+    @api.model
+    def create(self, vals):
+        if 'company_id' in vals:
+             curso_turma = self.env['geracad.curso.turma'].search([('id', '=', vals['curso_turma_id'] )])
+             self = self.with_company(curso_turma.company_id)
+
+        if vals.get('name', _('New')) == _('New'):
+             seq_date = None
+        vals['name'] = self._gera_codigo_matricula(vals) or _('New')
+        vals['state'] = 'inscrito'
+        
+        result = super(GeracadCursoMatricula, self).create(vals)
+        return result
     
-   
-  
+    #TODO
+    # verificar  essa função está certa e funcionando
+    def write(self, vals):
+        res = super(GeracadCursoMatricula, self).write(vals)
+
+        if self.edit_turma_curso:
+            vals['edit_turma_curso'] = False
+        
+        return res
+    
+    @api.depends('name', 'curso_turma_id')
+    def name_get(self):
+        result = []
+        for record in self:
+            name = '[' + record.name + '] ' + record.aluno_id.name
+            result.append((record.id, name))
+        return result
+    
+    # COMPUTE FUNCTIONS
+    #
     def _compute_matriculas_disciplinas(self):
         for record in self:    
             record.matriculas_disciplinas_count = self.env["geracad.curso.matricula.disciplina"].search(
@@ -182,14 +190,17 @@ class GeracadCursoMatricula(models.Model):
             record.contratos_count = self.env["geracad.curso.contrato"].search(
                 [('curso_matricula_id', '=', record.id)],
                 offset=0, limit=None, order=None, count=True)
+
     def _compute_parcelas(self):
         for record in self:    
             record.parcelas_count = self.env["geracad.curso.financeiro.parcelas"].search(
                 [('curso_matricula_id', '=', record.id)],
                 offset=0, limit=None, order=None, count=True)
     
-    
-    
+
+    # ONCHANGE FUNCTIONS
+    #
+
     @api.onchange('curso_turma_id')
     def _onchange_curso_turma_id(self):
         _logger.debug("MUDANCA NA TURMA DE CURSO")
@@ -201,40 +212,8 @@ class GeracadCursoMatricula(models.Model):
         
             self.name = self._gera_codigo_matricula(vals)
         
-        
-    @api.model
-    def create(self, vals):
-        if 'company_id' in vals:
-             curso_turma = self.env['geracad.curso.turma'].search([('id', '=', vals['curso_turma_id'] )])
-             self = self.with_company(curso_turma.company_id)
-
-        if vals.get('name', _('New')) == _('New'):
-             seq_date = None
-        vals['name'] = self._gera_codigo_matricula(vals) or _('New')
-        vals['state'] = 'inscrito'
-        
-        result = super(GeracadCursoMatricula, self).create(vals)
-        return result
-    
-    
-    def write(self, vals):
-        res = super(GeracadCursoMatricula, self).write(vals)
-        # Agregar codigo de validacion aca
-        if self.edit_turma_curso:
-            vals['edit_turma_curso'] = False
-        
-        return res
-    
-    @api.depends('name', 'curso_turma_id')
-    def name_get(self):
-        result = []
-        for record in self:
-            name = '[' + record.name + '] ' + record.aluno_id.name
-            result.append((record.id, name))
-        return result
-    
-    
-
+    # PRIVATE FUNCTIONS
+    #
     def _gera_codigo_matricula(self,vals):
         """
             Gera o codigo da matricula de cursos pegando o codigo da turma de curso + número sequencial
@@ -272,19 +251,30 @@ class GeracadCursoMatricula(models.Model):
 
     
     def _get_periodos(self):
+        '''
+        Retorna a quantidade de periodo do curso
+        '''
         res = []
         for periodo in range(self.curso_id.quantidade_de_periodos):
                 res.append(periodo+1)   
         return res  
 
     def _get_notas_periodo(self, periodo):
-        
-        nota_disciplina_ids = self.env['geracad.curso.nota.disciplina'].search([('curso_matricula_id', '=', self.id)])
+        '''
+        Retorna as notas de um periodo
+        '''
+        if self.state != 'formado':    
+            nota_disciplina_ids = self.env['geracad.curso.nota.disciplina'].search([('curso_matricula_id', '=', self.id)])
+        else:
+            nota_disciplina_ids = self.env['geracad.curso.nota.disciplina.historico.final'].search([('curso_matricula_id', '=', self.id)])
+
         nota_disciplina_ids_periodo = []
         for nota_disciplina_id in nota_disciplina_ids:
             _logger.debug(nota_disciplina_id)
             if nota_disciplina_id.periodo == int(periodo):
                 nota_disciplina_ids_periodo.append(nota_disciplina_id)
+    
+
         
         return nota_disciplina_ids_periodo
 
@@ -302,30 +292,12 @@ class GeracadCursoMatricula(models.Model):
         super(GeracadCursoMatricula, self)._compute_access_url()
         for matricula in self:
             matricula.access_url = '/my/matriculas/%s' % matricula.id
+
     # url de nome do aquivo download no portal
     def _get_report_base_filename(self):
         self.ensure_one()
         return 'Histórico - %s' % (self.name)
-    """
-
-            BUTTON ACTIONS
-
-    """
-    def action_gerar_contrato(self):
-        _logger.info("Gerando Contrato")
-        return {
-            'name': _('Gerar Contrato'),
-            'type': 'ir.actions.act_window',
-            'target':'current',
-            'view_mode': 'form',
-            'res_model': 'geracad.curso.contrato',
-            'domain': [('curso_matricula_id', '=', self.id)],
-            'context': {
-                'default_curso_matricula_id': self.id,
-             
-            }
-        }
-
+    
     
     #TODO.
     # 
@@ -366,31 +338,36 @@ class GeracadCursoMatricula(models.Model):
                 contrato.write({
                     'state': state
                 })
+
+
     ##########################################
     #  FUNCOES USADAS NA IMPRESSAO
     ##########################################
-    
-    
-    def get_periodo_cursado(self):
         
+    
+   
+    def get_periodo_cursado(self):
+        '''
+        Função utilizada para verficar o período cursado atual do aluno, utilizada na impressão
+        da declaração
+        '''
         matricula_disciplina_ids = self.env["geracad.curso.matricula.disciplina"].search([
             '&',
             ('curso_matricula_id','=', self.id),
-            
             ('state','not in', ['cancelada','trancado','expulso']),
-            
-
             ],order='data_matricula DESC',limit=1)
+
         if len(matricula_disciplina_ids):
             periodo = matricula_disciplina_ids[0].turma_disciplina_id.periodo
         else:
             periodo = 1
         return periodo
         
-        
-        
 
     def get_date_str(self):
+        '''
+        Função retorna a data no formato ex. 'São Luís-MA, 20 de Abril de 2022'
+        '''
         date_hoje = date.today()
         locale = get_lang(self.env).code
 
@@ -398,9 +375,8 @@ class GeracadCursoMatricula(models.Model):
         date_str = self.company_id.city_id.name + '-' + self.company_id.state_id.code + ', ' + format_date(date_hoje,format="long",locale=locale)
         return   date_str
 
+   
     #########################################
-
-
     # MUDA TODAS AS PARCELAS COM DATA DE VENCIMENTO DEPOIS DO DIA ATUAL
     
     def _cancela_parcelas_a_vencer(self):
@@ -455,6 +431,26 @@ class GeracadCursoMatricula(models.Model):
                     'active': active,
 
                 })
+    """
+
+            BUTTON ACTIONS
+
+    """
+    def action_gerar_contrato(self):
+        _logger.info("Gerando Contrato")
+        return {
+            'name': _('Gerar Contrato'),
+            'type': 'ir.actions.act_window',
+            'target':'current',
+            'view_mode': 'form',
+            'res_model': 'geracad.curso.contrato',
+            'domain': [('curso_matricula_id', '=', self.id)],
+            'context': {
+                'default_curso_matricula_id': self.id,
+             
+            }
+        }
+
 
     def action_trancar(self):
         _logger.info("Matrícula Trancada")
