@@ -23,6 +23,9 @@
 							padding: 0px;
 
 						}
+						div #state{
+						   text-transform: uppercase;
+						}
 			
 						.o_report_layout_background{
 							background-image: none;
@@ -91,7 +94,7 @@
 									<td colspan="8">
 										<div class="row dados-aluno">
 											<div class="col-6">
-												<div class="col-auto" name="data_conclusao">
+												<div class="col-auto text-uppercase" name="data_conclusao">
 													<strong>ALUNO:</strong>
 													<span t-field="o.aluno_id.display_name" />
 												</div>
@@ -115,7 +118,21 @@
 												</div>
 												<div class="col-auto" name="data_conclusao">
 													<strong>DATA TÉRMINO:</strong>
-													<span t-field="o.data_conclusao" />
+
+													<t t-if="o.data_conclusao">
+
+														<span t-field="o.data_conclusao" />
+													</t>
+													<t t-if="not o.data_conclusao">
+														EM ANDAMENTO
+													
+													</t>
+													
+
+												</div>
+												<div class="col-auto text-uppercase">
+													<strong>SITUAÇÃO:</strong>
+													<span t-field="o.state" />
 												</div>
 											</div>
 										</div>
@@ -183,17 +200,19 @@
 							<div class="col-6 text-center">
 								_____________________________________________
 								<br />
-								
+
 								<t t-if="o.company_id.diretor">
 									<strong>
-									<t t-esc="o.company_id.diretor" />
-									</strong><br />
+										<t t-esc="o.company_id.diretor" />
+									</strong>
+									<br />
 								</t>
 								<t t-if="o.company_id.diretor_formacao">
-								<span>
-									<t t-esc="o.company_id.diretor_formacao" />
-								</span>
-								<br /></t>
+									<span>
+										<t t-esc="o.company_id.diretor_formacao" />
+									</span>
+									<br />
+								</t>
 								<span>Diretor(a)</span>
 								<br />
 
