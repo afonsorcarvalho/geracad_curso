@@ -528,6 +528,21 @@
     
     <!-- <menuitem name="Server to list" id="geracad_aluno" parent="geracad_aluno.menu_2"
               action="geracad_aluno.action_server"/> -->
+    <menuitem
+              id="mail.menu_root_discuss"
+              name="Discuss"
+              action="mail.action_discuss"
+              web_icon="mail,static/description/icon.png"
+              groups="base.user_admin"
+              sequence="999"
+          />
+    <menuitem name="Website"
+          id="menu_website_configuration"
+          sequence="999"
+          groups="base.user_admin"
+          web_icon="website,static/description/icon.png"
+          
+          />
 
   </data>
 </odoo>

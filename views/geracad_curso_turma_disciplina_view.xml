@@ -170,7 +170,7 @@
                 
                 />
         
-                <field name="periodo"/>
+                <field name="periodo" options='{"type": "number", "range": [1,10]}'/>
                 <field name="carga_horaria"/>
                 <field name="professor_id" options="{'no_create': True}" />
                 <field name="vagas" />

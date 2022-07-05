@@ -264,7 +264,10 @@ class GeracadCursoMatricula(models.Model):
         Retorna as notas de um periodo
         '''
         if self.state != 'formado':    
-            nota_disciplina_ids = self.env['geracad.curso.nota.disciplina'].search([('curso_matricula_id', '=', self.id)])
+            nota_disciplina_ids = self.env['geracad.curso.nota.disciplina'].search([
+                ('curso_matricula_id', '=', self.id),
+                ('state','not in', ['cancelada'])
+                ])
         else:
             nota_disciplina_ids = self.env['geracad.curso.nota.disciplina.historico.final'].search([('curso_matricula_id', '=', self.id)])
 

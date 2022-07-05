@@ -4,7 +4,7 @@
         <field name="name">Diario</field>
         <field name="default" eval="True" />
         <field name="orientation">Portrait</field>
-        <field name="dpi">140</field>
+        <field name="dpi">135</field>
         <field name="margin_top">20</field>
         <field name="margin_bottom">15</field>
         <field name="margin_left">3</field>
@@ -32,7 +32,7 @@
 						}
 						table { }
 						td {  }
-						td.col-disciplina { width: 300px  }
+						td.col-disciplina { width: 500px  }
 					
 						.float-right {width:400px}
 						.dados-aluno {padding-top: 10px}
@@ -47,7 +47,7 @@
 							padding-top: 4rem ;
 						}
 						.legenda{
-							font-size: 0.6rem;
+							font-size: 0.8rem;
 						}
 
 				  </style>
@@ -135,7 +135,7 @@
 								<br />
 								<span><t t-esc="o.company_id.diretor_formacao" /></span>
 								<br />
-								<span>Diretor</span>
+								<span>Diretor(a)</span>
 								<br />
 
 
@@ -147,7 +147,7 @@
 								<t t-esc="o.company_id.secretaria" />
 								  </strong>
 								<br />
-								<span>Secretária Escolar</span>
+								<span>Secretário(a) Escolar</span>
 								<br />
 
 							</div>

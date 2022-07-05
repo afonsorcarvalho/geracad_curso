@@ -5,6 +5,7 @@ from odoo import models, fields, api, _
 from datetime import date
 from babel.dates import format_datetime, format_date
 from dateutil.relativedelta import relativedelta
+from odoo.exceptions import ValidationError
 
 
 from odoo.tools.misc import formatLang, format_date as odoo_format_date, get_lang
@@ -60,6 +61,7 @@ class GeracadCursoTurmDisciplina(models.Model):
     #mudar esse periodo da turma para default em vez de compute
     periodo = fields.Integer(
         string = "Periodo", 
+        default = 1
        
         
     )
@@ -180,7 +182,20 @@ class GeracadCursoTurmDisciplina(models.Model):
     active = fields.Boolean(default=True)
     
 
-   
+    @api.constrains('carga_horaria')
+    def _check_carga_horaria(self):  
+        for record in self:
+            if record.carga_horaria <= 0:
+                raise ValidationError("A carga horária tem que ser maior que zero")
+
+    @api.constrains('periodo')
+    def _check_periodo(self):  
+        for record in self:
+            if record.periodo <= 0:
+                raise ValidationError("O período tem que ser maior que zero")
+
+
+
     def write(self, vals):
         # Agregar codigo de validacion aca
         

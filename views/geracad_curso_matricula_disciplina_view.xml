@@ -100,7 +100,8 @@
       <field name="arch" type="xml">
           <form string="Disciplina">
             <header>
-            <!--   <button name="" string="Finalizar" class="oe_highlight" states="inscrito" type=""/> -->
+              <button name="action_cancela_matricula_disciplina" string="Cancelar" style="background-color:red;"
+                confirm="Tem certeza que gostaria de cancelar matrícula do aluno nessa disciplina? O cancelamento não poderá ser desfeito!" class="btn" states="inscrito" type="object"/> 
               <field name="state" widget="statusbar" statusbar_visible="inscrito" statusbar_colors="{'finalizado':'green'}"/>
             </header>
             <sheet>

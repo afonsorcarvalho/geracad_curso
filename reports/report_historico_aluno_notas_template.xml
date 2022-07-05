@@ -50,28 +50,28 @@
 							<span t-field="notas_line.disciplina_id.name" />
 						</td>
 
-						<td>
+						<td class="text-center">
 							<span t-field="notas_line.disciplina_id.carga_horaria" />
 						</td>
 
-						<td  >
+						<td class="text-center" >
 							<span t-field="notas_line.faltas" />
 						</td>
 
-						<td  > 
+						<td class="text-center" > 
 							<span t-field="notas_line.nota_1" />
 						</td>
 
-						<td  >
+						<td class="text-center" >
 							<span t-field="notas_line.nota_2" />
 						</td>
-						<td >
+						<td class="text-center">
 							<span t-field="notas_line.final" />
 						</td>
-						<td  >
+						<td class="text-center" >
 							<span t-field="notas_line.media" />
 						</td>
-						<td  >
+						<td  class="text-center" >
 							<span t-field="notas_line.situation" />
 						</td>
 					</tr>
