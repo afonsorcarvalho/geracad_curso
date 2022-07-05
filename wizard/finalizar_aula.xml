@@ -8,12 +8,12 @@
             <form string="Finalizar Aulas">
                 <sheet>
                     <group>
-                        <group>
+                       
                            
                             <field name="turma_disciplina_id" readonly="1"/>
                             <field name="data_termino"/>
                             
-                        </group>
+                       
                     </group>
                 </sheet>
                 <footer>
@@ -28,7 +28,7 @@
         <field name="name">Finalizar Aula de disciplinas</field>
         <field name="res_model">geracad.curso.finalizar.aula</field>
         <field name="view_mode">form</field>
-        <field name="view_id" ref="view_geracad_curso_pagamento_parcela_form"/>
+        <field name="view_id" ref="view_geracad_curso_finalizar_aula_form"/>
         <field name="target">new</field>
     </record>
 
