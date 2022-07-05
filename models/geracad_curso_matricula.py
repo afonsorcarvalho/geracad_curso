@@ -439,6 +439,29 @@ class GeracadCursoMatricula(models.Model):
             BUTTON ACTIONS
 
     """
+    def action_calcula_medias_novamente(self):
+        _logger.info("Calcula media novamente")
+        records_ids = self.env["geracad.curso.nota.disciplina"].search([('situation', '=', 'AP')], offset=0, limit=None, order=None, count=False)
+        records_ids._compute_media()
+
+    def action_muda_unidade_matricula(self):
+        _logger.info("Muda unidade da matricula")
+        #procurando parauapebas
+        records_ids = self.search([('name', 'ilike', 'CJ%')], offset=0, limit=None, order=None, count=False)
+        for record in records_ids:
+            _logger.info(record.name)
+            record.write({
+                'company_id': 3
+            }) 
+        #procurando belem
+        records_ids = self.search([('name', 'ilike', 'BL%')], offset=0, limit=None, order=None, count=False)
+        for record in records_ids:
+            _logger.info(record.name)
+            record.write({
+                'company_id': 2
+            }) 
+           
+
     def action_gerar_contrato(self):
         _logger.info("Gerando Contrato")
         return {
