@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 	<record id="paperformat_historico" model="report.paperformat">
-        <field name="name">Diario</field>
-        <field name="default" eval="True" />
-        <field name="orientation">Portrait</field>
-        <field name="dpi">135</field>
-        <field name="margin_top">20</field>
-        <field name="margin_bottom">15</field>
-        <field name="margin_left">3</field>
-        <field name="margin_right">3</field>
-        <field name="header_line" eval="False" />
-        <field name="header_spacing">16</field>
-    </record>
+		<field name="name">Diario</field>
+		<field name="default" eval="True" />
+		<field name="orientation">Portrait</field>
+		<field name="dpi">135</field>
+		<field name="margin_top">20</field>
+		<field name="margin_bottom">15</field>
+		<field name="margin_left">3</field>
+		<field name="margin_right">3</field>
+		<field name="header_line" eval="False" />
+		<field name="header_spacing">16</field>
+	</record>
 	<template id="view_historico_aluno_template">
 
 		<t t-call="web.html_container">
@@ -32,7 +32,16 @@
 						}
 						table { }
 						td {  }
-						td.col-disciplina { width: 500px  }
+						td.col-disciplina { width: 500px; text-transform: uppercase;  }
+						th.col-disciplina { width: 500px  }
+						td.col-ch { width: 50px  }
+						th.col-ch { width: 50px  }
+						td.col-falta { width: 100px  }
+						th.col-falta { width: 100px  }
+						td.col-nota { width: 100px  }
+						th.col-nota { width: 100px  }
+						td.situation { width: 100px  }
+						th.situation { width: 100px  }
 					
 						.float-right {width:400px}
 						.dados-aluno {padding-top: 10px}
@@ -59,15 +68,18 @@
 										<div class="row cabecalho-historico">
 											<div class="col-12">
 												<h4 class="text-center color-primary">
-													HISTÓRICO ESCOLAR 
+													HISTÓRICO ESCOLAR
 													<span t-if="o.state=='formado'">FINAL</span>
-													
+
 												</h4>
 												<h5 class="text-center" t-field="o.curso_nome" />
-												
-												<t t-if="o.curso_id.resolucao"><h6 class="text-center"  >
-												RESOLUÇÃO <span t-field="o.curso_id.resolucao" />
-												</h6></t>
+
+												<t t-if="o.curso_id.resolucao">
+													<h6 class="text-center">
+														RESOLUÇÃO
+														<span t-field="o.curso_id.resolucao" />
+													</h6>
+												</t>
 
 											</div>
 										</div>
@@ -112,15 +124,55 @@
 							</tbody>
 
 						</table>
-						
+
+						<!-- NOTAS DAS DISCIPLINAS GERAIS -->
 						<t t-foreach="o._get_periodos()" t-as="periodo">
-							
+
 							<t t-if="o._tem_notas_periodo(periodo)">
-							
+
 								<t t-call="geracad_curso.view_historico_aluno_notas_template" />
 							</t>
-							
+
 						</t>
+						<!-- NOTAS DO ESTÁGIO SUPERVISIONADO -->
+						<t t-if="o._tem_notas_periodo(0)">
+							<t t-foreach="o._get_notas_periodo(0)" t-as="notas_line">
+								<table class="table table-sm table-striped">
+									<thead>
+
+										<tr>
+											<th class="col-disciplina">
+												<span t-field="notas_line.disciplina_id.name" />
+											</th>
+											<th class="text-center col-ch">
+												<span t-field="notas_line.disciplina_id.carga_horaria" />
+											</th>
+											<th class="text-center col-falta">
+												<span t-field="notas_line.faltas" />
+											</th>
+											<th class="text-center col-nota">
+												<span t-field="notas_line.nota_1" t-options='{"widget": "float", "precision": 2}' />
+											</th>
+											<th class="text-center col-nota">
+												<span t-field="notas_line.nota_2" t-options='{"widget": "float", "precision": 2}' />
+											</th>
+											<th class="text-center col-nota">
+												<span t-field="notas_line.final" t-options='{"widget": "float", "precision": 2}' />
+											</th>
+											<th class="text-center col-nota">
+												<span t-field="notas_line.media" t-options='{"widget": "float", "precision": 2}' />
+											</th>
+											<th class="text-center situation">
+												<span t-field="notas_line.situation" />
+											</th>
+
+										</tr>
+									</thead>
+								</table>
+							</t>
+
+						</t>
+
 						<div class="row">
 							<div class="col-auto text-right legenda ">
 									LEGENDA:  AM - APROV. MEDIA   AP - APROV. FINAL  RC - REP. CONTEUDO  RF - REP. P/ FALTA  IN - INSCRITO  CA - CANCELAMENTO  TR - TRANCAMENTO  AB - ABANDONO  EA - ESTUDOS APROVEITADOS
@@ -131,10 +183,17 @@
 							<div class="col-6 text-center">
 								_____________________________________________
 								<br />
-								<strong><t t-esc="o.company_id.diretor" /></strong>
-								<br />
-								<span><t t-esc="o.company_id.diretor_formacao" /></span>
-								<br />
+								
+								<t t-if="o.company_id.diretor">
+									<strong>
+									<t t-esc="o.company_id.diretor" />
+									</strong><br />
+								</t>
+								<t t-if="o.company_id.diretor_formacao">
+								<span>
+									<t t-esc="o.company_id.diretor_formacao" />
+								</span>
+								<br /></t>
 								<span>Diretor(a)</span>
 								<br />
 
@@ -143,9 +202,9 @@
 							<div class="col-6 text-center">
 								_____________________________________________
 								<br />
-								<strong> 
-								<t t-esc="o.company_id.secretaria" />
-								  </strong>
+								<strong>
+									<t t-esc="o.company_id.secretaria" />
+								</strong>
 								<br />
 								<span>Secretário(a) Escolar</span>
 								<br />

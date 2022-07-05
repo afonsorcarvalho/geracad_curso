@@ -14,25 +14,25 @@
 					<th  >
 								Disciplina
 							</th>
-					<th >
+					<th class="text-center">
 								CH
 							</th>
-					<th >
+					<th class="text-center" >
 								Faltas
 							</th>
-					<th >
+					<th class="text-center" >
 								1º Nota
 							</th>
-					<th >
+					<th class="text-center">
 								2º Nota
 							</th>
-					<th>
+					<th class="text-center">
 								Final
 							</th>
-					<th >
+					<th class="text-center">
 								Média
 							</th>
-					<th >
+					<th class="text-center" >
 								Situação
 							</th>
 
@@ -50,28 +50,28 @@
 							<span t-field="notas_line.disciplina_id.name" />
 						</td>
 
-						<td class="text-center">
+						<td class="text-center col-ch">
 							<span t-field="notas_line.disciplina_id.carga_horaria" />
 						</td>
 
-						<td class="text-center" >
+						<td class="text-center col-falta" >
 							<span t-field="notas_line.faltas" />
 						</td>
 
-						<td class="text-center" > 
-							<span t-field="notas_line.nota_1" />
+						<td class="text-center col-nota" > 
+							<span t-field="notas_line.nota_1"  t-options='{"widget": "float", "precision": 2}'/>
 						</td>
 
-						<td class="text-center" >
-							<span t-field="notas_line.nota_2" />
+						<td class="text-center col-nota" >
+							<span t-field="notas_line.nota_2" t-options='{"widget": "float", "precision": 2}'/>
 						</td>
-						<td class="text-center">
-							<span t-field="notas_line.final" />
+						<td class="text-center col-nota">
+							<span t-field="notas_line.final" t-options='{"widget": "float", "precision": 2}'/>
 						</td>
-						<td class="text-center" >
-							<span t-field="notas_line.media" />
+						<td class="text-center col-nota" >
+							<span t-field="notas_line.media" t-options='{"widget": "float", "precision": 2}'/>
 						</td>
-						<td  class="text-center" >
+						<td  class="text-center situation" >
 							<span t-field="notas_line.situation" />
 						</td>
 					</tr>
