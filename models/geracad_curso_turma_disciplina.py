@@ -191,8 +191,8 @@ class GeracadCursoTurmDisciplina(models.Model):
     @api.constrains('periodo')
     def _check_periodo(self):  
         for record in self:
-            if record.periodo <= 0:
-                raise ValidationError("O período tem que ser maior que zero")
+            if record.periodo < 0:
+                raise ValidationError("O período não pode ser menor que zero")
 
 
 
