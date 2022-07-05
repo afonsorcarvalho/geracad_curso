@@ -465,9 +465,13 @@
     groups="group_geracad_curso_user,group_geracad_curso_secretaria,group_geracad_curso_administrator"
     />
 
-    <menuitem name="Notas" id="geracad_curso.menu_root_notas" web_icon="geracad_curso,static/description/icon.png"
+    <menuitem name="Notas" id="geracad_curso.menu_root_notas" web_icon="geracad_curso,static/description/notas.png"
     action="geracad_curso_notas_disciplina_action_window" 
     groups="group_geracad_curso_professor,group_geracad_curso_secretaria,group_geracad_curso_administrator"
+    />
+    <menuitem name="Financeiro" id="geracad_curso.menu_root_financeiro" web_icon="geracad_curso,static/description/financeiro.png"
+    action="geracad_curso_financeiro_parcelas_action_window" 
+    groups="group_geracad_curso_finaceiro"
     />
 
     <!-- menu categories -->
