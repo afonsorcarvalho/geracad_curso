@@ -112,7 +112,7 @@ class GeracadEquivalenciaDisciplinas(models.Model):
 
     name = fields.Char("Nome", tracking=True,)
     disciplinas_equivalentes = fields.One2many(
-        string='Disciplinas',
+        string='Disciplinas Equivalentes',
         comodel_name='geracad.curso.equivalencia.disciplina.line',
         inverse_name='equivalencia_disciplina_id' )
 
@@ -124,29 +124,67 @@ class GeracadEquivalenciaDisciplinasLine(models.Model):
          "geracad.curso.equivalencia.disciplina",
         string='Equivalencia Disciplinas',
         )
-    disciplinas_equivalentes = fields.Many2one(
+    disciplinas_id = fields.Many2one(
         "geracad.curso.disciplina",
-        string='Disciplina',
+        string='Disciplina Obrigatoria',
         )
+    disciplinas_id_codigo = fields.Char(
+        string='Código Obrigatória',
+        
+        related='disciplinas_id.codigo',
+        readonly=True,
+ 
+    )
+    disciplinas_id_carga_horaria = fields.Integer(
+        string='Carga Horária Obrigatória',
+        
+        related='disciplinas_id.carga_horaria',
+        readonly=True,
+    )
+    disciplinas_id_metodologia = fields.Many2one(
+        string='Metodologia Obrigatória',
+        
+        related='disciplinas_id.metodologia',
+        readonly=True,
+ 
+    )
+    disciplinas_id_ementa = fields.Html(
+        string='Ementa',
+        
+        related='disciplinas_id.ementa',
+        readonly=True,
+ 
+    )
+    disciplinas_equivalente_id = fields.Many2one(
+        "geracad.curso.disciplina",
+        string='Disciplina Equivalente',
+        )
+    disciplinas_equivalente_id_codigo = fields.Char(
+        string='Código equivalente',
+        
+        related='disciplinas_equivalente_id.codigo',
+        readonly=True,
+ 
+    )
+    disciplinas_equivalente_id_carga_horaria = fields.Integer(
+        string='Carga Horária Equivalente',
+        
+        related='disciplinas_equivalente_id.carga_horaria',
+        readonly=True,
+    )
+    disciplinas_equivalente_id_ementa =fields.Html(
+        string='Ementa Equivalente',
+        
+        related='disciplinas_equivalente_id.ementa',
+        readonly=True,
+    )
 
-    codigo = fields.Char(
-        string='Código',
+   
+    
+    disciplinas_equivalente_id_metodologia = fields.Many2one(
+        string='Metodologia Equivalente',
         
-        related='disciplinas_equivalentes.codigo',
-        readonly=True,
- 
-    )
-    carga_horaria = fields.Integer(
-        string='Carga Horária',
-        
-        related='disciplinas_equivalentes.carga_horaria',
-        readonly=True,
- 
-    )
-    metodologia = fields.Many2one(
-        string='Metodologia',
-        
-        related='disciplinas_equivalentes.metodologia',
+        related='disciplinas_equivalente_id.metodologia',
         readonly=True,
  
     )
@@ -170,6 +208,14 @@ class GeracadCursoDisciplina(models.Model):
     ementa = fields.Html(
         string='Ementa', tracking=True,
     )
+    
+    disciplinas_equivalentes_ids = fields.One2many(
+        comodel_name="geracad.curso.equivalencia.disciplina.line",
+        string='Disciplinas Equivalentes',
+        inverse_name='disciplinas_id'
+        )
+ 
+  
     
     @api.model
     @api.depends('name', 'codigo')

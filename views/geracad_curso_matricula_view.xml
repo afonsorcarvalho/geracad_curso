@@ -162,7 +162,7 @@
               <group>
 
                 <field name="curso_turma_id" string="Turma do Curso" attrs="{'readonly':[('state','!=','draft'),('edit_turma_curso', '!=', True)]  }" options="{'no_create': True}" />
-                <field name="curso_grade_version" string='Versão Grade' attrs="{'readonly':[('state','!=','draft'),('edit_turma_curso', '!=', True)]  }" options="{'no_create': True}" />
+                <field name="curso_grade_version" string='Versão Grade'  options="{'no_create': True}" />
                 <field name="aluno_id" string="Aluno" attrs="{'readonly':[('state','!=','draft')]  }" options="{'no_create': True}" />
                 <field name="data_matricula" attrs="{'readonly':[('state','!=','draft')]  }" />
                 <field name="data_previsao_conclusao" />

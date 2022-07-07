@@ -46,7 +46,9 @@
                             >
                                 <field  name="disciplina_id" string="Nomes" readonly="1"/>
 
+
                             </tree>
+                            tree
                             </field> 
                         </page>
                       </notebook>    

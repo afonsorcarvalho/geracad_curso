@@ -597,15 +597,17 @@ class GeracadCursoMatricula(models.Model):
             Recebe uma lista de ids de disciplinas e retorna
             a lista recebida mais todas as suas disciplinas equivalentes
         '''
-        disciplinas_equivalentes_ids = []
-        disciplinas_equivalentes_ids.append(disciplinas_ids_list)
+        disciplinas_equivalentes_ids = disciplinas_ids_list
+       
 
         for disciplina_id in disciplinas_ids_list:
-            disciplina_equivalentes_line  = self.env['geracad.curso.equivalencia.disciplina.line'].search([
-                ('disciplinas_equivalentes','=', disciplina_id)
+            disciplina_line_ids  = self.env['geracad.curso.equivalencia.disciplina.line'].search([
+                ('disciplinas_id','=', disciplina_id)
                 ])
-            for disciplina_equivalentes in disciplina_equivalentes_line:
-                disciplinas_equivalentes_ids.append(disciplina_equivalentes.id)
+            _logger.info('DISCIPLINAS equivalentes line ')
+            _logger.info(disciplina_line_ids)
+            for disciplina_equivalentes_line in disciplina_line_ids:
+                disciplinas_equivalentes_ids.append(disciplina_equivalentes_line.disciplinas_equivalente_id.id)
         return disciplinas_equivalentes_ids
 
     def _get_disciplinas_analise_ids(self):
@@ -620,7 +622,14 @@ class GeracadCursoMatricula(models.Model):
         disciplinas_faltantes = []
         disciplinas_cursadas = []
         for disciplina_obrigatoria in disciplinas_obrigatorias_id:
-            if disciplina_obrigatoria in self._get_disciplinas_equivalentes_ids(disciplina_concluida_ids):
+            
+            _logger.info('DISCIPLINAS CURSADAS ')
+            _logger.info(disciplina_concluida_ids)
+            disciplinas_cursadas_com_equivalentes = self._get_disciplinas_equivalentes_ids(disciplina_concluida_ids)
+            _logger.info('DISCIPLINAS CURSADAS COM SUAS EQUIVALENTES')
+            _logger.info(disciplinas_cursadas_com_equivalentes)
+            
+            if disciplina_obrigatoria in disciplinas_cursadas_com_equivalentes:
                 disciplinas_cursadas.append(disciplina_obrigatoria)
             else:
                 disciplinas_faltantes.append(disciplina_obrigatoria)
