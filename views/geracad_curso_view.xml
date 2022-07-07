@@ -6,23 +6,17 @@
       <field name="name">cursos.list</field>
       <field name="model">geracad.curso</field>
       <field name="arch" type="xml">
-        <tree 
-        delete="false"
-        >
-         
-       
-          <field name="sigla" placeholder="Sigla do Curso" optional="show"
-            options="{'always_reload': True, 'show':True}"
-          />
-          
-          <field name="display_name" string="Nome"/>
-          
-          <field name="type_curso" placeholder="Tipo do Curso"
-            
-          />
-          <field name="quantidade_de_periodos" placeholder="Quantidade de períodos" optional="hide"/>
+        <tree delete="false">
+
+
+          <field name="sigla" placeholder="Sigla do Curso" optional="show" options="{'always_reload': True, 'show':True}" />
+
+          <field name="display_name" string="Nome" />
+
+          <field name="type_curso" placeholder="Tipo do Curso" />
+          <field name="quantidade_de_periodos" placeholder="Quantidade de períodos" optional="hide" />
         </tree>
-    
+
       </field>
     </record>
 
@@ -30,34 +24,70 @@
       <field name="name">geracad.curso.form</field>
       <field name="model">geracad.curso</field>
       <field name="arch" type="xml">
-          <form string="Cursos">
-            <sheet>
-              <div class="oe_title">
-                <h1>
-                  <field name="name" default_focus="1" placeholder="Nome do Curso" />
-                </h1>
-                
-              </div>
+        <form string="Cursos">
+          <sheet>
+            <div class="oe_title">
+              <h1>
+                <field name="name" default_focus="1" placeholder="Nome do Curso" />
+              </h1>
+
+            </div>
+            <group>
               <group>
-                <group>
-                  
-                  <field name="sigla" placeholder="Sigla do Curso"/>
-                  <field name="resolucao" placeholder="Resolução"/>
-                  <field name="type_curso" placeholder="Tipo do Curso" options="{'no_create': True}" />
-                  <field name="quantidade_de_periodos" string="Períodos" placeholder="Períodos"/>
-                  <field name="carga_horaria_total" placeholder="Carga horária"/>
-                </group>
-                <group>
-            
-                </group>
+
+                <field name="sigla" placeholder="Sigla do Curso" />
+                <field name="resolucao" placeholder="Resolução" />
+                <field name="type_curso" placeholder="Tipo do Curso" options="{'no_create': True}" />
+                <field name="quantidade_de_periodos" string="Períodos" placeholder="Períodos" />
+                <field name="carga_horaria_total" placeholder="Carga horária" />
+              </group>
+              <group></group>
             </group>
+
             <notebook>
-              <page string="Grade Curricular">
-               
-                  <field name="grade_id" context="{'default_curso_id':id,'search_default_group_periodo': 1}" widget="one2many"
+              <page string="Grades Curriculares">
+                <field name="grade_version_ids" string="Grade">
+                  <tree multi_edit="1">
+
+                    <field name="name" string="Versão" />
+                    <field name="data_inicio" />
+                    <field name="e_obsoleta" />
+                    <field name="carga_horaria_total" />
+
+                  </tree>
+                  <form string="Grade">
+                    <group>
+                    <field name="name" />
+                    <field name="data_inicio" />
+                    <field name="e_obsoleta" />
+                    <field name="carga_horaria_total" />
+                    </group>
+                    <field name="grade_ids">
+                      <tree editable="bottom" multi_edit="1">
+                        <field name="sequence" widget='handle' />
+
+                        <field name="periodo" />
+                        <field name="modulo" />
+                        <field name="curso_id" invisible="1" />
+                        <field name="disciplina_id" />
+
+                        <field name="disciplina_id_carga_horaria" />
+                        <field name="e_obrigatoria" />
+                        <control>
+                          <create string="Adicione uma disciplina" context="{'default_curso_id':id,'default_periodo': 1}" />
+                        </control>
+
+                      </tree>
+                    </field>
+
+                  </form>
+                </field>
+
+                <!-- <field name="grade_id" context="{'default_curso_id':id,'search_default_group_periodo': 1}" widget="one2many"
                  
                   >
-                    <tree editable="bottom" multi_edit="1" >
+                  
+                      <tree editable="bottom" multi_edit="1" >
                       <field name="sequence" 
                       widget='handle'
                       />
@@ -65,6 +95,7 @@
                       <field name="periodo" />
                       <field name="curso_id" invisible="1"/>
                       <field name="disciplina_id" />
+                      
                       <field name="disciplina_id_carga_horaria"/>
                       <field name="e_obrigatoria"/>
                       <control>
@@ -81,22 +112,23 @@
                           <field name="name" />
                           <field name="periodo" widget="integer"/>
                           <field name="curso_id"/>
+                          <field name="version_grade_id"/>
                           <field name="disciplina_id" options="{'no_create': True}"/>
                           <field name="e_obrigatoria"/>
                         </group>
                       </sheet>
 
                     </form>
-                  </field>
+                  </field> -->
               </page>
             </notebook>
-            
-            </sheet>
-            <div class="oe_chatter">
-              <field name="message_follower_ids" widget="mail_followers"/>
-              <field name="message_ids" widget="mail_thread"/>
+
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers" />
+            <field name="message_ids" widget="mail_thread" />
           </div>
-          </form>
+        </form>
       </field>
     </record>
 
@@ -106,26 +138,14 @@
       <field name="model">geracad.curso</field>
       <field name="arch" type="xml">
         <search string="Procura Cursos">
-          <filter string="Cursos Técnicos"
-          name="Cursos Tecnicos"
-          domain="[('type_curso','=','Técnico')]"
-          context="{}"
-          help="" />
-          <filter string="Cursos Qualificação"
-          name="Curso qualificacao"
-          domain="[('type_curso','=','Qualificação')]"
-          context="{}"
-          help="" />
-          <filter string="Cursos Preparatórios"
-          name="Curso qualificacao"
-          domain="[('type_curso','=','Preparatório')]"
-          context="{}"
-          help="" />
-          <field name="name" string="nome"/>
-          <field name="sigla" string="Sigla"/>
-          <field name="type_curso" string="Tipo de Curso"/>
-          <field name="company_id" string="Unidade"/>
-      </search>
+          <filter string="Cursos Técnicos" name="Cursos Tecnicos" domain="[('type_curso','=','Técnico')]" context="{}" help="" />
+          <filter string="Cursos Qualificação" name="Curso qualificacao" domain="[('type_curso','=','Qualificação')]" context="{}" help="" />
+          <filter string="Cursos Preparatórios" name="Curso qualificacao" domain="[('type_curso','=','Preparatório')]" context="{}" help="" />
+          <field name="name" string="nome" />
+          <field name="sigla" string="Sigla" />
+          <field name="type_curso" string="Tipo de Curso" />
+          <field name="company_id" string="Unidade" />
+        </search>
       </field>
     </record>
 
@@ -134,9 +154,9 @@
       <field name="type">ir.actions.act_window</field>
       <field name="res_model">geracad.curso</field>
       <field name="view_mode">tree,form</field>
-   
-      <field name="search_view_id" ref="geracad_cursos_search"/>
-    
+
+      <field name="search_view_id" ref="geracad_cursos_search" />
+
       <field name="help" type="html">
         <p class="o_view_nocontent_smiling_face">
           Crie um novo Curso
@@ -145,7 +165,7 @@
     </record>
 
 
-         <!-- 
+    <!-- 
               DISCIPLINAS METODOLOGIA
 
          -->
@@ -154,12 +174,12 @@
       <field name="model">geracad.curso.disciplina.metodologia</field>
       <field name="arch" type="xml">
         <tree>
-          
-          <field name="display_name" string="Nome"/>
-          
-       
+
+          <field name="display_name" string="Nome" />
+
+
         </tree>
-    
+
       </field>
     </record>
 
@@ -175,7 +195,7 @@
       </field>
     </record>
 
-        <!-- 
+    <!-- 
               TIPO DE CURSO
 
          -->
@@ -184,12 +204,12 @@
       <field name="name">cursos.tipo.curso.list</field>
       <field name="model">geracad.curso.type</field>
       <field name="arch" type="xml">
-        <tree>        
-          <field name="display_name" string="Nome"/>
-        </tree>   
+        <tree>
+          <field name="display_name" string="Nome" />
+        </tree>
       </field>
     </record>
-    
+
     <record model="ir.actions.act_window" id="geracad_curso_tipo_curso_action_window">
       <field name="name">Tipo de Curso</field>
       <field name="type">ir.actions.act_window</field>
@@ -201,7 +221,7 @@
         </p>
       </field>
     </record>
-        <!-- 
+    <!-- 
              SALAS DE AULA
 
          -->
@@ -210,35 +230,35 @@
       <field name="name">geracad.curso.sala.list</field>
       <field name="model">geracad.curso.sala</field>
       <field name="arch" type="xml">
-        <tree>        
-          <field name="display_name" string="Nome"/>
-          <field name="description" string="Descrição"/>
-          <field name="unidade" string="Unidade"/>
+        <tree>
+          <field name="display_name" string="Nome" />
+          <field name="description" string="Descrição" />
+          <field name="unidade" string="Unidade" />
 
-        </tree>   
+        </tree>
       </field>
     </record>
     <record model="ir.ui.view" id="geracad_curso_sala_form">
       <field name="name">geracad.curso.sala.form</field>
       <field name="model">geracad.curso.sala</field>
       <field name="arch" type="xml">
-        <form>      
+        <form>
           <sheet>
             <group>
               <group>
-                <field name="name" string="Nome"/>
-                <field name="description" string="Descrição"/>
-             
+                <field name="name" string="Nome" />
+                <field name="description" string="Descrição" />
+
               </group>
               <group>
-                <field name="unidade" string="Unidade"/>
+                <field name="unidade" string="Unidade" />
               </group>
             </group>
-          </sheet>  
-        </form>   
+          </sheet>
+        </form>
       </field>
     </record>
-    
+
     <record model="ir.actions.act_window" id="geracad_curso_sala_action_window">
       <field name="name">Sala de Aula</field>
       <field name="type">ir.actions.act_window</field>
@@ -252,35 +272,32 @@
     </record>
 
 
-     <!-- 
+    <!-- 
           TURMAS DE CURSO
 
       -->
 
-      <record model="ir.ui.view" id="geracad_curso_turma_list">
+    <record model="ir.ui.view" id="geracad_curso_turma_list">
       <field name="name">geracad.curso.turma.list</field>
       <field name="model">geracad.curso.turma</field>
       <field name="arch" type="xml">
-        <tree default_order='data_abertura desc'>        
+        <tree default_order='data_abertura desc'>
           <header>
-            <button name="action_ajeita_unidade_turma_cursos" string="ajeita unidade" class="oe_highlight" type="object"
-            
-             groups="base.group_system"
-            
-            />
+            <button name="action_ajeita_unidade_turma_cursos" string="ajeita unidade" class="oe_highlight" type="object" groups="base.group_system" />
           </header>
-          <field name="name" string="Nome"/>
-          <field name="curso_id" string="Curso"/>
-          <field name="turno" string="Turno"/>
-          <field name="matricula_aberta" string="Matricula aberta"/>
-          <field name="data_abertura" string="Data de Abertura"/>
-          <field name="data_encerramento" string="Data de encerramento"/>
+          <field name="name" string="Nome" />
+          <field name="curso_id" string="Curso" />
+          <field name="curso_grade_version"  />
+          <field name="turno" string="Turno" />
+          <field name="matricula_aberta" string="Matricula aberta" />
+          <field name="data_abertura" string="Data de Abertura" />
+          <field name="data_encerramento" string="Data de encerramento" />
           <field name="vagas" />
           <field name="unidade_id" />
-          <field name="company_id" groups="base.group_multi_company"/>
-          
+          <field name="company_id" groups="base.group_multi_company" />
 
-        </tree>   
+
+        </tree>
       </field>
     </record>
 
@@ -288,80 +305,69 @@
       <field name="name">geracad.curso.turma.form</field>
       <field name="model">geracad.curso.turma</field>
       <field name="arch" type="xml">
-        <form string="Curso Turma">      
+        <form string="Curso Turma">
           <header>
-            
-            <button name="action_encerrar_matricula" string="Encerrar" class="oe_highlight" states="aberta" type="object"
-               
-                confirm="Tem certeza que deseja encerrar matriculas nessa turma? Esta ação não poderá ser defeita"
-            />
-            <button name="action_cancelar_matricula" string="Cancelar"  states="aberta" type="object"
-                
-                confirm="Tem certeza que deseja cancelar essa turma? Esta ação não poderá ser defeita"
-            />
-            <button name="action_suspender_matricula" string="Suspender" states="aberta" type="object"/>
-            <button name="action_abrir_matricula" string="Abrir" states="suspensa" type="object"/>
+
+            <button name="action_encerrar_matricula" string="Encerrar" class="oe_highlight" states="aberta" type="object" confirm="Tem certeza que deseja encerrar matriculas nessa turma? Esta ação não poderá ser defeita" />
+            <button name="action_cancelar_matricula" string="Cancelar" states="aberta" type="object" confirm="Tem certeza que deseja cancelar essa turma? Esta ação não poderá ser defeita" />
+            <button name="action_suspender_matricula" string="Suspender" states="aberta" type="object" />
+            <button name="action_abrir_matricula" string="Abrir" states="suspensa" type="object" />
             <field name="state" widget="statusbar" />
           </header>
           <sheet>
-            
-            <widget name="web_ribbon" title="Arquivada" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
-            <widget name="web_ribbon" title="Cancelada" bg_color="bg-danger" attrs="{'invisible': [('state', '!=', 'cancelada')]}"/>
-            <widget name="web_ribbon" title="Encerrada" bg_color="bg-warning" attrs="{'invisible': [('state', '!=', 'encerrada')]}"/>
-            
+
+            <widget name="web_ribbon" title="Arquivada" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}" />
+            <widget name="web_ribbon" title="Cancelada" bg_color="bg-danger" attrs="{'invisible': [('state', '!=', 'cancelada')]}" />
+            <widget name="web_ribbon" title="Encerrada" bg_color="bg-warning" attrs="{'invisible': [('state', '!=', 'encerrada')]}" />
+
             <div class="oe_button_box" name="button_box">
-                <button name="action_go_matriculas"
-                   type="object"
-                   class="oe_stat_button"
-                   icon="fa-files-o"
-                    >
-                    <div class="o_field_widget o_stat_info">
-                     
-                      <span class="o_state_value"><field name="matriculas_count" nolabel="1"  />Matrículas</span>
-                      
-                    </div>
-                </button>
-              
+              <button name="action_go_matriculas" type="object" class="oe_stat_button" icon="fa-files-o">
+                <div class="o_field_widget o_stat_info">
+
+                  <span class="o_state_value">
+                    <field name="matriculas_count" nolabel="1" />
+                    Matrículas
+                  </span>
+
+                </div>
+              </button>
+
             </div>
-            
+
             <h1>
-                <field name="name" string="Código" readonly="1"/>
+              <field name="name" string="Código" readonly="1" />
             </h1>
             <group>
-             
+
               <group>
-                                   
-                <field name="curso_id" string="Curso" attrs="{'readonly':[('state','!=','draft')]  }"
-                options="{'no_create': True}"
-                 />
-                <field name="turno" string="Turno" attrs="{'readonly':[('state','!=','draft')]  }"/>
-                <field name="matricula_aberta" string="Matrícula aberta" readonly="1"/>
+
+                <field name="curso_id" string="Curso" attrs="{'readonly':[('state','!=','draft')]  }" options="{'no_create': True}" />
+                <field name="curso_grade_version"  attrs="{'readonly':[('state','!=','draft')]  }" options="{'no_create': True}" />
+                <field name="turno" string="Turno" attrs="{'readonly':[('state','!=','draft')]  }" />
+                <field name="matricula_aberta" string="Matrícula aberta" readonly="1" />
 
               </group>
               <group>
-                <field name="data_abertura" attrs="{'readonly':[('state','!=','draft')]  }" 
-                required="1"
-                />
-                <field name="data_encerramento"/>
+                <field name="data_abertura" attrs="{'readonly':[('state','!=','draft')]  }" required="1" />
+                <field name="data_encerramento" />
                 <field name="vagas" />
                 <field name="active" invisible="1" />
-                <field name="unidade_id" invisible="1" options="{'no_create': True}"/>
-               
-                <field name="company_id" groups="base.group_multi_company" attrs="{'readonly':[('state','!=','draft')]  }"
-                 options="{'no_create': True}" />
+                <field name="unidade_id" invisible="1" options="{'no_create': True}" />
+
+                <field name="company_id" groups="base.group_multi_company" attrs="{'readonly':[('state','!=','draft')]  }" options="{'no_create': True}" />
               </group>
             </group>
-          </sheet>  
-      
+          </sheet>
+
           <div class="oe_chatter">
-            <field name="message_follower_ids" widget="mail_followers"/>
-            <field name="message_ids" widget="mail_thread"/>
-        </div>
-       
-        </form>   
+            <field name="message_follower_ids" widget="mail_followers" />
+            <field name="message_ids" widget="mail_thread" />
+          </div>
+
+        </form>
       </field>
     </record>
-        
+
 
     <record model="ir.actions.act_window" id="geracad_curso_turma_action_window">
       <field name="name">Turmas de Curso</field>
@@ -374,7 +380,7 @@
         </p>
       </field>
     </record>
-  
+
 
     <record model="ir.actions.act_window" id="geracad_curso_matricula_action_window">
       <field name="name">Matrículas de Curso</field>
@@ -412,141 +418,97 @@
 
     <!-- actions opening views on models -->
     <record id="action_geracad_curso_form_view" model="ir.actions.act_window.view">
-      <field eval="2" name="sequence"/>
+      <field eval="2" name="sequence" />
       <field name="view_mode">form</field>
-      <field name="view_id" ref="geracad_curso_form_view"/>
-      <field name="act_window_id" ref="geracad_curso_action_window"/>
-      
+      <field name="view_id" ref="geracad_curso_form_view" />
+      <field name="act_window_id" ref="geracad_curso_action_window" />
+
     </record>
     <record id="action_geracad_cursos_tree_view" model="ir.actions.act_window.view">
-      <field eval="1" name="sequence"/>
+      <field eval="1" name="sequence" />
       <field name="view_mode">tree</field>
-      <field name="view_id" ref="geracad_curso_list"/>
-      <field name="act_window_id" ref="geracad_curso_action_window"/>
+      <field name="view_id" ref="geracad_curso_list" />
+      <field name="act_window_id" ref="geracad_curso_action_window" />
     </record>
     <record id="action_geracad_cursos_disciplina_metodologia_tree_view" model="ir.actions.act_window.view">
-      <field eval="10" name="sequence"/>
+      <field eval="10" name="sequence" />
       <field name="view_mode">tree</field>
-      <field name="view_id" ref="geracad_curso_disciplina_metodologia_list"/>
-      <field name="act_window_id" ref="geracad_curso_disciplina_metodologia_action_window"/>
+      <field name="view_id" ref="geracad_curso_disciplina_metodologia_list" />
+      <field name="act_window_id" ref="geracad_curso_disciplina_metodologia_action_window" />
     </record>
     <record id="action_geracad_cursos_tipo_curso_tree_view" model="ir.actions.act_window.view">
-      <field eval="10" name="sequence"/>
+      <field eval="10" name="sequence" />
       <field name="view_mode">tree</field>
-      <field name="view_id" ref="geracad_curso_tipo_curso_list"/>
-      <field name="act_window_id" ref="geracad_curso_tipo_curso_action_window"/>
+      <field name="view_id" ref="geracad_curso_tipo_curso_list" />
+      <field name="act_window_id" ref="geracad_curso_tipo_curso_action_window" />
     </record>
     <record id="action_geracad_cursos_sala_tree_view" model="ir.actions.act_window.view">
-      <field eval="10" name="sequence"/>
+      <field eval="10" name="sequence" />
       <field name="view_mode">tree</field>
-      <field name="view_id" ref="geracad_curso_sala_list"/>
-      <field name="act_window_id" ref="geracad_curso_sala_action_window"/>
+      <field name="view_id" ref="geracad_curso_sala_list" />
+      <field name="act_window_id" ref="geracad_curso_sala_action_window" />
     </record>
-    
+
     <record id="action_geracad_curso_turma_tree_view" model="ir.actions.act_window.view">
-      <field eval="10" name="sequence"/>
+      <field eval="10" name="sequence" />
       <field name="view_mode">tree</field>
-      <field name="view_id" ref="geracad_curso_turma_list"/>
-      <field name="act_window_id" ref="geracad_curso_turma_action_window"/>
+      <field name="view_id" ref="geracad_curso_turma_list" />
+      <field name="act_window_id" ref="geracad_curso_turma_action_window" />
     </record>
     <record id="action_geracad_curso_matricula_tree_view" model="ir.actions.act_window.view">
-      <field eval="1" name="sequence"/>
+      <field eval="1" name="sequence" />
       <field name="view_mode">tree</field>
-      <field name="view_id" ref="geracad_curso_matricula_list"/>
-      <field name="act_window_id" ref="geracad_curso_matricula_action_window"/>
+      <field name="view_id" ref="geracad_curso_matricula_list" />
+      <field name="act_window_id" ref="geracad_curso_matricula_action_window" />
     </record>
-    
-   
+
+
     <!-- Top menu item -->
-    <menuitem name="Alunos" id="geracad_curso.menu_alunos" sequence="1" parent="geracad_curso.menu_root"  />
+    <menuitem name="Alunos" id="geracad_curso.menu_alunos" sequence="1" parent="geracad_curso.menu_root" />
 
-    <menuitem name="Cursos" id="geracad_curso.menu_root" web_icon="geracad_curso,static/description/icon.png"
-    action="geracad_curso_matricula_action_window" 
-    groups="group_geracad_curso_user,group_geracad_curso_secretaria,group_geracad_curso_administrator"
-    />
+    <menuitem name="Cursos" id="geracad_curso.menu_root" web_icon="geracad_curso,static/description/icon.png" action="geracad_curso_matricula_action_window" groups="group_geracad_curso_user,group_geracad_curso_secretaria,group_geracad_curso_administrator" />
 
-    <menuitem name="Notas" id="geracad_curso.menu_root_notas" web_icon="geracad_curso,static/description/notas.png"
-    action="geracad_curso_notas_disciplina_action_window" 
-    groups="group_geracad_curso_professor,group_geracad_curso_secretaria,group_geracad_curso_administrator"
-    />
-    <menuitem name="Financeiro" id="geracad_curso.menu_root_financeiro" web_icon="geracad_curso,static/description/financeiro.png"
-    action="geracad_curso_financeiro_parcelas_action_window" 
-    groups="group_geracad_curso_finaceiro"
-    />
+    <menuitem name="Notas" id="geracad_curso.menu_root_notas" web_icon="geracad_curso,static/description/notas.png" action="geracad_curso_notas_disciplina_action_window" groups="group_geracad_curso_professor,group_geracad_curso_secretaria,group_geracad_curso_administrator" />
+    <menuitem name="Financeiro" id="geracad_curso.menu_root_financeiro" web_icon="geracad_curso,static/description/financeiro.png" action="geracad_curso_financeiro_parcelas_action_window" groups="group_geracad_curso_finaceiro" />
 
     <!-- menu categories -->
 
-    
-    <menuitem name="Matriculas" id="geracad_curso.menu_matricular" sequence="2" parent="geracad_curso.menu_root"/>
-    <menuitem name="Turmas" id="geracad_curso.menu_turmas" sequence="3" parent="geracad_curso.menu_root"/>
-    <menuitem name="Financeiro" id="geracad_curso.financeiro" sequence="4" 
-    groups="group_geracad_curso_finaceiro"
-      parent="geracad_curso.menu_root"/>
-    <menuitem name="Configuração" id="geracad_curso.configuracao" sequence="100" parent="geracad_curso.menu_root"/>
 
-    
-    <!-- SUBMENU ALUNOS --> 
-    <menuitem name="Visualizar Alunos" id="geracad_curso.menu_visualiza_aluno" sequence="1" parent="geracad_curso.menu_alunos"  action="geracad_aluno.geracad_aluno_action_window"/>
-    <menuitem name="Histórico" id="geracad_curso.menu_alunos_historico" sequence="2" parent="geracad_curso.menu_alunos"
-              action="geracad_curso_matricula_action_window"/>
-    <menuitem name="Notas" id="geracad_curso.menu_alunos_notas" sequence="2" parent="geracad_curso.menu_alunos"
-              action="geracad_curso_notas_disciplina_action_window"/>
-    <!-- SUBMENU MATRICULAS --> 
-    <menuitem name="Curso" id="geracad_curso.matricular_curso_menu_list" parent="geracad_curso.menu_matricular"
-              action="geracad_curso_matricula_action_window"/>
-    <menuitem name="Disciplina" id="geracad_curso.matricular_disciplina_menu_list" parent="geracad_curso.menu_matricular"
-              action="geracad_curso_matricula_disciplina_action_window"/>
-    <!-- SUBMENU TURMAS --> 
-    <menuitem name="Curso" id="geracad_curso.turma_curso_menu_list" parent="geracad_curso.menu_turmas"
-              action="geracad_curso_turma_action_window"/>
-    <menuitem name="Disciplina" id="geracad_curso.turma_disciplina_menu_list" parent="geracad_curso.menu_turmas"
-              action="geracad_curso_turma_disciplina_action_window"
-              groups="group_geracad_curso_user,group_geracad_curso_secretaria,group_geracad_curso_administrator"
-              />
+    <menuitem name="Matriculas" id="geracad_curso.menu_matricular" sequence="2" parent="geracad_curso.menu_root" />
+    <menuitem name="Turmas" id="geracad_curso.menu_turmas" sequence="3" parent="geracad_curso.menu_root" />
+    <menuitem name="Financeiro" id="geracad_curso.financeiro" sequence="4" groups="group_geracad_curso_finaceiro" parent="geracad_curso.menu_root" />
+    <menuitem name="Configuração" id="geracad_curso.configuracao" sequence="100" parent="geracad_curso.menu_root" />
 
-              <!-- configuração -->
-    <menuitem name="Professores" id="geracad_curso.professores_menu" parent="geracad_curso.configuracao"
-              action="geracad_curso_professores_action_window" sequence="0"/>
-    <menuitem name="Cursos" id="geracad_curso.curso_menu" parent="geracad_curso.configuracao"
-              action="geracad_curso_action_window" sequence="0"/>
-    <menuitem name="Tipos de Curso" id="geracad_curso.tipo_curso_menu" parent="geracad_curso.configuracao"
-                        action="geracad_curso_tipo_curso_action_window" sequence="1"/>
-    <menuitem name="Disciplina" id="geracad_curso.menu_disciplina_1_list" parent="geracad_curso.configuracao"
-              action="geracad_curso_disciplina_action_window"  sequence="2"/>
-    <menuitem name="Grades" id="geracad_curso.menu_grade_1_list" parent="geracad_curso.configuracao"
-              action="geracad_curso_grade_action_window"  sequence="3"/>
-    <menuitem name="Metodologia da Disciplina" id="geracad_curso.disciplina_metodologia_menu" parent="geracad_curso.configuracao"
-              action="geracad_curso_disciplina_metodologia_action_window"  sequence="4"/>
-    <menuitem name="Salas de Aula" id="geracad_curso.sala_menu" parent="geracad_curso.configuracao"
-              action="geracad_curso_sala_action_window" sequence="5"/>
-    <menuitem name="Turma de Cursos" id="geracad_curso.turma_menu" parent="geracad_curso.configuracao"
-              action="geracad_curso_turma_action_window" sequence="6"/>
-    <menuitem name="Turma de Disciplina" id="geracad_curso.menu_turma_disciplina_1_list" parent="geracad_curso.configuracao"
-              action="geracad_curso_turma_disciplina_action_window" sequence="7"/>
-    <menuitem name="Notas de Disciplinas" id="geracad_curso.menu_nota_disciplina_list" parent="geracad_curso.configuracao"
-              action="geracad_curso_nota_disciplina_action_window" sequence="8"/>
-    <menuitem name="Contratos" id="geracad_curso.menu_nota_contrato_list" parent="geracad_curso.configuracao"
-              action="geracad_curso_contrato_action_window" sequence="9"/>
-    <menuitem name="A receber" id="geracad_curso.menu_financeiro_parcelas_list" parent="geracad_curso.financeiro"
-              action="geracad_curso_financeiro_parcelas_action_window" sequence="9"/>
-    
+
+    <!-- SUBMENU ALUNOS -->
+    <menuitem name="Visualizar Alunos" id="geracad_curso.menu_visualiza_aluno" sequence="1" parent="geracad_curso.menu_alunos" action="geracad_aluno.geracad_aluno_action_window" />
+    <menuitem name="Histórico" id="geracad_curso.menu_alunos_historico" sequence="2" parent="geracad_curso.menu_alunos" action="geracad_curso_matricula_action_window" />
+    <menuitem name="Notas" id="geracad_curso.menu_alunos_notas" sequence="2" parent="geracad_curso.menu_alunos" action="geracad_curso_notas_disciplina_action_window" />
+    <!-- SUBMENU MATRICULAS -->
+    <menuitem name="Curso" id="geracad_curso.matricular_curso_menu_list" parent="geracad_curso.menu_matricular" action="geracad_curso_matricula_action_window" />
+    <menuitem name="Disciplina" id="geracad_curso.matricular_disciplina_menu_list" parent="geracad_curso.menu_matricular" action="geracad_curso_matricula_disciplina_action_window" />
+    <!-- SUBMENU TURMAS -->
+    <menuitem name="Curso" id="geracad_curso.turma_curso_menu_list" parent="geracad_curso.menu_turmas" action="geracad_curso_turma_action_window" />
+    <menuitem name="Disciplina" id="geracad_curso.turma_disciplina_menu_list" parent="geracad_curso.menu_turmas" action="geracad_curso_turma_disciplina_action_window" groups="group_geracad_curso_user,group_geracad_curso_secretaria,group_geracad_curso_administrator" />
+
+    <!-- configuração -->
+    <menuitem name="Professores" id="geracad_curso.professores_menu" parent="geracad_curso.configuracao" action="geracad_curso_professores_action_window" sequence="0" />
+    <menuitem name="Cursos" id="geracad_curso.curso_menu" parent="geracad_curso.configuracao" action="geracad_curso_action_window" sequence="0" />
+    <menuitem name="Tipos de Curso" id="geracad_curso.tipo_curso_menu" parent="geracad_curso.configuracao" action="geracad_curso_tipo_curso_action_window" sequence="1" />
+    <menuitem name="Disciplina" id="geracad_curso.menu_disciplina_1_list" parent="geracad_curso.configuracao" action="geracad_curso_disciplina_action_window" sequence="2" />
+    <menuitem name="Grades" id="geracad_curso.menu_grade_1_list" parent="geracad_curso.configuracao" action="geracad_curso_grade_action_window" sequence="3" />
+    <menuitem name="Metodologia da Disciplina" id="geracad_curso.disciplina_metodologia_menu" parent="geracad_curso.configuracao" action="geracad_curso_disciplina_metodologia_action_window" sequence="4" />
+    <menuitem name="Salas de Aula" id="geracad_curso.sala_menu" parent="geracad_curso.configuracao" action="geracad_curso_sala_action_window" sequence="5" />
+    <menuitem name="Turma de Cursos" id="geracad_curso.turma_menu" parent="geracad_curso.configuracao" action="geracad_curso_turma_action_window" sequence="6" />
+    <menuitem name="Turma de Disciplina" id="geracad_curso.menu_turma_disciplina_1_list" parent="geracad_curso.configuracao" action="geracad_curso_turma_disciplina_action_window" sequence="7" />
+    <menuitem name="Notas de Disciplinas" id="geracad_curso.menu_nota_disciplina_list" parent="geracad_curso.configuracao" action="geracad_curso_nota_disciplina_action_window" sequence="8" />
+    <menuitem name="Contratos" id="geracad_curso.menu_nota_contrato_list" parent="geracad_curso.configuracao" action="geracad_curso_contrato_action_window" sequence="9" />
+    <menuitem name="A receber" id="geracad_curso.menu_financeiro_parcelas_list" parent="geracad_curso.financeiro" action="geracad_curso_financeiro_parcelas_action_window" sequence="9" />
+
     <!-- <menuitem name="Server to list" id="geracad_aluno" parent="geracad_aluno.menu_2"
               action="geracad_aluno.action_server"/> -->
-    <menuitem
-              id="mail.menu_root_discuss"
-              name="Discuss"
-              action="mail.action_discuss"
-              web_icon="mail,static/description/icon.png"
-              groups="base.user_admin"
-              sequence="999"
-          />
-    <menuitem name="Website"
-          id="menu_website_configuration"
-          sequence="999"
-          groups="base.user_admin"
-          web_icon="website,static/description/icon.png"
-          
-          />
+    <menuitem id="mail.menu_root_discuss" name="Discuss" action="mail.action_discuss" web_icon="mail,static/description/icon.png" groups="base.user_admin" sequence="999" />
+    <menuitem name="Website" id="menu_website_configuration" sequence="999" groups="base.user_admin" web_icon="website,static/description/icon.png" />
 
   </data>
 </odoo>

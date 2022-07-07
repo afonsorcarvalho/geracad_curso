@@ -26,6 +26,23 @@ class GeracadCursoTurma(models.Model):
         'geracad.curso',
         string='Curso',
         )
+
+    curso_grade_version = fields.Many2one(
+        string='Versão Grade',
+        comodel_name='geracad.curso.grade.versao',
+    )
+
+    
+    @api.onchange('curso_id')
+    def onchange_curso_id(self):
+        ''' Ao mudar o curso procura a versão mais nova da grade do curso'''
+        grade_version = self.env['geracad.curso.grade.versao'].search([],
+            limit=1,
+            order='data_inicio ASC',
+             )
+       
+        self.curso_grade_version = grade_version
+    
    
     turno = fields.Selection(
         string='turno',

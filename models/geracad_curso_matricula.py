@@ -41,6 +41,17 @@ class GeracadCursoMatricula(models.Model):
         required=True,
         track_visibility='true'
         )
+
+    @api.onchange('curso_turma_id')
+    def onchange_curso_turma_id(self):
+        self.curso_grade_version = self.curso_turma_id.curso_grade_version
+    
+    curso_grade_version = fields.Many2one(
+        string='Versão Grade',
+        comodel_name='geracad.curso.grade.versao',
+        
+    )
+    
     curso_nome = fields.Char( 
         related='curso_turma_id.curso_id.name',
         string="Nome do curso",
@@ -504,12 +515,16 @@ class GeracadCursoMatricula(models.Model):
         self.write({'state': 'inscrito'})
         self._muda_state_parcelas('vigente',True)
     
+   
+    
     def action_abandono(self):
         _logger.info("Matrícula Abandonada")
         for matricula_disciplina in self.matriculas_disciplina_ids:
             _logger.info(matricula_disciplina.name)
+            nota_aluno_ids = self.env['geracad.curso.nota.disciplina'].search([
+                ('disciplina_matricula_id','=',matricula_disciplina.id)])
 
-            for nota in matricula_disciplina.turma_disciplina_id.notas:
+            for nota in nota_aluno_ids:
                 if nota.situation == 'IN':
                     _logger.info("abandonada")
                     nota.write({
@@ -543,6 +558,9 @@ class GeracadCursoMatricula(models.Model):
         })
     
     def _get_disciplinas_cursadas_ids(self):
+        '''
+            Retorna um List das disciplinas cursadas apenas com os ids
+        '''
         disciplinas_ids = []
         res = self.env["geracad.curso.nota.disciplina"].search([
             '&',
@@ -555,10 +573,16 @@ class GeracadCursoMatricula(models.Model):
         return disciplinas_ids
 
     def _get_disciplinas_curso_obrigatorias_ids(self):
+        '''
+            Retorna uma lista apenas com os ids das disciplinas 
+            obrigatorias
+        '''
         disciplinas_ids = []
         res = self.env["geracad.curso.grade"].search([
             '&',
-            ('curso_id', '=',self.curso_id.id),
+            ('curso_id', '=',self.curso_id.id),    
+            ('version_grade_id', '=',self.curso_grade_version.id),    
+
             ('e_obrigatoria', '=',1 )
             ], offset=0, limit=None, order=None, count=False)
         _logger.info("PROCURANDO DISCIPLINAS OBRIGATÓRIAS")
@@ -568,7 +592,27 @@ class GeracadCursoMatricula(models.Model):
             
         return disciplinas_ids
     
-    def _get_disciplinas_faltantes_ids(self):
+    def _get_disciplinas_equivalentes_ids(self, disciplinas_ids_list):
+        '''
+            Recebe uma lista de ids de disciplinas e retorna
+            a lista recebida mais todas as suas disciplinas equivalentes
+        '''
+        disciplinas_equivalentes_ids = []
+        disciplinas_equivalentes_ids.append(disciplinas_ids_list)
+
+        for disciplina_id in disciplinas_ids_list:
+            disciplina_equivalentes_line  = self.env['geracad.curso.equivalencia.disciplina.line'].search([
+                ('disciplinas_equivalentes','=', disciplina_id)
+                ])
+            for disciplina_equivalentes in disciplina_equivalentes_line:
+                disciplinas_equivalentes_ids.append(disciplina_equivalentes.id)
+        return disciplinas_equivalentes_ids
+
+    def _get_disciplinas_analise_ids(self):
+        '''
+            Analisa as diciplinas cursadas com as obrigatorias
+            Retorna um map com 'disciplinas_faltantes' e 'disciplinas_cursadas'
+        '''
         disciplina_concluida_ids = self._get_disciplinas_cursadas_ids()
         _logger.info(disciplina_concluida_ids)
         disciplinas_obrigatorias_id = self._get_disciplinas_curso_obrigatorias_ids()
@@ -576,7 +620,7 @@ class GeracadCursoMatricula(models.Model):
         disciplinas_faltantes = []
         disciplinas_cursadas = []
         for disciplina_obrigatoria in disciplinas_obrigatorias_id:
-            if disciplina_obrigatoria in disciplina_concluida_ids:
+            if disciplina_obrigatoria in self._get_disciplinas_equivalentes_ids(disciplina_concluida_ids):
                 disciplinas_cursadas.append(disciplina_obrigatoria)
             else:
                 disciplinas_faltantes.append(disciplina_obrigatoria)
@@ -590,13 +634,17 @@ class GeracadCursoMatricula(models.Model):
 
 
     def action_gera_historico_final(self):
+        '''
+            Action que gera a wizard de geração do histórico final da matrícula
+            Mostrando as disciplinas faltantes e concluídas
+        '''
         _logger.info("Gerando Histórico final")
         
 
         dummy, act_id = self.env["ir.model.data"].sudo().get_object_reference(
             "geracad_curso", "action_geracad_curso_gerar_historico_final"
         )
-        disciplinas_faltantes_ids= self._get_disciplinas_faltantes_ids()
+        disciplinas_faltantes_ids= self._get_disciplinas_analise_ids()
         disciplinas_faltantes_values = []
         disciplinas_cursadas_values = []
         for disciplina in disciplinas_faltantes_ids['disciplinas_faltantes']:

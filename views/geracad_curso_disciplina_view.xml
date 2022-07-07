@@ -58,7 +58,8 @@
       <field name="model">geracad.curso.disciplina</field>
       <field name="arch" type="xml">
         <search string="Procura Disciplina">
-          <field name="name"/>
+          <field name="name" string="Nome"/>
+          <field name="codigo" string="Código"/>
           <field name="metodologia" />
           <field name="ementa" />   
       </search>

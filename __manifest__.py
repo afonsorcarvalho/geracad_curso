@@ -29,6 +29,7 @@
         'views/geracad_curso_contrato_view.xml',
         'views/geracad_curso_grade_view.xml',
         'views/geracad_curso_disciplina_view.xml',
+        'views/geracad_curso_equivalencia_disciplina_view.xml',
         'views/geracad_curso_turma_disciplina_view.xml',
         'views/geracad_curso_matricula_disciplina_view.xml',
         'views/geracad_curso_matricula_view.xml',

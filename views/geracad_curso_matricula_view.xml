@@ -18,6 +18,7 @@
           <field name="aluno_mobile" string="Celular" optional="hide" />
           <field name="curso_turma_codigo" optional="show" />
           <field name="curso_nome" optional="show" />
+          <field name="curso_grade_version" optional="hide" />
           <field name="curso_type" optional="hide" />
 
           <field name="data_matricula" />
@@ -42,6 +43,7 @@
           <field name="name" string="Matrícula do Aluno" />
           <field name="curso_turma_codigo" />
           <field name="curso_id" />
+          <field name="curso_grade_version" />
           <field name="data_matricula" />
           <field name="data_previsao_conclusao" />
           <field name="data_conclusao" />
@@ -108,7 +110,7 @@
             <button type="object" name="action_desabilita_edit_turma_curso" string="Desabilita Transferência" class="btn btn-default" attrs="{'invisible': [('edit_turma_curso', '==', False),]}" />
             <button type="object" name="action_trancar" string="Trancar" class="btn btn-default" confirm="Tem certeza que deseja TRANCAR matrícula do aluno? Essa matrícula poderá ser DESTRANCADA posteriormente" attrs="{'invisible': [('state', '=', 'trancado')]}" />
             <button type="object" name="action_destrancar" string="Destrancar" class="btn btn-default" confirm="Tem certeza que deseja DESTRANCAR matrícula do aluno?" attrs="{'invisible': [('state', '!=', 'trancado')]}" />
-            <button type="object" name="action_abandono" string="Abandonar" class="btn btn-default" confirm="Tem certeza que deseja ABANDONAR matrícula do aluno? Essa ação não poderá ser desfeita."  attrs="{'invisible': [('state', '=', 'abandono')]}" />
+            <button type="object" name="action_abandono" string="Abandonar" class="btn btn-default" confirm="Tem certeza que deseja ABANDONAR matrícula do aluno? Essa ação não poderá ser desfeita."  attrs="{'invisible': [('state', 'in', ['abandono','formado','expulso','cancelada','transferido'])]}" />
             <button type="object" name="action_gera_historico_final"  string="Gerar Histórico Final" 
              groups="geracad_curso.group_geracad_curso_finaceiro" attrs="{'invisible': [('state', 'not in', ['inscrito', 'draft'])]}"
              />
@@ -160,6 +162,7 @@
               <group>
 
                 <field name="curso_turma_id" string="Turma do Curso" attrs="{'readonly':[('state','!=','draft'),('edit_turma_curso', '!=', True)]  }" options="{'no_create': True}" />
+                <field name="curso_grade_version" string='Versão Grade' attrs="{'readonly':[('state','!=','draft'),('edit_turma_curso', '!=', True)]  }" options="{'no_create': True}" />
                 <field name="aluno_id" string="Aluno" attrs="{'readonly':[('state','!=','draft')]  }" options="{'no_create': True}" />
                 <field name="data_matricula" attrs="{'readonly':[('state','!=','draft')]  }" />
                 <field name="data_previsao_conclusao" />
