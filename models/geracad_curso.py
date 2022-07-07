@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from email.policy import default
-from typing_extensions import Required
 from odoo import models, fields, api, _
 from datetime import datetime, timedelta
 
