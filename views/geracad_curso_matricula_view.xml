@@ -106,11 +106,15 @@
           <header>
             <button type="object" name="action_go_gera_contrato" string="Gerar Contrato" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'inscrito'),]}" />
 
+            
+
+
             <button type="object" name="action_habilita_edit_turma_curso" string="Habilita Transferência"  class="btn-secondary" attrs="{'invisible': ['|',('edit_turma_curso', '==', True),('state', '!=', 'inscrito')]}" />
             <button type="object" name="action_desabilita_edit_turma_curso" string="Desabilita Transferência" class="btn btn-default" attrs="{'invisible': [('edit_turma_curso', '==', False),]}" />
-            <button type="object" name="action_trancar" string="Trancar" class="btn btn-default" confirm="Tem certeza que deseja TRANCAR matrícula do aluno? Essa matrícula poderá ser DESTRANCADA posteriormente" attrs="{'invisible': [('state', '=', 'trancado')]}" />
-            <button type="object" name="action_destrancar" string="Destrancar" class="btn btn-default" confirm="Tem certeza que deseja DESTRANCAR matrícula do aluno?" attrs="{'invisible': [('state', '!=', 'trancado')]}" />
-            <button type="object" name="action_abandono" string="Abandonar" class="btn btn-default" confirm="Tem certeza que deseja ABANDONAR matrícula do aluno? Essa ação não poderá ser desfeita."  attrs="{'invisible': [('state', 'in', ['abandono','formado','expulso','cancelada','transferido'])]}" />
+            <button type="object" name="action_trancar" string="Trancar" class="btn btn-default" confirm="Tem certeza que deseja TRANCAR matrícula do aluno? Essa matrícula poderá ser DESTRANCADA posteriormente" attrs="{'invisible': [('state', 'in', ['trancado','abandono','formado','expulso','cancelada','transferido'])]}" /> 
+           <!--  <button type="object" name="action_destrancar" string="Destrancar" class="btn btn-default" confirm="Tem certeza que deseja DESTRANCAR matrícula do aluno?" attrs="{'invisible': [('state', '!=', 'trancado')]}" />-->
+            <button type="object" name="action_abandono" string="Abandonar" class="btn btn-default" confirm="Tem certeza que deseja ABANDONAR matrícula do aluno? Essa ação não poderá ser desfeita."  attrs="{'invisible': [('state', 'not in', ['draft','inscrito'])]}" />
+            <button type="object" name="action_reativar" string="Reativar" class="btn btn-default"  attrs="{'invisible': [('state', 'not in', ['trancado','abandono'])]}" />
             <button type="object" name="action_gera_historico_final"  string="Gerar Histórico Final" 
              groups="geracad_curso.group_geracad_curso_finaceiro" attrs="{'invisible': [('state', 'not in', ['inscrito', 'draft'])]}"
              />
@@ -121,7 +125,7 @@
             <!-- <widget name="web_ribbon" title="Arquivada" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
               <widget name="web_ribbon" title="Cancelada" bg_color="bg-danger" attrs="{'invisible': [('state', '!=', 'cancelada')]}"/>
               <widget name="web_ribbon" title="Encerrada" bg_color="bg-warning" attrs="{'invisible': [('state', '!=', 'encerrada')]}"/> -->
-
+             <widget name="web_ribbon" title="Formado" bg_color="bg-success" attrs="{'invisible': [('state', '!=', 'formado')]}"/>
             <div class="oe_button_box" name="button_box">
               <button name="action_go_contratos" type="object" class="oe_stat_button" icon="fa-file-text-o">
                 <div class="o_field_widget o_stat_info">
@@ -160,10 +164,14 @@
             <group>
 
               <group>
-
-                <field name="curso_turma_id" string="Turma do Curso" attrs="{'readonly':[('state','!=','draft'),('edit_turma_curso', '!=', True)]  }" options="{'no_create': True}" />
-                <field name="curso_grade_version" string='Versão Grade'  options="{'no_create': True}" />
+                
                 <field name="aluno_id" string="Aluno" attrs="{'readonly':[('state','!=','draft')]  }" options="{'no_create': True}" />
+                <field name="curso_turma_id" string="Turma do Curso" attrs="{'readonly':[('state','!=','draft'),('edit_turma_curso', '!=', True)]  }" options="{'no_create': True}" />
+                <field name="curso_nome" string="Nome do Curso"  />
+                <field name="curso_id" string="Nome do Curso" readonly="1" invisible="1" />
+                
+                
+                <field name="curso_grade_version" string='Versão Grade' domain="[('curso_id','=', curso_id)]" options="{'no_create_edit': True, }" />
                 <field name="data_matricula" attrs="{'readonly':[('state','!=','draft')]  }" />
                 <field name="data_previsao_conclusao" />
                 <field name="data_conclusao" />

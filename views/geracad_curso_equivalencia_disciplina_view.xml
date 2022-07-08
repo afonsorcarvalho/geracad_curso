@@ -1,6 +1,8 @@
 <odoo>
   <data>
     <!-- explicit list view definition -->
+    <!-- TODO -->
+    <!-- VERFIICAR PRA TIRAR ESSE MODEL DE EQUIVALENCIA -->
 
     <record model="ir.ui.view" id="geracad_curso_equivalencia_disciplina_list">
       <field name="name">cursos.equivalencia.disciplina.list</field>
@@ -45,20 +47,11 @@
                         <field nolabel="1" name="disciplinas_id"/>
                         <field  name="disciplinas_id_carga_horaria"/>
                         <field  name="disciplinas_id_metodologia"/>
-                        
-                        
-                        
-                        
-                        
-                        
-                        
                       </group>
                       <group string="Disciplina Aproveitada">
                         <field nolabel="1" name="disciplinas_equivalente_id"/>
                         <field  name="disciplinas_equivalente_id_carga_horaria"/>
                         <field  name="disciplinas_equivalente_id_metodologia"/>
-                        
-                        
                       </group>
                       <group>
                         <field  nolabel="1" name="disciplinas_id_ementa"/>
@@ -66,16 +59,9 @@
                       <group>
                         <field  nolabel="1"   name="disciplinas_equivalente_id_ementa"/>
                       </group>
-                     
                     </group>
                   </form>
-                  
-
                 </field>
-
-
-              
-              
             </group>
           </sheet>
           <div class="oe_chatter">
@@ -86,16 +72,12 @@
       </field>
     </record>
 
-
     <record id="geracad_curso_equivalencia_disciplina_search" model="ir.ui.view">
       <field name="name">geracad.curso.equivalencia.disciplina.search</field>
       <field name="model">geracad.curso.equivalencia.disciplina</field>
       <field name="arch" type="xml">
         <search string="Procura Disciplina">
           <field name="name" string="Descrição" />
-         
-
-
         </search>
       </field>
     </record>

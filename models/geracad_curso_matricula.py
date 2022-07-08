@@ -7,7 +7,7 @@ from babel.dates import format_datetime, format_date
 from odoo.tools.misc import formatLang, format_date as odoo_format_date, get_lang
 from dateutil.relativedelta import relativedelta
 
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT, misc
 
 import logging
@@ -509,8 +509,8 @@ class GeracadCursoMatricula(models.Model):
         self._suspende_parcelas_a_vencer()
         self._suspende_contrato()
 
-    def action_destrancar(self):
-        _logger.info("Matrícula Destrancada")
+    def action_reativar(self):
+        _logger.info("Matrícula Reativada")
 
         self.write({'state': 'inscrito'})
         self._muda_state_parcelas('vigente',True)
@@ -647,8 +647,11 @@ class GeracadCursoMatricula(models.Model):
             Action que gera a wizard de geração do histórico final da matrícula
             Mostrando as disciplinas faltantes e concluídas
         '''
-        _logger.info("Gerando Histórico final")
+
         
+        _logger.info("Gerando Histórico final")
+        if not self.curso_grade_version:
+            raise ValidationError('Por favor, insiria a Versão da Grade na matrícula')
 
         dummy, act_id = self.env["ir.model.data"].sudo().get_object_reference(
             "geracad_curso", "action_geracad_curso_gerar_historico_final"
@@ -662,6 +665,7 @@ class GeracadCursoMatricula(models.Model):
             disciplinas_cursadas_values.append((0,0, {'disciplina_id': disciplina, 'concluida':1}))
         _logger.debug(disciplinas_faltantes_values)
         _logger.debug(disciplinas_cursadas_values)
+        _logger.debug("chamando a wizard")
         vals = self.env["ir.actions.act_window"].sudo().browse(act_id).read()[0]
         vals["context"] = {
             "default_matricula_id": self.id,

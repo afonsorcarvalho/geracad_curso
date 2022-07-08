@@ -97,6 +97,17 @@ class GeracadCurso(models.Model):
             for grade_line in record.grade_id:
                 sum += grade_line.disciplina_id_carga_horaria
         record.carga_horaria_total = sum
+    
+    def action_open_wizard_print_report(self):
+        '''
+            Action que abre a wizard de impressao de grade curriculares
+        '''
+        _logger.info("ABRINDO WIZARD DE IMPRESSA DE GRADE")
+        
+
+        dummy, act_id = self.env["ir.model.data"].sudo().get_object_reference(
+            "geracad_curso", "action_open_wizard_print_grade"
+        )
 
    
 class GeracadCursoType(models.Model):

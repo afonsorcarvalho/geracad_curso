@@ -7,11 +7,10 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
-#TODO
-# Fazer botão de finalizar notas
-# fazer estatísticas de notas (com média por curso, melhor nota etc)
-
 class GeracadCursoNotaDisciplinaHistoricoFinal(models.Model):
+    '''
+        Model das notas após o aluno formado que não é mais mudado
+    '''
     _name = "geracad.curso.nota.disciplina.historico.final"
     _description = "Notas de Disciplinas de Cursos do Histórico Final"
     _check_company_auto = True
