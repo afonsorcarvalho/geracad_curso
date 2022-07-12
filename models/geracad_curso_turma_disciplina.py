@@ -38,7 +38,7 @@ class GeracadCursoTurmDisciplina(models.Model):
    
         
         )
-   
+  
 
     curso_turma_id = fields.Many2one(
         'geracad.curso.turma',
@@ -61,10 +61,9 @@ class GeracadCursoTurmDisciplina(models.Model):
     #mudar esse periodo da turma para default em vez de compute
     periodo = fields.Integer(
         string = "Periodo", 
-        default = 1
-       
-        
+        default = 1, 
     )
+
     @api.depends('periodo')
     def onchange_periodo(self):
         _logger.info("MUDANDO O PERIODO DAS NOTAS")
@@ -292,6 +291,19 @@ class GeracadCursoTurmDisciplina(models.Model):
        
         return result
     
+    def action_ajeita_periodo_ch_notas(self):
+        '''
+            Atualiza os periodos das notas atualizando para o período da turma disciplina
+            utilizado em acoes agendadas
+        '''
+        _logger.info('AJEITANDO O PERIODO E A CARGA HORÁRIA DAS NOTAS')
+        notas = self.env["geracad.curso.nota.disciplina"].search([])
+                 
+        for nota in notas:
+            _logger.info('ajeitando nota')
+            _logger.info(nota)
+            nota._compute_periodo()
+
 
     def action_adiciona_alunos_turma_curso(self):
         _logger.debug("ADICIONANDO ALUNOS PELA TURMA CURSOS")
