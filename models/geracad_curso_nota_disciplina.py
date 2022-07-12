@@ -152,7 +152,7 @@ class GeracadCursoNotaDisciplina(models.Model):
     periodo = fields.Integer(
         string='periodo',
         compute="_compute_periodo",
-        store=True
+        
         
     )
     gerado_historico_final = fields.Boolean("Histórico final?")

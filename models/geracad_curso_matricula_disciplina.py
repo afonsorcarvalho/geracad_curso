@@ -47,18 +47,20 @@ class GeracadCursoMatriculaDisciplina(models.Model):
         readonly=True,
         store=True
     )
+    
     turma_disciplina_id = fields.Many2one(
         "geracad.curso.turma.disciplina",
         string='Turma Disciplina',
         required=True
         
         )
-    turma_disciplina_id = fields.Many2one(
-        "geracad.curso.turma.disciplina",
-        string='Turma Disciplina',
-        required=True
-        
-        )
+    e_pendencia = fields.Boolean("É pendencia", default=False, tracking=True)
+
+  
+
+
+            
+    
     nota = fields.One2many(string='Nota',comodel_name='geracad.curso.nota.disciplina',inverse_name='disciplina_matricula_id' )
     
     notas_disciplinas_count = fields.Integer(

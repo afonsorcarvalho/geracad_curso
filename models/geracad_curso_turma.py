@@ -25,6 +25,8 @@ class GeracadCursoTurma(models.Model):
     curso_id = fields.Many2one(
         'geracad.curso',
         string='Curso',
+        require=True
+
         )
 
     curso_grade_version = fields.Many2one(
@@ -32,21 +34,28 @@ class GeracadCursoTurma(models.Model):
         comodel_name='geracad.curso.grade.versao',
     )
 
-    
-    @api.onchange('curso_id')
+    @api.onchange('curso_id','data_abertura')
     def onchange_curso_id(self):
+        _logger.info("curso_id mudou")
         ''' Ao mudar o curso procura a versão mais nova da grade do curso'''
-        grade_version = self.env['geracad.curso.grade.versao'].search([],
-            limit=1,
-            order='data_inicio ASC',
-             )
-       
-        self.curso_grade_version = grade_version
+        for record in self:
+            if record.curso_id:
+                
+                grade_version = self.env['geracad.curso.grade.versao'].search([('curso_id','=',record.curso_id.id)],
+                    limit=1,
+                    
+                    )
+                _logger.info("achei a grade")
+                _logger.info(grade_version)
+                if len(grade_version) > 0:
+
+                    record.curso_grade_version = grade_version[0].id
     
    
     turno = fields.Selection(
         string='turno',
-        selection=[('MAT', 'Matutino'), ('VES', 'Vespertino'),('NOT', 'Noturno')]
+        selection=[('MAT', 'Matutino'), ('VES', 'Vespertino'),('NOT', 'Noturno')],
+        require= True,
     )
     matricula_aberta = fields.Boolean(string="Matrícula Aberta", default=True)
     

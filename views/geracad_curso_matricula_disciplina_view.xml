@@ -18,6 +18,7 @@
           decoration-success="state == 'inscrito'"
           />
           <field name="turma_disciplina_id" optional="show"/>
+          <field name="e_pendencia" optional="show"/>
           <field name="data_matricula" optional="show"/>
           <field name="company_id" optional="show" groups="base.group_multi_company"/>
      
@@ -44,6 +45,7 @@
        
           <field name="company_id" groups="base.group_multi_company"/>
           <field name="state" />
+          <filter name="pendencia" string="É pendencia" domain="[('e_pendencia','=', True)]" />
          
           <filter name="filter_data_matricula" date="data_matricula" 
             
@@ -57,6 +59,7 @@
          
          
           <filter name="state" string="Status" domain="[]" context="{'group_by':'state'}"/>
+          
         
           
           
@@ -64,6 +67,7 @@
           <searchpanel>
             <field name="state" string="Status" enable_counters="1" select="multi"/>
             <field name="company_id" string="Unidade" enable_counters="1" select="multi" groups="base.group_multi_company"/>
+            
            
           
             
@@ -144,6 +148,7 @@
                     <field name="data_conclusao" 
                     readonly="1"
                     />
+                    <field name="e_pendencia" attrs="{'readonly' : [('state','not in', ['draft','inscrito'])]  }" />
                     <field name="company_id"  groups="base.group_multi_company"/>
                   </group>
                 </group>    

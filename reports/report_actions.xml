@@ -10,7 +10,7 @@
     
     <field name="print_report_name">'Contrato Aluno - %s - %s' % (object.aluno_id.name, object.name)</field>
      <field name="binding_model_id" ref="model_geracad_curso_contrato"/> 
-    <!-- <field name="paperformat_id" ref="report.paperformat_euro" /> --> 
+    <field name="paperformat_id" ref="paperformat_contrato_aluno" />  
     <field name="help">Contrato de adesão aluno</field>
 </record>
 

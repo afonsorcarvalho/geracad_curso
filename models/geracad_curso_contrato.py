@@ -2,11 +2,14 @@
 import datetime
 
 from dateutil.relativedelta import relativedelta
-from re import M
+
 from odoo import models, fields, api, _
 from datetime import date,timedelta
-
+from num2words import num2words
+from babel.dates import format_datetime, format_date
+from odoo.tools.misc import formatLang, format_date as odoo_format_date, get_lang
 from odoo.exceptions import UserError, ValidationError
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT, misc
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -231,6 +234,20 @@ class GeracadCursoContrato(models.Model):
                 })
         _logger.debug(parcelas_em_aberto)
         return parcelas_em_aberto
+    
+    def _number_to_text(self, value):
+        return num2words(value, lang='pt_BR',to='currency').title()
+    
+    def get_date_str(self):
+        '''
+        Função retorna a data no formato ex. 'São Luís-MA, 20 de Abril de 2022'
+        '''
+        date_hoje = date.today()
+        locale = get_lang(self.env).code
+
+        _logger.info(self.company_id.city_id.name + '-' + self.company_id.state_id.code)
+        date_str = self.company_id.city_id.name + '-' + self.company_id.state_id.code + ', ' + format_date(date_hoje,format="long",locale=locale)
+        return   date_str
     
     #TODO 
     # PROCURAR PARCELAS NA MATRICULA DO ALUNO E MUDAR O ESTADO TAMBÉM

@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="paperformat_historico" model="report.paperformat">
+		<field name="name">Diario</field>
+		<field name="default" eval="True" />
+		<field name="orientation">Portrait</field>
+		<field name="dpi">135</field>
+		<field name="margin_top">20</field>
+		<field name="margin_bottom">15</field>
+		<field name="margin_left">3</field>
+		<field name="margin_right">3</field>
+		<field name="header_line" eval="False" />
+		<field name="header_spacing">16</field>
+	</record>
+	<template id="view_historico_aluno_template">
+
+		<t t-call="web.html_container">
+			<t t-foreach="docs" t-as="o">
+				<t t-call="web.external_layout">
+					<style>
+						div .page{
+							margin: 0px;
+							padding: 0px;
+
+						}
+						div #state{
+						   text-transform: uppercase;
+						}
+			
+						.o_report_layout_background{
+							background-image: none;
+						}
+						.o_background_header h3 {
+							max-width: 400px;
+						}
+						table { }
+						td {  }
+						td.col-disciplina { width: 500px; text-transform: uppercase;  }
+						th.col-disciplina { width: 500px  }
+						td.col-ch { width: 50px  }
+						th.col-ch { width: 50px  }
+						td.col-falta { width: 100px  }
+						th.col-falta { width: 100px  }
+						td.col-nota { width: 100px  }
+						th.col-nota { width: 100px  }
+						td.situation { width: 100px  }
+						th.situation { width: 100px  }
+					
+						.float-right {width:400px}
+						.dados-aluno {padding-top: 10px}
+						.cabecalho-historico {padding: 20px}
+						#table_cabecalho {
+						
+						}
+						.pt-5{
+							padding-top: 0rem !important;
+						}
+						.assinaturas{
+							padding-top: 4rem ;
+						}
+						.legenda{
+							font-size: 0.8rem;
+						}
+
+				  </style>
+					<div class="page">
+						<table class="table table-sm table-striped" style="table-layout: fixed" id="table_cabecalho">
+							<thead style="display: table-row-group">
+								<tr>
+									<th colspan="8">
+										<div class="row cabecalho-historico">
+											<div class="col-12">
+												<h4 class="text-center color-primary">
+													HISTÓRICO ESCOLAR
+													<span t-if="o.state=='formado'">FINAL</span>
+
+												</h4>
+												<h5 class="text-center" t-field="o.curso_nome" />
+
+												<t t-if="o.curso_id.resolucao">
+													<h6 class="text-center">
+														RESOLUÇÃO
+														<span t-field="o.curso_id.resolucao" />
+													</h6>
+												</t>
+
+											</div>
+										</div>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td colspan="8">
+										<div class="row dados-aluno">
+											<div class="col-6">
+												<div class="col-auto text-uppercase" name="data_conclusao">
+													<strong>ALUNO:</strong>
+													<span t-field="o.aluno_id.display_name" />
+												</div>
+												<div class="col-auto" name="matricula">
+													<strong>MATRÍCULA:</strong>
+													<span t-field="o.name" />
+												</div>
+												<div class="col-auto" name="l10n_br_cnpj_cpf">
+													<strong>CPF:</strong>
+													<span t-field="o.aluno_id.l10n_br_cnpj_cpf" />
+												</div>
+												<div class="col-auto" name="data_nascimento">
+													<strong>DATA DE NASCIMENTO:</strong>
+													<span t-field="o.aluno_id.data_nascimento" />
+												</div>
+											</div>
+											<div class="col-6">
+												<div class="col-auto" name="data_matricula">
+													<strong>DATA INÍCIO:</strong>
+													<span t-field="o.data_matricula" />
+												</div>
+												<div class="col-auto" name="data_conclusao">
+													<strong>DATA TÉRMINO:</strong>
+
+													<t t-if="o.data_conclusao">
+
+														<span t-field="o.data_conclusao" />
+													</t>
+													<t t-if="not o.data_conclusao">
+														EM ANDAMENTO
+													
+													</t>
+													
+
+												</div>
+												<div class="col-auto text-uppercase">
+													<strong>SITUAÇÃO:</strong>
+													<span t-field="o.state" />
+												</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+
+						</table>
+
+						<!-- NOTAS DAS DISCIPLINAS GERAIS -->
+						<t t-foreach="o._get_periodos()" t-as="periodo">
+
+							<t t-if="o._tem_notas_periodo(periodo)">
+
+								<t t-call="geracad_curso.view_historico_aluno_notas_template" />
+							</t>
+
+						</t>
+						<!-- NOTAS DO ESTÁGIO SUPERVISIONADO -->
+						<t t-if="o._tem_notas_periodo(0)">
+							<t t-foreach="o._get_notas_periodo(0)" t-as="notas_line">
+								<table class="table table-sm table-striped">
+									<thead>
+
+										<tr>
+											<th class="col-disciplina">
+												<span t-field="notas_line.disciplina_id.name" />
+											</th>
+											<th class="text-center col-ch">
+												<span t-field="notas_line.disciplina_id.carga_horaria" />
+											</th>
+											<th class="text-center col-falta">
+												<span t-field="notas_line.faltas" />
+											</th>
+											<th class="text-center col-nota">
+												<span t-field="notas_line.nota_1" t-options='{"widget": "float", "precision": 2}' />
+											</th>
+											<th class="text-center col-nota">
+												<span t-field="notas_line.nota_2" t-options='{"widget": "float", "precision": 2}' />
+											</th>
+											<th class="text-center col-nota">
+												<span t-field="notas_line.final" t-options='{"widget": "float", "precision": 2}' />
+											</th>
+											<th class="text-center col-nota">
+												<span t-field="notas_line.media" t-options='{"widget": "float", "precision": 2}' />
+											</th>
+											<th class="text-center situation">
+												<span t-field="notas_line.situation" />
+											</th>
+
+										</tr>
+									</thead>
+								</table>
+							</t>
+
+						</t>
+
+						<div class="row">
+							<div class="col-auto text-right legenda ">
+									LEGENDA:  AM - APROV. MEDIA   AP - APROV. FINAL  RC - REP. CONTEUDO  RF - REP. P/ FALTA  IN - INSCRITO  CA - CANCELAMENTO  TR - TRANCAMENTO  AB - ABANDONO  EA - ESTUDOS APROVEITADOS
+							</div>
+
+						</div>
+						<div class="row assinaturas">
+							<div class="col-6 text-center">
+								_____________________________________________
+								<br />
+
+								<t t-if="o.company_id.diretor">
+									<strong>
+										<t t-esc="o.company_id.diretor" />
+									</strong>
+									<br />
+								</t>
+								<t t-if="o.company_id.diretor_formacao">
+									<span>
+										<t t-esc="o.company_id.diretor_formacao" />
+									</span>
+									<br />
+								</t>
+								<span>Diretor(a)</span>
+								<br />
+
+
+							</div>
+							<div class="col-6 text-center">
+								_____________________________________________
+								<br />
+								<strong>
+									<t t-esc="o.company_id.secretaria" />
+								</strong>
+								<br />
+								<span>Secretário(a) Escolar</span>
+								<br />
+
+							</div>
+						</div>
+					</div>
+				</t>
+			</t>
+		</t>
+	</template>
+</odoo>

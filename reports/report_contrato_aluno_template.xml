@@ -3,12 +3,20 @@
   <!ENTITY Ccedil "entity-value">
 ]>
 <odoo>
+  <record id="paperformat_contrato_aluno" model="report.paperformat">
+		<field name="name">Contrato Aluno</field>
+		<field name="default" eval="True" />
+		<field name="orientation">Portrait</field>
+		<field name="dpi">135</field>
+		<field name="margin_top">20</field>
+		<field name="margin_bottom">15</field>
+		<field name="margin_left">3</field>
+		<field name="margin_right">3</field>
+		<field name="header_line" eval="False" />
+		<field name="header_spacing">16</field>
+	</record>
   <template id='view_contrato_aluno_template'>
-    <style>
-      p{border:1px solid lightgray; margin-left:16px;}
-      
-
-    </style>
+    <style></style>
     <t t-call='web.html_container'>
       <t t-foreach='docs' t-as='o'>
         <t t-call='web.external_layout'>
@@ -24,7 +32,7 @@
               <p align="justify">
                 Pelo presente instrumento particular que entre si fazem, de um lado
                 <strong>
-                  <span t-field="o.company_id.l10n_br_legal_name" />
+                  <span t-field="o.company_id.l10n_br_legal_name" class="text-uppercase" />
                 </strong>
                 , CNPJ nº
                 <span t-field="o.company_id.l10n_br_cnpj_cpf" />
@@ -58,7 +66,8 @@
                 <strong>Cláusula Segunda</strong>
                 : O objeto do presente contrato é prestação de serviços educacionais, ofertando o Curso
                 <strong>
-                  <span t-field="o.curso_nome" />
+
+                  <span t-field="o.curso_nome" class="text-uppercase" />
                 </strong>
                 , consoante previsto  na legislação de ensino em vigor  e Regimento interno do
                 <strong>CONTRATADO</strong>
@@ -107,7 +116,9 @@
                     <span t-field="o.valor_total" />
                   </strong>
                   (
-                  <strong>{valorParcelasExtenso}</strong>
+                  <strong>
+                    <t t-esc="o._number_to_text(o.valor_total)" />
+                  </strong>
                   ), em uma única parcela
                   <!--de R$ <strong>{dadosConta[conta_receber_valor]} </strong>(<strong>{valorParcelasExtenso}</strong>) -->
                   .
@@ -132,17 +143,90 @@
                 </p>
               </t>
               <t t-if="o.qtd_parcelas > 1">
-                <p align="justify"><strong>Cláusula Terceira</strong>: Pelos serviços ora contratados o <strong>CONTRATANTE</strong>  pagará ao <strong>CONTRATADO</strong>, R$ <strong>{valor}</strong> (<strong>{valorExtenso}</strong>), em <strong>{dadosConta[conta_receber_parcelas]}  parcelas</strong>, sendo: {parc}.</p>
-                <p align="justify">Parágrafo <strong>1º</strong>: A primeira parcela será paga no ato da matrícula, sendo sua quitação imprescindível para realização deste contrato,  tendo caráter de sinal, arras e princípio de pagamento. As demais parcelas deverão ser pagas sucessivas e mensalmente, a partir de <strong>{dadosConta[conta_receber_data_vencimento]}</strong>, com vencimento no dia  {diaVencimento} de cada m�s  e t�rmino em  <strong>{dataTermino}</strong>.</p>
-                <p align="justify">Parágrafo <strong>2º</strong>: O pagamento das referidas parcelas mensais será efetuado através de boleto bancário em favor do <strong>CONTRATADO</strong> ou em banco autorizado para tal fim.</p>
-                <p align="justify">Parágrafo <strong>3º</strong>: Caso o aluno deseje trancar o seu curso, deverá encaminhar à coordenação a solicitação de trancamento, conforme modelo de solicitação disponível, devendo estar em dias com suas mensalidades. Caso o aluno deseje retornar, terá que fazer a sua nova matrícula e reiniciar o curso a partir do período concluído constante no seu histórico.</p>
-                <p align="justify">Parágrafo <strong>4º</strong>: Será caracterizado abandono do curso a ausência do aluno por um período igual ou superior a 30 (trinta) dias consecutivos. Caracterizado o abandono, o aluno não poderá reiniciar o curso, sendo que a Instituição fica no direito de cobrar as mensalidades até o último mês frequentado.</p>
-                <p align="justify"><strong>Cláusula Quarta</strong>:  Havendo atraso no pagamento de cada parcela escolar, o <strong>CONTRATANTE</strong> pagará, além do principal, os seguintes acréscimos : a) multa, como pena por atraso, de 2% (dois por cento) do valor  principal ; b) 0,33% ( trinta e três centésimo por cento ) do valor principal, por dia de atraso, como acréscimo  por mora.</p>
-                <p align="justify">Parágrafo <strong>1º</strong>: <strong>Se o atraso for superior a 30 (trintanze) dias, o CONTRATADO poderá ainda : a) negativar o devedor em cadastro ou serviços legalmente constituídos e destinados à proteção de crédito; b) promover o protesto da dívida, mediante duplicata de serviços, letra de câmbio ou outro título de crédito que for legalmente; c) promover a cobrança através de advogados, empresas especializadas ou bancos; d) promover a cobrança judicial, através de Ação Monitória, de Execução de Contrato ou outra prevista na legislação brasileira: rescindir o contrato nos termos do Código Civil Brasileiro, nos prazos previstos  na legislação de ensino, com cobrança de Perdas e Danos.</strong></p>
-                <p align="justify">Parágrafo <strong>2º</strong>: <strong>Havendo quaisquer descumprimento ou inadimplência do presente contrato por motivo de responsabilidade do (a) CONTRATANTE, o CONTRATADO reserva-se o direito de suspender os serviços previstos neste contrato e compromete-se a notificar o(a) CONTRATANTE, por correio ou por e-mail, para que proceda a regularização da pendência, sob pena de não serem retomados os serviços ora contratados, em razão de descumprimento de cláusula contratual.</strong></p>
-                <p align="justify">Parágrafo <strong>3º</strong>: Será responsabilidade do <strong>CONTRATANTE</strong>, o ônus advindo da contratação de serviço de cobrança, desde já fixado em 10% (dez por cento) sobre o total do débito  para os casos de pagamento em procedimento judicial. Nos casos  em que a cobrança se der por meio de advogado a este serão pagos honorários a base de 20% (vinte por cento) sobre o total do débito se houver cobrança judicial ou purga judicial da mora, ou intervenção de advogados para seu recebimento. Na hipótese de acordo amigável,  este percentual será de 10% (dez por cento) sobre o total do débito.</p>
+                <p align="justify">
+                  <strong>Cláusula Terceira</strong>
+                  : Pelos serviços ora contratados o
+                  <strong>CONTRATANTE</strong>
+                  pagará ao
+                  <strong>CONTRATADO</strong>
+                  ,
+                  <strong>
+                    R$
+                    <span t-field="o.valor_total" />
+                  </strong>
+                  (
+                  <strong>
+                    <t t-esc="o._number_to_text(o.valor_total)" />
+                  </strong>
+                  ), em
+                  <strong>
+                    <span t-field="o.qtd_parcelas" />
+                    parcelas
+                  </strong>
+                  de
+                  <strong>
+                    <span t-field="o.valor_parcelas" />
+                    (
+                    <span t-esc="o._number_to_text(o.valor_parcelas)" />
+                    )
+                  </strong>
+                  .
+                </p>
+                <p align="justify">
+                  Parágrafo
+                  <strong>1º</strong>
+                  : A primeira parcela será paga no ato da matrícula, sendo sua quitação imprescindível para realização deste contrato,  tendo caráter de sinal, arras e princípio de pagamento. As demais parcelas deverão ser pagas sucessivas e mensalmente, a partir de
+                  <strong>
+                    <span t-field="o.data_vencimento_parcelas" />
+                  </strong>
+                  , com vencimento no dia
+                  <span t-esc="o.data_vencimento_parcelas.day" />
+                  de cada mês.
+                </p>
+                <p align="justify">
+                  Parágrafo
+                  <strong>2º</strong>
+                  : O pagamento das referidas parcelas mensais será efetuado através de boleto bancário em favor do
+                  <strong>CONTRATADO</strong>
+                  ou em banco autorizado para tal fim.
+                </p>
+                <p align="justify">
+                  Parágrafo
+                  <strong>3º</strong>
+                  : Caso o aluno deseje trancar o seu curso, deverá encaminhar à coordenação a solicitação de trancamento, conforme modelo de solicitação disponível, devendo estar em dias com suas mensalidades. Caso o aluno deseje retornar, terá que fazer a sua nova matrícula e reiniciar o curso a partir do período concluído constante no seu histórico.
+                </p>
+                <p align="justify">
+                  Parágrafo
+                  <strong>4º</strong>
+                  : Será caracterizado abandono do curso a ausência do aluno por um período igual ou superior a 30 (trinta) dias consecutivos. Caracterizado o abandono, o aluno não poderá reiniciar o curso, sendo que a Instituição fica no direito de cobrar as mensalidades até o último mês frequentado.
+                </p>
+                <p align="justify">
+                  <strong>Cláusula Quarta</strong>
+                  :  Havendo atraso no pagamento de cada parcela escolar, o
+                  <strong>CONTRATANTE</strong>
+                  pagará, além do principal, os seguintes acréscimos : a) multa, como pena por atraso, de 2% (dois por cento) do valor  principal ; b) 0,33% ( trinta e três centésimo por cento ) do valor principal, por dia de atraso, como acréscimo  por mora.
+                </p>
+                <p align="justify">
+                  Parágrafo
+                  <strong>1º</strong>
+                  :
+                  <strong>Se o atraso for superior a 30 (trintanze) dias, o CONTRATADO poderá ainda : a) negativar o devedor em cadastro ou serviços legalmente constituídos e destinados à proteção de crédito; b) promover o protesto da dívida, mediante duplicata de serviços, letra de câmbio ou outro título de crédito que for legalmente; c) promover a cobrança através de advogados, empresas especializadas ou bancos; d) promover a cobrança judicial, através de Ação Monitória, de Execução de Contrato ou outra prevista na legislação brasileira: rescindir o contrato nos termos do Código Civil Brasileiro, nos prazos previstos  na legislação de ensino, com cobrança de Perdas e Danos.</strong>
+                </p>
+                <p align="justify">
+                  Parágrafo
+                  <strong>2º</strong>
+                  :
+                  <strong>Havendo quaisquer descumprimento ou inadimplência do presente contrato por motivo de responsabilidade do (a) CONTRATANTE, o CONTRATADO reserva-se o direito de suspender os serviços previstos neste contrato e compromete-se a notificar o(a) CONTRATANTE, por correio ou por e-mail, para que proceda a regularização da pendência, sob pena de não serem retomados os serviços ora contratados, em razão de descumprimento de cláusula contratual.</strong>
+                </p>
+                <p align="justify">
+                  Parágrafo
+                  <strong>3º</strong>
+                  : Será responsabilidade do
+                  <strong>CONTRATANTE</strong>
+                  , o ônus advindo da contratação de serviço de cobrança, desde já fixado em 10% (dez por cento) sobre o total do débito  para os casos de pagamento em procedimento judicial. Nos casos  em que a cobrança se der por meio de advogado a este serão pagos honorários a base de 20% (vinte por cento) sobre o total do débito se houver cobrança judicial ou purga judicial da mora, ou intervenção de advogados para seu recebimento. Na hipótese de acordo amigável,  este percentual será de 10% (dez por cento) sobre o total do débito.
+                </p>
 
-                </t>
+              </t>
 
               <p align="justify">
                 <strong>Cláusula Quinta</strong>
@@ -152,34 +236,49 @@
               </p>
             </p>
             <p align="right">
-            <span t-field=" o.company_id.city_id" />
-            , {dia} de {mes} de {ano}</p>
+              <span t-field=" o.company_id.city_id" />
+              <t t-esc="o.get_date_str()" />
+            </p>
             <br />
-            <table class="table col-12">
-              <tr>
-                <td>
-                  <!-- <img width="160px" src="{path}images/assinatura carlos.JPG"> -->
-                  <!---->
-                  <p>Netcom Treinamementos e Soluções Tecnológicas</p>
-                </td>
-                <td>
-                  __________________________________________
-                  <p>CONTRATANTE</p>
-                </td>
-              </tr>
-              <tr>
-                <td>
+            <div class="row">
+              <div class="col-6">
+                <div class="row-6 text-uppercase text-center font-italic">
+                  __________________________________________________________
                   <br />
-                  __________________________________________
-                  <p>TESTEMUNHA</p>
-                </td>
-                <td>
+                  Netcom Treinamentos e Soluções Tecnológicas
                   <br />
-                  __________________________________________
-                  <p>TESTEMUNHA</p>
-                </td>
-              </tr>
-            </table>
+                  CONTRATADO
+                </div>
+                <br/>
+                <br/>
+                <div class="row-6 text-center">
+                  ________________________________________________________
+                  <br />
+                  
+                  
+                  <span t-field="o.sacado.name" class="text-uppercase font-italic" />
+                  <br />
+                  CONTRATANTE
+                </div>
+
+
+              </div>
+              <div class="col-6">
+                <div class="row text-center">
+                  _________________________________________________________
+                  <br />
+                  TESTEMUNHA
+                </div>
+                <br/>
+                <br/>
+                <div class="row text-center">
+                  __________________________________________________________
+                  <br />
+                  TESTEMUNHA
+                </div>
+              </div>
+
+            </div>
 
 
           </div>
