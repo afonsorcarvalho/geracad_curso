@@ -92,11 +92,14 @@ class GeracadCurso(models.Model):
 
     @api.depends('grade_id')
     def _compute_carga_horaria_total(self):
+        _logger.info("calcula carga horaria total")
         for record in self:
-            sum = 0
-            for grade_line in record.grade_id:
-                sum += grade_line.disciplina_id_carga_horaria
-        record.carga_horaria_total = sum
+            
+            grade_versoes  = self.env['geracad.curso.grade.versao'].search([
+                ('curso_id', '=', record.id)
+                ], offset=0, limit=1)
+            for grade_versao_line in grade_versoes:
+                record.carga_horaria_total = grade_versao_line.carga_horaria_total
     
     def action_open_wizard_print_report(self):
         '''
@@ -286,6 +289,7 @@ class GeracadCursoGradeVersao(models.Model):
     
     
     _inherit = ['mail.thread']
+    _order = 'data_inicio'
 
     name = fields.Char(compute='_compute_field', tracking=True, )
 
@@ -330,7 +334,7 @@ class GeracadCursoGradeVersao(models.Model):
             sum = 0
             for grade_line in record.grade_ids:
                 sum += grade_line.disciplina_id_carga_horaria
-        record.carga_horaria_total = sum
+            record.carga_horaria_total = sum
 
 class GeracadCursoGrade(models.Model):
     _name = "geracad.curso.grade"

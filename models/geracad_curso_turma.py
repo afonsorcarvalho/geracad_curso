@@ -50,7 +50,13 @@ class GeracadCursoTurma(models.Model):
                 if len(grade_version) > 0:
 
                     record.curso_grade_version = grade_version[0].id
-    
+      
+        return {
+            'domain': {
+                'curso_grade_version': [('curso_id', '=', self.curso_id)]
+            }
+        }
+        
    
     turno = fields.Selection(
         string='turno',
@@ -167,6 +173,15 @@ class GeracadCursoTurma(models.Model):
             BUTTON ACTIONS
 
     """
+
+    def action_ajeita_versao_grade_turma_curso(self):
+        _logger.info("Ajeita versao grade turma curso")
+        res = self.env["geracad.curso.turma"].search([])
+        for turma_curso in res:
+            _logger.info("turma curso")
+            _logger.info(turma_curso)
+
+            turma_curso.onchange_curso_id()
 
     def action_suspender_matricula(self):
         self.write({
