@@ -36,6 +36,7 @@
        
         <search string="Procure">
           <field name="name" string="Código da matricula"  />
+          <field name="disciplina_id" string="Disciplina"  />
          
           <field name="curso_matricula_id" />
        
@@ -54,10 +55,8 @@
           
           
           <filter name="groupby_unidade" string="Unidade" context="{'group_by' : 'company_id'}"></filter>
-          
+  
           <filter name="data_matricula" string="Data da matricula" domain="[]" context="{'group_by':'data_matricula'}"/>
-         
-         
           <filter name="state" string="Status" domain="[]" context="{'group_by':'state'}"/>
           
         

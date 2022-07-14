@@ -54,6 +54,13 @@ class GeracadCursoMatriculaDisciplina(models.Model):
         required=True
         
         )
+    disciplina_id = fields.Many2one(
+        related='turma_disciplina_id.disciplina_id',
+        readonly=True,
+        store=True
+        )
+    
+
     e_pendencia = fields.Boolean("É pendencia", default=False, tracking=True)
 
   
