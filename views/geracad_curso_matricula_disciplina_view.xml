@@ -195,6 +195,12 @@
         </p>
       </field>
     </record>
+    <record model="ir.actions.act_window" id="geracad_curso_create_matricula_disciplina_action_window">
+      <field name="name">Criar Matricula Disciplina</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">geracad.curso.matricula.disciplina</field>
+      <field name="view_mode">form</field>
+    </record>
 
     <!-- actions opening views on models -->
     <record id="action_geracad_curso_matricula_disciplina_form_view" model="ir.actions.act_window.view">

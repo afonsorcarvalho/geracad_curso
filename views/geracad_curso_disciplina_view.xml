@@ -101,6 +101,12 @@
                     
                   </group>
                 </page>
+                <page string="Grades Curriculares">
+                  <group>
+                    <field nolabel="1" name="grades" />  
+                    
+                  </group>
+                </page>
               </notebook>     
             </sheet>
             <div class="oe_chatter">

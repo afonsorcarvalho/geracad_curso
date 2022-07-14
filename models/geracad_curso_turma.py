@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import json
 from odoo import models, fields, api, _
 from datetime import date
 import logging
@@ -33,31 +34,43 @@ class GeracadCursoTurma(models.Model):
         string='Versão Grade',
         comodel_name='geracad.curso.grade.versao',
     )
+    
+    curso_grade_version_domain = fields.Char(compute="_compute_curso_grade_version_domain", readonly=True, store=False)
 
-    @api.onchange('curso_id','data_abertura')
+    @api.depends('curso_id')
+    def _compute_curso_grade_version_domain(self):
+        for rec in self:
+            _logger.info("curso id")
+            rec.curso_grade_version_domain = ""
+            if rec.curso_id:
+                rec.curso_grade_version_domain = json.dumps([('curso_id','=',rec.curso_id.id)])
+                #_logger.info(self.curso_id)
+            # if rec.curso_id.id > 0:
+            #     _logger.info("é maior que zero")
+            #     
+
+    @api.onchange('curso_id')
     def onchange_curso_id(self):
-        _logger.info("curso_id mudou")
-        ''' Ao mudar o curso procura a versão mais nova da grade do curso'''
-        for record in self:
-            if record.curso_id:
-                
+        
+         ''' Ao mudar o curso procura a versão mais nova da grade do curso'''
+         _logger.info("curso_id mudou")
+         for record in self:
+
+             _logger.info(record.curso_id.id)
+             if record.curso_id:
+    
                 grade_version = self.env['geracad.curso.grade.versao'].search([('curso_id','=',record.curso_id.id)],
-                    limit=1,
+                     limit=1,
                     
-                    )
+                     )
                 _logger.info("achei a grade")
                 _logger.info(grade_version)
                 if len(grade_version) > 0:
-
                     record.curso_grade_version = grade_version[0].id
-      
-        return {
-            'domain': {
-                'curso_grade_version': [('curso_id', '=', self.curso_id)]
-            }
-        }
-        
    
+       
+        
+  
     turno = fields.Selection(
         string='turno',
         selection=[('MAT', 'Matutino'), ('VES', 'Vespertino'),('NOT', 'Noturno')],

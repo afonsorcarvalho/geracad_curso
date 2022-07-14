@@ -228,6 +228,12 @@ class GeracadCursoDisciplina(models.Model):
         string='Disciplinas Equivalentes',
         inverse_name='disciplinas_id'
         )
+
+    grades = fields.One2many(
+        comodel_name = "geracad.curso.grade",
+        string="Grades Pertencentes",
+        inverse_name = "disciplina_id",
+    )
  
   
     
@@ -289,7 +295,7 @@ class GeracadCursoGradeVersao(models.Model):
     
     
     _inherit = ['mail.thread']
-    _order = 'data_inicio'
+    _order = 'data_inicio DESC'
 
     name = fields.Char(compute='_compute_field', tracking=True, )
 

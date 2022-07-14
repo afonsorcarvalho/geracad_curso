@@ -13,6 +13,7 @@
           <field name="sequence" optional="hide"/>
           <field name="display_name" string="Nome" invisible="1"/>
           <field name="curso_id" optional="show"/>
+          <field name="version_grade_id" optional="show"/>
           <field name="disciplina_id" optional="show"/>
           <field name="periodo" optional="show"/>
           <field name="disciplina_id_carga_horaria" sum="Soma Total" optional="show"/>
@@ -37,6 +38,7 @@
                   <field name="modulo" />   
                   <field name="display_name" string="Nome" invisible="1"/>
                   <field name="curso_id" options="{'no_create': True}"/>
+                  <field name="version_grade_id" required="1" options="{'no_create': True}"/>
                   <field name="disciplina_id" options="{'no_create': True}" />
                   <field name="disciplina_id_carga_horaria" />
                   

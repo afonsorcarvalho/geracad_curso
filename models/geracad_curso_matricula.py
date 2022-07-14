@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import json
 from odoo import models, fields, api, _
 from datetime import date, timedelta
 
@@ -51,6 +51,21 @@ class GeracadCursoMatricula(models.Model):
         comodel_name='geracad.curso.grade.versao',
         
     )
+    curso_grade_version_domain = fields.Char(
+        compute="_compute_curso_grade_version_domain"
+    )
+
+    
+    @api.depends('curso_id')
+    def _compute_curso_grade_version_domain(self):
+        for rec in self:
+            _logger.info("curso id")
+            rec.curso_grade_version_domain = ""
+            if rec.curso_id:
+                rec.curso_grade_version_domain = json.dumps([('curso_id','=',rec.curso_id.id)])
+    
+    
+    
     
     curso_nome = fields.Char( 
         related='curso_turma_id.curso_id.name',
@@ -64,6 +79,26 @@ class GeracadCursoMatricula(models.Model):
         readonly=True,
         store=True
     )
+
+    @api.onchange('curso_id')
+    def onchange_curso_id(self):
+        
+         ''' Ao mudar o curso procura a versão mais nova da grade do curso'''
+         _logger.info("curso_id mudou")
+         for record in self:
+
+             _logger.info(record.curso_id.id)
+             if record.curso_id:
+    
+                grade_version = self.env['geracad.curso.grade.versao'].search([('curso_id','=',record.curso_id.id)],
+                     limit=1,
+                    
+                     )
+                _logger.info("achei a grade")
+                _logger.info(grade_version)
+                if len(grade_version) > 0:
+                    record.curso_grade_version = grade_version[0].id
+                    
     curso_type = fields.Many2one(
         string='Tipo do Curso',
         comodel_name="geracad.curso.type",related='curso_id.type_curso',

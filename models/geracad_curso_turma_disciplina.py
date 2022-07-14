@@ -44,6 +44,15 @@ class GeracadCursoTurmDisciplina(models.Model):
         'geracad.curso.turma',
         string='Curso Turma',
         )
+    curso_grade_version = fields.Many2one(
+        string='Versão Grade',
+        
+        related='curso_turma_id.curso_grade_version',
+        readonly=True,
+        store=True
+       
+        )
+   
     
     # curso_turma_nome = fields.Char("Código Curso", 
     #     related='curso_turma_id.name',

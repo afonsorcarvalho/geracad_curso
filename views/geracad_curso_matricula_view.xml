@@ -172,6 +172,7 @@
                 
                 
                 <field name="curso_grade_version" string='Versão Grade' domain="[('curso_id','=', curso_id)]" options="{'no_create_edit': True, }" />
+                <field name="curso_grade_version_domain" invisible="1" />
                 <field name="data_matricula" attrs="{'readonly':[('state','!=','draft')]  }" />
                 <field name="data_previsao_conclusao" />
                 <field name="data_conclusao" />

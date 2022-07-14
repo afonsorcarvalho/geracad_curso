@@ -342,7 +342,8 @@
               <group>
 
                 <field name="curso_id" string="Curso" attrs="{'readonly':[('state','!=','draft')]  }" options="{'no_create': True}" />
-                <field name="curso_grade_version"  attrs="{'readonly':[('state','!=','draft')]  }" options="{'no_create': True}" />
+                <field name="curso_grade_version"  domain = "curso_grade_version_domain" attrs="{'readonly':[('state','!=','draft')]  }" options="{'no_create': True}" />
+                <field name="curso_grade_version_domain" invisible="1"/>
                 <field name="turno" string="Turno" attrs="{'readonly':[('state','!=','draft')]  }" />
                 <field name="matricula_aberta" string="Matrícula aberta" readonly="1" />
 
@@ -461,24 +462,40 @@
       <field name="view_id" ref="geracad_curso_matricula_list" />
       <field name="act_window_id" ref="geracad_curso_matricula_action_window" />
     </record>
-
-
+    
+    
     <!-- Top menu item -->
-    <menuitem name="Alunos" id="geracad_curso.menu_alunos" sequence="1" parent="geracad_curso.menu_root" />
-
-    <menuitem name="Cursos" id="geracad_curso.menu_root" web_icon="geracad_curso,static/description/icon.png" action="geracad_curso_matricula_action_window" groups="group_geracad_curso_user,group_geracad_curso_secretaria,group_geracad_curso_administrator" />
-
-    <menuitem name="Notas" id="geracad_curso.menu_root_notas" web_icon="geracad_curso,static/description/notas.png" action="geracad_curso_notas_disciplina_action_window" groups="group_geracad_curso_professor,group_geracad_curso_secretaria,group_geracad_curso_administrator" />
-    <menuitem name="Financeiro" id="geracad_curso.menu_root_financeiro" web_icon="geracad_curso,static/description/financeiro.png" action="geracad_curso_financeiro_parcelas_action_window" groups="group_geracad_curso_finaceiro" />
-
+    
+    <menuitem name="Professores" id="geracad_curso.menu_root_professores" sequence="2" action="geracad_curso_professores_action_window" web_icon="geracad_curso,static/description/professores.png" />
+    <menuitem name="Cursos" id="geracad_curso.menu_root" sequence="3" action="geracad_curso_matricula_action_window" groups="group_geracad_curso_user,group_geracad_curso_secretaria,group_geracad_curso_administrator" />
+    <menuitem name="Disciplinas" id="geracad_curso.menu_root_disciplinas" sequence="4"  web_icon="geracad_curso,static/description/disciplinas.png" action="geracad_curso_turma_disciplina_action_window" groups="group_geracad_curso_user,group_geracad_curso_secretaria,group_geracad_curso_administrator" />
+    <menuitem name="Matriculas" id="geracad_curso.menu_root_matriculas" sequence="5" web_icon="geracad_curso,static/description/matriculas.png"  action="geracad_curso_matricula_action_window" groups="group_geracad_curso_user,group_geracad_curso_secretaria,group_geracad_curso_administrator" />
+    <menuitem name="Notas" id="geracad_curso.menu_root_notas" sequence="6" web_icon="geracad_curso,static/description/notas.png" action="geracad_curso_notas_disciplina_action_window" groups="group_geracad_curso_professor,group_geracad_curso_secretaria,group_geracad_curso_administrator" />
+    <menuitem name="Diarios" id="geracad_curso.menu_root_diarios" sequence="7" web_icon="geracad_curso,static/description/diarios.png" action="geracad_curso_notas_disciplina_action_window" groups="group_geracad_curso_professor,group_geracad_curso_secretaria,group_geracad_curso_administrator" />
+    
+    <menuitem name="Financeiro" id="geracad_curso.menu_root_financeiro" sequence="8" web_icon="geracad_curso,static/description/financeiro.png" action="geracad_curso_financeiro_parcelas_action_window" groups="group_geracad_curso_finaceiro" />
+    
     <!-- menu categories -->
-
-
+    
+    
+    <menuitem name="Alunos" id="geracad_curso.menu_alunos" sequence="1" parent="geracad_curso.menu_root" />
+    <menuitem name="Professores" id="geracad_curso.menu_professores_2" sequence="1" parent="geracad_curso.menu_root" action="geracad_curso_professores_action_window" />
     <menuitem name="Matriculas" id="geracad_curso.menu_matricular" sequence="2" parent="geracad_curso.menu_root" />
     <menuitem name="Turmas" id="geracad_curso.menu_turmas" sequence="3" parent="geracad_curso.menu_root" />
     <menuitem name="Financeiro" id="geracad_curso.financeiro" sequence="4" groups="group_geracad_curso_finaceiro" parent="geracad_curso.menu_root" />
     <menuitem name="Configuração" id="geracad_curso.configuracao" sequence="100" parent="geracad_curso.menu_root" />
 
+    
+    <!-- SUBMENU DISCIPLINAS -->
+    <menuitem name="Turmas" id="geracad_curso.menu_disciplinas_turma" sequence="1" parent="geracad_curso.menu_root_disciplinas" />
+    <menuitem name="Matrículas" id="geracad_curso.menu_disciplinas_matriculas" sequence="1" parent="geracad_curso.menu_root_disciplinas" />
+
+    <!-- SUBMENU DISCIPLINAS/TURMAS  -->
+    <menuitem name="Visualizar Turmas" id="geracad_curso.menu_disciplinas_turmas_visualizar" sequence="1" parent="geracad_curso.menu_disciplinas_turma"  action="geracad_curso_turma_disciplina_action_window" />
+    <menuitem name="Cadastrar Turmas" id="geracad_curso.menu_disciplinas_turmas_cadastrar" sequence="1" parent="geracad_curso.menu_disciplinas_turma"  action="geracad_curso_create_turma_disciplina_action_window" />
+    <!-- SUBMENU DISCIPLINAS/MATRICULAS  -->
+    <menuitem name="Visualizar Matrículas" id="geracad_curso.menu_disciplinas_matriculas_visualizar" sequence="1" parent="geracad_curso.menu_disciplinas_matriculas"  action="geracad_curso_matricula_disciplina_action_window" />
+    <menuitem name="Matricular em Turma" id="geracad_curso.menu_disciplinas_matriculas_matricular" sequence="1" parent="geracad_curso.menu_disciplinas_matriculas"  action="geracad_curso_create_matricula_disciplina_action_window" />
 
     <!-- SUBMENU ALUNOS -->
     <menuitem name="Visualizar Alunos" id="geracad_curso.menu_visualiza_aluno" sequence="1" parent="geracad_curso.menu_alunos" action="geracad_aluno.geracad_aluno_action_window" />
@@ -492,7 +509,7 @@
     <menuitem name="Disciplina" id="geracad_curso.turma_disciplina_menu_list" parent="geracad_curso.menu_turmas" action="geracad_curso_turma_disciplina_action_window" groups="group_geracad_curso_user,group_geracad_curso_secretaria,group_geracad_curso_administrator" />
 
     <!-- configuração -->
-    <menuitem name="Professores" id="geracad_curso.professores_menu" parent="geracad_curso.configuracao" action="geracad_curso_professores_action_window" sequence="0" />
+    <menuitem name="Professores" id="geracad_curso.menu_configuracao_professores" parent="geracad_curso.configuracao" action="geracad_curso_professores_action_window" sequence="0" />
     <menuitem name="Cursos" id="geracad_curso.curso_menu" parent="geracad_curso.configuracao" action="geracad_curso_action_window" sequence="0" />
     <menuitem name="Tipos de Curso" id="geracad_curso.tipo_curso_menu" parent="geracad_curso.configuracao" action="geracad_curso_tipo_curso_action_window" sequence="1" />
     <menuitem name="Disciplina" id="geracad_curso.menu_disciplina_1_list" parent="geracad_curso.configuracao" action="geracad_curso_disciplina_action_window" sequence="2" />

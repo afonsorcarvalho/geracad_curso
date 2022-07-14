@@ -243,6 +243,12 @@
         </p>
       </field>
     </record>
+    <record model="ir.actions.act_window" id="geracad_curso_create_turma_disciplina_action_window">
+      <field name="name">Criar Turma</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">geracad.curso.turma.disciplina</field>
+      <field name="view_mode">form</field>
+    </record>
 
     <!-- actions opening views on models -->
     <record id="action_geracad_curso_turma_disciplina_form_view" model="ir.actions.act_window.view">
