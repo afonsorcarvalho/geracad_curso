@@ -442,7 +442,7 @@ class GeracadCursoTurmDisciplina(models.Model):
             rec.carga_horaria = rec.disciplina_id.carga_horaria
             grade_rec = self.env["geracad.curso.grade"].search([('disciplina_id','=', rec.disciplina_id.id)], limit=1)
             if len(grade_rec) > 0:
-                _logger.info(grade_rec[0].versao_grade_id)
+                _logger.info(grade_rec[0].version_grade_id)
                 rec.periodo = grade_rec[0].periodo
             else:
                 rec.periodo = 1
