@@ -152,8 +152,8 @@
 
 						</t>
 						<!-- NOTAS DO ESTÁGIO SUPERVISIONADO -->
-						<t t-if="o._tem_notas_periodo(0)">
-							<t t-foreach="o._get_notas_periodo(0)" t-as="notas_line">
+						<t t-if="o._tem_estagio()">
+							<t t-foreach="o._get_nota_estagio()" t-as="notas_line">
 								<table class="table table-sm table-striped">
 									<thead>
 

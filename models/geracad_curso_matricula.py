@@ -331,8 +331,11 @@ class GeracadCursoMatricula(models.Model):
         '''
         if self.state != 'formado':    
             nota_disciplina_ids = self.env['geracad.curso.nota.disciplina'].search([
+                '&',
                 ('curso_matricula_id', '=', self.id),
-                ('state','not in', ['cancelada'])
+                '&',
+                ('state','not in', ['cancelada']),
+                ('disciplina_id.e_estagio','=', False)
                 ])
         else:
             nota_disciplina_ids = self.env['geracad.curso.nota.disciplina.historico.final'].search([
@@ -360,7 +363,26 @@ class GeracadCursoMatricula(models.Model):
     def _tem_notas_periodo(self,periodo):
         count_disciplinas = len(self._get_notas_periodo(periodo))
         return count_disciplinas
-    
+        
+    def _get_nota_estagio(self):
+        return self.env['geracad.curso.nota.disciplina'].search([
+                '&',
+                ('curso_matricula_id', '=', self.id),
+                '&',
+                ('state','not in', ['cancelada']),
+                ('disciplina_id.e_estagio','=', True)
+                ])
+
+    def _tem_estagio(self):
+        return self.env['geracad.curso.nota.disciplina'].search([
+                '&',
+                ('curso_matricula_id', '=', self.id),
+                '&',
+                ('state','not in', ['cancelada']),
+                ('disciplina_id.e_estagio','=', True)
+                ], count=True)
+        
+
     # def _get_portal_return_action(self):
     #     """ Return the action used to display matriculas when returning from customer portal. """
     #     self.ensure_one()
