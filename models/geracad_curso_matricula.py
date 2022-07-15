@@ -305,6 +305,26 @@ class GeracadCursoMatricula(models.Model):
                 res.append(periodo+1)   
         return res  
 
+    def _pega_periodo_disciplina_sem_periodo(self,disciplina_id):
+        '''
+            recebe uma discplina e retorna o periodo dela
+        '''
+        periodo = 0
+        versao_grade = self.curso_id.curso_grade_version
+        grade_line_ids = self.env['geracad.curso.grade'].search([
+            ('disciplina_id','=',disciplina_id.id),
+            ('version_grade_id','=', versao_grade.id)
+
+            ])
+        for grade_line in grade_line_ids:
+            if grade_line.periodo == 0:
+                
+                periodo = 1
+            else:
+                periodo = grade_line.periodo
+        return periodo
+
+
     def _get_notas_periodo(self, periodo):
         '''
         Retorna as notas de um periodo
@@ -315,12 +335,22 @@ class GeracadCursoMatricula(models.Model):
                 ('state','not in', ['cancelada'])
                 ])
         else:
-            nota_disciplina_ids = self.env['geracad.curso.nota.disciplina.historico.final'].search([('curso_matricula_id', '=', self.id)])
+            nota_disciplina_ids = self.env['geracad.curso.nota.disciplina.historico.final'].search([
+                ('curso_matricula_id', '=', self.id)])
 
         nota_disciplina_ids_periodo = []
         for nota_disciplina_id in nota_disciplina_ids:
-            _logger.debug(nota_disciplina_id)
-            if nota_disciplina_id.periodo == int(periodo):
+            _logger.debug(nota_disciplina_id.disciplina_id.name)
+            _logger.debug("PERIODO")
+            _logger.debug(nota_disciplina_id.periodo)
+            if nota_disciplina_id.periodo == 0:
+                if nota_disciplina_id.turma_disciplina_id.periodo == 0:
+                    periodo_nota = self._pega_periodo_disciplina_sem_periodo(nota_disciplina_id.disciplina_id)
+                else:
+                    periodo_nota = nota_disciplina_id.turma_disciplina_id.periodo
+            else:
+                periodo_nota = nota_disciplina_id.periodo
+            if periodo_nota == int(periodo):
                 nota_disciplina_ids_periodo.append(nota_disciplina_id)
     
 
@@ -328,7 +358,7 @@ class GeracadCursoMatricula(models.Model):
         return nota_disciplina_ids_periodo
 
     def _tem_notas_periodo(self,periodo):
-        count_disciplinas = self.env['geracad.curso.nota.disciplina'].search([('curso_matricula_id', '=', self.id),('periodo', '=', periodo)], count=True)
+        count_disciplinas = len(self._get_notas_periodo(periodo))
         return count_disciplinas
     
     # def _get_portal_return_action(self):

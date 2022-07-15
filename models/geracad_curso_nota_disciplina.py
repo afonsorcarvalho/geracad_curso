@@ -161,13 +161,15 @@ class GeracadCursoNotaDisciplina(models.Model):
     def _disciplina_periodo_procura_matricula_grade(self):
         disciplina_id = self.turma_disciplina_id.disciplina_id
         grade_version_id = self.curso_matricula_id.curso_grade_version
+        periodo = 1
         grade_lines = self.env['geracad.curso.grade'].search([
             '&',
             ('curso_grade_version','=',grade_version_id),
             ('disciplina_id','=',disciplina_id)
             ])
         for grade in grade_lines:
-            return grade.periodo
+            if grade.periodo != 0:
+                periodo = grade.periodo
         return 1
         
         
@@ -178,7 +180,7 @@ class GeracadCursoNotaDisciplina(models.Model):
         for record in self:
             if record.turma_disciplina_id.disciplina_id.e_estagio:
                 record.periodo = 0
-            if self.turma_disciplina_id.periodo:
+            if self.turma_disciplina_id.periodo == 0:
                 record.periodo = self.turma_disciplina_id.periodo
             else:
                 record.periodo = record._disciplina_periodo_procura_matricula_grade()

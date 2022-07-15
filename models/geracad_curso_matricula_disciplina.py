@@ -156,6 +156,7 @@ class GeracadCursoMatriculaDisciplina(models.Model):
                  "company_id": result.company_id.id,
                  "disciplina_matricula_id": result.id,
                  "turma_disciplina_id": result.turma_disciplina_id.id
+                
 
              }
              )
