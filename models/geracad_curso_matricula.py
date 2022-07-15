@@ -310,7 +310,7 @@ class GeracadCursoMatricula(models.Model):
             recebe uma discplina e retorna o periodo dela
         '''
         periodo = 0
-        versao_grade = self.curso_id.curso_grade_version
+        versao_grade = self.curso_grade_version
         grade_line_ids = self.env['geracad.curso.grade'].search([
             ('disciplina_id','=',disciplina_id.id),
             ('version_grade_id','=', versao_grade.id)
