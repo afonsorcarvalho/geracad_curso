@@ -41,7 +41,7 @@
           <field name="curso_matricula_id" />
        
           <field name="turma_disciplina_id" />
-          <field name="aluno_id" readonly="1" />
+          <field name="aluno_id"  />
           <field name="data_matricula" />
        
           <field name="company_id" groups="base.group_multi_company"/>
@@ -135,7 +135,8 @@
                    options="{'no_create': True}" 
                    domain="[('state', '=', 'inscrito')]"
                    />
-                  <field name="aluno_id" attrs="{'readonly' : [('state','!=', 'draft')]  }" />
+                  
+                  <field name="aluno_id" readonly="1" />
                   <field name="curso_nome" />
                   <field name="turma_disciplina_id"  options="{'no_create': True}" attrs="{'readonly' : [('state','!=', 'draft')]  }"
                   domain="[('state', '=', 'aberta')]"

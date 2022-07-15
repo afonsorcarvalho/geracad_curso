@@ -489,6 +489,7 @@
     <!-- SUBMENU DISCIPLINAS -->
     <menuitem name="Turmas" id="geracad_curso.menu_disciplinas_turma" sequence="1" parent="geracad_curso.menu_root_disciplinas" />
     <menuitem name="Matrículas" id="geracad_curso.menu_disciplinas_matriculas" sequence="1" parent="geracad_curso.menu_root_disciplinas" />
+    <menuitem name="Aproveitamentos" id="geracad_curso.menu_nota_disciplinas_aproveitamento" sequence="1" parent="geracad_curso.menu_root_disciplinas" />
 
     <!-- SUBMENU DISCIPLINAS/TURMAS  -->
     <menuitem name="Visualizar Turmas" id="geracad_curso.menu_disciplinas_turmas_visualizar" sequence="1" parent="geracad_curso.menu_disciplinas_turma"  action="geracad_curso_turma_disciplina_action_window" />
@@ -496,6 +497,9 @@
     <!-- SUBMENU DISCIPLINAS/MATRICULAS  -->
     <menuitem name="Visualizar Matrículas" id="geracad_curso.menu_disciplinas_matriculas_visualizar" sequence="1" parent="geracad_curso.menu_disciplinas_matriculas"  action="geracad_curso_matricula_disciplina_action_window" />
     <menuitem name="Matricular em Turma" id="geracad_curso.menu_disciplinas_matriculas_matricular" sequence="1" parent="geracad_curso.menu_disciplinas_matriculas"  action="geracad_curso_create_matricula_disciplina_action_window" />
+    <!-- SUBMENU DISCIPLINAS/APROVEITAMENTOS  -->
+    <menuitem name="Visualizar Aproveitamentos" id="geracad_curso.menu_disciplinas_aproveitamentos_visualizar" sequence="1" parent="geracad_curso.menu_nota_disciplinas_aproveitamento"  action="geracad_curso_nota_disciplina_aproveitamento_action_window" />
+    <menuitem name="Criar Aproveitamento" id="geracad_curso.menu_disciplinas_aproveitamentos_criar" sequence="1" parent="geracad_curso.menu_nota_disciplinas_aproveitamento"  action="create_geracad_curso_nota_disciplina_aproveitamento_action_window" />
 
     <!-- SUBMENU ALUNOS -->
     <menuitem name="Visualizar Alunos" id="geracad_curso.menu_visualiza_aluno" sequence="1" parent="geracad_curso.menu_alunos" action="geracad_aluno.geracad_aluno_action_window" />
