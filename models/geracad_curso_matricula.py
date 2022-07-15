@@ -339,7 +339,9 @@ class GeracadCursoMatricula(models.Model):
                 ])
         else:
             nota_disciplina_ids = self.env['geracad.curso.nota.disciplina.historico.final'].search([
-                ('curso_matricula_id', '=', self.id)])
+                ('curso_matricula_id', '=', self.id),
+                ('disciplina_id.e_estagio','=', False)
+                ])
 
         nota_disciplina_ids_periodo = []
         for nota_disciplina_id in nota_disciplina_ids:
@@ -363,24 +365,23 @@ class GeracadCursoMatricula(models.Model):
     def _tem_notas_periodo(self,periodo):
         count_disciplinas = len(self._get_notas_periodo(periodo))
         return count_disciplinas
-        
-    def _get_nota_estagio(self):
-        return self.env['geracad.curso.nota.disciplina'].search([
+
+    def _get_nota_estagio(self, count = False):
+        if self.state != 'formado':
+            return self.env['geracad.curso.nota.disciplina'].search([
                 '&',
                 ('curso_matricula_id', '=', self.id),
                 '&',
                 ('state','not in', ['cancelada']),
                 ('disciplina_id.e_estagio','=', True)
-                ])
+                ], count = count)
+        return self.env['geracad.curso.nota.disciplina.historico.final'].search([
+                ('curso_matricula_id', '=', self.id),
+                ('disciplina_id.e_estagio','=', True)
+                ], count = count)
 
     def _tem_estagio(self):
-        return self.env['geracad.curso.nota.disciplina'].search([
-                '&',
-                ('curso_matricula_id', '=', self.id),
-                '&',
-                ('state','not in', ['cancelada']),
-                ('disciplina_id.e_estagio','=', True)
-                ], count=True)
+        return self._get_nota_estagio(True)
         
 
     # def _get_portal_return_action(self):
@@ -749,10 +750,7 @@ class GeracadCursoMatricula(models.Model):
             raise ValidationError('Por favor, insiria a Versão da Grade na matrícula')
         
         _logger.info("PROCURANDO TURMAS DISCIPLINAS SEM PERIODO")
-        self.env['geracad.curso.nota.disciplina'].search([
-            ('id','=',self.id)
-            ('periodo','=',0)
-            ])
+        
         dummy, act_id = self.env["ir.model.data"].sudo().get_object_reference(
             "geracad_curso", "action_geracad_curso_gerar_historico_final"
         )
