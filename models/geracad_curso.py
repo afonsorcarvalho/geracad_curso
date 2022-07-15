@@ -234,6 +234,8 @@ class GeracadCursoDisciplina(models.Model):
         string="Grades Pertencentes",
         inverse_name = "disciplina_id",
     )
+
+    e_estagio = fields.Boolean("É estágio", default=0)
  
   
     

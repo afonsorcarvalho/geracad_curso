@@ -157,12 +157,31 @@ class GeracadCursoNotaDisciplina(models.Model):
         
     )
     gerado_historico_final = fields.Boolean("Histórico final?")
+    
+    def _disciplina_periodo_procura_matricula_grade(self):
+        disciplina_id = self.turma_disciplina_id.disciplina_id
+        grade_version_id = self.curso_matricula_id.curso_grade_version
+        grade_lines = self.env['geracad.curso.grade'].search([
+            '&',
+            ('curso_grade_version','=',grade_version_id),
+            ('disciplina_id','=',disciplina_id)
+            ])
+        for grade in grade_lines:
+            return grade.periodo
+        return 1
+        
+        
    
     #@api.depends('disciplina_matricula_id','curso_matricula_id')
     def _compute_periodo(self):
+        
         for record in self:
-            
-            record.periodo = self.turma_disciplina_id.periodo
+            if record.turma_disciplina_id.disciplina_id.e_estagio:
+                record.periodo = 0
+            if self.turma_disciplina_id.periodo:
+                record.periodo = self.turma_disciplina_id.periodo
+            else:
+                record.periodo = record._disciplina_periodo_procura_matricula_grade()
 
     
     nota_1 = fields.Float(group_operator="avg", tracking=True)

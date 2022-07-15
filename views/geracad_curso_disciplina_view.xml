@@ -13,6 +13,7 @@
           <field name="display_name" string="Nome" />
           <field name="metodologia" optional="show"/>
           <field name="carga_horaria" optional="show"/>
+          <field name="e_estagio" optional="show"/>
           <field name="ementa" optional="hide"/>
      
      
@@ -30,14 +31,18 @@
             <sheet>
               <group>
                 <group>
-                  <field name="id" optional="show"/>
+                  <field name="id" optional="hide"/>
                   <field name="codigo" optional="show"/>
                
                   <field name="name" string="Nome" />
                   
-                  <field name="metodologia" widget="selection" optional="show"/>
-                  <field name="carga_horaria" optional="show"/>
                  
+                 
+                </group>
+                <group>
+                   <field name="metodologia" widget="selection" optional="show"/>
+                  <field name="carga_horaria" optional="show"/>
+                  <field name="e_estagio" widget="boolean_toggle"/>
                 </group>
               
                  

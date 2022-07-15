@@ -695,7 +695,12 @@ class GeracadCursoMatricula(models.Model):
         _logger.info("Gerando Histórico final")
         if not self.curso_grade_version:
             raise ValidationError('Por favor, insiria a Versão da Grade na matrícula')
-
+        
+        _logger.info("PROCURANDO TURMAS DISCIPLINAS SEM PERIODO")
+        self.env['geracad.curso.nota.disciplina'].search([
+            ('id','=',self.id)
+            ('periodo','=',0)
+            ])
         dummy, act_id = self.env["ir.model.data"].sudo().get_object_reference(
             "geracad_curso", "action_geracad_curso_gerar_historico_final"
         )
