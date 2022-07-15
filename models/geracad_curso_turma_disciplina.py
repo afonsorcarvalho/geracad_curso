@@ -448,6 +448,11 @@ class GeracadCursoTurmDisciplina(models.Model):
             else:
                 periodo = 1
             
+            _logger.info("CARGA HORARIA")
+            _logger.info(rec.disciplina_id.carga_horaria)
+            _logger.info("PERIODO")
+            _logger.info(periodo)
+            
             result = rec.write({
                 'carga_horaria': rec.disciplina_id.carga_horaria,
                 'periodo': periodo
