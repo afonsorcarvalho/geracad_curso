@@ -426,6 +426,27 @@ class GeracadCursoTurmDisciplina(models.Model):
         resultado_string ="{:02d}"
         return resultado_string.format(number_sequencial)
     
+    
+    def action_corrige_periodo_CH(self):    
+        '''
+            Corrige erro no banco de dados antigo
+            Coloca periodo e carga_horaria da turma de discicplina
+            chamado com acoes agendadas
+        '''
+        _logger.info("Corrigindo periodo e CH de turma disciplinas")
+        res = self.env["geracad.curso.turma.disciplina"].search([('curso_turma_id.name','=','XX22301')])
+        
+        
+        for rec in res:
+            _logger.info(rec.name)
+            rec.carga_horaria = rec.disciplina_id.carga_horaria
+            grade_rec = self.env["geracad.curso.grade"].search([('disciplina_id','=', rec.disciplina_id.id)], limit=1)
+            if len(grade_rec) > 0:
+                _logger.info(grade_rec[0].versao_grade_id)
+                rec.periodo = grade_rec[0].periodo
+            else:
+                rec.periodo = 1
+    
     """
 
             BUTTON ACTIONS

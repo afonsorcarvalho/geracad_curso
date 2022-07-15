@@ -208,7 +208,7 @@ class GeracadCursoMatriculaDisciplina(models.Model):
         data_hoje = date.today()
         self.write({'data_conclusao' : data_hoje})
         
-  
+   
     
     """
 
