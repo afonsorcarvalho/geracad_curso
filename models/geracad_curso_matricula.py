@@ -490,6 +490,14 @@ class GeracadCursoMatricula(models.Model):
         records_ids = self.env["geracad.curso.nota.disciplina"].search([('situation', '=', 'AP')], offset=0, limit=None, order=None, count=False)
         records_ids._compute_media()
 
+    def action_ajeita_versao_grade_matricula_curso(self):
+        _logger.info("Mudando versao da grade na matricula")
+        res = self.env["geracad.curso.matricula"].search([])
+        for rec in res:
+            rec.onchange_curso_turma_id()
+        
+        
+
     def action_muda_unidade_matricula(self):
         _logger.info("Muda unidade da matricula")
         #procurando parauapebas
