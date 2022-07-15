@@ -1,0 +1,224 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="geracad_curso_nota_disciplina_aproveitamento_list">
+      <field name="name">cursos.nota.disciplina.aproveitamento.list</field>
+      <field name="model">geracad.curso.nota.disciplina.aproveitamento</field>
+      <field name="arch" type="xml">
+        <tree 
+         create="true"
+         delete="false"
+         edit="true"
+        
+       
+         
+         
+        
+         
+         >
+         <header>
+
+         </header>
+          <field name="instituicao"  />
+          <field name="nome_disciplina_aproveitada"  />
+          <field name="carga_horaria_aproveitada"  />
+          <field name="data_aproveitamento"  />
+          <field name="curso_matricula_codigo" readonly="1" optional="show" />
+          <field name="aluno_nome" readonly="1" optional="show" />
+          <field name="curso_turma_id" readonly="1" optional="hide" />
+          <field name="turma_disciplina_id"  readonly="1" optional="show"/>
+          <field name="disciplina_id"  readonly="1" optional="hide"/>
+          <field name="faltas" optional="show"/>
+          <field name="nota_1" optional="show"/>
+          <field name="nota_2" optional="show"/>
+          <field name="final" optional="show"/>
+          <field name="media"  readonly="1" optional="show"/>
+         
+          <field name="state" optional="hide"/>
+        </tree>
+   
+      </field>
+      
+      
+      
+    </record>
+    <record model="ir.ui.view" id="geracad_curso_nota_disciplina_aproveitamento_pivot">
+      <field name="name">cursos.nota.disciplina.aproveitamento.pivot</field>
+      <field name="model">geracad.curso.nota.disciplina.aproveitamento</field>
+      <field name="arch" type="xml">
+        <pivot>
+          <field name="disciplina_matricula_id"  />
+          <field name="turma_disciplina_id"  />
+          <field name="disciplina_id"  />
+          <field name="faltas" />
+          <field name="nota_1"/>
+          <field name="nota_2"/>
+          <field name="final"/>
+          <field name="media" />
+     
+          <field name="state" />
+        </pivot>
+    
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="geracad_curso_nota_disciplina_aproveitamento_form_view">
+      <field name="name">geracad.curso.nota.disciplina.aproveitamento.form</field>
+      <field name="model">geracad.curso.nota.disciplina.aproveitamento</field>
+      <field name="arch" type="xml">
+          <form string="Notas" 
+          delete="false"
+          create="false"
+          duplicate="false"
+    
+          class="oe_edit_only"
+          
+          
+          >
+          
+          
+          <header>
+          
+          <button name="action_lancar_nota" states="inscrito,draft" confirm="Despois de lançada, a nota não poderá mais ser alterada!" string="Lançar Nota" type="object" class="oe_highlight"/>
+          
+           <field name="state" widget="statusbar" />
+          
+          </header>
+            <sheet> 
+              <widget name="web_ribbon" title="Lançada" attrs="{'invisible': [('state', '!=', 'concluida')]}"/>
+            
+              <group>
+               
+                <group string="Dados do Aproveitamento">
+                  
+                <field name="curso_matricula_id" required="1" />
+                  <field name="disciplina_matricula_id" 
+                  readonly="1" invisible="1"
+                  />
+                  <field name="disciplina_id"  
+                  required="1"
+                  />
+                  
+                  <field name="turma_disciplina_id"  readonly="1"/>
+                  <field name="instituicao"  />
+                  <field name="nome_disciplina_aproveitada"  />
+                  <field name="carga_horaria_aproveitada" string="Carga Horária"
+                  required="1"
+                    />
+                  <field name="data_aproveitamento"  
+                  required="1"
+                  />
+                  
+                
+                
+               
+                  
+                </group>
+                <group string="Notas">
+                  <field name="faltas" attrs="{'readonly': [('state','in',('concluida'))]}"/>
+                  <field name="nota_1" attrs="{'readonly': [('state','in',('concluida'))]}"/>
+                  <field name="nota_2" attrs="{'readonly': [('state','in',('concluida'))]}"/>
+                  <field name="final" attrs="{'readonly': [('state','in',('concluida'))]}"/>
+                  <field name="media"  />
+                </group>
+              </group>       
+              
+            </sheet>
+            <div class="oe_chatter">
+              <field name="message_follower_ids" widget="mail_followers"/>
+              <field name="message_ids" widget="mail_thread"/>
+          </div>
+          </form>
+      </field>
+    </record>
+
+
+    <record id="geracad_curso_nota_disciplina_aproveitamento_search" model="ir.ui.view">
+      <field name="name">geracad.curso.nota.disciplina.aproveitamento.search</field>
+      <field name="model">geracad.curso.nota.disciplina.aproveitamento</field>
+      <field name="arch" type="xml">
+        <search string="Procura Nota">
+          <field name="curso_matricula_id"  />
+          <field name="aluno_nome"  />
+         
+          <field name="turma_disciplina_id"  />
+     
+          <field name="disciplina_id"  />
+          <field name="curso_turma_id"  />
+
+          <filter name="filter_data_aproveitamento" date="data_aproveitamento" 
+              string="Data do Aproveitamento" default_period="this_week" />
+          
+          <separator  />
+              
+         
+        
+          <filter name="groupby_turma_disciplina" string="Turma de Disciplina" context="{'group_by' : 'turma_disciplina_id'}"></filter>
+          <filter name="groupby_disciplina_id" string="Disciplina" context="{'group_by' : 'disciplina_id'}"></filter>
+          <filter name="groupby_curso_matricula_id" string="Matrícula" context="{'group_by' : 'curso_matricula_id'}"></filter>
+        
+          
+        
+
+     
+
+      </search>
+      
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="geracad_curso_nota_disciplina_aproveitamento_action_window">
+      <field name="name">Nota Disciplina Aproveitamento</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">geracad.curso.nota.disciplina.aproveitamento</field>
+      <field name="view_mode">tree,form,pivot</field>
+   
+      <field name="search_view_id" ref="geracad_curso_nota_disciplina_aproveitamento_search"/>
+    
+      <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+          Crie um novo Nota de aproveitamento de Disciplina
+        </p>
+      </field>
+    </record>
+    <record model="ir.actions.act_window" id="create_geracad_curso_nota_disciplina_aproveitamento_action_window">
+      <field name="name">Criar Nota Disciplina Aproveitamento</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">geracad.curso.nota.disciplina.aproveitamento</field>
+      <field name="view_mode">form</field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record id="action_geracad_curso_nota_disciplina_aproveitamento_form_view" model="ir.actions.act_window.view">
+      <field eval="11" name="sequence"/>
+      <field name="view_mode">form</field>
+      <field name="view_id" ref="geracad_curso_nota_disciplina_aproveitamento_form_view"/>
+    
+      <field name="act_window_id" ref="geracad_curso_nota_disciplina_aproveitamento_action_window"/>
+      
+    </record>
+    <record id="action_geracad_cursos_nota_disciplina_aproveitamento_tree_view" model="ir.actions.act_window.view">
+      <field eval="10" name="sequence"/>
+      <field name="view_mode">tree</field>
+      <field name="view_id" ref="geracad_curso_nota_disciplina_aproveitamento_list"/>
+      <field name="act_window_id" ref="geracad_curso_nota_disciplina_aproveitamento_action_window"/>
+    </record>
+
+    
+
+    <!-- menu categories -->
+
+    <!-- <menuitem name="Grade" id="geracad_curso.menu_grade_1" parent="geracad_curso.menu_root"/>
+    <menuitem name="grade 2" id="geracad_curso.menu_grade_2" parent="geracad_curso.menu_root"/> -->
+
+    <!-- actions -->
+
+   
+    <!-- <menuitem name="Em Disciplina" id="geracad_curso.menu_grade_2_list" parent="geracad_curso.configuracao"
+              action="geracad_curso_grade_action_window"/> -->
+    <!-- <menuitem name="Server to list" id="geracad_aluno" parent="geracad_aluno.menu_2"
+              action="geracad_aluno.action_server"/> -->
+
+  </data>
+</odoo>
