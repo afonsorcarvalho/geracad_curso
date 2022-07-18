@@ -173,7 +173,8 @@ class GeracadCursoNotaDisciplinaAproveitamento(models.Model):
                 'data_encerramento': rec.data_aproveitamento,
                 'professor_id': rec.professor_id.id,
                 'vagas': 1,
-                'state' : 'encerrada',
+                
+                
                 'carga_horaria': rec.carga_horaria_aproveitada,
                 'e_aproveitamento': True,               
             })
@@ -194,6 +195,7 @@ class GeracadCursoNotaDisciplinaAproveitamento(models.Model):
                         'media': rec.media,
                         'situation': 'EA',
                     })
+            turma_disciplina_id.action_encerrar_turma_disciplina()
     """
 
             BUTTON ACTIONS
