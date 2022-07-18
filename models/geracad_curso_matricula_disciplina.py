@@ -62,6 +62,7 @@ class GeracadCursoMatriculaDisciplina(models.Model):
     
 
     e_pendencia = fields.Boolean("É pendencia", default=False, tracking=True)
+    e_aproveitamento = fields.Boolean("É aproveitamento", default=False, tracking=True)
 
   
 

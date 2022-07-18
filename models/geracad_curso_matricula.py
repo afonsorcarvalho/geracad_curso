@@ -590,7 +590,8 @@ class GeracadCursoMatricula(models.Model):
         for matricula_disciplina in self.matriculas_disciplina_ids:
             _logger.info(matricula_disciplina.name)
 
-            for nota in matricula_disciplina.turma_disciplina_id.notas:
+            nota_ids = self.env["geracad.curso.nota.disciplina"].search([('disciplina_matricula_id','=',matricula_disciplina.id)])
+            for nota in nota_ids:
                 if nota.situation == 'IN':
                     _logger.info("trancada")
                     nota.write({

@@ -220,6 +220,10 @@ class GeracadCursoTurmDisciplina(models.Model):
     
     #usado na impressão do diário
     def get_diario_date(self):
+        '''
+            Função que retorna uma string da data para impressão do diário
+            no formato: ex. São Luis-MA, 02 de agosto de 2022
+        '''
         locale = get_lang(self.env).code
 
         _logger.info(self.company_id.city_id.name + '-' + self.company_id.state_id.code)
@@ -228,6 +232,10 @@ class GeracadCursoTurmDisciplina(models.Model):
 
     #usado na impressão da ata
     def get_ano_semestre(self,tipo):
+        '''
+            Função que retorna uma string  do ano ou do semestre da
+            turma disciplina
+        '''
         if tipo == "semestre":
             if(self.data_abertura.month > 6):
                 return '2º'
@@ -392,9 +400,6 @@ class GeracadCursoTurmDisciplina(models.Model):
         date_now = date.today()
         _logger.info("Ano ")
         _logger.info(date_now.strftime("%y"))
-
-        company = self.env['res.company'].search([('id', '=', vals['company_id'])])
-        _logger.info(company.name)
         disciplina = self.env['geracad.curso.disciplina'].search([('id', '=', vals['disciplina_id'] )])
         _logger.info(disciplina.name)
         

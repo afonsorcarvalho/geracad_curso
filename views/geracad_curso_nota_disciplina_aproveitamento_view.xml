@@ -28,6 +28,7 @@
           <field name="aluno_nome" readonly="1" optional="show" />
           <field name="curso_turma_id" readonly="1" optional="hide" />
           <field name="turma_disciplina_id"  readonly="1" optional="show"/>
+          <field name="professor_id"   optional="hide"/>
           <field name="disciplina_id"  readonly="1" optional="hide"/>
           <field name="faltas" optional="show"/>
           <field name="nota_1" optional="show"/>
@@ -100,6 +101,7 @@
                   required="1"
                   />
                   
+                  <field name="professor_id"  />
                   <field name="turma_disciplina_id"  readonly="1"/>
                   <field name="instituicao"  />
                   <field name="nome_disciplina_aproveitada"  />

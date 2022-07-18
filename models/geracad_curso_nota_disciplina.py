@@ -176,14 +176,24 @@ class GeracadCursoNotaDisciplina(models.Model):
    
     #@api.depends('disciplina_matricula_id','curso_matricula_id')
     def _compute_periodo(self):
+        '''
+            Calcula periodo da nota
+            - Caso seja Estágio a disciplina o periodo é zero
+            - Caso seja outra disciplina
+            - E o período da turma da disciplina seja diferente de zero, o periodo da nota
+                é igual ao da turma da disciplina
+            - Caso nenhum dos anteriores cacula pela grade da matrícula do aluno
+
+        '''
         
         for record in self:
             if record.turma_disciplina_id.disciplina_id.e_estagio:
                 record.periodo = 0
-            if self.turma_disciplina_id.periodo == 0:
-                record.periodo = self.turma_disciplina_id.periodo
             else:
-                record.periodo = record._disciplina_periodo_procura_matricula_grade()
+                if self.turma_disciplina_id.periodo != 0:
+                    record.periodo = self.turma_disciplina_id.periodo
+                else:
+                    record.periodo = record._disciplina_periodo_procura_matricula_grade()
 
     
     nota_1 = fields.Float(group_operator="avg", tracking=True)
@@ -233,8 +243,8 @@ class GeracadCursoNotaDisciplina(models.Model):
     @api.constrains('faltas')
     def _check_faltas(self):  
         for record in self:
-            if record.faltas < 0 or record.faltas > record.turma_disciplina_id.carga_horaria:
-                raise ValidationError("As faltas devem estar entre 0 e " + str(record.turma_disciplina_id.carga_horaria) )
+            if record.faltas < 0 :
+                raise ValidationError("As faltas não devem ser menor que 0" )
     
     @api.constrains('nota_1')
     def _check_nota_1(self):  

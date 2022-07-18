@@ -45,11 +45,12 @@ class GeracadCursoNotaDisciplinaAproveitamento(models.Model):
         store=True
         
         )
+    
 
     disciplina_matricula_id = fields.Many2one(
         'geracad.curso.matricula.disciplina',
         string='Matricula Disciplina',
-        required=True
+       
         )
     turma_disciplina_id = fields.Many2one(
         "geracad.curso.turma.disciplina",
@@ -58,6 +59,12 @@ class GeracadCursoNotaDisciplinaAproveitamento(models.Model):
         related='disciplina_matricula_id.turma_disciplina_id',
         readonly=True,
         store=True,
+        )
+    professor_id =  fields.Many2one(
+        'res.partner',
+        string='Professor',
+        required=True,
+        domain=[('e_professor','=', True)]
         )
     instituicao = fields.Char("Instituição", required=True)
     nome_disciplina_aproveitada = fields.Char("Disciplina Aproveitada", required=True)
@@ -119,8 +126,8 @@ class GeracadCursoNotaDisciplinaAproveitamento(models.Model):
     @api.constrains('faltas')
     def _check_faltas(self):  
         for record in self:
-            if record.faltas < 0 or record.faltas > record.turma_disciplina_id.carga_horaria:
-                raise ValidationError("As faltas devem estar entre 0 e " + str(record.turma_disciplina_id.carga_horaria) )
+            if record.faltas < 0: 
+                raise ValidationError("As faltas devem ser maio que 0 "  )
     
     @api.constrains('nota_1')
     def _check_nota_1(self):  
@@ -154,7 +161,39 @@ class GeracadCursoNotaDisciplinaAproveitamento(models.Model):
         return media
         
 
-    
+    def _create_matricula_turma_disciplina(self):
+        for rec in self:
+            turma_disciplina_id = self.env["geracad.curso.turma.disciplina"].create({
+                'curso_turma_id': rec.curso_matricula_id.curso_turma_id.id,
+                'disciplina_id': rec.disciplina_id.id,
+                'data_abertura': rec.data_aproveitamento,
+                'data_inicio': rec.data_aproveitamento,
+                'data_termino': rec.data_aproveitamento,
+                'data_previsao_termino': rec.data_aproveitamento,
+                'data_encerramento': rec.data_aproveitamento,
+                'professor_id': rec.professor_id.id,
+                'vagas': 1,
+                'state' : 'encerrada',
+                'carga_horaria': rec.carga_horaria_aproveitada,
+                'e_aproveitamento': True,               
+            })
+
+            if turma_disciplina_id:
+                rec.write({ 'turma_disciplina_id' : turma_disciplina_id.id})
+                matricula_disciplina_id = self.env["geracad.curso.matricula.disciplina"].create({
+                    'curso_matricula_id': rec.curso_matricula_id.id,
+                    'turma_disciplina_id': turma_disciplina_id.id,
+                    'e_aproveitamento': True,
+                })
+                if matricula_disciplina_id:
+                    nota = self.env["geracad.curso.nota.disciplina"].search([('disciplina_matricula_id','=',matricula_disciplina_id.id)])
+                    nota.write({
+                        'faltas': rec.faltas,
+                        'nota_1': rec.nota_1,
+                        'nota_2': rec.nota_2,
+                        'media': rec.media,
+                        'situation': 'EA',
+                    })
     """
 
             BUTTON ACTIONS
@@ -163,6 +202,9 @@ class GeracadCursoNotaDisciplinaAproveitamento(models.Model):
     
     def action_lancar_nota(self):    
         _logger.debug("Nota Lançada")
+        self._create_matricula_turma_disciplina()
+        
+
         self.write({
             'state': 'concluida'
         })
