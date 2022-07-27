@@ -19,45 +19,36 @@
 <template id="portal_my_home_geracad_display_none" name="Portal layout : cursos menu entries" inherit_id="portal.portal_my_home" priority="19">
     <xpath expr="//div[hasclass('o_portal_docs')]" position="attributes">
         <attribute name="style">display:none</attribute>
-        
-        <!-- <t t-call="portal.portal_docs_entry">
-            <t t-set="title">Matriculas</t>
-            <t t-set="url" t-value="'/my/quotes'"/>
-            <t t-set="placeholder_count" t-value="'quotation_count'"/> 
-        </t> -->
     </xpath>
 </template>
+
 <!--  APAGANDO O EDITAR DO DETALHE DO PORTAL -->
 <template id="portal_my_home_geracad_details_none" name="Portal layout : apagar details" inherit_id="portal.portal_layout" priority="19">
     <xpath expr="//div[hasclass('o_portal_my_details')]/h4/a" position="attributes">
         <attribute name="style">display:none</attribute>
-        
-        <!-- <t t-call="portal.portal_docs_entry">
-            <t t-set="title">Matriculas</t>
-            <t t-set="url" t-value="'/my/quotes'"/>
-            <t t-set="placeholder_count" t-value="'quotation_count'"/> 
-        </t> -->
     </xpath>
 </template>
-
-
 
 <!--  ADICIONANDO NOVO MENU DO MÓDULO GERACAD -->
 <template id="portal_my_home_geracad" name="Portal layout : cursos menu entries" inherit_id="portal.portal_my_home" priority="19">
     <xpath expr="//div[hasclass('o_portal_docs_geracad')]" position="inside">
        
-        
         <t t-call="portal.portal_docs_entry">
             <t t-set="title">Matriculas</t>
             <t t-set="url" t-value="'/my/matriculas'"/>
             <t t-set="placeholder_count" t-value="'matriculas_count'"/>  
         </t> 
+        <t t-call="portal.portal_docs_entry">
+            <t t-set="title">Pagamentos</t>
+            <t t-set="url" t-value="'/my/pagamentos'"/>
+            <t t-set="placeholder_count" t-value="'parcelas_count'"/>  
+        </t> 
     </xpath>
 </template>
+
 <!--  Apagando promotion do odoo do portal -->
 <template id="brand_promotion_geracad" name="Brand Promotion : apagando promotion" inherit_id="web.brand_promotion" priority="19">
     <xpath expr="//div[hasclass('o_brand_promotion')]" position="replace">
-       
         
     </xpath>
 </template>

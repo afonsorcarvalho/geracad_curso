@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+
+
+
+
+<!-- 
+        MENUS MY HOME
+
+-->
     <template id="portal_my_home_menu_matricula" name="Portal layout : matricula menu entries" inherit_id="portal.portal_breadcrumbs" priority="19">
         <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
       
@@ -14,6 +22,26 @@
             </li>
         </xpath>
     </template>
+    <template id="portal_my_home_menu_parcelas" name="Portal layout : parcelas menu entries" inherit_id="portal.portal_breadcrumbs" priority="19">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+      
+            <li t-if="page_name == 'parcela'" t-attf-class="breadcrumb-item #{'active ' if not parcela else ''}">
+                <a t-if="parcela" t-attf-href="/my/pagamentos?{{ keep_query() }}">Pagamentos</a>
+                <t t-else="">Pagamentos</t>
+                
+            </li>
+            <li t-if="parcela" class="breadcrumb-item active">
+                <t t-esc="parcela.name" t-if="parcela.name != '/'"/>
+                <t t-else=""><em>Pagamentos</em></t>
+            </li>
+        </xpath>
+    </template>
+
+
+<!-- 
+        PORTAL MY MATRICULAS
+
+-->
 
     <template id="portal_my_matriculas" name="Minhas Matriculas">
         <t t-call="portal.portal_layout">
@@ -135,6 +163,7 @@
 
 
     </template>
+
     <template id="matricula_portal_content" name="Matricula Portal Content">
         <!-- Intro -->
         <div id="introduction" t-attf-class="pb-2 pt-3 #{'card-header bg-white' if report_type == 'html' else ''}">
@@ -145,4 +174,149 @@
         </div>
 
     </template>
+
+
+    <!-- 
+        PORTAL MY PAGAMENTOS
+
+-->
+
+<template id="portal_my_pagamentos" name="Meus Pagamentos">
+    <t t-call="portal.portal_layout">
+        <t t-set="breadcrumbs_searchbar" t-value="True" />
+
+        <t t-call="portal.portal_searchbar">
+            <t t-set="title">Pagamentos</t>
+        </t>
+        <t t-if="not parcelas">
+            <p>Nenhum pagamentos encontrado.</p>
+        </t>
+        <t t-if="parcelas" t-call="portal.portal_table">
+            <thead>
+                <tr class="active">
+                    <th>Parcela #</th>
+                    <th class="text-center">Data de Vencimento</th>
+                    <th class="text-center">Data de pagamento</th>
+                    
+                    <th class="text-right">Status</th>
+                </tr>
+            </thead>
+            <t t-foreach="parcelas" t-as="parcela">
+                <tr>
+                    <td>
+                        <a t-att-href="parcela.get_portal_url()">
+                            <t t-esc="parcela.name" />
+                        </a>
+                    </td>
+
+                    <td class="text-center">
+                        <span t-field="parcela.data_vencimento" />
+                    </td>
+                    <td class="text-center">
+                        <span t-field="parcela.data_pagamento" />
+                    </td>
+                  
+                    <td class="text-right">
+                        <t t-if="not parcela.esta_pago">
+                        <span  class="badge badge-pill badge-danger">
+                            <i class="fa fa-fw fa-times-circle" />
+                            <span>Em Aberto</span>
+                        </span>
+                         </t>
+                        <t t-if="parcela.esta_pago">
+                        
+                            <span  class="badge badge-pill badge-success">
+                                <i class="fa fa-fw fa-check" />
+                                <span >Pago</span>
+                            </span>
+                        </t>
+                    </td>
+                    
+                </tr>
+            </t>
+        </t>
+    </t>
+</template>
+
+<template id="matricula_portal_template" name="Matricula Portal Template" inherit_id="portal.portal_sidebar" primary="True">
+    <xpath expr="//div[hasclass('o_portal_sidebar')]" position="inside">
+        <div class="row mt16 o_portal_invoice_sidebar">
+            <!-- Sidebar -->
+            <t t-call="portal.portal_record_sidebar">
+                <t t-set="classes" t-value="'col-lg-auto d-print-none'"/>
+                <t t-set="title">
+                    <h2 class="mb-0">
+                        <span t-field="matricula.name" />
+                    </h2>
+                    <div class="small" ><i class="fa fa-user-circle-o"/><span class="ml4" t-field="matricula.aluno_id.name"/></div>
+                </t>
+
+                <t t-set="entries">
+                    <ul class="list-group list-group-flush flex-wrap flex-row flex-lg-column">
+                        <li class="list-group-item flex-grow-1">
+                            <div class="o_download_pdf btn-toolbar flex-sm-nowrap">
+                                <div class="btn-group  flex-grow-1 mr-1 mb-1">
+                                    <a class="btn btn-secondary btn-block o_download_btn" t-att-href="matricula.get_portal_url(report_type='pdf', download=True)" title="Download"><i class="fa fa-download"/> Download</a>
+                                </div>
+                                <div class="btn-group flex-grow-1 mb-1">
+                                    <a class="btn btn-secondary btn-block o_print_btn o_portal_invoice_print" t-att-href="matricula.get_portal_url(report_type='pdf')" id="print_invoice_report" title="Print" target="_blank"><i class="fa fa-print"/> Print</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li t-if="matricula.aluno_id" class="list-group-item flex-grow-1">
+                            <div class="small mb-1"><strong class="text-muted">
+                               Usuário
+                            </strong></div>
+                            <div class="row">
+                                <div class="col flex-grow-0 pr-2">
+                                    <img t-if="matricula.aluno_id.image_1024" class="rounded-circle mt-1 o_portal_contact_img" t-att-src="image_data_uri(matricula.aluno_id.image_1024)" alt="Contact"/>
+                                    <img t-else="" class="rounded-circle mt-1 o_portal_contact_img" src="/web/static/src/img/user_menu_avatar.png" alt="Contact"/>
+                                </div>
+                                <div class="col pl-0">
+                                    <span t-field="matricula.aluno_id" t-options='{"widget": "contact", "fields": ["name", "phone"], "no_marker": True}'/>
+                                    <a href="#discussion" class="small"><i class="fa fa-fw fa-comments"/><b>Enviar Mensagem</b></a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </t>
+            </t>
+
+            <!-- Page Content -->
+            <div id="matricula_content" class="col-12 col-lg">
+                <t t-if="error or warning" t-call="matricula.portal_invoice_error"/>
+                <t t-if="success and (not error and not warning)" t-call="matricula.portal_invoice_success"/>
+
+                <div class="o_portal_html_view shadow p-3">
+                    <div class="o_portal_html_loader text-center">
+                        <i class="fa fa-circle-o-notch fa-spin fa-2x fa-fw text-black-50"></i>
+                    </div>
+                    <iframe id="invoice_html" class="mt8 mb8" width="100%" height="100%" frameborder="0" scrolling="yes" t-att-src="matricula.get_portal_url(report_type='html')"/>
+                </div>
+                <!-- chatter -->
+                <div id="invoice_communication" class="mt-4">
+                    <h2>History</h2>
+                    <t t-call="portal.message_thread">
+                        <t t-set="object" t-value="matricula"/>
+                    </t>
+                </div>
+            </div>
+        </div>
+
+    </xpath>
+
+
+</template>
+
+<template id="matricula_portal_content" name="Matricula Portal Content">
+    <!-- Intro -->
+    <div id="introduction" t-attf-class="pb-2 pt-3 #{'card-header bg-white' if report_type == 'html' else ''}">
+        <h2 class="my-0">
+
+            <em t-esc="matricula.name" />
+        </h2>
+    </div>
+
+</template>
+
 </odoo>

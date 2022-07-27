@@ -19,7 +19,7 @@ class GeracadCursoFinanceiroParcelas(models.Model):
     _order = "id desc"
 
     
-    _inherit = ['mail.thread']
+    _inherit = ['portal.mixin','mail.thread']
     
 
 
