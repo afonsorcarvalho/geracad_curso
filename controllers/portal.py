@@ -153,7 +153,7 @@ class MatriculasPortal(CustomerPortal):
     # My Pagamentos
     # ------------------------------------------------------------
 
-    def _matricula_get_page_view_values(self, parcela, access_token, **kwargs):
+    def _pagamentos_get_page_view_values(self, parcela, access_token, **kwargs):
         values = {
             'page_name': 'Pagamentos',
             'parcela': parcela,
@@ -248,7 +248,7 @@ class MatriculasPortal(CustomerPortal):
 
         if report_type in ('html', 'pdf', 'text'):
             return self._show_report(model=parcela_sudo, report_type=report_type, report_ref='geracad_curso.action_historico_aluno_report', download=download)
-        values = self._matricula_get_page_view_values(parcela_sudo, access_token, **kw)
+        values = self._pagamentos_get_page_view_values(parcela_sudo, access_token, **kw)
      
         return request.render('geracad_curso.matricula_portal_template', values)
 
