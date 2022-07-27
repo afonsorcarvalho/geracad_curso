@@ -194,19 +194,28 @@
         <t t-if="parcelas" t-call="portal.portal_table">
             <thead>
                 <tr class="active">
-                    <th>Parcela #</th>
+                    <th>Matrícula </th>
+                    <th>Parcela</th>
                     <th class="text-center">Data de Vencimento</th>
                     <th class="text-center">Data de pagamento</th>
+                    <th class="text-center">Valor</th>
+                    <th class="text-center">Forma de pagamento</th>
                     
                     <th class="text-right">Status</th>
                 </tr>
             </thead>
             <t t-foreach="parcelas" t-as="parcela">
                 <tr>
+                    
                     <td>
-                        <a t-att-href="parcela.get_portal_url()">
-                            <t t-esc="parcela.name" />
-                        </a>
+                       
+                            <t t-esc="parcela.curso_matricula_id.name" />
+                        
+                    </td>
+                    <td>
+                       
+                            <t t-esc="parcela.numero_parcela" />
+                        
                     </td>
 
                     <td class="text-center">
@@ -214,6 +223,12 @@
                     </td>
                     <td class="text-center">
                         <span t-field="parcela.data_pagamento" />
+                    </td>
+                    <td class="text-center">
+                        <span t-field="parcela.valor" />
+                    </td>
+                    <td class="text-center">
+                        <span t-field="parcela.forma_de_pagamento" />
                     </td>
                   
                     <td class="text-right">
