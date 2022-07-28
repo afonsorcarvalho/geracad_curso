@@ -34,7 +34,7 @@
     <xpath expr="//div[hasclass('o_portal_docs_geracad')]" position="inside">
        
         <t t-call="portal.portal_docs_entry">
-            <t t-set="title">Matriculas</t>
+            <t t-set="title">Históricos</t>
             <t t-set="url" t-value="'/my/matriculas'"/>
             <t t-set="placeholder_count" t-value="'matriculas_count'"/>  
         </t> 
