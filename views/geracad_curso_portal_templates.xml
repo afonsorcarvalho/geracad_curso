@@ -12,8 +12,8 @@
         <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
       
             <li t-if="page_name == 'matricula'" t-attf-class="breadcrumb-item #{'active ' if not matricula else ''}">
-                <a t-if="matricula" t-attf-href="/my/matriculas?{{ keep_query() }}">Matrículas</a>
-                <t t-else="">Matrículas</t>
+                <a t-if="matricula" t-attf-href="/my/matriculas?{{ keep_query() }}">Históricos</a>
+                <t t-else="">Históricos</t>
                 
             </li>
             <li t-if="matricula" class="breadcrumb-item active">
@@ -48,7 +48,7 @@
             <t t-set="breadcrumbs_searchbar" t-value="True" />
 
             <t t-call="portal.portal_searchbar">
-                <t t-set="title">Matriculas</t>
+                <t t-set="title">Histórico</t>
             </t>
             <t t-if="not matriculas">
                 <p>There are currently no quotations for your account.</p>
