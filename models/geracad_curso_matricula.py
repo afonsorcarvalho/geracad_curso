@@ -146,6 +146,12 @@ class GeracadCursoMatricula(models.Model):
         readonly=True,
         store=True
     )
+    state_id = fields.Char( 
+        related='aluno_id.city',
+        string="Cidade",
+        readonly=True,
+        store=True
+    )
     aluno_mobile =  fields.Char(related='aluno_id.mobile',readonly=True) 
    
     data_matricula = fields.Date(
