@@ -148,7 +148,7 @@ class GeracadCursoMatricula(models.Model):
     )
     city = fields.Char( 
         related='aluno_id.city',
-        string="UF",
+        string="cidade",
         readonly=True,
         store=True
     )
