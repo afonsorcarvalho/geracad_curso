@@ -141,7 +141,7 @@ class GeracadCursoMatricula(models.Model):
         store=True
     )
     state_id = fields.Char( 
-        related='aluno_id.state_id.code',
+        related='aluno_id.state_id',
         string="UF",
         readonly=True,
         store=True
