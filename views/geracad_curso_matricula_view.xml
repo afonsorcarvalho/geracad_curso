@@ -15,6 +15,11 @@
 
 
           <field name="aluno_id" optional="show" />
+          <field name="nome_pai" optional="hide" />
+          <field name="nome_mae" optional="hide" />
+          <field name="data_nascimento" optional="hide" />
+          <field name="city" optional="hide" />
+          <field name="state_id" optional="hide" />
           <field name="aluno_mobile" string="Celular" optional="hide" />
           <field name="curso_turma_codigo" optional="show" />
           <field name="curso_nome" optional="show" />

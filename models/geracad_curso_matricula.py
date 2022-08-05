@@ -121,6 +121,31 @@ class GeracadCursoMatricula(models.Model):
         domain=[('e_aluno','=',True)]
         
         )  
+    nome_pai = fields.Char( 
+        related='aluno_id.nome_pai',
+        string="Nome do Pai",
+        readonly=True,
+        store=True
+    )
+    nome_mae = fields.Char( 
+        related='aluno_id.nome_mae',
+        string="Nome do mãe",
+        readonly=True,
+        store=True
+    )
+   
+    data_nascimento = fields.Date( 
+        related='aluno_id.data_nascimento',
+        string="Data Nascimento",
+        readonly=True,
+        store=True
+    )
+    state_id = fields.Many2one( 
+        related='aluno_id.state_id',
+        string="UF",
+        readonly=True,
+        store=True
+    )
     aluno_mobile =  fields.Char(related='aluno_id.mobile',readonly=True) 
    
     data_matricula = fields.Date(
