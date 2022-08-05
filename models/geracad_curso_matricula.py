@@ -140,8 +140,8 @@ class GeracadCursoMatricula(models.Model):
         readonly=True,
         store=True
     )
-    state_id = fields.Many2one( 
-        related='aluno_id.state_id',
+    state_id = fields.Char( 
+        related='aluno_id.state_id.name',
         string="UF",
         readonly=True,
         store=True
