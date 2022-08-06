@@ -769,6 +769,15 @@ class GeracadCursoMatricula(models.Model):
         _logger.info(disciplinas_faltantes)
         return {'disciplinas_faltantes':disciplinas_faltantes,'disciplinas_cursadas':disciplinas_cursadas}
 
+    #TODO
+    # fazer essa funcao de disciplina pendentes
+    # mostrando o um histórico do aluno com a grade curricular e o check box concluido
+    # e as disciplinas faltantes de cada periodo
+    # gerando um report
+    
+    def action_disciplinas_pendentes(self):
+        _logger.info("Action Disciplinas Pendentes")
+        disciplinas_pedentes_ids= self._get_disciplinas_analise_ids()
 
     def action_gera_historico_final(self):
         '''
