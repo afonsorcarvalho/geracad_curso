@@ -123,7 +123,7 @@
             <button type="object" name="action_gera_historico_final"  string="Gerar Histórico Final" 
             groups="geracad_curso.group_geracad_curso_finaceiro" attrs="{'invisible': [('state', 'not in', ['inscrito', 'draft'])]}"
              />
-            <button type="object" name="action_disciplinas_pendentes"  string="Disciplinas Pendentes" 
+            <button type="object" name="action_disciplinas_pendentes"  string="Imprimir Pendências" 
             attrs="{'invisible': [('state', 'not in', ['inscrito', 'draft'])]}"
              />
             <field name="state" widget="statusbar" />

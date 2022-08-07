@@ -815,6 +815,9 @@ class GeracadCursoMatricula(models.Model):
             Action que gera report de disciplinas pendentes
         '''
         _logger.info("Action Disciplinas Pendentes")
+        if not self.curso_grade_version:
+            raise ValidationError('Por favor, insiria a Versão da Grade na matrícula')
+        return self.env.ref("geracad_curso.action_historico_disciplinas_pendentes_aluno_report").report_action(self)
         # analise_disciplinas_ids= self._get_disciplinas_analise_ids()
         
         # disciplinas_pendentes = analise_disciplinas_ids['disciplinas_faltantes']
