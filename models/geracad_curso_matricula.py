@@ -396,6 +396,16 @@ class GeracadCursoMatricula(models.Model):
     def _tem_notas_periodo(self,periodo):
         count_disciplinas = len(self._get_notas_periodo(periodo))
         return count_disciplinas
+    
+    def _get_disciplinas_pendentes(self):
+        '''
+        Função usada na impressão de disciplinas pendentes do aluno
+        retorna uma lista de disciplinas pendentes com 
+        Código, Nome e Carga horária.
+        '''
+        _logger.info("Pegando disciplinas pendentes")
+
+   
 
     def _get_nota_estagio(self, count = False):
         if self.state != 'formado':
@@ -774,8 +784,11 @@ class GeracadCursoMatricula(models.Model):
     # mostrando o um histórico do aluno com a grade curricular e o check box concluido
     # e as disciplinas faltantes de cada periodo
     # gerando um report
-    
+
     def action_disciplinas_pendentes(self):
+        '''
+            Action que gera report de disciplinas pendentes
+        '''
         _logger.info("Action Disciplinas Pendentes")
         disciplinas_pedentes_ids= self._get_disciplinas_analise_ids()
 

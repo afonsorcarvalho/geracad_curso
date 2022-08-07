@@ -29,6 +29,21 @@
     <!-- <field name="paperformat_id" ref="report.paperformat_euro" /> --> 
     <field name="help">Histórico aluno</field>
 </record>
+<record id="action_historico_disciplinas_pendentes_aluno_report" model="ir.actions.report">
+    <field name="name">Disciplinas Pendentes Aluno</field>
+    <field name="model">geracad.curso.matricula</field>
+    <field name="report_type">qweb-html</field>
+    <field name="report_name">geracad_curso.view_historico_disciplinas_pendentes_aluno_template</field>
+    <field name="report_file">geracad_curso.view_historico_disciplinas_pendentes_aluno_template</field>
+    <field name="attachment_use" eval="False"/>
+    
+     <field name="print_report_name">'Histórico Disciplinas Pendnetes Aluno - %s - %s' % (object.aluno_id.name, object.name)</field> 
+     <field name="binding_model_id" ref="model_geracad_curso_matricula"/> 
+     <field name="paperformat_id" ref="paperformat_disciplinas_pendentes"/>
+     
+    <!-- <field name="paperformat_id" ref="report.paperformat_euro" /> --> 
+    <field name="help">Disciplinas Pendentes</field>
+</record>
 
 <record id="action_declaracao_aluno_report" model="ir.actions.report">
     <field name="name">Declaração Aluno</field>

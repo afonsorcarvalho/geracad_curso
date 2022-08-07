@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="view_disciplinas_pendentes_aluno_template">
+		<tr>
+			<td class="col-disciplina">
+				<span t-field="disciplina_line.disciplina_id.codigo" />
+			</td>
+			<td class="col-disciplina">
+				<span t-field="disciplina_line.disciplina_id.name" />
+			</td>
+			<td class="text-center col-ch">
+				<span t-field="disciplina_line.disciplina_id.carga_horaria" />
+			</td>
+		</tr>
+	</template>
+</odoo>
