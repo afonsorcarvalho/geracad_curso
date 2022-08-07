@@ -404,8 +404,33 @@ class GeracadCursoMatricula(models.Model):
         Código, Nome e Carga horária.
         '''
         _logger.info("Pegando disciplinas pendentes")
+        analise_disciplinas_ids= self._get_disciplinas_analise_ids()
+        _logger.info(analise_disciplinas_ids)
+        disciplinas_pendentes = analise_disciplinas_ids['disciplinas_faltantes']
+        return self.env['geracad.curso.disciplina'].search([('id','in',disciplinas_pendentes)])
 
-   
+    def _calc_carga_horaria_pendente_cursada(self):
+        _logger.info("Calculando carga horaria pendente")
+        analise_disciplinas_ids= self._get_disciplinas_analise_ids()
+        disciplinas_pendentes_ids = analise_disciplinas_ids['disciplinas_faltantes']
+        disciplinas_cursadas_ids = analise_disciplinas_ids['disciplinas_cursadas']
+        disciplinas_pendentes = self.env['geracad.curso.disciplina'].search([('id','in',disciplinas_pendentes_ids)])
+        disciplinas_cursadas =  self.env['geracad.curso.disciplina'].search([('id','in',disciplinas_cursadas_ids)])
+        disciplinas_pendentes_ch_total = 0
+        disciplinas_cursada_ch_total = 0
+        for disciplina_pen in disciplinas_pendentes:
+            disciplinas_pendentes_ch_total = disciplinas_pendentes_ch_total + disciplina_pen.carga_horaria
+        for disciplina_cur in disciplinas_cursadas:
+            disciplinas_cursada_ch_total = disciplinas_cursada_ch_total + disciplina_cur.carga_horaria
+        return {
+            'disciplinas_cursada_ch_total' : disciplinas_cursada_ch_total,
+            'disciplinas_pendentes_ch_total' : disciplinas_pendentes_ch_total,
+
+        }
+
+
+
+
 
     def _get_nota_estagio(self, count = False):
         if self.state != 'formado':
@@ -750,7 +775,7 @@ class GeracadCursoMatricula(models.Model):
 
     def _get_disciplinas_analise_ids(self):
         '''
-            Analisa as diciplinas cursadas com as obrigatorias
+            Analisa as disciplinas cursadas com as obrigatorias
             Retorna um map com 'disciplinas_faltantes' e 'disciplinas_cursadas'
         '''
         disciplina_concluida_ids = self._get_disciplinas_cursadas_ids()
@@ -790,7 +815,10 @@ class GeracadCursoMatricula(models.Model):
             Action que gera report de disciplinas pendentes
         '''
         _logger.info("Action Disciplinas Pendentes")
-        disciplinas_pedentes_ids= self._get_disciplinas_analise_ids()
+        # analise_disciplinas_ids= self._get_disciplinas_analise_ids()
+        
+        # disciplinas_pendentes = analise_disciplinas_ids['disciplinas_faltantes']
+        # return self.env['geracad.curso.disciplnas'].search([('id','in',disciplinas_pendentes)])
 
     def action_gera_historico_final(self):
         '''

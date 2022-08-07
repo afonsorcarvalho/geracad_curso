@@ -1,32 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 	<record id="paperformat_disciplinas_pendentes" model="report.paperformat">
-		<field name="name">
-			Disciplinas Pendentes
-		</field>
+		<field name="name">Disciplinas Pendentes</field>
 		<field name="default" eval="True" />
-		<field name="orientation">
-			Portrait
-		</field>
-		<field name="dpi">
-			135
-		</field>
-		<field name="margin_top">
-			20
-		</field>
-		<field name="margin_bottom">
-			15
-		</field>
-		<field name="margin_left">
-			3
-		</field>
-		<field name="margin_right">
-			3
-		</field>
+		<field name="orientation">Portrait</field>
+		<field name="dpi">135</field>
+		<field name="margin_top">20</field>
+		<field name="margin_bottom">15</field>
+		<field name="margin_left">3</field>
+		<field name="margin_right">3</field>
 		<field name="header_line" eval="False" />
-		<field name="header_spacing">
-			16
-		</field>
+		<field name="header_spacing">16</field>
 	</record>
 	<template id="view_historico_disciplinas_pendentes_aluno_template">
 		<t t-call="web.html_container">
@@ -50,6 +34,7 @@
 						}
 						table { }
 						td {  }
+						td.col-codigo { width: 50px; text-transform: uppercase;  }
 						td.col-disciplina { width: 500px; text-transform: uppercase;  }
 						th.col-disciplina { width: 500px  }
 						td.col-ch { width: 50px  }
@@ -147,6 +132,12 @@
 													</strong>
 													<span t-field="o.state" />
 												</div>
+												<div class="col-auto text-uppercase">
+													<strong>
+														VERSÃO MATRIZ CURRICULAR:
+													</strong>
+													<span t-field="o.curso_grade_version" />
+												</div>
 											</div>
 										</div>
 									</td>
@@ -170,10 +161,45 @@
 							</thead>
 							<tbody>
 								<t-foreach t-foreach="o._get_disciplinas_pendentes()" t-as="disciplina_line">
-									<t t-call="geracad_curso.view_historico_disciplinas_pendentes_aluno_template" />
+									<t t-call="geracad_curso.view_disciplinas_pendentes_aluno_template" />
 								</t-foreach>
 							</tbody>
 						</table>
+						<div class="row">
+							<div class="col-auto">
+								<strong>
+									CARGA HORÁRIA TOTAL DO CURSO:
+								</strong>
+								<span t-field="o.curso_grade_version.carga_horaria_total" />
+							</div>
+						</div> 
+						
+						<t t-set="ch" t-value="o._calc_carga_horaria_pendente_cursada()" />
+						
+						<div class="row">
+							<div class="col-auto">
+								<strong>
+									CARGA HORÁRIA CURSADA:
+								</strong>
+								<span t-esc="ch['disciplinas_cursada_ch_total']"  t-options='{"widget": "float","precision": 0}' />
+							</div>
+						</div> 
+						<div class="row">
+							<div class="col-auto">
+								<strong>
+									CARGA HORÁRIA PENDENTE:
+								</strong>
+								<span t-esc="ch['disciplinas_pendentes_ch_total']"  t-options='{"widget": "float", "precision": 0}'/>
+							</div>
+						</div> 
+						<div class="row">
+							<div class="col-6"></div>
+							<div class="col-6" align="right">
+							  <p>
+								<t t-esc="o.get_date_str()" />
+							  </p>
+							</div>
+						</div>
 					</div>
 				</t>
 			</t>

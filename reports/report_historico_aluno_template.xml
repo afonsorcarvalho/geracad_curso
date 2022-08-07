@@ -197,6 +197,14 @@
 
 						</div>
 						<div class="row assinaturas">
+							<div class="col-6"></div>
+							<div class="col-6" align="right">
+							  <p>
+								<t t-esc="o.get_date_str()" />
+							  </p>
+							</div>
+						</div>
+						<div class="row assinaturas">
 							<div class="col-6 text-center">
 								_____________________________________________
 								<br />
