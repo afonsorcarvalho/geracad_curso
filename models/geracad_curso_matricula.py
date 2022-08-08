@@ -755,23 +755,23 @@ class GeracadCursoMatricula(models.Model):
             
         return disciplinas_ids
     
-    def _get_disciplinas_equivalentes_ids(self, disciplinas_ids_list):
+    def _get_disciplinas_com_equivalentes_ids(self, disciplinas_ids_list):
         '''
             Recebe uma lista de ids de disciplinas e retorna
             a lista recebida mais todas as suas disciplinas equivalentes
         '''
-        disciplinas_equivalentes_ids = disciplinas_ids_list
+        disciplinas_equivalentes_ids = [] 
        
 
         for disciplina_id in disciplinas_ids_list:
             disciplina_line_ids  = self.env['geracad.curso.equivalencia.disciplina.line'].search([
-                ('disciplinas_id','=', disciplina_id)
+                ('disciplinas_equivalente_id','=', disciplina_id)
                 ])
             _logger.info('DISCIPLINAS equivalentes line ')
             _logger.info(disciplina_line_ids)
             for disciplina_equivalentes_line in disciplina_line_ids:
-                disciplinas_equivalentes_ids.append(disciplina_equivalentes_line.disciplinas_equivalente_id.id)
-        return disciplinas_equivalentes_ids
+                disciplinas_equivalentes_ids.append(disciplina_equivalentes_line.disciplinas_id.id)
+        return disciplinas_ids_list + disciplinas_equivalentes_ids
 
     def _get_disciplinas_analise_ids(self):
         '''
@@ -779,19 +779,17 @@ class GeracadCursoMatricula(models.Model):
             Retorna um map com 'disciplinas_faltantes' e 'disciplinas_cursadas'
         '''
         disciplina_concluida_ids = self._get_disciplinas_cursadas_ids()
+        _logger.info('DISCIPLINAS CURSADAS ')
         _logger.info(disciplina_concluida_ids)
+        disciplinas_cursadas_com_equivalentes = self._get_disciplinas_com_equivalentes_ids(disciplina_concluida_ids)
+        _logger.info('DISCIPLINAS CURSADAS COM SUAS EQUIVALENTES')
+        _logger.info(disciplinas_cursadas_com_equivalentes)
         disciplinas_obrigatorias_id = self._get_disciplinas_curso_obrigatorias_ids()
         _logger.info(disciplinas_obrigatorias_id)
         disciplinas_faltantes = []
         disciplinas_cursadas = []
         for disciplina_obrigatoria in disciplinas_obrigatorias_id:
-            
-            _logger.info('DISCIPLINAS CURSADAS ')
-            _logger.info(disciplina_concluida_ids)
-            disciplinas_cursadas_com_equivalentes = self._get_disciplinas_equivalentes_ids(disciplina_concluida_ids)
-            _logger.info('DISCIPLINAS CURSADAS COM SUAS EQUIVALENTES')
-            _logger.info(disciplinas_cursadas_com_equivalentes)
-            
+ 
             if disciplina_obrigatoria in disciplinas_cursadas_com_equivalentes:
                 disciplinas_cursadas.append(disciplina_obrigatoria)
             else:

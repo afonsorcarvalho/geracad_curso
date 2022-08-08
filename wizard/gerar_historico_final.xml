@@ -33,9 +33,14 @@
                       
                             decoration-danger="1==1"
                             >
-                                <field  name="disciplina_id" string="Nomes" readonly="1" />
+                            <field  name="disciplina_id" string="Nomes" readonly="1"/>
+                            <field  name="metodologia" readonly="1"/>
+                            <field  name="carga_horaria" readonly="1"/>
 
                             </tree>
+                            <form>
+                                <field  name="disciplina_id" string="Disciplina" readonly="1"/>
+                            </form>
                             </field>
                         </page>
                         <page string="Disciplinas Concluídas">
@@ -45,9 +50,15 @@
                             decoration-success="1==1"
                             >
                                 <field  name="disciplina_id" string="Nomes" readonly="1"/>
+                                <field  name="metodologia" readonly="1"/>
+                                <field  name="carga_horaria" readonly="1"/>
 
 
                             </tree>
+                            <form>
+                                <field  name="disciplina_id" string="Disciplina" readonly="1"/>
+                            </form>
+                            
                             
                             </field> 
                         </page>

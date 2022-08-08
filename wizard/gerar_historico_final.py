@@ -95,6 +95,14 @@ class GeracadCursoDisciplinasFaltantesHistoricoFinal(models.TransientModel):
        
         "geracad.curso.disciplina", string="Disciplinas"
     )
+    carga_horaria =  fields.Integer(        
+        related='disciplina_id.carga_horaria',
+        readonly=True,
+    )
+    metodologia =  fields.Many2one(        
+        related='disciplina_id.metodologia',
+        readonly=True,
+    )
     concluida = fields.Boolean(
        
          string="Concluída"
