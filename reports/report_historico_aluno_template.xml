@@ -198,11 +198,13 @@
 						</div>
 						<div class="row assinaturas">
 							<div class="col-6"></div>
-							<div class="col-6" align="right">
-							  <p>
-								<t t-esc="o.get_date_str()" />
-							  </p>
-							</div>
+							<t t-if="o.state != 'formado'">
+								<div class="col-6" align="right">
+								<p>
+									<t t-esc="o.get_date_str()" />
+								</p>
+								</div>
+							</t>
 						</div>
 						<div class="row assinaturas">
 							<div class="col-6 text-center">
