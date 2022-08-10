@@ -56,6 +56,7 @@ class GeracadCursoGerarHistoricoFinal(models.TransientModel):
 
     def _limpa_disciplinas_duplicadas(self, nota_disciplinas):
         disciplinas_ids = []
+        list_nota_disciplinas = list(nota_disciplinas)
         _logger.info("LIMPANDO ESSAS DISCIPLINAS ABAIXO")
         _logger.info(nota_disciplinas)
         # apenas paga log
@@ -94,7 +95,7 @@ class GeracadCursoGerarHistoricoFinal(models.TransientModel):
                 _logger.info("indices a serem apagados")
                 _logger.info(keys[value])
                 # apagando da lista de notas de disciplinas os duplicados com menores médias
-                list_nota_disciplinas = list(nota_disciplinas)
+                
                 for index in keys[value]:
                     list_nota_disciplinas.pop(index)
 
