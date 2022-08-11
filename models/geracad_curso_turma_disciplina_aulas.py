@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from ast import For
-from typing_extensions import Required
+
 from odoo import models, fields, api, _
 from datetime import date
 from babel.dates import format_datetime, format_date
@@ -256,7 +256,7 @@ class GeracadCursoTurmDisciplina(models.Model):
 
     def action_iniciar(self):
         _logger.inf("finalizando")
-        
+
     def action_finalizar(self):
         _logger.inf("finalizando")
 

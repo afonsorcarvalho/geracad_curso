@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import json
-from typing_extensions import Required
+
 from odoo import models, fields, api, _
 from datetime import date
 import logging
