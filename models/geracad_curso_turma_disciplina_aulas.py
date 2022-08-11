@@ -251,18 +251,14 @@ class GeracadCursoTurmDisciplina(models.Model):
 
    
    
-    def action_finalizar_aulas(self):
-        dummy, act_id = self.env["ir.model.data"].sudo().get_object_reference(
-            "geracad_curso", "action_geracad_curso_finalizar_aula"
-        )
-        vals = self.env["ir.actions.act_window"].sudo().browse(act_id).read()[0]
-        vals["context"] = {
-           
-           
-            "default_turma_disciplina_id": self.id,
-            
-        }
-        return vals
+    def action_agendar(self):
+        _logger.inf("finalizando")
+
+    def action_iniciar(self):
+        _logger.inf("finalizando")
+        
+    def action_finalizar(self):
+        _logger.inf("finalizando")
 
 
 

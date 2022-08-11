@@ -54,6 +54,13 @@ class GeracadCursoMatriculaDisciplina(models.Model):
         required=True
         
         )
+    periodo = fields.Integer(
+        
+        related='turma_disciplina_id.periodo',
+        readonly=True,
+      
+        
+        )
     disciplina_id = fields.Many2one(
         related='turma_disciplina_id.disciplina_id',
         readonly=True,

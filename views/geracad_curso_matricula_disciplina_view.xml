@@ -41,6 +41,7 @@
           <field name="curso_matricula_id" />
        
           <field name="turma_disciplina_id" />
+          <field name="periodo" />
           <field name="aluno_id"  />
           <field name="data_matricula" />
        

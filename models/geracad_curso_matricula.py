@@ -358,7 +358,7 @@ class GeracadCursoMatricula(models.Model):
 
     def _get_notas_periodo(self, periodo):
         '''
-        Retorna as notas de um periodo
+        Retorna as notas de um periodo para impressao do historico
         '''
         if self.state != 'formado':    
             nota_disciplina_ids = self.env['geracad.curso.nota.disciplina'].search([
@@ -366,19 +366,23 @@ class GeracadCursoMatricula(models.Model):
                 ('curso_matricula_id', '=', self.id),
                 '&',
                 ('state','not in', ['cancelada']),
+                '&',
+                ('periodo','=', int(periodo)),
                 ('disciplina_id.e_estagio','=', False)
                 ])
         else:
             nota_disciplina_ids = self.env['geracad.curso.nota.disciplina.historico.final'].search([
                 ('curso_matricula_id', '=', self.id),
-                ('disciplina_id.e_estagio','=', False)
+                '&',
+                ('disciplina_id.e_estagio','=', False),
+                ('periodo','=', int(periodo))
                 ])
 
         nota_disciplina_ids_periodo = []
         for nota_disciplina_id in nota_disciplina_ids:
-            _logger.debug(nota_disciplina_id.disciplina_id.name)
-            _logger.debug("PERIODO")
-            _logger.debug(nota_disciplina_id.periodo)
+            _logger.info(nota_disciplina_id.disciplina_id.name)
+            _logger.info("PERIODO")
+            _logger.info(nota_disciplina_id.periodo)
             if nota_disciplina_id.periodo == 0:
                 if nota_disciplina_id.turma_disciplina_id.periodo == 0:
                     periodo_nota = self._pega_periodo_disciplina_sem_periodo(nota_disciplina_id.disciplina_id)
@@ -802,11 +806,24 @@ class GeracadCursoMatricula(models.Model):
         _logger.info(disciplinas_faltantes)
         return {'disciplinas_faltantes':disciplinas_faltantes,'disciplinas_cursadas':disciplinas_cursadas}
 
-    #TODO
-    # fazer essa funcao de disciplina pendentes
-    # mostrando o um histórico do aluno com a grade curricular e o check box concluido
-    # e as disciplinas faltantes de cada periodo
-    # gerando um report
+  
+    def _atualiza_periodo_de_nota_com_turma_disciplina(self):
+        '''
+            Função que atualiza as notas do aluno com os respectivos periodos de acordo 
+            com a matriz curricular 
+        '''
+        for rec in self:
+            notas = self.env["geracad.curso.nota.disciplina"].search([('curso_matricula_id','=',rec.id)])
+            for nota in notas:
+                nota.periodo = nota.turma_disciplina_id.periodo
+
+    def action_atualizar_historico(self):
+
+        self._atualiza_periodo_de_nota_com_turma_disciplina()
+        if not self.curso_grade_version:
+            raise ValidationError('Por favor, insiria a Versão da Grade na matrícula')
+        return self.env.ref("geracad_curso.action_historico_aluno_report").report_action(self)
+
 
     def action_disciplinas_pendentes(self):
         '''
