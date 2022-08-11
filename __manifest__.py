@@ -19,7 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','geracad_aluno', 'portal'],
+    'depends': ['base','geracad_aluno', 'portal','mail'],
 
     # always loaded
     'data': [
@@ -31,6 +31,7 @@
         'views/geracad_curso_disciplina_view.xml',
         'views/geracad_curso_equivalencia_disciplina_view.xml',
         'views/geracad_curso_turma_disciplina_view.xml',
+        'views/geracad_curso_turma_disciplina_aulas_view.xml',
         'views/geracad_curso_matricula_disciplina_view.xml',
         'views/geracad_curso_matricula_view.xml',
         'views/geracad_curso_nota_disciplina_view.xml',

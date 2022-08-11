@@ -101,13 +101,13 @@ class GeracadCursoMatriculaDisciplina(models.Model):
     data_matricula = fields.Date(
         string='Data Matrícula',
         default=fields.Date.context_today,
-        track_visibility='true'
+        tracking=True
     )
     data_conclusao = fields.Date(
         string='Data Conclusão',
         
        
-        track_visibility='true',
+        tracking=True,
     )
 
    

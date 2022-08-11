@@ -125,30 +125,30 @@ class GeracadCursoTurmDisciplina(models.Model):
     data_abertura = fields.Date(
         string='Data Abertura',
         default=fields.Date.context_today,
-        track_visibility='true'
+        tracking=True
     )
     data_inicio = fields.Date(
         string='Inicio das aulas',
         default=fields.Date.context_today,
-        track_visibility='true'
+        tracking=True
     )
     data_termino = fields.Date(
         string='Término das aulas',
         
-        track_visibility='true'
+        tracking=True
     )
    
     
     data_previsao_termino = fields.Date(
         string='Previsão de término',
         default= lambda self: date.today() +  relativedelta(months=4),
-        track_visibility='true'
+        tracking=True
        
     )
 
     data_encerramento = fields.Date(
         string='Data Encerramento',
-        track_visibility='true'
+        tracking=True
     )
      
     professor_id =  fields.Many2one(
@@ -159,7 +159,7 @@ class GeracadCursoTurmDisciplina(models.Model):
         )
    
     vagas = fields.Integer(
-        string='Vagas',track_visibility='true'
+        string='Vagas',tracking=True
     )
     state = fields.Selection([
         ('draft', 'Rascunho'),
@@ -170,7 +170,7 @@ class GeracadCursoTurmDisciplina(models.Model):
         ('em_andamento', 'Em andamento'), 
         ('cancelada', 'Cancelada'),
         
-    ], string="Status", default="draft", track_visibility='true')
+    ], string="Status", default="draft", tracking=True)
 
     sala_id = fields.Many2one(
         'geracad.curso.sala',

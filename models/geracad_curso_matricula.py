@@ -25,21 +25,21 @@ class GeracadCursoMatricula(models.Model):
     
 
 
-    name = fields.Char("Código", track_visibility='true')
+    name = fields.Char("Código", tracking=True)
 
     company_id = fields.Many2one(
         'res.company', string="Unidade", required=True,
          default=lambda self: self.env.company,
-         track_visibility='true'
+         tracking=True
         
     )
-    edit_turma_curso =  fields.Boolean(track_visibility='true')
+    edit_turma_curso =  fields.Boolean(tracking=True)
 
     curso_turma_id = fields.Many2one(
         'geracad.curso.turma',
         string='Turma',
         required=True,
-        track_visibility='true'
+        tracking=True
         )
 
     @api.onchange('curso_turma_id')
@@ -157,19 +157,19 @@ class GeracadCursoMatricula(models.Model):
     data_matricula = fields.Date(
         string='Data Matrícula',
         default=fields.Date.context_today,
-        track_visibility='true'
+        tracking=True
     )
 
     data_previsao_conclusao = fields.Date(
         string='Data Prevista Conclusão',
         default= lambda self: date.today() +  relativedelta(months=24),
-        track_visibility='true'
+        tracking=True
     )
    
     data_conclusao = fields.Date(
         string='Data Conclusão',
         
-        track_visibility='true'
+        tracking=True
     )
    
     state = fields.Selection([

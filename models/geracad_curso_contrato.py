@@ -65,12 +65,12 @@ class GeracadCursoContrato(models.Model):
     data_inicio = fields.Date(
         string='Data Início',
         default=fields.Date.context_today,
-        track_visibility='true'
+        tracking=True
     )
     data_encerramento = fields.Date(
         string='Data Encerramento',
         default=fields.Date.context_today,
-        track_visibility='true'
+        tracking=True
     )
     qtd_parcelas = fields.Integer(string='Qtd. parcelas',required=True)
     valor_parcelas = fields.Monetary(string='Valor', required=True)
@@ -111,7 +111,7 @@ class GeracadCursoContrato(models.Model):
         ('suspenso', 'Suspenso'),
         ('cancelado', 'Cancelado'),
         ('finalizado', 'Finalizado'),
-    ], string="Status", default="draft", track_visibility='true')
+    ], string="Status", default="draft", tracking=True)
 
     active = fields.Boolean(default = True)
     

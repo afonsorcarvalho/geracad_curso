@@ -102,17 +102,17 @@ class GeracadCursoFinanceiroParcelas(models.Model):
     data_vencimento = fields.Date(
         string='Data Vencimento',
         default=fields.Date.context_today,
-        track_visibility='true'
+        tracking=True
     )
     data_pagamento = fields.Date(
         string='Data Pagamento',
         
-        track_visibility='true'
+        tracking=True
     )
     numero_parcela = fields.Integer("Parcela",group_operator=False)
-    valor = fields.Monetary(string='Valor', required=True, track_visibility='true')
-    valor_pago = fields.Monetary(string='Valor Pago', required=True, default=0, track_visibility='true')
-    esta_pago = fields.Boolean("Pago", default=0, track_visibility='true')
+    valor = fields.Monetary(string='Valor', required=True, tracking=True)
+    valor_pago = fields.Monetary(string='Valor Pago', required=True, default=0, tracking=True)
+    esta_pago = fields.Boolean("Pago", default=0, tracking=True)
     juros = fields.Float("Juros")
     multa = fields.Float("Multa")
     desconto = fields.Float("Desconto")
@@ -132,7 +132,7 @@ class GeracadCursoFinanceiroParcelas(models.Model):
             
             ],
         required=True,
-        track_visibility='true'
+        tracking=True
 
     )
     
@@ -147,7 +147,7 @@ class GeracadCursoFinanceiroParcelas(models.Model):
         ('cancelado', 'Cancelado'),
         ('recebido', 'Recebido'),
         ('suspenso', 'Suspenso'),
-    ], string="Status", default="draft", track_visibility='true')
+    ], string="Status", default="draft", tracking=True)
 
     active = fields.Boolean(default = True)
 

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import json
+from typing_extensions import Required
 from odoo import models, fields, api, _
 from datetime import date
 import logging
@@ -26,7 +27,7 @@ class GeracadCursoTurma(models.Model):
     curso_id = fields.Many2one(
         'geracad.curso',
         string='Curso',
-        require=True
+        required=True
 
         )
 
@@ -74,24 +75,24 @@ class GeracadCursoTurma(models.Model):
     turno = fields.Selection(
         string='turno',
         selection=[('MAT', 'Matutino'), ('VES', 'Vespertino'),('NOT', 'Noturno')],
-        require= True,
+        required= True,
     )
     matricula_aberta = fields.Boolean(string="Matrícula Aberta", default=True)
     
     data_abertura = fields.Date(
         string='Data Abertura',
         # default=fields.Date.context_today,
-        track_visibility='true'
+        tracking=True
     )
 
     data_encerramento = fields.Date(
         string='Data Encerramento',
         # default=fields.Date.context_today,
-        track_visibility='true'
+        tracking=True
     )
    
     vagas = fields.Integer(
-        string='Vagas',track_visibility='true'
+        string='Vagas',tracking=True
     )
     state = fields.Selection([
         ('draft', 'Rascunho'),
@@ -99,7 +100,7 @@ class GeracadCursoTurma(models.Model):
         ('encerrada', 'Matrícula Encerrada'),
         ('suspensa', 'Matrícula Suspensa'), 
         ('cancelada', 'Cancelada'),
-    ], string="Status", default="draft", track_visibility='true')
+    ], string="Status", default="draft", tracking=True)
 
     unidade_id = fields.Many2one('geracad.curso.unidade', string="Unidade",
     company_dependent=True
