@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from ast import For
+
+import json
 from odoo import models, fields, api, _
 from datetime import date
 from babel.dates import format_datetime, format_date
@@ -34,11 +35,32 @@ class GeracadCursoTurmDisciplina(models.Model):
     disciplina_id = fields.Many2one(
         'geracad.curso.disciplina',
         string='Disciplina',
-        required=True, 
-   
+        required=True,     
         
         )
-  
+    domain_disciplina_id = fields.Char(
+        compute="_compute_disciplina_id_domain",
+        readonly=True,
+        store=False,
+    )
+   
+    
+    @api.depends('curso_turma_id')
+    def _compute_disciplina_id_domain(self):
+        for rec in self:
+            domain_disciplina = []
+            if self.curso_turma_id and self.curso_turma_id.curso_grade_version:
+                grade_ids = self.env["geracad.curso.grade"].search([("version_grade_id","=",self.curso_turma_id.curso_grade_version.id)])
+                domain_disciplina = list(map(lambda x: x.disciplina_id.id, grade_ids))
+                if grade_ids:
+                    domain_disciplina = [('id', 'in', domain_disciplina)]
+                        
+                
+
+            
+            rec.domain_disciplina_id = json.dumps(domain_disciplina)
+
+
 
     curso_turma_id = fields.Many2one(
         'geracad.curso.turma',

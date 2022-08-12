@@ -8,7 +8,7 @@
       <field name="arch" type="xml">
         <tree>
           <field name="id" optional="hide"/>
-          <field name="name" string="Nome" />
+          <field name="name" string="Código" />
           <field name="disciplina_id"/>
           <field name="curso_turma_id" optional="hide"/>
           <field name="matricula_aberta" optional="show"/>
@@ -166,9 +166,10 @@
                 <field name="curso_turma_id" string="Turma Curso" options="{'no_create': True }" attrs="{'readonly' : [('state','!=', 'draft')]  }" />
                 
                 <field name="curso_id"  />
-                <field name="disciplina_id" options="{'no_create': True}" attrs="{'readonly' : [('state','!=', 'draft')]  }"
+                <field name="disciplina_id" domain="domain_disciplina_id" options="{'no_create': True}" attrs="{'readonly' : [('state','!=', 'draft')]  }"
                 
                 />
+                <field name="domain_disciplina_id" invisible="0"/>
         
                 <field name="periodo" options='{"type": "number", "range": [1,10]}'/>
                 <field name="carga_horaria"/>
