@@ -19,7 +19,13 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','geracad_aluno', 'portal','mail'],
+    'depends': [
+        'base',
+        'geracad_aluno', 
+        'portal',
+        'mail',
+        'web_domain_field',
+        'web_dialog_size'],
 
     # always loaded
     'data': [
