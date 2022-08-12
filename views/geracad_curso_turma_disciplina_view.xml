@@ -169,7 +169,7 @@
                 <field name="disciplina_id" domain="domain_disciplina_id" options="{'no_create': True}" attrs="{'readonly' : [('state','!=', 'draft')]  }"
                 
                 />
-                <field name="domain_disciplina_id" invisible="0"/>
+                <field name="domain_disciplina_id" invisible="1"/>
         
                 <field name="periodo" options='{"type": "number", "range": [1,10]}'/>
                 <field name="carga_horaria"/>
