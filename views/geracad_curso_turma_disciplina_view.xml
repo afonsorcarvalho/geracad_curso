@@ -10,6 +10,7 @@
           <field name="id" optional="hide"/>
           <field name="name" string="Código" />
           <field name="disciplina_id"/>
+          <field name="tipo"/>
           <field name="curso_turma_id" optional="hide"/>
           <field name="matricula_aberta" optional="show"/>
           <field name="professor_id" optional="show" context="{'default_e_professor': 1}"/>
@@ -41,6 +42,7 @@
           <field name="name" string="Código da turma"  />
           <field name="disciplina_id"  />
           <field name="curso_turma_id" />
+          <field name="tipo"/>
        
           <field name="professor_id" />
           <field name="data_abertura" />
@@ -73,6 +75,8 @@
           <filter name="not_pendencia" string="Não é pendência" domain="[('e_pendencia','=', False)]" />
           <filter name="e_aproveitamento" string="É aproveitamento" domain="[('e_aproveitamento','=', True)]" />
           <filter name="not_aproveitamento" string="Não é aproveitamento" domain="[('e_aproveitamento','=', False)]" />
+          <filter name="e_resencial" string="Presencial" domain="[('tipo','=', 'presencial')]" />
+          <filter name="e_a_distancia" string="A Distância" domain="[('tipo','=', 'a_distancia')]" />
           <filter name="data_encerramento" string="Data de encerramento" domain="[]" context="{'group_by':'data_encerramento'}"/>
          
           <filter name="state" string="Status" domain="[]" context="{'group_by':'state'}"/>
@@ -164,6 +168,7 @@
             <group>
               <group string="Dados da Turma Disciplina">
                 <field name="curso_turma_id" string="Turma Curso" options="{'no_create': True }" attrs="{'readonly' : [('state','!=', 'draft')]  }" />
+                <field name="tipo" string="Tipo" attrs="{'readonly' : [('state','!=', 'draft')]  }" />
                 
                 <field name="curso_id"  />
                 <field name="disciplina_id" domain="domain_disciplina_id" options="{'no_create': True}" attrs="{'readonly' : [('state','!=', 'draft')]  }"

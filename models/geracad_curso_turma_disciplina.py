@@ -38,6 +38,13 @@ class GeracadCursoTurmDisciplina(models.Model):
         required=True,     
         
         )
+    
+    tipo = fields.Selection(
+        string='Tipo de Turma',
+        selection=[('presencial', 'Presencial'), ('a_distancia', 'A Distância')],
+        default = 'presencial',
+    )
+    
     domain_disciplina_id = fields.Char(
         compute="_compute_disciplina_id_domain",
         readonly=True,

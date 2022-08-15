@@ -17,7 +17,7 @@ _logger = logging.getLogger(__name__)
 
 
 
-class GeracadCursoTurmDisciplina(models.Model):
+class GeracadCursoTurmaDisciplinaAulas(models.Model):
     _name = "geracad.curso.turma.disciplina.aulas"
     _description = "Aulas da Turma de disciplina de Curso"
     _check_company_auto = True
@@ -28,6 +28,7 @@ class GeracadCursoTurmDisciplina(models.Model):
     
 
     name = fields.Char("Assunto")
+
     company_id = fields.Many2one(
         'res.company',string="Unidade", required=True, default=lambda self: self.env.company
     )
@@ -38,12 +39,27 @@ class GeracadCursoTurmDisciplina(models.Model):
         required=True, 
 
         )
+    
     disciplina_id = fields.Many2one(
         string='Disciplina',
         related='turma_disciplina_id.disciplina_id',
         readonly=True,
         store=True
         )
+        
+    
+    @api.depends('name', 'turma_disciplina_id')
+    def name_get(self):
+        result = []
+        for record in self:
+           
+            name = '[' + str(record.turma_disciplina_id.disciplina_id.name) + '] ' + str(record.name)
+
+           
+            result.append((record.id, name))
+        return result
+    
+        
 
     curso_id = fields.Many2one(
         string='Curso',
@@ -106,7 +122,10 @@ class GeracadCursoTurmDisciplina(models.Model):
     
     active = fields.Boolean(default=True)
     
-
+    
+   
+    
+    
     #usado na impressão do diário
     def get_diario_date(self):
         '''
@@ -164,7 +183,7 @@ class GeracadCursoTurmDisciplina(models.Model):
 
     @api.model
     def fields_get(self, allfields=None, attributes=None):
-        res = super(GeracadCursoTurmDisciplina, self).fields_get(allfields, attributes=attributes)
+        res = super(GeracadCursoTurmaDisciplinaAulas, self).fields_get(allfields, attributes=attributes)
         _logger.info(res)
         for field in self.get_fields_to_ignore_in_search():
 
@@ -252,13 +271,13 @@ class GeracadCursoTurmDisciplina(models.Model):
    
    
     def action_agendar(self):
-        _logger.inf("finalizando")
+        _logger.info("agendando")
 
     def action_iniciar(self):
-        _logger.inf("finalizando")
+        _logger.info("iniciando")
 
     def action_finalizar(self):
-        _logger.inf("finalizando")
+        _logger.info("finalizando")
 
 
 
