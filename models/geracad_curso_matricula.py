@@ -810,18 +810,41 @@ class GeracadCursoMatricula(models.Model):
     def _atualiza_periodo_de_nota_com_turma_disciplina(self):
         '''
             Função que atualiza as notas do aluno com os respectivos periodos de acordo 
-            com a matriz curricular 
+            com a turma disciplina 
         '''
         for rec in self:
             notas = self.env["geracad.curso.nota.disciplina"].search([('curso_matricula_id','=',rec.id)])
             for nota in notas:
                 nota.periodo = nota.turma_disciplina_id.periodo
 
-    def action_atualizar_historico(self):
+    def _atualiza_periodo_turma_disciplina_com_grade(self):
+        '''
+            Função que atualiza as turmas de disciplinas com os respectivos periodos de acordo 
+            com a grade curricular da matricula do curso do aluno 
+        '''
+        for rec in self:
+            matricula_disciplina_line = self.env["geracad.curso.matricula.disciplina"].search([
+               
+                ('curso_matricula_id','=',rec.id),
+                       
+                ])
+            for matricula_disciplina in matricula_disciplina_line:    
+                grade_line = self.env["geracad.curso.grade"].search([
+                    ('version_grade_id','=',rec.curso_grade_version.id),
+                    ('disciplina_id','=',matricula_disciplina.disciplina_id)
+                    
+                    ])
+                for grade in grade_line:    
+                    matricula_disciplina.turma_disciplina_id.periodo = grade.periodo
 
-        self._atualiza_periodo_de_nota_com_turma_disciplina()
+
+    def action_atualizar_historico(self):
         if not self.curso_grade_version:
             raise ValidationError('Por favor, insiria a Versão da Grade na matrícula')
+        for rec in self:
+            rec._atualiza_periodo_turma_disciplina_com_grade()
+            rec._atualiza_periodo_de_nota_com_turma_disciplina()
+        
         return self.env.ref("geracad_curso.action_historico_aluno_report").report_action(self)
 
 
