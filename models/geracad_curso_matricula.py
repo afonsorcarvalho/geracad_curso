@@ -828,6 +828,7 @@ class GeracadCursoMatricula(models.Model):
                 ('curso_matricula_id','=',rec.id),
                        
                 ])
+            _logger.info(matricula_disciplina_line)
             for matricula_disciplina in matricula_disciplina_line:    
                 grade_line = self.env["geracad.curso.grade"].search([
                     ('version_grade_id','=',rec.curso_grade_version.id),
