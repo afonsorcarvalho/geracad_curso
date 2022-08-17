@@ -829,12 +829,15 @@ class GeracadCursoMatricula(models.Model):
                        
                 ])
             _logger.info(matricula_disciplina_line)
-            for matricula_disciplina in matricula_disciplina_line:    
+            for matricula_disciplina in matricula_disciplina_line:   
+                _logger.info(matricula_disciplina.disciplina_id.name) 
                 grade_line = self.env["geracad.curso.grade"].search([
+                    '&',
                     ('version_grade_id','=',rec.curso_grade_version.id),
                     ('disciplina_id','=',matricula_disciplina.disciplina_id.id)
                     
                     ])
+                _logger.info(grade_line)
                 for grade in grade_line:    
                     turma_disciplina = self.env["geracad.curso.turma.disciplina"].search([
                         ('id','=',matricula_disciplina.turma_disciplina_id.id)])
