@@ -748,7 +748,7 @@ class GeracadCursoMatricula(models.Model):
         res = self.env["geracad.curso.grade"].search([
             '&',
            # ('curso_id', '=',self.curso_id.id),   
-            '&', 
+           # '&', 
             ('version_grade_id', '=',self.curso_grade_version.id),    
             ('e_obrigatoria', '=',1 )
             ], offset=0, limit=None, order=None, count=False)
