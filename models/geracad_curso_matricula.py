@@ -835,8 +835,10 @@ class GeracadCursoMatricula(models.Model):
                     
                     ])
                 for grade in grade_line:    
-                    matricula_disciplina.turma_disciplina_id.periodo = grade.periodo
-
+                    matricula_disciplina.turma_disciplina_id.write({
+                        'periodo' : grade.periodo
+                    }
+                    )
 
     def action_atualizar_historico(self):
         if not self.curso_grade_version:
