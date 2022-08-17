@@ -831,7 +831,7 @@ class GeracadCursoMatricula(models.Model):
             for matricula_disciplina in matricula_disciplina_line:    
                 grade_line = self.env["geracad.curso.grade"].search([
                     ('version_grade_id','=',rec.curso_grade_version.id),
-                    ('disciplina_id','=',matricula_disciplina.disciplina_id)
+                    ('disciplina_id','=',matricula_disciplina.disciplina_id.id)
                     
                     ])
                 for grade in grade_line:    
