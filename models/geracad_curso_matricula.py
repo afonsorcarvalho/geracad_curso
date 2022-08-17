@@ -835,7 +835,7 @@ class GeracadCursoMatricula(models.Model):
                     
                     ])
                 for grade in grade_line:    
-                    turma_disciplina = self.env["geracad.curso.matricula.disciplina"].search([
+                    turma_disciplina = self.env["geracad.curso.turma.disciplina"].search([
                         ('id','=',matricula_disciplina.turma_disciplina_id.id)])
                     turma_disciplina.write({
                         'periodo' : grade.periodo
