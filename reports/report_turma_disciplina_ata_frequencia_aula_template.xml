@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_turma_disciplina_ata_frequencia_aula_template">
+
+
+        <t t-call="web.html_container">
+
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <style type="text/css">
+
+                            .col, col-4, col-12, col-6 {
+                                padding:0px;
+                            }
+                            .table thead {
+                                margin-top: 5px;
+                            }
+                            .table tfoot{
+                                font-size:10px;
+
+                            }
+                            .table td, .table th{
+                                margin:0px;
+                                padding:3px;
+                            }
+                            .presente  {
+                                text-align:center;
+                               
+                               
+
+                            }
+                            .ausente {
+                                text-align:center;
+                                background-color: #000000;
+                                color:#FFFFFF;
+                               
+                              
+
+                            }
+
+                         
+                            .table-bordered th, .table-bordered td{
+                                border:1px solid #000000
+                            }
+
+                            .diario_date{
+                                text-align:center;
+                            }
+                            .diario_assinatura{
+                                text-align:center;
+                            }
+                        
+                            
+                        
+                            
+                        </style>
+                    <div class="page">
+
+                        <table class="table table-condensed table-bordered">
+                            <tr>
+                                <td colspan="3" valign="middle" align="center" height="80px">
+
+
+                                    <h2 style="text-align:center;">ATA DE FREQUÊNCIA DE AULA</h2>
+
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width='60%'>Turma da Disciplina: 
+                                    <h4 style="text-align:left;">
+                                       
+                                        <span t-field="o.turma_disciplina_id" />
+                                    </h4>
+                                </td>
+                                <td width="18%">Data: 
+                                    <h4 style="text-align:center;">
+                                        <t t-esc="o.hora_inicio_agendado" 
+                                       
+                                        t-options='{"widget": "date","format": "dd/MM/yyyy"}'/>
+                                    </h4>
+                                </td>
+                                <td width="22%">
+                                    Horário:  <h4 style="text-align:center;">
+                                       <t t-esc="o.hora_inicio_agendado"  t-options='{"widget": "datetime","format": "HH:mm"}' /> às <t t-esc="o.hora_termino_agendado" t-options='{"widget": "datetime","format": "HH:mm"}' /> 
+                                    </h4>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" >
+                                  Assunto:  <h5 style="text-align:left;margin-right:20px"> 
+                                     <span t-field="o.name" />
+                                    </h5>
+                                </td>
+                                <td >
+                                   Professor(a): <h5 style="text-align:left;">
+                                    <span t-field="o.professor_id" /></h5>
+                                </td>
+
+                            </tr>
+                         
+
+
+                        </table>
+
+                        <table class="table table-condensed table-bordered" cellpadding="0" cellspacing="0" padding="0" margin="0">
+                            <thead>
+
+                                <tr>
+                                    <th rowspan="2" width="30px" align="center" style="border-right:none;background-color:#F3F3F3;">
+                                        <div style="text-align:center;">Nº</div>
+                                    </th>
+                                    <th rowspan="2" style="border-right:none;background-color:#F3F3F3;">[MATRÍCULA] ALUNO</th>
+
+                                    <th colspan="4" style="border-right:none;background-color:#F3F3F3;">
+                                        <div style="text-align:center;">Horários</div>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    
+                                    
+
+                                    <th>
+                                        <div class="text-center">1º</div>
+                                    </th>
+                                    <th class="text-center">
+                                        <div>2º</div>
+                                    </th>
+                                    <th class="text-center">
+                                        <div>3º</div>
+                                    </th >
+                                    <th class="text-center">
+                                        <div>4º</div>
+                                    </th>
+                                </tr>
+
+
+                            </thead>
+                            <tbody>
+
+                                <t t-set="count" t-value="1" />
+
+                                <t t-foreach="o.frequencia_ids" t-as="rec">
+                                    <tr>
+                                        <td class="pri_col">
+                                            <t t-esc="count" />
+                                            <t t-set="count" t-value="count + 1" />
+                                        </td>
+                                        <td style="border-top:none;border-right:none;">
+                                            [<span t-field="rec.curso_matricula_name" />] <span t-field="rec.aluno_name" />
+                                        </td>
+                                        <td  style="border-top:none;border-right:none;">
+                                            <t t-if="rec.hora_1">
+                                                <div class="presente">P</div>
+                                            </t>
+                                            <t t-if="not rec.hora_1">
+                                                <div class="ausente">F</div>
+                                            </t>
+                                        </td>
+                                        <td style="border-top:none;border-right:none;">
+                                            <t t-if="rec.hora_2">
+                                                <div class="presente">P</div>
+                                            </t>
+                                            <t t-if="not rec.hora_2">
+                                                <div class="ausente">F</div>
+                                            </t>
+                                        </td>
+                                        <td style="border-top:none;border-right:none;">
+                                            <t t-if="rec.hora_3">
+                                                <div class="presente">Presente</div>
+                                            </t>
+                                            <t t-if="not rec.hora_3">
+                                                <div class="ausente">F</div>
+                                            </t>
+                                        </td>
+                                        <td style="border-top:none;border-right:none;background-color:#FFFFFF;">
+                                            <t t-if="rec.hora_4">
+                                                <div class="presente">Presente</div>
+                                            </t>
+                                            <t t-if="not rec.hora_4">
+                                                <div class="ausente">F</div>
+                                            </t>
+                                        </td>
+
+                                    </tr>
+
+
+                                </t>
+                            </tbody>
+                            <tfoot></tfoot>
+
+                        </table>
+                        <div class="row">
+                            <div class="col-12"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6"></div>
+                            <div class="col-6 diario_date">
+
+                                <!-- <t t-esc="o.get_diario_date()" /> -->
+                                <p>_________________, __________ de __________________ de _______________.</p>
+
+
+                            </div>
+                        </div>
+
+                        <div class="row-12" height="100px">
+
+
+                        </div>
+
+                        <div class="row-12 diario_assinatura">
+                            <br/>
+                            <br/>
+                            ________________________________________________________
+                            <br />
+
+                            <span class="text-uppercase font-italic" t-field="o.professor_id" />
+
+                        </div>
+
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

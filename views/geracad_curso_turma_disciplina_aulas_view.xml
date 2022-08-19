@@ -55,15 +55,16 @@
           <field name="state" />
          
          
-          <filter name="filter_data_inicio" date="hora_inicio" 
-            
-            string="hora de início"/>
-          <filter name="filter_data_termino" date="hora_termino" 
-            
-            string="Hora término"/>
+          <filter name="filter_data_inicio" date="hora_inicio_agendado" string="Hora de Início Agendada"/>     
+          <filter name="filter_data_termino" date="hora_termino_agendado" string="Hora Término Agendada"/>
+
+          <filter name="filter_data_inicio" date="hora_inicio" string="Hora de início"/>
+          <filter name="filter_data_termino" date="hora_termino" string="Hora término"/>
       
           
-          <filter name="groupby_unidade" string="Unidade" context="{'group_by' : 'company_id'}"></filter>
+          <filter name="groupby_unidade" string="Unidade" context="{'group_by' : 'company_id'}" groups="base.group_multi_company"></filter>
+          <filter name="groupby_professor" string="Professor" context="{'group_by' : 'professor_id'}"></filter>
+          <filter name="groupby_turma_disciplina" string="Turma Disciplina" context="{'group_by' : 'turma_disciplina_id'}"></filter>
          
          
          
@@ -89,9 +90,15 @@
       <field name="arch" type="xml">
         <form string="Aulas">
           <header>
-                  <button name="action_agendar" type="object" string="Agendar"/>
-                  <button name="action_iniciar" type="object" string="Iniciar"/>
-                  <button name="action_finalizar" type="object" string="Finalizar"/>
+                  <button name="action_agendar" type="object" string="Agendar" 
+                  attrs="{'invisible': [('state', 'not in', ['draft'])]}"
+                  />
+                  <button name="action_iniciar" type="object" string="Iniciar"
+                  attrs="{'invisible': [('state', 'not in', ['draft','agendada'])]}"
+                  />
+                  <button name="action_finalizar" type="object" string="Finalizar"
+                  attrs="{'invisible': [('state', 'not in', ['em_andamento'])]}"
+                  />
                   <field name="state" widget="statusbar" />
           </header>
           <sheet>
@@ -128,19 +135,22 @@
                 
                 <field name="professor_id" options="{'no_create': True}" />
                 
-                <field name="tipo_de_aula"  />
+                <field name="tipo_de_aula" attrs = "{'readonly': [('state','in',['concluida'])]}" />
                 <field name="sala_id" options="{'no_create': True}" />
               </group>
               <group string="Programação">
                 
-                <field name="hora_inicio_agendado" />
-                <field name="hora_termino_agendado" />
+                <field name="hora_inicio_agendado" 
+                attrs = "{'readonly': [('state','not in',('draft'))]}"
+                />
+                <field name="hora_termino_agendado"    
+                 attrs = "{'readonly': [('state','not in',('draft'))]}"/>
              
               </group>
               <group string="Aula Ministrada">
               
-                <field name="hora_inicio" />
-                <field name="hora_termino" />
+                <field name="hora_inicio"  attrs = "{'readonly': [('state','in',['concluida'])]}"/>
+                <field name="hora_termino" attrs = "{'readonly': [('state','in',['concluida'])]}" />
              
               </group>
              
@@ -157,7 +167,17 @@
             <notebook>
               <page string="Frequencia">
                 <group>
-                 
+                  <field nolabel="1" name="frequencia_ids" attrs = "{'readonly': [('state','in',['concluida'])]}">
+                    <tree editable="top" create="0">
+                      <field name="curso_matricula_name" />
+                      <field name="aluno_name" />
+                      <field name="hora_1" />
+                      <field name="hora_2" />
+                      <field name="hora_3" />
+                      <field name="hora_4" />
+                    </tree>
+                  </field>
+
                 </group>
               </page>
               <page string="Descrição do conteúdo">

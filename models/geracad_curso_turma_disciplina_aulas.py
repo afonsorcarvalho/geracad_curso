@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from ast import For
+from email.policy import default
 
 from odoo import models, fields, api, _
 from datetime import date
@@ -27,7 +28,9 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
     
     
 
-    name = fields.Char("Assunto")
+    name = fields.Char("Assunto", 
+    required=True
+    )
 
     company_id = fields.Many2one(
         'res.company',string="Unidade", required=True, default=lambda self: self.env.company
@@ -99,11 +102,20 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
         ], required=True)
 
     professor_id =  fields.Many2one(
-        'res.partner',
-        string='Professor',
-        required=True,
-        domain=[('e_professor','=', True)]
+    
+        related='turma_disciplina_id.professor_id',
+        readonly=True,
+        store=True,
+    
         )
+
+    
+    frequencia_ids = fields.One2many(
+        string='Frequência',
+        comodel_name='geracad.curso.turma.disciplina.aulas.frequencia',
+        inverse_name='turma_aula_id',
+    )
+    
  
     state = fields.Selection([
         ('draft', 'Rascunho'),
@@ -267,18 +279,118 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
             }
         }
 
+    def _get_matriculas_ativas(self):
+        _logger.info("Pegando matriculas ativas")
+        matricula_disciplina_ids = []
+        for rec in self:
+            matricula_disciplina_ids = self.env['geracad.curso.matricula.disciplina'].search([
+                '&',
+                ('turma_disciplina_id','=',rec.turma_disciplina_id.id),
+                ('state','in',['inscrito'])
 
-   
+                ])
+        return matricula_disciplina_ids
+            
+            
+
+    def _monta_frequencia(self):
+        _logger.info("Montando a frequencia dos alunos")
+        for rec in self:
+            matricula_disciplina_ids = rec._get_matriculas_ativas()
+            for matricula_disciplina in matricula_disciplina_ids:
+                rec.write({
+                    'frequencia_ids':[
+                         (0,0, {
+                        'turma_aula_id': rec.id,
+                        'matricula_disciplina_id': matricula_disciplina.id,
+                    })
+                    ]
+                   
+                })
+
+
+    def _calcula_adiciona_frequencia_na_nota_disciplina(self):
+        _logger.info("Calculando e adicionando as faltas na turma")
+        for rec in self:
+            for frequencia in rec.frequencia_ids:
+                soma = 0
+                if frequencia.hora_1:
+                    soma=soma+1
+                if frequencia.hora_2:
+                    soma=soma+1
+                if frequencia.hora_3:
+                    soma=soma+1
+                if frequencia.hora_4:
+                    soma=soma+1
+                frequencia.matricula_disciplina_id.nota.faltas = frequencia.matricula_disciplina_id.nota.faltas + soma
    
     def action_agendar(self):
         _logger.info("agendando")
+        for rec in self:
+            rec.write({
+                'state': 'agendada',
+            })
 
     def action_iniciar(self):
         _logger.info("iniciando")
+        for rec in self:
+            rec._monta_frequencia()
+            rec.write({
+                'state': 'em_andamento',
+                'hora_inicio': fields.Datetime.now()
+            }
+               
+            )
+
+
 
     def action_finalizar(self):
         _logger.info("finalizando")
+        _logger.info("iniciando")
+        for rec in self:
+            rec._calcula_adiciona_frequencia_na_nota_disciplina()
+            rec.write({
+                'state': 'concluida',
+                'hora_termino': fields.Datetime.now()
+            })
 
+class GeracadCursoTurmaDisciplinaAulasFrequencia(models.Model):
+    _name = "geracad.curso.turma.disciplina.aulas.frequencia"
+    _description = "Frequencia das Aulas da Turma de disciplina de Curso"
+    _check_company_auto = True
+
+    company_id = fields.Many2one(
+        'res.company',string="Unidade", required=True, default=lambda self: self.env.company
+    )
+
+    turma_aula_id = fields.Many2one(
+        'geracad.curso.turma.disciplina.aulas',
+        string='Aulas',
+        )
+    matricula_disciplina_id = fields.Many2one(
+        "geracad.curso.matricula.disciplina",
+        string="Matrícula Disciplina"
+    )
+    curso_matricula_name = fields.Char(
+      
+        string='Matrícula',
+        related='matricula_disciplina_id.curso_matricula_id.name',
+        readonly=True,
+        store=True
+        )
+    aluno_name = fields.Char(
+     
+        string='Aluno',
+        related='matricula_disciplina_id.aluno_id.name',
+        readonly=True,
+        store=True
+        )
+    
+    
+    hora_1 = fields.Boolean("1ª hora", default=False)
+    hora_2 = fields.Boolean("2ª hora", default=False)
+    hora_3 = fields.Boolean("3ª hora", default=False)
+    hora_4 = fields.Boolean("4ª hora", default=False)
 
 
         

@@ -35,12 +35,56 @@
         </record>
 
         <!-- Professores Rules -->
-       <!-- <record model="ir.rule" id="geracad_curso_nota_disciplina_professor_rule">
-            <field name="name">Regra de nota disciplina apenas professor da disciplina</field>
+       <record model="ir.rule" id="geracad_curso_nota_disciplina_professor_rule">
+            <field name="name">Notas: Regra de nota disciplina apenas professor da disciplina</field>
             <field name="model_id" ref="model_geracad_curso_nota_disciplina"/>
             <field name="groups" eval="[(4, ref('group_geracad_curso_professor'))]"/>
-            <field name="domain_force">[ '|', ('professor_id', '=', False),('professor_id', '=', user.partner_id.id)]</field>
-        </record> -->
+            <field name="domain_force">[ ('professor_id', '=', user.partner_id.id)]</field>
+            <field name="perm_unlink">False</field>
+        </record> 
+       <record model="ir.rule" id="geracad_curso_turma_disciplina_aulas_professor_rule">
+            <field name="name">Aulas: Regra de aulas apenas professor da disciplina</field>
+            <field name="model_id" ref="model_geracad_curso_turma_disciplina_aulas"/>
+            <field name="groups" eval="[(4, ref('group_geracad_curso_professor'))]"/>
+            <field name="domain_force">[ ('professor_id', '=', user.partner_id.id)]</field>
+            <field name="perm_unlink">False</field>
+        </record> 
+       <record model="ir.rule" id="geracad_curso_turma_disciplina_professor_rule">
+            <field name="name">Turmas disciplinas: Regra de ver apenas a disciplina do professor</field>
+            <field name="model_id" ref="model_geracad_curso_turma_disciplina"/>
+            <field name="groups" eval="[(4, ref('group_geracad_curso_professor'))]"/>
+            <field name="domain_force">[ ('professor_id', '=', user.partner_id.id)]</field>
+            <field name="perm_unlink">False</field>
+            <field name="perm_write">False</field>
+            <field name="perm_read">True</field>
+            <field name="perm_create">False</field>
+        </record> 
+    
+         <!-- Secretaria Rules -->
+       <record model="ir.rule" id="geracad_curso_nota_disciplina_secretaria_rule">
+            <field name="name">Notas: todas as notas</field>
+            <field name="model_id" ref="model_geracad_curso_nota_disciplina"/>
+            <field name="groups" eval="[(4, ref('group_geracad_curso_secretaria'))]"/>
+            <field name="domain_force">[ (1, '=', 1)]</field>
+            <field name="perm_unlink">False</field>
+        </record> 
+        <record model="ir.rule" id="geracad_curso_turma_disciplina_aulas_secretaria_rule">
+            <field name="name">Aulas: todas as aulas</field>
+            <field name="model_id" ref="model_geracad_curso_turma_disciplina_aulas"/>
+            <field name="groups" eval="[(4, ref('group_geracad_curso_secretaria'))]"/>
+            <field name="domain_force">[ (1, '=', 1)]</field>
+            <field name="perm_unlink">False</field>
+        </record> 
+        <record model="ir.rule" id="geracad_curso_turma_disciplina_secretaria_rule">
+            <field name="name">Turmas disciplinas: todas as turmas</field>
+            <field name="model_id" ref="model_geracad_curso_turma_disciplina"/>
+            <field name="groups" eval="[(4, ref('group_geracad_curso_secretaria'))]"/>
+            <field name="domain_force">[ (1, '=', 1)]</field>
+            <field name="perm_unlink">False</field>
+            <field name="perm_write">True</field>
+            <field name="perm_read">True</field>
+            <field name="perm_create">True</field>
+        </record> 
         
 
         <!-- Multi - Company Rules -->

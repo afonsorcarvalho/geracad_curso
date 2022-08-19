@@ -163,7 +163,8 @@
             </h1>
             <button name="action_adiciona_alunos_turma_curso" string="Atualizar alunos" 
              class="oe_highlight" states="aberta"  type="object" 
-              help="Atualiza os alunos inscritos no curso, adicionando os que não estão matriculados na disciplina" />
+             groups="geracad_curso.group_geracad_curso_secretaria"
+             help="Atualiza os alunos inscritos no curso, adicionando os que não estão matriculados na disciplina" />
           
             <group>
               <group string="Dados da Turma Disciplina">
@@ -208,10 +209,14 @@
             <notebook>
               <page string="Notas">
                 <group>
-                  <field name="notas" nolabel="1" readonly="1">
-                    <tree editable="0" delete="0" create="0" default_order="">
+                  <field name="notas" nolabel="1" readonly="0">
+                    <tree editable="1" delete="0" create="0" default_order="">
                       <!-- <field name="disciplina_matricula_id"  optional="hide"/> -->
-                      <field name="curso_matricula_id" />
+                      <field name="curso_matricula_codigo" 
+                      
+                       />
+                      <field name="aluno_nome"  />
+                      <field name="faltas" />
                       <field name="nota_1" />
                       <field name="nota_2" />
                       <field name="final" />

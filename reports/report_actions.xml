@@ -110,6 +110,7 @@
     <field name="report_type">qweb-html</field>
     <field name="report_name">geracad_curso.report_turma_disciplina_diario_template</field>
     <field name="report_file">geracad_curso.report_turma_disciplina_diario_template</field>
+    <field name="groups_id" eval="[(4, ref('geracad_curso.group_geracad_curso_secretaria')),(4, ref('geracad_curso.group_geracad_curso_administrator'))]"/>
     <field name="attachment_use" eval="False"/>
     
      <field name="print_report_name">'Diário Turma - %s' % (object.name)</field> 
@@ -125,6 +126,7 @@
     <field name="report_type">qweb-html</field>
     <field name="report_name">geracad_curso.report_turma_disciplina_ata_avaliacao_template</field>
     <field name="report_file">geracad_curso.report_turma_disciplina_ata_avaliacao_template</field>
+    <field name="groups_id" eval="[(4, ref('geracad_curso.group_geracad_curso_secretaria')),(4, ref('geracad_curso.group_geracad_curso_administrator'))]"/>
     <field name="attachment_use" eval="False"/>
     
      <field name="print_report_name">'Ata Avaliação Turma - %s' % (object.name)</field> 
@@ -140,6 +142,7 @@
     <field name="report_type">qweb-html</field>
     <field name="report_name">geracad_curso.report_turma_disciplina_ata_frequencia_avaliacao_template</field>
     <field name="report_file">geracad_curso.report_turma_disciplina_ata_frequencia_avaliacao_template</field>
+    <field name="groups_id" eval="[(4, ref('geracad_curso.group_geracad_curso_secretaria')),(4, ref('geracad_curso.group_geracad_curso_administrator'))]"/>
     <field name="attachment_use" eval="False"/>
     
      <field name="print_report_name">'Ata Frequencia de Avaliação Turma - %s' % (object.name)</field> 
@@ -148,6 +151,23 @@
     
     <!-- <field name="paperformat_id" ref="report.paperformat_euro" /> --> 
     <field name="help">Frequência de Avaliação</field>
+</record>
+<record id="action_ata_frequencia_aula_turma_disciplina_report" model="ir.actions.report">
+    <field name="name">Ata de Frequência de Aula</field>
+    <field name="model">geracad.curso.turma.disciplina.aulas</field>
+    <field name="report_type">qweb-html</field>
+    <field name="report_name">geracad_curso.report_turma_disciplina_ata_frequencia_aula_template</field>
+    <field name="report_file">geracad_curso.report_turma_disciplina_ata_frequencia_aula_template</field>
+    <field name="groups_id" 
+    eval="[(4, ref('geracad_curso.group_geracad_curso_secretaria')),(4, ref('geracad_curso.group_geracad_curso_administrator')),(4, ref('geracad_curso.group_geracad_curso_professor'))]"/>
+    <field name="attachment_use" eval="False"/>
+    
+     <field name="print_report_name">'Ata Frequencia de Aula Turma - %s - %s - %s' % (object.name,object.turma_disciplina_id.name,object.hora_inicio_agendado)</field> 
+     <field name="binding_model_id" ref="model_geracad_curso_turma_disciplina_aulas"/> 
+     <field name="paperformat_id" ref="paperformat_ata_avaliacao"/> 
+    
+    <!-- <field name="paperformat_id" ref="report.paperformat_euro" /> --> 
+    <field name="help">Frequência de Aula</field>
 </record>
 
  

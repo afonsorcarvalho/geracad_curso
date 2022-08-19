@@ -170,7 +170,7 @@ class GeracadCursoNotaDisciplina(models.Model):
         for grade in grade_lines:
             if grade.periodo != 0:
                 periodo = grade.periodo
-        return 1
+        return periodo
         
         
    
