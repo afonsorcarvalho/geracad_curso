@@ -120,6 +120,22 @@
     <!-- <field name="paperformat_id" ref="report.paperformat_euro" /> --> 
     <field name="help">Diário</field>
 </record>
+<record id="action_diario_turma_disciplina_final_report" model="ir.actions.report">
+    <field name="name">Diário Turma Disciplina Final</field>
+    <field name="model">geracad.curso.turma.disciplina</field>
+    <field name="report_type">qweb-html</field>
+    <field name="report_name">geracad_curso.report_turma_disciplina_diario_final_template</field>
+    <field name="report_file">geracad_curso.report_turma_disciplina_diario_final_template</field>
+    <field name="groups_id" eval="[(4, ref('geracad_curso.group_geracad_curso_secretaria')),(4, ref('geracad_curso.group_geracad_curso_administrator')),(4, ref('geracad_curso.group_geracad_curso_professor'))]"/>
+    <field name="attachment_use" eval="False"/>
+    
+     <field name="print_report_name">'Diário Turma Final - %s' % (object.name)</field> 
+     <field name="binding_model_id" ref="model_geracad_curso_turma_disciplina"/> 
+     <field name="paperformat_id" ref="paperformat_diario"/>
+    
+    <!-- <field name="paperformat_id" ref="report.paperformat_euro" /> --> 
+    <field name="help">Diário Final</field>
+</record>
 <record id="action_ata_avaliação_turma_disciplina_report" model="ir.actions.report">
     <field name="name">Ata de Avaliação Turma</field>
     <field name="model">geracad.curso.turma.disciplina</field>

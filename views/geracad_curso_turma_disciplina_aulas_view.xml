@@ -175,6 +175,7 @@
                       <field name="hora_2" />
                       <field name="hora_3" />
                       <field name="hora_4" />
+                      <field name="count_faltas" />
                     </tree>
                   </field>
 

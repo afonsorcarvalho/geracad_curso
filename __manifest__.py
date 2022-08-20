@@ -57,6 +57,7 @@
         'reports/report_disciplinas_pendentes_aluno_template.xml',
         'reports/report_historico_disciplinas_pendentes_aluno_template.xml',
         'reports/report_turma_disciplina_diario_template.xml',
+        'reports/report_turma_disciplina_diario_final_template.xml',
         'reports/report_turma_disciplina_ata_avaliacao_template.xml',
         'reports/report_turma_disciplina_ata_frequencia_avaliacao_template.xml',
         'reports/report_turma_disciplina_ata_frequencia_aula_template.xml',

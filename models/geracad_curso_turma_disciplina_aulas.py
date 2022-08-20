@@ -4,7 +4,8 @@ from ast import For
 from email.policy import default
 
 from odoo import models, fields, api, _
-from datetime import date
+from datetime import date, datetime
+
 from babel.dates import format_datetime, format_date
 from dateutil.relativedelta import relativedelta
 from odoo.exceptions import ValidationError
@@ -206,78 +207,8 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
                 res[field]['exportable'] = False 
         return res
 
-    # def _compute_alunos_count(self):
-    #     for record in self:    
-    #         record.alunos_count = self.env["geracad.curso.matricula.disciplina"].search(
-    #             [('turma_disciplina_id', '=', record.id)],
-    #             offset=0, limit=None, order=None, count=True)
-
-        
-    # @api.depends('name', 'disciplina_id')
-    # def name_get(self):
-    #     result = []
-    #     for record in self:
-    #         name = '[' + record.name + '] ' + record.disciplina_id.name
-    #         result.append((record.id, name))
-    #     return result
     
-    #TODO
-    # Verificar essa função que não está funcionando direito
 
-    # @api.model
-    # def name_search(self, name, args=None, operator='=ilike', limit=100):
-    #     args = args or []
-    #     domain = []
-    #     if name:
-    #         domain = [
-    #             '|', ('name', '=ilike', name), ('disciplina_id', operator, name)
-    #         ]
-            
-    #     records = self.search(domain + args, limit=limit)
-    #     return records.name_get()
-    
-    
-    
-    
-    
-    """
-
-            BUTTON ACTIONS
-
-    """
-
-    def action_go_alunos_disciplinas(self):
-        _logger.info("action open alunos disciplinas")
-
-        return {
-            'name': _('Alunos Matriculados'),
-            'type': 'ir.actions.act_window',
-            'target':'current',
-            'view_mode': 'tree,form',
-            'res_model': 'geracad.curso.matricula.disciplina',
-            'domain': [('turma_disciplina_id', '=', self.id)],
-            'context': {
-                'default_turma_disciplina_id': self.id,
-               
-            }
-        }
-    def action_go_notas_disciplinas(self):
-        _logger.info("action open alunos disciplinas")
-
-        return {
-            'name': _('Notas'),
-            'type': 'ir.actions.act_window',
-            'target':'current',
-            'view_mode': 'tree,form',
-            'res_model': 'geracad.curso.nota.disciplina',
-            'domain': [('turma_disciplina_id', '=', self.id)],
-            'context': {
-                'default_turma_disciplina_id': self.id,
-                
-                'expand': True,
-                'editable': "bottom",
-            }
-        }
 
     def _get_matriculas_ativas(self):
         _logger.info("Pegando matriculas ativas")
@@ -308,21 +239,14 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
                    
                 })
 
-
-    def _calcula_adiciona_frequencia_na_nota_disciplina(self):
+    def _adiciona_frequencia_na_nota_disciplina(self):
+        '''
+            Função que soma a contagem de faltas da frequencia na nota de cada aluno
+        '''
         _logger.info("Calculando e adicionando as faltas na turma")
         for rec in self:
             for frequencia in rec.frequencia_ids:
-                soma = 0
-                if frequencia.hora_1:
-                    soma=soma+1
-                if frequencia.hora_2:
-                    soma=soma+1
-                if frequencia.hora_3:
-                    soma=soma+1
-                if frequencia.hora_4:
-                    soma=soma+1
-                frequencia.matricula_disciplina_id.nota.faltas = frequencia.matricula_disciplina_id.nota.faltas + soma
+                frequencia.matricula_disciplina_id.nota.faltas += frequencia.count_faltas
    
     def action_agendar(self):
         _logger.info("agendando")
@@ -348,7 +272,7 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
         _logger.info("finalizando")
         _logger.info("iniciando")
         for rec in self:
-            rec._calcula_adiciona_frequencia_na_nota_disciplina()
+            rec._adiciona_frequencia_na_nota_disciplina()
             rec.write({
                 'state': 'concluida',
                 'hora_termino': fields.Datetime.now()
@@ -392,6 +316,68 @@ class GeracadCursoTurmaDisciplinaAulasFrequencia(models.Model):
     hora_3 = fields.Boolean("3ª hora", default=False)
     hora_4 = fields.Boolean("4ª hora", default=False)
 
+    count_faltas =  fields.Integer(
+        string='Faltas',compute="_compute_faltas"
+    )
+
+
+    @api.depends('hora_1','hora_2','hora_3','hora_4')
+    def _compute_faltas(self):
+        
+        for rec in self:
+            qtd_horario = self._calcula_hora_aula( rec.turma_aula_id.hora_inicio_agendado,rec.turma_aula_id.hora_termino_agendado)
+            _logger.info("qtd horario")
+            _logger.info(qtd_horario)
+            faltas = 0
+            soma_presenca = 0
+           
+            if rec.hora_1:
+                soma_presenca += 1 
+            if rec.hora_2:
+                soma_presenca += 1 
+            if rec.hora_3:
+                soma_presenca += 1 
+            if rec.hora_4:
+                soma_presenca += 1 
+
+            _logger.info("numero de presencas")
+            _logger.info(qtd_horario)
+            if soma_presenca < qtd_horario:
+                faltas = qtd_horario - soma_presenca
+                
+            _logger.info("qtd de faltas")
+            _logger.info(faltas)
+            rec.count_faltas = faltas
+    
+
+    def _calcula_hora_aula(self, hora_ini, hora_fim):
+        '''
+            Recebe Datatime de inicio e de fim
+            e retorna quantidade de hora aula
+            
+        '''
+        _logger.info("HORA INICIO")
+        _logger.info(hora_ini)
+        _logger.info("HORA FIM")
+        _logger.info(hora_fim)
+        tempo_hora_aula = 50 # tempo da hora aula em minutos
+        max_hora_aula = 4 # valor maximo hora aula
+        tempo_de_aula =  ((hora_fim -  hora_ini).seconds // 60)  # tempo de aula em minutos
+        _logger.info("TEMPO DE AULA")
+        _logger.info(tempo_de_aula)
+        hora_aula = tempo_de_aula//tempo_hora_aula
+        _logger.info("HORA AULA CALCULADA")
+        _logger.info(hora_aula)
+        if hora_aula >= max_hora_aula:
+            hora_aula = max_hora_aula
+        if hora_aula < 0:
+            hora_aula = 0
+        _logger.info("HORA AULA RETORNADA")
+        _logger.info(hora_aula)
+        return hora_aula
+
+
+    
 
         
 

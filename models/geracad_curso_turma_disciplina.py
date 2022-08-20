@@ -2,6 +2,7 @@
 
 
 import json
+from re import search
 from odoo import models, fields, api, _
 from datetime import date
 from babel.dates import format_datetime, format_date
@@ -246,6 +247,48 @@ class GeracadCursoTurmDisciplina(models.Model):
             })
 
         return res
+    
+
+
+    #usado na impressão do diário
+    def get_aulas(self):
+        '''
+            Função que retorna as aulas para impressão do diário final
+            
+        '''
+        aulas = self.env['geracad.curso.turma.disciplina.aulas'].search([
+            ('turma_disciplina_id','=', self.id)
+            
+            ],order='hora_inicio_agendado ASC')
+        
+        return aulas
+    #usado na impressão do diário
+    def get_presenca_aula_matricula(self,aula, matricula_disciplina):
+        '''
+            Função que retorna presenca ou falta 
+            
+        '''
+        frequencia = self.env['geracad.curso.turma.disciplina.aulas.frequencia'].search([
+            ('turma_aula_id','=', aula.id),
+            ('matricula_disciplina_id','=', matricula_disciplina.id),
+            
+            ])
+        
+        return frequencia[0].count_faltas
+    #usado na impressão do diário
+    def get_coluna_restante_frequencia(self):
+        '''
+            Função que retorna quantidade de colunas na frequecia
+            
+        '''
+        qtd_colunas_total = 40
+        aulas = self.get_aulas()
+        qtd_aulas = len(aulas)
+        colunas_restantes = []
+        for n in range(0,qtd_colunas_total-qtd_aulas):
+            colunas_restantes.append(n)
+        
+        return colunas_restantes
     
     #usado na impressão do diário
     def get_diario_date(self):
