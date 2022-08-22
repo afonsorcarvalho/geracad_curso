@@ -26,8 +26,6 @@
                             }
                             .presente  {
                                 text-align:center;
-                               
-                               
 
                             }
                             .ausente {
@@ -50,6 +48,22 @@
                             .diario_assinatura{
                                 text-align:center;
                             }
+                            .faltas{
+                                text-align:center;
+                            }
+                            th.faltas {
+                                text-align:center;
+                                width: 50px;
+                            }
+                            th.horarios {
+                                text-align:center;
+                                width: 150px;
+                            }
+                            td.hora_nula {
+                                text-align:center;
+                                background-color: #EAEAEA;
+                            }
+
                         
                             
                         
@@ -113,8 +127,11 @@
                                     </th>
                                     <th rowspan="2" style="border-right:none;background-color:#F3F3F3;">[MATRÍCULA] ALUNO</th>
 
-                                    <th colspan="4" style="border-right:none;background-color:#F3F3F3;">
+                                    <th colspan="4" class="horarios" style="border-right:none;background-color:#F3F3F3;">
                                         <div style="text-align:center;">Horários</div>
+                                    </th>
+                                    <th rowspan="2" class="faltas" style="border-right:none;background-color:#F3F3F3;">
+                                        <div style="text-align:center;">FALTAS</div>
                                     </th>
                                 </tr>
                                 <tr>
@@ -150,37 +167,58 @@
                                         <td style="border-top:none;border-right:none;">
                                             [<span t-field="rec.curso_matricula_name" />] <span t-field="rec.aluno_name" />
                                         </td>
-                                        <td  style="border-top:none;border-right:none;">
-                                            <t t-if="rec.hora_1">
-                                                <div class="presente">P</div>
-                                            </t>
-                                            <t t-if="not rec.hora_1">
-                                                <div class="ausente">F</div>
-                                            </t>
-                                        </td>
-                                        <td style="border-top:none;border-right:none;">
-                                            <t t-if="rec.hora_2">
-                                                <div class="presente">P</div>
-                                            </t>
-                                            <t t-if="not rec.hora_2">
-                                                <div class="ausente">F</div>
-                                            </t>
-                                        </td>
-                                        <td style="border-top:none;border-right:none;">
-                                            <t t-if="rec.hora_3">
-                                                <div class="presente">Presente</div>
-                                            </t>
-                                            <t t-if="not rec.hora_3">
-                                                <div class="ausente">F</div>
-                                            </t>
-                                        </td>
-                                        <td style="border-top:none;border-right:none;background-color:#FFFFFF;">
-                                            <t t-if="rec.hora_4">
-                                                <div class="presente">Presente</div>
-                                            </t>
-                                            <t t-if="not rec.hora_4">
-                                                <div class="ausente">F</div>
-                                            </t>
+                                        
+                                        <t t-if="rec._calcula_hora_aula(o.hora_inicio_agendado,o.hora_termino_agendado)>=1">
+                                            <td  style="border-top:none;border-right:none;">
+                                                <t t-if="rec.hora_1">
+                                                    <div class="presente">P</div>
+                                                </t>
+                                                <t t-if="not rec.hora_1">
+                                                    <div class="ausente">F</div>
+                                                </t>
+                                            </td>
+                                        </t>
+                                        <t t-if="rec._calcula_hora_aula(o.hora_inicio_agendado,o.hora_termino_agendado)>=2">
+                                            <td style="border-top:none;border-right:none;">
+                                                <t t-if="rec.hora_2">
+                                                    <div class="presente">P</div>
+                                                </t>
+                                                <t t-if="not rec.hora_2">
+                                                    <div class="ausente">F</div>
+                                                </t>
+                                            </td>
+                                        </t>
+                                        <t t-if="not rec._calcula_hora_aula(o.hora_inicio_agendado,o.hora_termino_agendado)>=2">
+                                            <td class="hora_nula" style="border-top:none;border-right:none;"></td>  
+                                        </t>
+                                        <t t-if="rec._calcula_hora_aula(o.hora_inicio_agendado,o.hora_termino_agendado)>=3">
+                                            <td style="border-top:none;border-right:none;">
+                                                <t t-if="rec.hora_3">
+                                                    <div class="presente">P</div>
+                                                </t>
+                                                <t t-if="not rec.hora_3">
+                                                    <div class="ausente">F</div>
+                                                </t>
+                                            </td>
+                                        </t>
+                                        <t t-if="not rec._calcula_hora_aula(o.hora_inicio_agendado,o.hora_termino_agendado)>=3">
+                                            <td class="hora_nula" style="border-top:none;border-right:none;"></td> 
+                                        </t>
+                                        <t t-if="rec._calcula_hora_aula(o.hora_inicio_agendado,o.hora_termino_agendado)>=4">
+                                            <td style="border-top:none;border-right:none;background-color:#FFFFFF;">
+                                                <t t-if="rec.hora_4">
+                                                    <div class="presente">P</div>
+                                                </t>
+                                                <t t-if="not rec.hora_4">
+                                                    <div class="ausente">F</div>
+                                                </t>
+                                            </td>
+                                        </t>
+                                        <t t-if="not rec._calcula_hora_aula(o.hora_inicio_agendado,o.hora_termino_agendado)>=4">
+                                            <td class="hora_nula" style="border-top:none;border-right:none;"></td>  
+                                        </t>
+                                        <td class="faltas" style="border-top:none;border-right:none;">
+                                            <span t-field="rec.count_faltas" />
                                         </td>
 
                                     </tr>

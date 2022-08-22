@@ -257,7 +257,8 @@ class GeracadCursoTurmDisciplina(models.Model):
             
         '''
         aulas = self.env['geracad.curso.turma.disciplina.aulas'].search([
-            ('turma_disciplina_id','=', self.id)
+            ('turma_disciplina_id','=', self.id),
+            ('state','in', ['em_andamento','concluida']),
             
             ],order='hora_inicio_agendado ASC')
         
@@ -268,13 +269,13 @@ class GeracadCursoTurmDisciplina(models.Model):
             Função que retorna presenca ou falta 
             
         '''
-        frequencia = self.env['geracad.curso.turma.disciplina.aulas.frequencia'].search([
+        frequencia_lines = self.env['geracad.curso.turma.disciplina.aulas.frequencia'].search([
             ('turma_aula_id','=', aula.id),
             ('matricula_disciplina_id','=', matricula_disciplina.id),
             
             ])
-        
-        return frequencia[0].count_faltas
+        for frequencia in frequencia_lines:
+            return frequencia[0].count_faltas
     #usado na impressão do diário
     def get_coluna_restante_frequencia(self):
         '''
@@ -297,10 +298,13 @@ class GeracadCursoTurmDisciplina(models.Model):
             no formato: ex. São Luis-MA, 02 de agosto de 2022
         '''
         locale = get_lang(self.env).code
-
+        date_diario = date.today()
         _logger.info(self.company_id.city_id.name + '-' + self.company_id.state_id.code)
-        date_str = self.company_id.city_id.name + '-' + self.company_id.state_id.code + ', ' + format_date(self.data_encerramento,format="long",locale=locale)
-        return   date_str
+        if self.data_encerramento:
+            date_diario = self.data_encerramento
+
+        date_str = self.company_id.city_id.name + '-' + self.company_id.state_id.code + ', ' + format_date(date_diario,format="long",locale=locale)
+        return date_str
 
     #usado na impressão da ata
     def get_ano_semestre(self,tipo):

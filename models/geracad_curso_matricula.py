@@ -587,9 +587,11 @@ class GeracadCursoMatricula(models.Model):
         parcelas_ids = self.env["geracad.curso.financeiro.parcelas"].search([
             '&',
             ('curso_matricula_id','=', self.id),
+           
             '|',
             ('active','=', False),
             ('active','=', True),
+
             
             
             ], offset=0, limit=None, order=None, count=False)
@@ -668,10 +670,10 @@ class GeracadCursoMatricula(models.Model):
                         'situation': 'TR',
                         
                     })
-                    matricula_disciplina.write({
-                        'state': 'trancado'
+            matricula_disciplina.write({
+                'state': 'trancado'
 
-                    })
+            })
         self.write({'state': 'trancado'})
         self._suspende_parcelas_a_vencer()
         self._suspende_contrato()
@@ -681,6 +683,12 @@ class GeracadCursoMatricula(models.Model):
 
         self.write({'state': 'inscrito'})
         self._muda_state_parcelas('vigente',True)
+        for matricula_disciplina in self.matriculas_disciplina_ids:
+            matricula_disciplina.write({
+                'state': 'inscrito'
+
+            })
+
     
    
     
@@ -698,19 +706,17 @@ class GeracadCursoMatricula(models.Model):
                         'situation': 'AB',
                         'state': 'concluida',
                     })
-                    matricula_disciplina.write({
-                        'state': 'abandono'
+            matricula_disciplina.write({
+                'state': 'abandono'
 
-                    })
+            })
 
         self.write({'state': 'abandono'})
         self._cancela_parcelas_a_vencer()
         self._cancela_contrato()
 
 
-    def action_reativar(self):
-        _logger.info("Matrícula Retivar")
-        self.write({'state': 'inscrito'})
+    
     
 
     def action_habilita_edit_turma_curso(self):

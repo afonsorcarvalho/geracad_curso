@@ -153,22 +153,27 @@
                 <field name="hora_termino" attrs = "{'readonly': [('state','in',['concluida'])]}" />
              
               </group>
-             
-            </group>
-            <group string="Outras informações">
-         
-              <group >
+             <group string="Outras informações" >
                
           
                 <field name="company_id" groups="base.group_multi_company" string="Unidade" options="{'no_create': True}" attrs="{'readonly' : [('state','!=', 'draft')]  }" />
 
               </group>
             </group>
+            
             <notebook>
               <page string="Frequencia">
                 <group>
+                  <p class="alert alert-danger">
+                    Clique no checkbox para colocar presença no aluno desejado. As faltas por hora aula serão calculadas automaticamente de acordo com o tempo de aula programada.
+                  </p>
+                </group>
+                <group>
+                
                   <field nolabel="1" name="frequencia_ids" attrs = "{'readonly': [('state','in',['concluida'])]}">
-                    <tree editable="top" create="0">
+                    <tree editable="top" create="0" edit="0"
+                    options="{ 'no_open': True}"
+                    >
                       <field name="curso_matricula_name" />
                       <field name="aluno_name" />
                       <field name="hora_1" />
