@@ -6,7 +6,7 @@
       <field name="name">cursos.turma.disciplina.aulas.list</field>
       <field name="model">geracad.curso.turma.disciplina.aulas</field>
       <field name="arch" type="xml">
-        <tree>
+        <tree create="0">
         
           <field name="name" string="Nome" />
           <field name="turma_disciplina_id"/>
@@ -15,6 +15,7 @@
         
           <field name="hora_inicio_agendado" optional="show"/>
           <field name="hora_termino_agendado" optional="show"/>
+          <field name="tempo_hora_aula_programado" optional="show"/>
           <field name="hora_inicio" optional="show"/>
           <field name="hora_termino" optional="show"/>
           <field name="tipo_de_aula" optional="show"/>
@@ -145,6 +146,8 @@
                 />
                 <field name="hora_termino_agendado"    
                  attrs = "{'readonly': [('state','not in',('draft'))]}"/>
+                <field name="tempo_hora_aula_programado"    
+                />
              
               </group>
               <group string="Aula Ministrada">
@@ -215,11 +218,12 @@
         
           delete="0"
           
-          color="">
+          color="state">
           <field name="display_name"/>
           <field name="professor_id" string="Professor" filters="1" />
           <field name="disciplina_id" />
           <field name="turma_disciplina_id" filters="1"/>
+          <field name="state" filters="1"/>
         </calendar>
       </field>
     </record>

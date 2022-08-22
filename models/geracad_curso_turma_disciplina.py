@@ -248,7 +248,16 @@ class GeracadCursoTurmDisciplina(models.Model):
 
         return res
     
-
+     #usado na impressão do diário
+    def get_soma_hora_aula(self):
+        '''
+            Função que retorna a soma de horas aula da disciplina
+        '''
+        aulas = self.get_aulas()
+        soma = 0
+        for aula in aulas:
+            soma += aula.tempo_hora_aula_programado
+        return soma
 
     #usado na impressão do diário
     def get_aulas(self):

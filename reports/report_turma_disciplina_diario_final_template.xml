@@ -235,9 +235,71 @@
                             <span class="text-uppercase font-italic" t-field="o.professor_id" />
 
                         </div>
+                        <p style="page-break-after:always;">   </p>
+                    <div style="margin-top:20px" >
+                        <table  class="table table-condensed table-bordered" cellpadding="0" cellspacing="0" padding="0" margin="0">
+                            <thead>
+                                <tr>
+                                    <th>
+                                    DATA
+                                    </th>
+                                    <th>
+                                        TIPO
+                                    </th>
+                                    <th>
+                                        ASSUNTO
+                                    </th>
+                                    <th>
+                                    QTD HORA AULA (HH:MM:SS)
+                                    </th>
 
+                                </tr> 
+                            </thead>
+                            <tbody>
+                            <t t-foreach="o.get_aulas()" t-as="aula">
+
+                               
+                                <tr >
+                                   
+                                    
+                                    <td> <span t-field="aula.hora_inicio_agendado" width="50" t-options='{"widget": "date","format": "dd/MM/yyyy"}' /> </td>
+                                    <td> <span class="text-uppercase" t-field="aula.tipo_de_aula" /> </td>
+                                    <td> <strong><span class="text-uppercase" t-field="aula.name" /></strong> </td>
+                                    <td> <span class="text-uppercase" t-field="aula.tempo_hora_aula_programado" /> </td>
+                                   
+                                    
+                                    
+                                  
+                                </tr>
+                            </t>
+                            <!-- <tr>
+                               <td><t t-esc="o.get_soma_hora_aula()"></t></td>
+                            </tr> -->
+                        </tbody>
+                        </table>
+                        <div class="row">
+                            <div class="col-6"></div>
+                            <div class="col-6 diario_date">
+                                
+                                <t t-esc="o.get_diario_date()"/>
+                                
+
+                            </div>
+                        </div>
+
+                        <div class="row-12"></div>
+
+                        <div class="row-12 diario_assinatura">
+                            ________________________________________________________
+                            <br />
+
+                            <span class="text-uppercase font-italic" t-field="o.professor_id" />
+
+                        </div>
+                    </div>
 
                     </div>
+                    
                 </t>
             </t>
         </t>

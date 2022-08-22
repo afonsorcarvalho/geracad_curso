@@ -23,6 +23,7 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
     _name = "geracad.curso.turma.disciplina.aulas"
     _description = "Aulas da Turma de disciplina de Curso"
     _check_company_auto = True
+    _order = 'hora_inicio_agendado DESC'
 
     
     _inherit = ['mail.thread']
@@ -78,12 +79,28 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
         tracking=True,
         required=True
     )
+
+    @api.constrains('hora_inicio_agendado','hora_termino_agendado')
+    def _check_hora_inicio_agendado(self):  
+        _logger.info("Verificando hora de inicio")
+        for record in self:
+            if record.hora_termino_agendado:
+                if record.hora_termino_agendado <= record.hora_inicio_agendado :
+                    raise ValidationError("Hora de inicio programada tem que ser antes da hora de término")
+
     hora_termino_agendado = fields.Datetime(
         string='Término Programado',     
         default= lambda self: date.today() +  relativedelta(hours=1),
         tracking=True,    
         required=True
     )
+    tempo_hora_aula_programado = fields.Char("Tempo Programado",compute="_compute_tempo_programado")
+    
+    def _compute_tempo_programado(self):
+        
+        for rec in self:
+            if rec.hora_termino_agendado and rec.hora_inicio_agendado:
+                rec.tempo_hora_aula_programado = (rec.hora_termino_agendado - rec.hora_inicio_agendado)
 
     hora_inicio = fields.Datetime(
         string='Inicio',
@@ -137,7 +154,7 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
     
     
    
-    
+   
     
     #usado na impressão do diário
     def get_diario_date(self):
