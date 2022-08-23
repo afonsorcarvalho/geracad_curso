@@ -31,7 +31,7 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
     
 
     name = fields.Char("Assunto", 
-    required=True
+    
     )
 
     company_id = fields.Many2one(
@@ -44,6 +44,23 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
         required=True, 
 
         )
+
+    @api.onchange("turma_disciplina_id" )
+    def onchange_turma_disciplina_id(self):
+        if self.turma_disciplina_id.curso_turma_id:
+            self.turma_curso_ids =  [(4,self.turma_disciplina_id.curso_turma_id.id)] 
+                
+    
+        
+  
+    turma_curso_ids = fields.Many2many(
+        "geracad.curso.turma",
+        string='Turma Curso',
+        required=True, 
+
+        )
+    
+   
     
     disciplina_id = fields.Many2one(
         string='Disciplina',
@@ -94,13 +111,13 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
         tracking=True,    
         required=True
     )
-    tempo_hora_aula_programado = fields.Char("Tempo Programado",compute="_compute_tempo_programado")
+    tempo_hora_aula_programado = fields.Integer("Tempo Programado",compute="_compute_tempo_programado")
     
     def _compute_tempo_programado(self):
         
         for rec in self:
             if rec.hora_termino_agendado and rec.hora_inicio_agendado:
-                rec.tempo_hora_aula_programado = (rec.hora_termino_agendado - rec.hora_inicio_agendado)
+                rec.tempo_hora_aula_programado = (rec.hora_termino_agendado - rec.hora_inicio_agendado).total_seconds()/3600
 
     hora_inicio = fields.Datetime(
         string='Inicio',
@@ -231,14 +248,36 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
 
     def _monta_frequencia(self):
         _logger.info("Montando a frequencia dos alunos")
+        tempo_hora_aula_teorico = 60*50
         for rec in self:
             matricula_disciplina_ids = rec._get_matriculas_ativas()
+            hora_1 = True
+            hora_2 = False
+            hora_3 = False
+            hora_4 = False
+
+           
+            if rec.hora_termino_agendado and rec.hora_inicio_agendado:
+                tempo_hora_aula_programado = (rec.hora_termino_agendado - rec.hora_inicio_agendado).total_seconds()
+                if tempo_hora_aula_programado >= 2*tempo_hora_aula_teorico:
+                    hora_2 = True
+                if tempo_hora_aula_programado >= 3*tempo_hora_aula_teorico:
+                    hora_3 = True
+                if tempo_hora_aula_programado >= 4*tempo_hora_aula_teorico:
+                    hora_4 = True
+
             for matricula_disciplina in matricula_disciplina_ids:
+                
                 rec.write({
                     'frequencia_ids':[
                          (0,0, {
                         'turma_aula_id': rec.id,
                         'matricula_disciplina_id': matricula_disciplina.id,
+                        'hora_1': hora_1,
+                        'hora_2': hora_2,
+                        'hora_3': hora_3,
+                        'hora_4': hora_4,
+                        
                     })
                     ]
                    
@@ -275,8 +314,11 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
 
     def action_finalizar(self):
         _logger.info("finalizando")
-        _logger.info("iniciando")
+    
+
         for rec in self:
+            if rec.name == '':
+                raise ValidationError(_('Digite o assunto da aula para poder finalizar.'))
             rec._adiciona_frequencia_na_nota_disciplina()
             rec.write({
                 'state': 'concluida',
@@ -317,6 +359,16 @@ class GeracadCursoTurmaDisciplinaAulasFrequencia(models.Model):
     
     
     hora_1 = fields.Boolean("1ª hora", default=False)
+    @api.onchange('hora_1')
+    def onchange_hora_1(self):
+        if self.turma_aula_id.tempo_hora_aula_programado > 1:
+            self.hora_2 = self.hora_1
+        if self.turma_aula_id.tempo_hora_aula_programado > 2:
+            self.hora_3 = self.hora_1
+        if self.turma_aula_id.tempo_hora_aula_programado > 3:
+            self.hora_4 = self.hora_1
+
+
     hora_2 = fields.Boolean("2ª hora", default=False)
     hora_3 = fields.Boolean("3ª hora", default=False)
     hora_4 = fields.Boolean("4ª hora", default=False)

@@ -25,7 +25,9 @@
         'portal',
         'mail',
         'web_domain_field',
-        'web_dialog_size'],
+        'web_dialog_size',
+        'web_calendar_color_field'
+        ],
 
     # always loaded
     'data': [

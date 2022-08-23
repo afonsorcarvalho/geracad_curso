@@ -8,23 +8,30 @@
       <field name="arch" type="xml">
         <tree create="0">
         
-          <field name="name" string="Nome" />
+          <field name="name" string="Assunto" />
           <field name="turma_disciplina_id"/>
           <field name="curso_id" optional="hide"/>
           <field name="professor_id" optional="show" context="{'default_e_professor': 1}"/>
+          <field name="turma_curso_ids" widget="many2many_tags" />
         
           <field name="hora_inicio_agendado" optional="show"/>
           <field name="hora_termino_agendado" optional="show"/>
-          <field name="tempo_hora_aula_programado" optional="show"/>
-          <field name="hora_inicio" optional="show"/>
-          <field name="hora_termino" optional="show"/>
-          <field name="tipo_de_aula" optional="show"/>
+          <field name="tempo_hora_aula_programado" string="Tempo(h)" optional="show"/>
+          <field name="hora_inicio" optional="hide"/>
+          <field name="hora_termino" optional="hide"/>
+          <field name="tipo_de_aula" optional="hide"/>
         
         
         
           <field name="state" 
           widget="badge"
-          optional="show"/>
+          optional="show"
+          decoration-info="state == 'agendada'" 
+          decoration-success="state == 'draft'" 
+          decoration-danger="state == 'em_andamento'" 
+          decoration-muted="state == 'concluido'" 
+          
+          />
           
           <field name="company_id" optional="show" 
            groups="base.group_multi_company"
@@ -46,6 +53,7 @@
           <field name="name" string="Assunto"  />
           <field name="turma_disciplina_id"  />
           <field name="curso_id" />
+          <field name="turma_curso_ids" widget="many2many_tags" />
        
           <field name="professor_id" />
          
@@ -120,7 +128,7 @@
             </div> -->
 
             <h1>
-              <field name="name" placeholder="Digite o Assunto..." attrs="{'readonly' : [('state','!=', 'draft')]  }" />
+              <field name="name" placeholder="Digite o Assunto..." attrs="{'readonly' : [('state','not in', ['draft','agendada'])]  }" />
             </h1>
         
          
@@ -130,6 +138,7 @@
                   string="Turma Disciplina" 
                   options="{'no_create': True }" attrs="{'readonly' : [('state','!=', 'draft')]  }" />
                   <field name="curso_id"  />
+                  <field name="turma_curso_ids" widget="many2many_tags" options="{'no_create': True}" />
                
                 
         
@@ -165,12 +174,12 @@
             </group>
             
             <notebook>
-              <page string="Frequencia">
-                <group>
+              <page string="Frequência">
+                <!-- <group>
                   <p class="alert alert-danger">
                     Clique no checkbox para colocar presença no aluno desejado. As faltas por hora aula serão calculadas automaticamente de acordo com o tempo de aula programada.
                   </p>
-                </group>
+                </group> -->
                 <group>
                 
                   <field nolabel="1" name="frequencia_ids" attrs = "{'readonly': [('state','in',['concluida'])]}">
@@ -185,6 +194,18 @@
                       <field name="hora_4" />
                       <field name="count_faltas" />
                     </tree>
+                    <form>
+                      <group string="">
+                        <group>
+                          <field name="curso_matricula_name"/>
+                          <field name="aluno_name"/>
+                        </group>
+                        <group>
+                          <field name="count_faltas"/>
+                        </group>
+                      </group>
+                 
+                    </form>
                   </field>
 
                 </group>
@@ -218,11 +239,13 @@
         
           delete="0"
           
-          color="state">
+          color="turma_disciplina_id">
           <field name="display_name"/>
           <field name="professor_id" string="Professor" filters="1" />
+          <field name="turma_curso_ids" string="Turma Curso" />
           <field name="disciplina_id" />
-          <field name="turma_disciplina_id" filters="1"/>
+          <field name="turma_disciplina_id" filters="1" />
+         
           <field name="state" filters="1"/>
         </calendar>
       </field>

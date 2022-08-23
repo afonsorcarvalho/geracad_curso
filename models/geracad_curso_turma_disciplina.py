@@ -33,6 +33,10 @@ class GeracadCursoTurmDisciplina(models.Model):
         'res.company',string="Unidade", required=True, default=lambda self: self.env.company
     )
 
+    color_calendar = fields.Integer(
+        string='Cor calendario',
+    )
+
     disciplina_id = fields.Many2one(
         'geracad.curso.disciplina',
         string='Disciplina',
