@@ -69,7 +69,7 @@
                                 position:absolute;
                                 left:0;
                                 right:0;
-                                top: 56px;
+                                top: 52px;
                                 margin:auto;
                             }
                         
@@ -250,13 +250,13 @@
                                         ASSUNTO
                                     </th>
                                     <th>
-                                    QTD HORA AULA (HH:MM:SS)
+                                    QTD HORA/AULA 
                                     </th>
 
                                 </tr> 
                             </thead>
                             <tbody>
-                            <t t-foreach="o.get_aulas()" t-as="aula">
+                            <t t-foreach="o.get_aulas()" t-as="aula"> 
 
                                
                                 <tr >
@@ -265,7 +265,7 @@
                                     <td> <span t-field="aula.hora_inicio_agendado" width="50" t-options='{"widget": "date","format": "dd/MM/yyyy"}' /> </td>
                                     <td> <span class="text-uppercase" t-field="aula.tipo_de_aula" /> </td>
                                     <td> <strong><span class="text-uppercase" t-field="aula.name" /></strong> </td>
-                                    <td> <span class="text-uppercase" t-field="aula.tempo_hora_aula_programado" /> </td>
+                                    <td> <span class="text-uppercase" t-field="aula.tempo_hora_aula_programado" /> h </td>
                                    
                                     
                                     

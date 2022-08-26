@@ -210,7 +210,7 @@
               <page string="Notas">
                 <group>
                   <field name="notas" nolabel="1" readonly="0">
-                    <tree editable="1" delete="0" create="0" default_order="">
+                    <tree editable="1" edit="1" delete="0" create="0" default_order="">
                       <!-- <field name="disciplina_matricula_id"  optional="hide"/> -->
                       <field name="curso_matricula_codigo" 
                       

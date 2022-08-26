@@ -163,6 +163,35 @@ class GeracadCursoFinanceiroParcelas(models.Model):
         for rec in self:
             if rec.esta_pago and (rec.state == 'vigente' or rec.state == 'draft') :
                 rec.state = 'recebido'
+
+    def action_ajeita_valor_pago_parcela(self,data_minima):
+        _logger.info("ajeitando valor pagos das parcelas do banco antigo")
+        parcelas_ids = self.env['geracad.curso.financeiro.parcelas'].search([
+            '&',
+            ('esta_pago','=',True),
+            '&',
+            ('valor_pago','=', 0),
+            ('data_vencimento','>', data_minima)
+
+        
+        ], 
+           
+        )
+        
+        for parcela in parcelas_ids:
+            _logger.info("valor_pago atual")
+            _logger.info(parcela.valor_pago)
+            parcela.write({
+                'valor_pago': parcela.valor
+            }
+
+            )
+          
+            _logger.info("valor_pago modificado")
+            _logger.info(parcela.valor_pago)
+        
+
+        
     #################################
     # 
     # USADO NA IMPRESSAO            
@@ -186,6 +215,8 @@ class GeracadCursoFinanceiroParcelas(models.Model):
             BUTTON ACTIONS
 
     """
+
+  
 
     def action_pagar_parcela(self):
         if self.state == 'recebido' or self.esta_pago:
