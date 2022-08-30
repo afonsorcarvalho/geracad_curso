@@ -150,6 +150,20 @@
 							<tfoot>
 								<tr>
 									<t t-if="not o.matricula_id">
+										<th colspan="6" style="text-align:right;">TOTAL</th>
+									</t>
+									<t t-if="o.matricula_id">
+										<th colspan="5" style="text-align:right;">TOTAL</th>
+									</t>
+									<td style="text-align:right;">
+										<div >
+											<strong>R$
+											<t t-esc="soma" t-options='{"widget": "float", "precision": 2}' /></strong>
+										</div>
+									</td>
+								</tr>							
+								<tr>
+									<t t-if="not o.matricula_id">
 										<th colspan="6" style="text-align:right;">TOTAL PAGO</th>
 									</t>
 									<t t-if="o.matricula_id">
