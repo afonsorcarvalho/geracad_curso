@@ -472,13 +472,13 @@
     
     
   </record>
-    <record id="action_geracad_curso_pendencias_financeiras_aluno_wizard_form_view" model="ir.actions.act_window.view">
+   <!--  <record id="action_geracad_curso_pendencias_financeiras_aluno_wizard_form_view" model="ir.actions.act_window.view">
       
       <field name="view_mode">form</field>
       
       <field name="view_id" ref="view_geracad_curso_pendencias_financeira_aluno_wizard_form"/>
       <field name="act_window_id" ref="action_geracad_curso_pendencias_financeiras_aluno_wizard_window"/>
-   </record>
+   </record> -->
     
     
     <!-- Top menu item -->
