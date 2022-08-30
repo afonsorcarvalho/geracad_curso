@@ -185,6 +185,23 @@
     <!-- <field name="paperformat_id" ref="report.paperformat_euro" /> --> 
     <field name="help">Frequência de Aula</field>
 </record>
+<record id="action_pendencias_financeira_aluno_report" model="ir.actions.report">
+    <field name="name">Relatório de pendência financeira Aluno</field>
+    <field name="model">geracad.curso.pendencias.financeira.aluno.wizard</field>
+    <field name="report_type">qweb-html</field>
+    <field name="report_name">geracad_curso.report_pendencias_financeira_aluno_template</field>
+    <field name="report_file">geracad_curso.report_pendencias_financeira_aluno_template</field>
+    <field name="groups_id" 
+    eval="[(4, ref('geracad_curso.group_geracad_curso_secretaria')),(4, ref('geracad_curso.group_geracad_curso_finaceiro'))]"/>
+    <field name="attachment_use" eval="False"/>
+    
+     <field name="print_report_name">'Pendencias financeira aluno - %s' % (object.aluno_id.name)</field> 
+    
+    
+    
+    <!-- <field name="paperformat_id" ref="report.paperformat_euro" /> --> 
+    <field name="help">Pendência Financeira Aluno</field>
+</record>
 
  
  </odoo>

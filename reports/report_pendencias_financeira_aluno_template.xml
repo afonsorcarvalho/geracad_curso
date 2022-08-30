@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<!-- <record id="paperformat_disciplinas_pendentes" model="report.paperformat">
+		<field name="name">Disciplinas Pendentes</field>
+		<field name="default" eval="True" />
+		<field name="orientation">Portrait</field>
+		<field name="dpi">135</field>
+		<field name="margin_top">20</field>
+		<field name="margin_bottom">15</field>
+		<field name="margin_left">3</field>
+		<field name="margin_right">3</field>
+		<field name="header_line" eval="False" />
+		<field name="header_spacing">16</field>
+	</record> -->
+	<template id="report_pendencias_financeira_aluno_template">
+		<t t-call="web.html_container">
+			<t t-foreach="docs" t-as="o">
+				<t t-call="web.external_layout">
+					<style>
+						div .page{
+						margin: 0px;
+						padding: 0px;
+						
+						}
+						div #state{
+						text-transform: uppercase;
+						}
+						
+						.o_report_layout_background{
+						background-image: none;
+						}
+						.o_background_header h3 {
+						max-width: 400px;
+						}
+						table { }
+						td {  }
+						td.col-codigo { width: 50px; text-transform: uppercase;  }
+						td.col-disciplina { width: 500px; text-transform: uppercase;  }
+						th.col-disciplina { width: 500px  }
+						td.col-ch { width: 50px  }
+						th.col-ch { width: 50px  }
+						td.col-falta { width: 100px  }
+						th.col-falta { width: 100px  }
+						td.col-nota { width: 100px  }
+						th.col-nota { width: 100px  }
+						td.situation { width: 100px  }
+						th.situation { width: 100px  }
+						
+						.float-right {width:400px}
+						.dados-aluno {padding-top: 10px}
+						.cabecalho-historico {padding: 20px}
+						#table_cabecalho {
+						
+						}
+						.pt-5{
+						padding-top: 0rem !important;
+						}
+						.assinaturas{
+						padding-top: 4rem ;
+						}
+						.legenda{
+						font-size: 0.8rem;
+						}
+					</style>
+					<div class="page">
+						<table class="table table-sm table-striped" style="table-layout: fixed" id="table_cabecalho">
+							<thead style="display: table-row-group">
+								<tr>
+									<th colspan="8">
+										<div class="row cabecalho-historico">
+											<div class="col-12">
+												<h4 class="text-center color-primary">
+													PENDÊNCIAS FINANCEIRAS
+												</h4>
+												<h5 class="text-center">
+
+													<t t-if="o.matricula_id">
+														<span t-field="o.matricula_id" />
+													</t>
+													<t t-if="not o.matricula_id">
+														<span t-field="o.aluno_id.name" />
+													</t>
+												</h5>
+											</div>
+										</div>
+									</th>
+								</tr>
+							</thead>
+
+
+						</table>
+						<!-- PENDENTES -->
+						<table class="table table-sm table-striped">
+							<thead>
+								<tr>
+									<t t-if="not o.matricula_id">
+										<th>Código Mat.</th>
+									</t>
+									<th>Parcela</th>
+									<th>Data Vencimento</th>
+									<th>Data Pagamento</th>
+									<th>Forma de Pagamento</th>
+									<th>Pago</th>
+									<th>Valor</th>
+								</tr>
+
+							</thead>
+							<tbody>
+								<t t-set="soma" t-value="0" />
+								<t t-foreach="o.get_parcelas()" t-as="parcela">
+
+									<t t-set="soma" t-value="parcela.valor+soma" />
+
+									<tr>
+										<t t-if="not o.matricula_id">
+											<td>
+												<span t-field="parcela.curso_matricula_id.name" />
+											</td>
+										</t>
+										<td>
+											<span t-field="parcela.numero_parcela" />
+										</td>
+										<td>
+											<span t-field="parcela.data_vencimento" />
+										</td>
+										<td>
+											<span t-field="parcela.data_pagamento" />
+										</td>
+										<td>
+											<span t-field="parcela.forma_de_pagamento" />
+										</td>
+										<td>
+											
+											<t t-if="parcela.esta_pago">
+												<div class="text-success">SIM</div>
+											</t>
+											<t t-if="not parcela.esta_pago">
+												<div class="text-danger">NÃO</div>
+											</t>
+											
+											
+										</td>
+										<td style="text-align:right;">
+											<span t-field="parcela.valor" />
+										</td>
+									</tr>
+								</t>
+
+							</tbody>
+							<tfoot>
+								<tr>
+									<t t-if="not o.matricula_id">
+										<th colspan="6" style="text-align:right;">TOTAL PAGO</th>
+									</t>
+									<t t-if="o.matricula_id">
+										<th colspan="5" style="text-align:right;">TOTAL PAGO</th>
+									</t>
+									<td style="text-align:right;">
+										<div class="text-success">
+											R$
+											<t t-esc="o.get_parcelas('pagas',False,True)" t-options='{"widget": "float", "precision": 2}' />
+										</div>
+									</td>
+								</tr>							
+								<tr>
+									<t t-if="not o.matricula_id">
+										<th colspan="6" style="text-align:right;">TOTAL A PAGAR</th>
+									</t>
+									<t t-if="o.matricula_id">
+										<th colspan="5" style="text-align:right;">TOTAL A PAGAR</th>
+									</t>
+									<td style="text-align:right;">
+										<div class="text-danger">
+											R$
+											<t t-esc="o.get_parcelas('abertas',False,True)" t-options='{"widget": "float", "precision": 2}' />
+										</div>
+									</td>
+								</tr>							
+								<tr>
+									<t t-if="not o.matricula_id">
+										<th colspan="6" style="text-align:right;">TOTAL VENCIDO</th>
+									</t>
+									<t t-if="o.matricula_id">
+										<th colspan="5" style="text-align:right;">TOTAL VENCIDO</th>
+									</t>
+									<td style="text-align:right;">
+										<div class="text-danger">
+											R$
+											<t t-esc="o.get_parcelas('vencidas',False,True)" t-options='{"widget": "float", "precision": 2}' />
+										</div>
+									</td>
+								</tr>							
+								<tr>
+									<t t-if="not o.matricula_id">
+										<th colspan="6" style="text-align:right;">TOTAL A VENCER</th>
+									</t>
+									<t t-if="o.matricula_id">
+										<th colspan="5" style="text-align:right;">TOTAL A VENCER</th>
+									</t>
+									<td style="text-align:right;">
+										<div >
+											R$
+											<t t-esc="o.get_parcelas('a_vencer',False,True)" t-options='{"widget": "float", "precision": 2}' />
+										</div>
+									</td>
+								</tr>							
+							</tfoot>
+
+						</table>
+						
+						<div class="row">
+							<div class="col-12" align="right">
+								<p>
+									<t t-esc="o.get_date_str()" />
+								</p>
+							</div>
+						</div>
+
+
+					</div>
+				</t>
+			</t>
+		</t>
+	</template>
+	<template id="view_template">
+
+	</template>
+</odoo>

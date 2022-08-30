@@ -35,7 +35,7 @@ class GeracadCursoHistorioFinal(models.Model):
         store=True
         )
     disciplina_name = fields.Char("Disciplina Nome",
-        related = 'matricula_disciplina_id.disciplina_id.mame'
+        related = 'matricula_disciplina_id.disciplina_id.mame',
         readonly=True,
         store=True
     )

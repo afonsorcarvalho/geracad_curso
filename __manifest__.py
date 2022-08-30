@@ -64,10 +64,12 @@
         'reports/report_turma_disciplina_ata_frequencia_avaliacao_template.xml',
         'reports/report_turma_disciplina_ata_frequencia_aula_template.xml',
         'reports/report_recibo_parcela_template.xml',
+        'reports/report_pendencias_financeira_aluno_template.xml',
         'reports/report_actions.xml',
         'wizard/pagamento_parcela.xml',
         'wizard/finalizar_aula.xml',
         'wizard/gerar_historico_final.xml',
+        'wizard/pendencias_financeira_aluno_wizard.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

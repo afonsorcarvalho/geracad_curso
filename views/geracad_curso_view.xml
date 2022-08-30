@@ -462,6 +462,23 @@
       <field name="view_id" ref="geracad_curso_matricula_list" />
       <field name="act_window_id" ref="geracad_curso_matricula_action_window" />
     </record>
+  
+    <record id="action_geracad_curso_pendencias_financeiras_aluno_wizard_window" model="ir.actions.act_window">
+      <field name="name">Pendencias financeiras Aluno Wizard</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">geracad.curso.pendencias.financeira.aluno.wizard</field> 
+      <field name="view_mode">form</field>
+     <field name="target">new</field>
+    
+    
+  </record>
+    <record id="action_geracad_curso_pendencias_financeiras_aluno_wizard_form_view" model="ir.actions.act_window.view">
+      
+      <field name="view_mode">form</field>
+      
+      <field name="view_id" ref="view_geracad_curso_pendencias_financeira_aluno_wizard_form"/>
+      <field name="act_window_id" ref="action_geracad_curso_pendencias_financeiras_aluno_wizard_window"/>
+   </record>
     
     
     <!-- Top menu item -->
@@ -512,6 +529,12 @@
     <!-- SUBMENU TURMAS -->
     <menuitem name="Curso" id="geracad_curso.turma_curso_menu_list" parent="geracad_curso.menu_turmas" action="geracad_curso_turma_action_window" />
     <menuitem name="Disciplina" id="geracad_curso.turma_disciplina_menu_list" parent="geracad_curso.menu_turmas" action="geracad_curso_turma_disciplina_action_window" groups="group_geracad_curso_user,group_geracad_curso_secretaria,group_geracad_curso_administrator" />
+    <!-- SUBMENU FINANCEIRO -->
+    <menuitem name="Relatórios" id="geracad_curso.financeiro_relatorios_menu" parent="geracad_curso.menu_root_financeiro"/>
+    <!-- SUBMENU FINANCEIRO/PENDENCIAS -->
+    <menuitem name="Pendências" id="geracad_curso.financeiro_visualizar_pendencias_menu_form" parent="geracad_curso.financeiro_relatorios_menu" action="action_geracad_curso_pendencias_financeiras_aluno_wizard_window" />
+   
+   
 
     <!-- configuração -->
     <menuitem name="Professores" id="geracad_curso.menu_configuracao_professores" parent="geracad_curso.configuracao" action="geracad_curso_professores_action_window" sequence="0" />
