@@ -472,6 +472,15 @@
     
     
   </record>
+    <record id="action_geracad_curso_pendencias_financeiras_turma_wizard_window" model="ir.actions.act_window">
+      <field name="name">Pendencias financeiras por turma Wizard</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">geracad.curso.pendencias.financeira.turma.wizard</field> 
+      <field name="view_mode">form</field>
+     <field name="target">new</field>
+    
+    
+  </record>
    <!--  <record id="action_geracad_curso_pendencias_financeiras_aluno_wizard_form_view" model="ir.actions.act_window.view">
       
       <field name="view_mode">form</field>
@@ -532,7 +541,8 @@
     <!-- SUBMENU FINANCEIRO -->
     <menuitem name="Relatórios" id="geracad_curso.financeiro_relatorios_menu" parent="geracad_curso.menu_root_financeiro"/>
     <!-- SUBMENU FINANCEIRO/PENDENCIAS -->
-    <menuitem name="Pendências" id="geracad_curso.financeiro_visualizar_pendencias_menu_form" parent="geracad_curso.financeiro_relatorios_menu" action="action_geracad_curso_pendencias_financeiras_aluno_wizard_window" />
+    <menuitem name="Pendências por Aluno" id="geracad_curso.financeiro_visualizar_pendencias_menu_form" parent="geracad_curso.financeiro_relatorios_menu" action="action_geracad_curso_pendencias_financeiras_aluno_wizard_window" />
+    <menuitem name="Pendências por Turma" id="geracad_curso.financeiro_visualizar_pendencias_por_turma_menu_form" parent="geracad_curso.financeiro_relatorios_menu" action="action_geracad_curso_pendencias_financeiras_turma_wizard_window" />
    
    
 

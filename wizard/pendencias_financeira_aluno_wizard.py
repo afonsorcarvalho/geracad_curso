@@ -44,8 +44,7 @@ class GeracadCursoPendenciasFinanceirasAlunoWizard(models.TransientModel):
    
     def get_parcelas(self, status = 'todas', count = False, sum = False):
 
-        if not self.matricula_id and not self.aluno_id:
-            raise ValidationError('Nenhum aluno ou matricula foi selecionada')
+       
         
         domain_filter = []
         if status == 'todas':
@@ -98,5 +97,7 @@ class GeracadCursoPendenciasFinanceirasAlunoWizard(models.TransientModel):
         
         """
         _logger.debug("confirmado")
+        if not self.matricula_id and not self.aluno_id:
+            raise ValidationError('Nenhum aluno ou matricula foi selecionada')
         return self.env.ref("geracad_curso.action_pendencias_financeira_aluno_report").report_action(self)
        
