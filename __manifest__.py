@@ -57,7 +57,7 @@
         'reports/report_contrato_aluno_template.xml',
         'reports/report_declaracao_aluno_template.xml',
         'reports/report_historico_aluno_notas_template.xml',
-        'reports/report_historico_aluno_notas_antigo_template.xml',
+        #'reports/report_historico_aluno_notas_antigo_template.xml',
         'reports/report_historico_aluno_template.xml',
         #'reports/report_historico_aluno_antigo_template.xml',
         'reports/report_disciplinas_pendentes_aluno_template.xml',
