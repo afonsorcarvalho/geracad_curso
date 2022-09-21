@@ -6,20 +6,28 @@
       <field name="name">cursos.turma.disciplina.aulas.list</field>
       <field name="model">geracad.curso.turma.disciplina.aulas</field>
       <field name="arch" type="xml">
-        <tree create="0">
-        
+        <tree >
+          <header>
+            <button name="action_iniciar" type="object" string="Iniciar" class="oe_highlight"
+           
+            />
+    
+            <button name="action_finalizar" type="object" string="Finalizar" class="oe_highlight"
+           
+            />
+          </header>
           <field name="name" string="Assunto" />
-          <field name="turma_disciplina_id"/>
+          <field name="turma_disciplina_id"  options="{'no_create': True }"  />
           <field name="curso_id" optional="hide"/>
           <field name="professor_id" optional="show" context="{'default_e_professor': 1}"/>
-          <field name="turma_curso_ids" widget="many2many_tags" />
+          <field name="turma_curso_ids"  />
         
           <field name="hora_inicio_agendado" optional="show"/>
           <field name="hora_termino_agendado" optional="show"/>
           <field name="tempo_hora_aula_programado" string="Tempo(h)" optional="show"/>
           <field name="hora_inicio" optional="hide"/>
           <field name="hora_termino" optional="hide"/>
-          <field name="tipo_de_aula" optional="hide"/>
+          <field name="tipo_de_aula" />
         
         
         
@@ -53,7 +61,7 @@
           <field name="name" string="Assunto"  />
           <field name="turma_disciplina_id"  />
           <field name="curso_id" />
-          <field name="turma_curso_ids" widget="many2many_tags" />
+          <field name="turma_curso_ids"  />
        
           <field name="professor_id" />
          
@@ -128,7 +136,7 @@
             </div> -->
 
             <h1>
-              <field name="name" placeholder="Digite o Assunto..." attrs="{'readonly' : [('state','not in', ['draft','agendada'])]  }" />
+              <field name="name" placeholder="Digite o Assunto..." attrs="{'readonly' : [('state','in', ['concluida'])]  }" />
             </h1>
         
          
@@ -136,9 +144,9 @@
               <group string="Dados da Aula">
                 <field name="turma_disciplina_id" 
                   string="Turma Disciplina" 
-                  options="{'no_create': True }" attrs="{'readonly' : [('state','!=', 'draft')]  }" />
+                  options="{'no_create': True }" attrs="{'readonly' : [('state','=', 'concluida')]  }" />
                   <field name="curso_id"  />
-                  <field name="turma_curso_ids" widget="many2many_tags" options="{'no_create': True}" />
+                  <field name="turma_curso_ids"  options="{'no_create': True}" />
                
                 
         
@@ -151,24 +159,28 @@
               <group string="Programação">
                 
                 <field name="hora_inicio_agendado" 
-                attrs = "{'readonly': [('state','not in',('draft'))]}"
+                attrs = "{'readonly': [('state','in',('concluida'))]}"
                 />
                 <field name="hora_termino_agendado"    
-                 attrs = "{'readonly': [('state','not in',('draft'))]}"/>
+                 attrs = "{'readonly': [('state','in',('concluida'))]}"/>
                 <field name="tempo_hora_aula_programado"    
                 />
              
               </group>
-              <group string="Aula Ministrada">
+              <group   groups="base.group_system" string="Aula Ministrada">
               
-                <field name="hora_inicio"  attrs = "{'readonly': [('state','in',['concluida'])]}"/>
-                <field name="hora_termino" attrs = "{'readonly': [('state','in',['concluida'])]}" />
+                <field name="hora_inicio"  readonly="1" 
+                 groups="base.group_system"
+                />
+                <field name="hora_termino" readonly="1" 
+                groups="base.group_system"
+                />
              
               </group>
              <group string="Outras informações" >
                
           
-                <field name="company_id" groups="base.group_multi_company" string="Unidade" options="{'no_create': True}" attrs="{'readonly' : [('state','!=', 'draft')]  }" />
+                <field name="company_id" groups="base.group_multi_company" string="Unidade" options="{'no_create': True}" attrs="{'readonly' : [('state','=', 'concluida')]  }" />
 
               </group>
             </group>

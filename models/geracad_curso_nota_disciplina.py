@@ -119,7 +119,7 @@ class GeracadCursoNotaDisciplina(models.Model):
         string='Carga Horária',
         related='disciplina_matricula_id.turma_disciplina_id.carga_horaria',
         readonly=True,
-        store=True,
+        store=False,
         )
     professor_id = fields.Many2one(
         "res.partner",

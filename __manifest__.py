@@ -26,7 +26,9 @@
         'mail',
         'web_domain_field',
         'web_dialog_size',
-        'web_calendar_color_field'
+        'web_calendar_color_field',
+        'web_view_calendar_list',
+        'web_widget_open_tab',
         ],
 
     # always loaded
@@ -55,7 +57,9 @@
         'reports/report_contrato_aluno_template.xml',
         'reports/report_declaracao_aluno_template.xml',
         'reports/report_historico_aluno_notas_template.xml',
+        'reports/report_historico_aluno_notas_antigo_template.xml',
         'reports/report_historico_aluno_template.xml',
+        'reports/report_historico_aluno_antigo_template.xml',
         'reports/report_disciplinas_pendentes_aluno_template.xml',
         'reports/report_historico_disciplinas_pendentes_aluno_template.xml',
         'reports/report_turma_disciplina_diario_template.xml',

@@ -42,21 +42,23 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
         "geracad.curso.turma.disciplina",
         string='Turma Disciplina',
         required=True, 
+        domain=[('state','=','aberta')],
 
         )
 
-    @api.onchange("turma_disciplina_id" )
-    def onchange_turma_disciplina_id(self):
-        if self.turma_disciplina_id.curso_turma_id:
-            self.turma_curso_ids =  [(4,self.turma_disciplina_id.curso_turma_id.id)] 
+    # @api.onchange("turma_disciplina_id" )
+    # def onchange_turma_disciplina_id(self):
+    #     if self.turma_disciplina_id.curso_turma_id:
+    #         self.turma_curso_ids =  self.turma_disciplina_id.curso_turma_id 
                 
     
         
   
-    turma_curso_ids = fields.Many2many(
+    turma_curso_ids = fields.Many2one(
         "geracad.curso.turma",
         string='Turma Curso',
-        required=True, 
+  
+        related='turma_disciplina_id.curso_turma_id',
 
         )
     
@@ -149,7 +151,9 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
         string='Frequência',
         comodel_name='geracad.curso.turma.disciplina.aulas.frequencia',
         inverse_name='turma_aula_id',
+
     )
+    
     
  
     state = fields.Selection([
@@ -170,8 +174,16 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
     active = fields.Boolean(default=True)
     
     
-   
-   
+    
+    def unlink(self):
+        for rec in self:
+            if rec.state not in ['agendada','draft']:
+                raise ValidationError(_('Não é possível excluir uma aula que já está em andamento ou concluída.'))
+                
+
+        res = super().unlink()
+    
+        return res
     
     #usado na impressão do diário
     def get_diario_date(self):
@@ -301,7 +313,10 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
 
     def action_iniciar(self):
         _logger.info("iniciando")
+        
         for rec in self:
+            if rec.state not in ['draft', 'agendada']:
+                raise ValidationError(_('Esta aula já foi iniciada'))
             rec._monta_frequencia()
             rec.write({
                 'state': 'em_andamento',
@@ -314,10 +329,16 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
 
     def action_finalizar(self):
         _logger.info("finalizando")
+       
     
 
         for rec in self:
-            if rec.name == '':
+            
+            if rec.state in ['concluida']:
+                raise ValidationError(_('Esta aula já foi concluída'))
+            if rec.state not in ['em_andamento']:
+                raise ValidationError(_('Esta aula deve ser iniciada primeiro'))
+            if not rec.name:
                 raise ValidationError(_('Digite o assunto da aula para poder finalizar.'))
             rec._adiciona_frequencia_na_nota_disciplina()
             rec.write({

@@ -220,6 +220,11 @@ class GeracadCursoTurmDisciplina(models.Model):
         compute='_compute_alunos_count',
             
         )
+    aulas_count = fields.Integer(
+        string='aulas', 
+        compute='_compute_aulas_count',
+            
+        )
     notas = fields.One2many('geracad.curso.nota.disciplina', 'turma_disciplina_id')
     active = fields.Boolean(default=True)
     
@@ -271,7 +276,7 @@ class GeracadCursoTurmDisciplina(models.Model):
         '''
         aulas = self.env['geracad.curso.turma.disciplina.aulas'].search([
             ('turma_disciplina_id','=', self.id),
-            ('state','in', ['em_andamento','concluida']),
+            ('state','in', ['concluida']),
             
             ],order='hora_inicio_agendado ASC')
         
@@ -520,7 +525,44 @@ class GeracadCursoTurmDisciplina(models.Model):
         resultado_string ="{:02d}"
         return resultado_string.format(number_sequencial)
     
-    
+    def action_encerrando_turmas_sistema_antigo(self, data_ini, data_fim):    
+        '''
+            Encerra turma disciplina via açao agendada
+            
+        '''
+        
+        res = self.env["geracad.curso.turma.disciplina"].search([
+            '&',
+            '&',
+            ('data_abertura','<=',data_fim),
+            ('data_abertura','>=',data_ini),
+            ('state','not in',['cancelada','suspensa','encerrada']),
+            ])
+        for rec in res:
+            #verificando data de encerramento
+            _logger.info(rec.name)
+            if not rec.data_encerramento:
+                data_encerramento = rec.data_previsao_termino
+            else:
+                data_encerramento = rec.data_encerramento
+
+            #verificando carga horaria
+            if rec.carga_horaria == 0:
+                carga_horaria = rec.disciplina_id.carga_horaria
+            else:
+                carga_horaria = rec.carga_horaria
+
+            rec.write({
+                'data_encerramento': data_encerramento,
+                'state': 'encerrada',
+                'matricula_aberta': False,
+                'carga_horaria' : carga_horaria,
+            })
+            rec._finaliza_matricula_turma_disciplina()
+                
+
+        
+
     def action_corrige_periodo_CH(self):    
         '''
             Corrige erro no banco de dados antigo
