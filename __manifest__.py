@@ -59,7 +59,7 @@
         'reports/report_historico_aluno_notas_template.xml',
         'reports/report_historico_aluno_notas_antigo_template.xml',
         'reports/report_historico_aluno_template.xml',
-        'reports/report_historico_aluno_antigo_template.xml',
+        #'reports/report_historico_aluno_antigo_template.xml',
         'reports/report_disciplinas_pendentes_aluno_template.xml',
         'reports/report_historico_disciplinas_pendentes_aluno_template.xml',
         'reports/report_turma_disciplina_diario_template.xml',
