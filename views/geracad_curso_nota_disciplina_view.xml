@@ -11,6 +11,7 @@
          delete="false"
          edit="true"
          duplicate="false"
+	 editable="bottom"
          
        
          
@@ -89,7 +90,7 @@
           
           <header>
           
-          <button name="action_lancar_nota" states="inscrito,draft" confirm="Despois de lançada, a nota não poderá mais ser alterada!" string="Lançar Nota" type="object" class="oe_highlight"/>
+          <button name="action_lancar_nota" invisble="1" states="inscrito,draft" confirm="Despois de lançada, a nota não poderá mais ser alterada!" string="Lançar Nota" type="object" class="oe_highlight"/>
           
            <field name="state" widget="statusbar" />
           
