@@ -47,7 +47,7 @@
             <field name="model_id" ref="model_geracad_curso_turma_disciplina_aulas"/>
             <field name="groups" eval="[(4, ref('group_geracad_curso_professor'))]"/>
             <field name="domain_force">[ ('professor_id', '=', user.partner_id.id)]</field>
-            <field name="perm_unlink">False</field>
+            <field name="perm_unlink">True</field>
         </record> 
        <record model="ir.rule" id="geracad_curso_turma_disciplina_professor_rule">
             <field name="name">Turmas disciplinas: Regra de ver apenas a disciplina do professor</field>

@@ -247,13 +247,13 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
     def _get_matriculas_ativas(self):
         _logger.info("Pegando matriculas ativas")
         matricula_disciplina_ids = []
-        for rec in self:
-            matricula_disciplina_ids = self.env['geracad.curso.matricula.disciplina'].search([
+        matricula_disciplina_ids = self.env['geracad.curso.matricula.disciplina'].search([
                 '&',
-                ('turma_disciplina_id','=',rec.turma_disciplina_id.id),
+                ('turma_disciplina_id','=',self.turma_disciplina_id.id),
                 ('state','in',['inscrito'])
 
                 ])
+        _logger.info(matricula_disciplina_ids)
         return matricula_disciplina_ids
             
             
@@ -305,8 +305,15 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
                 frequencia.matricula_disciplina_id.nota.faltas += frequencia.count_faltas
    
     def action_agendar(self):
+
         _logger.info("agendando")
+
         for rec in self:
+            if rec.turma_disciplina_id.state not in ['draft', 'aberta','em_andamento']:
+                raise ValidationError(_('Esta turma de disciplina está encerrada, suspensa ou cancelada'))
+
+            if rec.state not in ['draft', 'agendada']:
+                raise ValidationError(_('Esta aula já foi iniciada'))
             rec.write({
                 'state': 'agendada',
             })
@@ -315,6 +322,8 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
         _logger.info("iniciando")
         
         for rec in self:
+            if rec.turma_disciplina_id.state not in ['draft', 'aberta','em_andamento']:
+                raise ValidationError(_('Esta turma de disciplina está encerrada, suspensa ou cancelada'))
             if rec.state not in ['draft', 'agendada']:
                 raise ValidationError(_('Esta aula já foi iniciada'))
             rec._monta_frequencia()
