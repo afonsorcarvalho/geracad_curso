@@ -112,10 +112,12 @@
             <button type="object" name="action_go_gera_contrato" string="Gerar Contrato" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'inscrito'),]}" />
             <button type="object" name="action_habilita_edit_turma_curso" string="Habilita Transferência"  class="btn-secondary" attrs="{'invisible': ['|',('edit_turma_curso', '==', True),('state', '!=', 'inscrito')]}" />
             <button type="object" name="action_desabilita_edit_turma_curso" string="Desabilita Transferência" class="btn btn-default" attrs="{'invisible': [('edit_turma_curso', '==', False),]}" />
-            <button type="object" name="action_trancar" string="Trancar" class="btn btn-default" confirm="Tem certeza que deseja TRANCAR matrícula do aluno? Essa matrícula poderá ser DESTRANCADA posteriormente" attrs="{'invisible': [('state', 'in', ['trancado','abandono','formado','expulso','cancelada','transferido'])]}" /> 
+            <button type="object" help="Suspender matricula do aluno por motivos financeiros" name="action_suspender" string="Suspender" class="btn btn-default" confirm="Tem certeza que deseja SUSPENDER matrícula do aluno? Essa matrícula poderá ser ATIVADA posteriormente" attrs="{'invisible': [('state', 'in', ['trancado','suspensa','abandono','formado','expulso','cancelada','transferido'])]}" /> 
+            <button type="object" name="action_trancar" string="Trancar" class="btn btn-default" confirm="Tem certeza que deseja TRANCAR a matrícula do aluno? Essa matrícula poderá ser ATIVADA posteriormente" attrs="{'invisible': [('state', 'in', ['trancado','abandono','formado','expulso','cancelada','transferido'])]}" /> 
             <!--  <button type="object" name="action_destrancar" string="Destrancar" class="btn btn-default" confirm="Tem certeza que deseja DESTRANCAR matrícula do aluno?" attrs="{'invisible': [('state', '!=', 'trancado')]}" />-->
+          
             <button type="object" name="action_abandono" string="Abandonar" class="btn btn-default" confirm="Tem certeza que deseja ABANDONAR matrícula do aluno? Essa ação não poderá ser desfeita."  attrs="{'invisible': [('state', 'not in', ['draft','inscrito'])]}" />
-            <button type="object" name="action_reativar" string="Reativar" class="btn btn-default"  attrs="{'invisible': [('state', 'not in', ['trancado','abandono'])]}" />
+            <button type="object" name="action_reativar" string="Reativar" class="btn btn-default"  attrs="{'invisible': [('state', 'not in', ['trancado','abandono','suspensa'])]}" />
             <button type="object" name="action_gera_historico_final"  string="Gerar Histórico Final" 
             groups="geracad_curso.group_geracad_curso_finaceiro" attrs="{'invisible': [('state', 'not in', ['inscrito', 'draft'])]}"
             />

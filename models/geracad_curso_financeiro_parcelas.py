@@ -216,7 +216,9 @@ class GeracadCursoFinanceiroParcelas(models.Model):
 
     """
 
-  
+    def action_cancelar_parcela(self):
+        for rec in self:
+            rec.write({'state' :'cancelado'})
 
     def action_pagar_parcela(self):
         if self.state == 'recebido' or self.esta_pago:

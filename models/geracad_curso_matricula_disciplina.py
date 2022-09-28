@@ -84,6 +84,7 @@ class GeracadCursoMatriculaDisciplina(models.Model):
             
         )
     
+    
     def _compute_notas_disciplinas(self):
         for record in self:    
             record.notas_disciplinas_count = self.env["geracad.curso.nota.disciplina"].search(
@@ -123,6 +124,7 @@ class GeracadCursoMatriculaDisciplina(models.Model):
         ('inscrito', 'Inscrito'),
         ('trancado', 'Trancada'),
         ('abandono', 'Abandono'), 
+        ('suspensa', 'Suspensa'), 
         ('cancelada', 'Cancelada'),
         ('expulso', 'Expulso'), 
         ('falecido', 'Falecido'),
@@ -184,10 +186,13 @@ class GeracadCursoMatriculaDisciplina(models.Model):
             'state':'finalizado'
         })
 
-    def _cancela_matricula_disciplina(self):
+    def _suspende_matricula_disciplina(self):
         self.write({
-            'state':'cancelada'
+            'state':'suspensa'
         })
+
+    def _cancela_matricula_disciplina(self):
+        
         if self.nota.state != 'concluida':
             if self.nota.situation == 'IN':
                 self.nota.write({
@@ -198,6 +203,9 @@ class GeracadCursoMatriculaDisciplina(models.Model):
                 self.nota.write({
                     'state':'cancelada',  
                 })
+        self.write({
+            'state':'cancelada'
+        })
     def _tranca_matricula_disciplina(self):
         self.write({
             'state':'trancado'
@@ -217,7 +225,53 @@ class GeracadCursoMatriculaDisciplina(models.Model):
         data_hoje = date.today()
         self.write({'data_conclusao' : data_hoje})
         
-   
+    def reativa_situation_notas(self):
+        if self.nota.situation in  ['TR','AB']:
+            self.nota.situation = 'IN'
+        
+    def atualiza_frequencia_aulas(self):
+        _logger.info("ATUALIZANDO FREQUENCIA DO ALUNO")
+        '''
+            Função que procura todas as aulas da turma de disciplina que o aluno está matriculado,
+            e adiciona a frequencia caso não tenha com as faltas, calculando as faltas no diario final
+            da turma disciplina.
+        '''
+        # PROCURA AS AULAS DA TURMA DISCIPLINA
+        # VERIFICA SE ALUNO JÁ ESTAVA NA FREQUENCIA
+        # SE NÃO COLOCA O ALUNO E COLOCA FALTA
+
+        aulas_ids = self.env["geracad.curso.turma.disciplina.aulas"].search([
+            ('turma_disciplina_id','=',self.turma_disciplina_id.id)
+
+            ])
+        _logger.info("AULAS DA TURMA DISCIPLINA QUE O ALUNO ESTA MATRICULADO")
+        _logger.info(aulas_ids)
+        
+        for aulas in aulas_ids:
+            _logger.info(aulas.name)
+            not_frequencia_ids = self.env['geracad.curso.turma.disciplina.aulas.frequencia'].search([
+                '&',
+                ('matricula_disciplina_id','not in', [self.id]),
+                ('turma_aula_id','=', aulas.id)
+                
+                ])
+            _logger.info('AULAS QUE O ALUNO NAO ESTAVA INSCRITO')
+            _logger.info(not_frequencia_ids)
+
+            for not_frequencia in not_frequencia_ids:
+
+                _logger.info("COLOCANDO ALUNO COM FALTA NESSA AULA")
+                _logger.info(not_frequencia)
+                frequencia = not_frequencia.create({
+                    'matricula_disciplina_id': self.id,
+                    'turma_aula_id': aulas.id
+
+                })
+                _logger.info("QUANTIDADE DE FALTAS ADICIONADAS AO ALUNO")
+                _logger.info(frequencia.count_faltas)
+                frequencia.matricula_disciplina_id.nota.faltas += frequencia.count_faltas
+               
+
     
     """
 
@@ -239,6 +293,10 @@ class GeracadCursoMatriculaDisciplina(models.Model):
         for rec in self:
             if rec.state == 'draft' or rec.state == 'inscrito':
                 rec._cancela_matricula_disciplina()
+    def action_suspende_matricula_disciplina(self):
+        for rec in self:
+            if rec.state == 'draft' or rec.state == 'inscrito':
+                rec._suspende_matricula_disciplina()
             
     def action_go_notas_disciplinas(self):
 
