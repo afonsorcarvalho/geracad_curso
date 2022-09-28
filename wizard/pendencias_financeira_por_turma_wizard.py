@@ -47,8 +47,8 @@ class GeracadCursoPendenciasFinanceirasPorTurmaWizard(models.TransientModel):
            domain_filter.append(('data_vencimento','>=', self.data_vencimento_inicio))  
            domain_filter.append(('data_vencimento','<=', self.data_vencimento_fim))  
         if self.data_pagamento_inicio and self.data_pagamento_fim:
-           domain_filter.append(('data_vencimento','>=', self.data_pagamento_inicio))  
-           domain_filter.append(('data_vencimento','<=', self.data_pagamento_fim))  
+           domain_filter.append(('data_pagamento','>=', self.data_pagamento_inicio))  
+           domain_filter.append(('data_pagamento','<=', self.data_pagamento_fim))  
        
         group_parcelas_ids = self.env['geracad.curso.financeiro.parcelas'].read_group(
             domain_filter, #domain
