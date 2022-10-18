@@ -5,12 +5,12 @@
 		<field name="default" eval="True" />
 		<field name="orientation">Portrait</field>
 		<field name="dpi">140</field>
-		<field name="margin_top">20</field>
+		<field name="margin_top">15</field>
 		<field name="margin_bottom">15</field>
 		<field name="margin_left">3</field>
 		<field name="margin_right">3</field>
 		<field name="header_line" eval="False" />
-		<field name="header_spacing">16</field>
+		<field name="header_spacing">10</field>
 	</record>
 	<template id="view_historico_aluno_template">
 
@@ -64,7 +64,7 @@
 
 				  </style>
 					<div class="page">
-						<table class="table table-sm table-striped" style="table-layout: fixed" id="table_cabecalho">
+						<table class="table table-sm " style="table-layout: fixed" id="table_cabecalho">
 							<thead style="display: table-row-group">
 								<tr>
 									<th colspan="8">
