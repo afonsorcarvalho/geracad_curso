@@ -64,9 +64,7 @@ class GeracadCursoMatricula(models.Model):
             if rec.curso_id:
                 rec.curso_grade_version_domain = json.dumps([('curso_id','=',rec.curso_id.id)])
     
-    
-    
-    
+  
     curso_nome = fields.Char( 
         related='curso_turma_id.curso_id.name',
         string="Nome do curso",
@@ -117,7 +115,6 @@ class GeracadCursoMatricula(models.Model):
         'res.partner',
         string='Aluno',
         required=True,
-        
         domain=[('e_aluno','=',True)]
         
         )  

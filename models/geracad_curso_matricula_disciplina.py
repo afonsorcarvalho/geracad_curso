@@ -233,7 +233,7 @@ class GeracadCursoMatriculaDisciplina(models.Model):
         _logger.info("ATUALIZANDO FREQUENCIA DO ALUNO")
         '''
             Função que procura todas as aulas da turma de disciplina que o aluno está matriculado,
-            e adiciona a frequencia caso não tenha com as faltas, calculando as faltas no diario final
+            e adiciona a frequencia, caso não tenha, com as faltas, calculando as faltas no diario final
             da turma disciplina.
         '''
         # PROCURA AS AULAS DA TURMA DISCIPLINA

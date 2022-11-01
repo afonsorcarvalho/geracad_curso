@@ -225,6 +225,7 @@ class GeracadCursoTurmDisciplina(models.Model):
         compute='_compute_aulas_count',
             
         )
+    aulas = fields.One2many('geracad.curso.turma.disciplina.aulas', 'turma_disciplina_id')
     notas = fields.One2many('geracad.curso.nota.disciplina', 'turma_disciplina_id')
     active = fields.Boolean(default=True)
     

@@ -227,6 +227,24 @@
                   </field>
                 </group>
               </page>
+              <page string="Aulas">
+                <group>
+                  <field name="aulas" nolabel="1" readonly="0">
+                    <tree edit="1" delete="0" create="0" default_order="hora_inicio_agendado">
+                      <!-- <field name="disciplina_matricula_id"  optional="hide"/> -->
+                     
+                       <field name="hora_inicio_agendado" string="Data"  />
+                       <field name="name" string="Assunto"  />
+                       
+                      <field name="tempo_hora_aula_programado" string="Tempo(h)" />
+                      <field name="tipo_de_aula" />
+                      <field name="state"/> 
+                      
+                    </tree>
+
+                  </field>
+                </group>
+              </page>
             </notebook>
           </sheet>
           <div class="oe_chatter">
