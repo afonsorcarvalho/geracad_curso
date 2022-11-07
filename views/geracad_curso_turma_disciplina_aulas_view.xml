@@ -112,9 +112,11 @@
                   />
                   <button name="action_iniciar" type="object" string="Iniciar"
                   attrs="{'invisible': [('state', 'not in', ['draft','agendada'])]}"
+                  class="oe_highlight"
                   />
                   <button name="action_finalizar" type="object" string="Finalizar"
                   attrs="{'invisible': [('state', 'not in', ['em_andamento'])]}"
+                  class="btn-danger"
                   />
                   <field name="state" widget="statusbar" />
           </header>
@@ -144,7 +146,7 @@
               <group string="Dados da Aula">
                 <field name="turma_disciplina_id" 
                   string="Turma Disciplina" 
-                  options="{'no_create': True }" attrs="{'readonly' : [('state','=', 'concluida')]  }" />
+                  options="{'no_create': True }" attrs = "{'readonly': [('state','not in',['draft','agendada'])]}" />
                   <field name="curso_id"  />
                   <field name="turma_curso_ids"  options="{'no_create': True}" />
                
@@ -153,18 +155,19 @@
                 
                 <field name="professor_id" options="{'no_create': True}" />
                 
-                <field name="tipo_de_aula" attrs = "{'readonly': [('state','in',['concluida'])]}" />
+                <field name="tipo_de_aula" attrs = "{'readonly': [('state','not in',['draft','agendada'])]}" />
                 <field name="sala_id" options="{'no_create': True}" />
               </group>
               <group string="Programação">
                 
                 <field name="hora_inicio_agendado" 
-                attrs = "{'readonly': [('state','in',('concluida'))]}"
+                attrs = "{'readonly': [('state','not in',['draft','agendada'])]}"
+                />
+                <field name="tempo_hora_aula_programado" attrs = "{'readonly': [('state','not in',['draft','agendada'])]}"
+                options='{"type": "number", "range": [1,4]}'
                 />
                 <field name="hora_termino_agendado"    
-                 attrs = "{'readonly': [('state','in',('concluida'))]}"/>
-                <field name="tempo_hora_aula_programado"    
-                />
+                attrs = "{'readonly': [('state','not in',['draft','agendada'])]}"/>
              
               </group>
               <group   groups="base.group_system" string="Aula Ministrada">
@@ -180,7 +183,7 @@
              <group string="Outras informações" >
                
           
-                <field name="company_id" groups="base.group_multi_company" string="Unidade" options="{'no_create': True}" attrs="{'readonly' : [('state','=', 'concluida')]  }" />
+                <field name="company_id" groups="base.group_multi_company" string="Unidade" options="{'no_create': True}" attrs = "{'readonly': [('state','not in',['draft','agendada'])]}" />
 
               </group>
             </group>
@@ -197,13 +200,16 @@
                   <field nolabel="1" name="frequencia_ids" attrs = "{'readonly': [('state','in',['concluida'])]}">
                     <tree editable="top" create="0" edit="0"
                     options="{ 'no_open': True}"
+                    decoration-muted = "matricula_disciplina_id_state in ['suspensa']"
                     >
                       <field name="curso_matricula_name" />
+                      <field name="matricula_disciplina_id_state" />
+                      
                       <field name="aluno_name" />
-                      <field name="hora_1" />
-                      <field name="hora_2" />
-                      <field name="hora_3" />
-                      <field name="hora_4" />
+                      <field name="hora_1" attrs = "{'readonly': [('matricula_disciplina_id_state','in',['suspensa'])]}" />
+                      <field name="hora_2" attrs = "{'readonly': [('matricula_disciplina_id_state','in',['suspensa'])]}"/>
+                      <field name="hora_3" attrs = "{'readonly': [('matricula_disciplina_id_state','in',['suspensa'])]}"/>
+                      <field name="hora_4" attrs = "{'readonly': [('matricula_disciplina_id_state','in',['suspensa'])]}" />
                       <field name="count_faltas" />
                     </tree>
                     <form>

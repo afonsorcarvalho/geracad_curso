@@ -100,8 +100,7 @@ class GeracadCursoTurmDisciplina(models.Model):
         store=True
     )
     
-    #TODO
-    #mudar esse periodo da turma para default em vez de compute
+    
     periodo = fields.Integer(
         string = "Periodo", 
         default = 1, 
@@ -121,11 +120,9 @@ class GeracadCursoTurmDisciplina(models.Model):
     #mudar esse periodo da turma para default em vez de compute
     carga_horaria = fields.Integer(
         string = "Carga horária", 
-        
-       
-        
-        
     )
+    
+
    
     @api.onchange('disciplina_id','curso_turma_id')
     def onchange_disciplina_id_curso_id(self):
@@ -226,6 +223,30 @@ class GeracadCursoTurmDisciplina(models.Model):
             
         )
     aulas = fields.One2many('geracad.curso.turma.disciplina.aulas', 'turma_disciplina_id')
+
+    
+    total_horas_aulas_ministradas = fields.Integer(
+        string='Horas ministradas',
+        compute="_compute_total_horas_aulas_ministradas"
+        
+    )
+    
+    @api.depends('aulas')
+    def _compute_total_horas_aulas_ministradas(self):
+        sum = 0
+        for record in self:
+            aulas = self.env["geracad.curso.turma.disciplina.aulas"].search(
+                [('turma_disciplina_id', '=', record.id),
+                ('state', '=', 'concluida')
+
+                
+                ],
+                )
+            for aula in aulas:
+                sum = sum + aula.tempo_hora_aula_programado
+        record.total_horas_aulas_ministradas = sum
+
+
     notas = fields.One2many('geracad.curso.nota.disciplina', 'turma_disciplina_id')
     active = fields.Boolean(default=True)
     

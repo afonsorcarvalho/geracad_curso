@@ -7,29 +7,28 @@
       <field name="model">geracad.curso.turma.disciplina</field>
       <field name="arch" type="xml">
         <tree>
-          <field name="id" optional="hide"/>
+          <field name="id" optional="hide" />
           <field name="name" string="Código" />
-          <field name="disciplina_id"/>
-          <field name="tipo"/>
-          <field name="curso_turma_id" optional="hide"/>
-          <field name="matricula_aberta" optional="show"/>
-          <field name="professor_id" optional="show" context="{'default_e_professor': 1}"/>
-          <field name="data_abertura" optional="show"/>
-          <field name="data_inicio" optional="hide"/>
-          <field name="data_previsao_termino" optional="hide"/>
-          <field name="data_encerramento" optional="show"/>
-          <field name="e_pendencia" optional="hide"/>
-          <field name="e_aproveitamento" optional="hide"/>
-          <field name="state" 
-          widget="badge"
-          optional="show"/>
-          
-          <field name="company_id" optional="show"/>
-     
-     
+          <field name="disciplina_id" />
+          <field name="tipo" />
+          <field name="curso_turma_id" optional="hide" />
+          <field name="matricula_aberta" optional="show" />
+          <field name="professor_id" optional="show" context="{'default_e_professor': 1}" />
+          <field name="data_abertura" optional="show" />
+          <field name="data_inicio" optional="hide" />
+          <field name="data_previsao_termino" optional="hide" />
+          <field name="data_encerramento" optional="show" />
+          <field name="e_pendencia" optional="hide" />
+          <field name="e_aproveitamento" optional="hide" />
+          <field name="state"
+            widget="badge"
+            optional="show" />
+
+          <field name="company_id" optional="show" />
+
 
         </tree>
-    
+
       </field>
     </record>
 
@@ -37,13 +36,13 @@
       <field name="name">cursos.turma.disciplina.search</field>
       <field name="model">geracad.curso.turma.disciplina</field>
       <field name="arch" type="xml">
-       
+
         <search string="Procure">
-          <field name="name" string="Código da turma"  />
-          <field name="disciplina_id"  />
+          <field name="name" string="Código da turma" />
+          <field name="disciplina_id" />
           <field name="curso_turma_id" />
-          <field name="tipo"/>
-       
+          <field name="tipo" />
+
           <field name="professor_id" />
           <field name="data_abertura" />
           <field name="data_inicio" />
@@ -51,46 +50,39 @@
           <field name="data_encerramento" />
           <field name="company_id" />
           <field name="state" />
-         
-          <filter name="filter_data_abertura" date="data_abertura" 
-            
-            string="Data de Abertura"/>
-          <filter name="filter_data_inicio" date="data_inicio" 
-            
-            string="Data de início das aulas"/>
-          <filter name="filter_data_previsao_termino" date="data_previsao_termino" 
-            
-            string="Data previsão de término"/>
-          <filter name="filter_data_encerramento" date="data_encerramento" 
-            
-            string="Data de encerramento"/>
-          
+
+          <filter name="filter_data_abertura" date="data_abertura"
+            string="Data de Abertura" />
+          <filter name="filter_data_inicio" date="data_inicio"
+            string="Data de início das aulas" />
+          <filter name="filter_data_previsao_termino" date="data_previsao_termino"
+            string="Data previsão de término" />
+          <filter name="filter_data_encerramento" date="data_encerramento"
+            string="Data de encerramento" />
+
           <filter name="groupby_unidade" string="Unidade" context="{'group_by' : 'company_id'}"></filter>
           <filter name="groupby_e_pendencia" string="Pendência" context="{'group_by' : 'e_pendencia'}"></filter>
           <filter name="groupby_e_aproveitamento" string="Aproveitamento" context="{'group_by' : 'e_aproveitamento'}"></filter>
-          <filter name="data_abertura" string="Data de abertura" domain="[]" context="{'group_by':'data_abertura'}"/>
-          <filter name="data_inicio" string="Data de início das aulas" domain="[]" context="{'group_by':'data_inicio'}"/>
-          <filter name="data_previsao_termino" string="Data previsão de término" domain="[]" context="{'group_by':'data_previsao_termino'}"/>
+          <filter name="data_abertura" string="Data de abertura" domain="[]" context="{'group_by':'data_abertura'}" />
+          <filter name="data_inicio" string="Data de início das aulas" domain="[]" context="{'group_by':'data_inicio'}" />
+          <filter name="data_previsao_termino" string="Data previsão de término" domain="[]" context="{'group_by':'data_previsao_termino'}" />
           <filter name="e_pendencia" string="É pendência" domain="[('e_pendencia','=', True)]" />
           <filter name="not_pendencia" string="Não é pendência" domain="[('e_pendencia','=', False)]" />
           <filter name="e_aproveitamento" string="É aproveitamento" domain="[('e_aproveitamento','=', True)]" />
           <filter name="not_aproveitamento" string="Não é aproveitamento" domain="[('e_aproveitamento','=', False)]" />
           <filter name="e_resencial" string="Presencial" domain="[('tipo','=', 'presencial')]" />
           <filter name="e_a_distancia" string="A Distância" domain="[('tipo','=', 'a_distancia')]" />
-          <filter name="data_encerramento" string="Data de encerramento" domain="[]" context="{'group_by':'data_encerramento'}"/>
-         
-          <filter name="state" string="Status" domain="[]" context="{'group_by':'state'}"/>
-        
-          
-          
-         
+          <filter name="data_encerramento" string="Data de encerramento" domain="[]" context="{'group_by':'data_encerramento'}" />
+
+          <filter name="state" string="Status" domain="[]" context="{'group_by':'state'}" />
+
+
           <searchpanel>
-            <field name="state" string="Status" enable_counters="1" select="multi"/>
-            <field name="company_id" string="Unidade" enable_counters="1" select="multi"/>
-           
-          
-            
-        </searchpanel>
+            <field name="state" string="Status" enable_counters="1" select="multi" />
+            <field name="company_id" string="Unidade" enable_counters="1" select="multi" />
+
+
+          </searchpanel>
 
         </search>
       </field>
@@ -99,24 +91,30 @@
       <field name="name">geracad.curso.turma.disciplina.pivot</field>
       <field name="model">geracad.curso.turma.disciplina</field>
       <field name="arch" type="xml">
-          <pivot string="Turmas Disciplinas" disable_linking="True">
-            <field name="disciplina_id" type="row"/>
-            <field name="professor_id" type="measure"/>
-              
-          </pivot>
-      </field>
-  </record>
-  <record model="ir.ui.view" id="geracad_curso_turma_disciplina_graph">
-    <field name="name">geracad.curso.turma.disciplina.graph</field>
-    <field name="model">geracad.curso.turma.disciplina</field>
-      <field name="arch" type="xml">
-          <graph string="Turmas Disciplinas">
-              <field name="disciplina_id" type="row"/>
-              <field name="professor_id" type="measure"/>
-          </graph>
-      </field>
-  </record>
+        <pivot string="Turmas Disciplinas" disable_linking="True">
+          <field name="disciplina_id" type="row" />
+          <field name="professor_id" type="measure" />
 
+        </pivot>
+      </field>
+    </record>
+    <record model="ir.ui.view" id="geracad_curso_turma_disciplina_graph">
+      <field name="name">geracad.curso.turma.disciplina.graph</field>
+      <field name="model">geracad.curso.turma.disciplina</field>
+      <field name="arch" type="xml">
+        <graph string="Turmas Disciplinas">
+          <field name="disciplina_id" type="row" />
+          <field name="professor_id" type="measure" />
+        </graph>
+      </field>
+    </record>
+    <record model="ir.actions.act_window" id="geracad_curso_turma_disciplina_editar_frequencia_action_window">
+      <field name="name">Editar Frequencia</field>
+      
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">geracad.curso.turma.disciplina.aulas</field>
+      <field name="view_mode">form</field>
+    </record>
     <record model="ir.ui.view" id="geracad_curso_turma_disciplina_form_view">
       <field name="name">geracad.curso.turma.disciplina.form</field>
       <field name="model">geracad.curso.turma.disciplina</field>
@@ -124,33 +122,33 @@
         <form string="Disciplina">
           <header>
 
-            <button name="action_encerrar_turma_disciplina" string="Encerrar Turma" class="oe_highlight" states="aulas_encerradas" type="object" 
-            groups="geracad_curso.group_geracad_curso_secretaria" 
-            confirm="Tem certeza que deseja finalizar essa turma?
+            <button name="action_encerrar_turma_disciplina" string="Encerrar Turma" class="oe_highlight" states="aulas_encerradas" type="object"
+              groups="geracad_curso.group_geracad_curso_secretaria"
+              confirm="Tem certeza que deseja finalizar essa turma?
             Todas as notas serão dadas como lançadas e não poderão ser modificadas.
             Todas as matrículas na disciplina dos alunos irão para o status de concluída.
             Esta ação não poderá ser desfeita!!!
             " />
-            <button name="action_finalizar_aulas" string="Finalizar Aulas" class="oe_highlight" states="aberta" type="object" 
-            groups = "geracad_curso.group_geracad_curso_secretaria" />
-            <button name="action_cancelar_turma_disciplina" string="Cancelar" states="aberta" type="object"  confirm="Tem certeza que deseja cancelar essa turma? Esta ação não poderá ser defeita" 
-            groups="geracad_curso.group_geracad_curso_secretaria"/>
+            <button name="action_finalizar_aulas" string="Finalizar Aulas" class="oe_highlight" states="aberta" type="object"
+              groups="geracad_curso.group_geracad_curso_secretaria" />
+            <button name="action_cancelar_turma_disciplina" string="Cancelar" states="aberta" type="object" confirm="Tem certeza que deseja cancelar essa turma? Esta ação não poderá ser defeita"
+              groups="geracad_curso.group_geracad_curso_secretaria" />
             <button name="action_suspender_turma_disciplina" string="Suspender" states="aberta" type="object"
-            groups="geracad_curso.group_geracad_curso_secretaria" />
+              groups="geracad_curso.group_geracad_curso_secretaria" />
             <button name="action_abrir_turma_disciplina" string="Abrir" states="suspensa" type="object"
-            groups="geracad_curso.group_geracad_curso_secretaria" />
+              groups="geracad_curso.group_geracad_curso_secretaria" />
             <field name="state" widget="statusbar" statusbar_visible="aberta,aulas_encerradas,encerrada" />
           </header>
           <sheet>
             <div class="oe_button_box" name="button_box">
-              <button name="action_go_alunos_disciplinas" type="object" class="oe_stat_button" icon="fa-file-text-o">
+              <button name="action_go_alunos_disciplinas"  groups="geracad_curso.group_geracad_curso_secretaria" type="object" class="oe_stat_button" icon="fa-file-text-o">
                 <div class="o_field_widget o_stat_info">
 
                   <field name="alunos_count" class="o_state_value" />
                   <span class="o_stat_text">Alunos</span>
                 </div>
               </button>
-              <button name="action_go_notas_disciplinas" type="object" class="oe_stat_button" icon="fa-file-text-o">
+              <button name="action_go_notas_disciplinas"  groups="geracad_curso.group_geracad_curso_secretaria"  type="object" class="oe_stat_button" icon="fa-file-text-o">
                 <div class="o_field_widget o_stat_info">
                   <span class="o_stat_text">Notas</span>
                 </div>
@@ -161,46 +159,49 @@
             <h1>
               <field name="display_name" readonly="1" />
             </h1>
-            <button name="action_adiciona_alunos_turma_curso" string="Atualizar alunos" 
-             class="oe_highlight" states="aberta"  type="object" 
-             groups="geracad_curso.group_geracad_curso_secretaria"
-             help="Atualiza os alunos inscritos no curso, adicionando os que não estão matriculados na disciplina" />
-          
+            <button name="action_adiciona_alunos_turma_curso" string="Atualizar alunos"
+              class="oe_highlight" states="aberta" type="object"
+              groups="geracad_curso.group_geracad_curso_secretaria"
+              help="Atualiza os alunos inscritos no curso, adicionando os que não estão matriculados na disciplina" />
+
             <group>
-              <group string="Dados da Turma Disciplina">
+              <group string="Dados da Turma Disciplina" groups="geracad_curso.group_geracad_curso_secretaria" >
                 <field name="curso_turma_id" string="Turma Curso" options="{'no_create': True }" attrs="{'readonly' : [('state','!=', 'draft')]  }" />
                 <field name="tipo" string="Tipo" attrs="{'readonly' : [('state','!=', 'draft')]  }" />
-                
-                <field name="curso_id"  />
-                <field name="disciplina_id" domain="domain_disciplina_id" options="{'no_create': True}" attrs="{'readonly' : [('state','!=', 'draft')]  }"
-                
+
+                <field name="curso_id" />
+                <field name="id"
+                  invisible="1"
                 />
-                <field name="domain_disciplina_id" invisible="1"/>
-        
-                <field name="periodo" options='{"type": "number", "range": [1,10]}'/>
-                <field name="carga_horaria"/>
-                <field name="professor_id" options="{'no_create': True}" />
-                <field name="vagas" />
+                <field name="disciplina_id" domain="domain_disciplina_id" options="{'no_create': True}" attrs="{'readonly' : [('state','!=', 'draft')]  }"
+                />
+                <field name="domain_disciplina_id" invisible="1" />
+
+                <field name="periodo" options='{"type": "number", "range": [1,4]}' />
+                <field name="carga_horaria" />
+                <field name="professor_id" options="{'no_create': True}" attrs="{'readonly' : [('state','not in', ['draft','aberta','aulas_cencerradas'])]  }"/>
+                <field name="vagas"/>
                 <field name="sala_id" options="{'no_create': True}" />
+                <field name="total_horas_aulas_ministradas"  />
               </group>
-              <group string="Datas e Status">
+              <group string="Datas e Status" groups="geracad_curso.group_geracad_curso_secretaria">
                 <field name="data_abertura" attrs="{'readonly' : [('state','!=', 'draft')]  }" />
-                <field name="data_inicio" />
-                <field name="data_previsao_termino" />
-                <field name="data_termino" />
-                <field name="data_encerramento" />
+                <field name="data_inicio" attrs="{'readonly' : [('state','not in', ['draft','aberta','aulas_cencerradas'])]  }"/>
+                <field name="data_previsao_termino" attrs="{'readonly' : [('state','not in', ['draft','aberta','aulas_cencerradas'])]  }" />
+                <field name="data_termino" attrs="{'readonly' : [('state','not in', ['draft','aberta','aulas_cencerradas'])]  }"/>
+                <field name="data_encerramento" attrs="{'readonly' : [('state','not in', ['draft','aberta','aulas_cencerradas'])]  }"/>
 
               </group>
-             
+
             </group>
-            <group string="Outras informações">
-              <group >
+            <group string="Outras informações" groups="geracad_curso.group_geracad_curso_secretaria">
+              <group>
                 <field name="matricula_aberta" attrs="{'readonly' : [('state','!=', 'draft')]  }" />
                 <field name="e_pendencia" attrs="{'readonly' : [('state','!=', 'draft')]  }" />
-               
+
               </group>
-              <group >
-               
+              <group>
+
                 <field name="e_aproveitamento" attrs="{'readonly' : [('state','!=', 'draft')]  }" />
                 <field name="company_id" string="Unidade" options="{'no_create': True}" attrs="{'readonly' : [('state','!=', 'draft')]  }" />
 
@@ -209,19 +210,27 @@
             <notebook>
               <page string="Notas">
                 <group>
-                  <field name="notas" nolabel="1" readonly="0">
-                    <tree editable="1" edit="1" delete="0" create="0" default_order="">
+                  <field name="notas" nolabel="1" readonly="0" attrs="{'readonly' : [('state','not in', ['draft','aberta','aulas_cencerradas'])]  }" >
+                    <tree editable="1" edit="1" delete="0" create="0" default_order=""
+                    decoration-muted = "state in ['cancelada','concluida']"
+                    decoration-success = "situation in ['AM','EA','AP']"
+                    decoration-danger = "situation in ['RF','RC']"
+                    >
                       <!-- <field name="disciplina_matricula_id"  optional="hide"/> -->
-                      <field name="curso_matricula_codigo" 
+                      <field name="curso_matricula_codigo"
+                      />
+                      
+                      <field name="aluno_nome" />
+                      <field name="faltas"  attrs="{'readonly' : [('state','in', ['cancelada','concluida'])]  }"/>
+                      <field name="nota_1" attrs="{'readonly' : [('state','in', ['cancelada','concluida'])]  }" />
+                      <field name="nota_2" attrs="{'readonly' : [('state','in', ['cancelada','concluida'])]  }" />
+                      <field name="final" attrs="{'readonly' : [('state','in', ['cancelada','concluida'])]  }" />
+                      <field name="media"  />
+                      <field name="state" groups="geracad_curso.group_geracad_curso_secretaria"
                       
                        />
-                      <field name="aluno_nome"  />
-                      <field name="faltas" />
-                      <field name="nota_1" />
-                      <field name="nota_2" />
-                      <field name="final" />
-                      <field name="media" />
-                      <field name="situation" string="Situação" />
+
+                      <field name="situation" string="Situação" attrs="{'readonly' : [('state','in', ['cancelada','concluida'])]  }" />
                     </tree>
 
                   </field>
@@ -229,18 +238,78 @@
               </page>
               <page string="Aulas">
                 <group>
-                  <field name="aulas" nolabel="1" readonly="0">
-                    <tree edit="1" delete="0" create="0" default_order="hora_inicio_agendado">
+                  <field name="aulas" nolabel="1" readonly="0" attrs="{'readonly' : [('state','not in', ['draft','aberta','aulas_cencerradas'])]  }"  >
+
+                    <tree editable="bottom" multi_edit="1" edit="1" delete="1" create="1" default_order="hora_inicio_agendado"
+                      decoration-warning="state == 'draft'"
+                      decoration-info="state == 'agendada'"
+                      decoration-danger="state == 'em_andamento'"
+                      decoration-success="state == 'concluido'"
+                    >
                       <!-- <field name="disciplina_matricula_id"  optional="hide"/> -->
-                     
-                       <field name="hora_inicio_agendado" string="Data"  />
-                       <field name="name" string="Assunto"  />
-                       
-                      <field name="tempo_hora_aula_programado" string="Tempo(h)" />
+                      <control>
+                        <create
+                          string="Adicionar Aula"
+                          context="{'default_turma_disciplina_id': id}"
+                        />
+                        
+                      </control>
+                      <field name="hora_inicio_agendado" string="Data Inicio" attrs="{'readonly' : [('state','not in', ['draft','agendada'])]  }" />
+                      <field name="tempo_hora_aula_programado" string="Tempo(h)" attrs="{'readonly' : [('state','not in', ['draft','agendada'])]  }" />
+                      <field name="hora_termino_agendado" string="Data Término" attrs="{'readonly' : [('state','not in', ['draft','agendada'])]  }"  />
+                      <field name="turma_disciplina_id" string="Turma"  
+                      invisible="1" 
+                      />
+                      <field name="name" string="Assunto" />
+
                       <field name="tipo_de_aula" />
-                      <field name="state"/> 
+                      <field name="state" 
+                      readonly="1"
+                      />
+                      <button name="action_open_frequencia_view"
+                      string="Frequência"
+                      context="{'action': 'visualizar' }"
+                      type="object"
+                      class="oe_highlight"/>
+                    
+
+                      <button name="action_open_frequencia_view"
+                       string="Agendar"
+                       
+                       context="{'action': 'agendar' }"
+                       
+                       type="object"
+                       states="draft"
+                       class="oe_highlight"/>
+                      <button name="action_open_frequencia_view"
+                       string="Iniciar"
+                       context="{'action': 'iniciar' }"
+                       states="agendada"
+                       type="object"
+                       class="oe_highlight"/>
                       
+                      
+                      
+                       <button name="action_open_frequencia_view"
+                       string="Finalizar"
+                      
+                       context="{'action': 'finalizar' }"
+                       states="em_andamento"
+                       type="object"
+                       class="btn-danger"/>
+                     
+                      
+
                     </tree>
+                    <!-- <form>
+                      <field name="name" />
+                      <field name="tipo_de_aula" />
+                      <field name="hora_inicio_agendado" />
+                      <field name="hora_termino_agendado" />
+                      <field name="tempo_hora_aula_programado" />
+
+
+                    </form> -->
 
                   </field>
                 </group>
@@ -248,15 +317,13 @@
             </notebook>
           </sheet>
           <div class="oe_chatter">
-            <field name="message_follower_ids" widget="mail_followers"/>
-           
-            <field name="message_ids" widget="mail_thread"/>
-        </div>
+            <field name="message_follower_ids" widget="mail_followers" />
+
+            <field name="message_ids" widget="mail_thread" />
+          </div>
         </form>
       </field>
     </record>
-
-
     
 
     <record model="ir.actions.act_window" id="geracad_curso_turma_disciplina_action_window">
@@ -264,9 +331,9 @@
       <field name="type">ir.actions.act_window</field>
       <field name="res_model">geracad.curso.turma.disciplina</field>
       <field name="view_mode">tree,form,pivot,graph</field>
-   
-      <field name="search_view_id" ref="geracad_curso_turma_disciplina_search"/>
-    
+
+      <field name="search_view_id" ref="geracad_curso_turma_disciplina_search" />
+
       <field name="help" type="html">
         <p class="o_view_nocontent_smiling_face">
           Crie um nova Turma de Disciplina
@@ -282,20 +349,19 @@
 
     <!-- actions opening views on models -->
     <record id="action_geracad_curso_turma_disciplina_form_view" model="ir.actions.act_window.view">
-      <field eval="11" name="sequence"/>
+      <field eval="11" name="sequence" />
       <field name="view_mode">form</field>
-      <field name="view_id" ref="geracad_curso_turma_disciplina_form_view"/>
-      <field name="act_window_id" ref="geracad_curso_turma_disciplina_action_window"/>
-      
+      <field name="view_id" ref="geracad_curso_turma_disciplina_form_view" />
+      <field name="act_window_id" ref="geracad_curso_turma_disciplina_action_window" />
+
     </record>
     <record id="action_geracad_cursos_turma_disciplina_tree_view" model="ir.actions.act_window.view">
-      <field eval="10" name="sequence"/>
+      <field eval="10" name="sequence" />
       <field name="view_mode">tree</field>
-      <field name="view_id" ref="geracad_curso_turma_disciplina_list"/>
-      <field name="act_window_id" ref="geracad_curso_turma_disciplina_action_window"/>
+      <field name="view_id" ref="geracad_curso_turma_disciplina_list" />
+      <field name="act_window_id" ref="geracad_curso_turma_disciplina_action_window" />
     </record>
 
-    
 
     <!-- menu categories -->
 
@@ -304,7 +370,7 @@
 
     <!-- actions -->
 
-   
+
     <!-- <menuitem name="Em Disciplina" id="geracad_curso.menu_disciplina_2_list" parent="geracad_curso.menu_disciplina_1"
               action="geracad_curso_disciplina_action_window"/> -->
     <!-- <menuitem name="Server to list" id="geracad_aluno" parent="geracad_aluno.menu_2"

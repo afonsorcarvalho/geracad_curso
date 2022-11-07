@@ -4,7 +4,7 @@ from ast import For
 from email.policy import default
 
 from odoo import models, fields, api, _
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 from babel.dates import format_datetime, format_date
 from dateutil.relativedelta import relativedelta
@@ -37,6 +37,7 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
     company_id = fields.Many2one(
         'res.company',string="Unidade", required=True, default=lambda self: self.env.company
     )
+    
     
     turma_disciplina_id = fields.Many2one(
         "geracad.curso.turma.disciplina",
@@ -94,10 +95,14 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
 
     hora_inicio_agendado = fields.Datetime(
         string='Inicio Programado',
-        default=fields.Datetime.now,
+        default= lambda self: datetime.utcnow().replace(hour=22,minute=0,second=0) ,
         tracking=True,
         required=True
     )
+    @api.constrains('tempo_hora_aula_programado')
+    def _check_tempo_hora_aula_programado(self):
+        if self.tempo_hora_aula_programado < 1 or self.tempo_hora_aula_programado > 4:
+            raise ValidationError(_('O tempo de aula tem que estar entre 1 a 4 horas.'))
 
     @api.constrains('hora_inicio_agendado','hora_termino_agendado')
     def _check_hora_inicio_agendado(self):  
@@ -109,23 +114,42 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
 
     hora_termino_agendado = fields.Datetime(
         string='Término Programado',     
-        default= lambda self: date.today() +  relativedelta(hours=1),
+        default= lambda self: datetime.now() +  relativedelta(hours=3),
         tracking=True,    
         required=True
     )
-    tempo_hora_aula_programado = fields.Integer("Tempo Programado",compute="_compute_tempo_programado")
+
+    tempo_hora_aula_programado = fields.Integer("Tempo Programado",compute="_compute_tempo_hora_aula_programado", 
+    inverse='_inverse_tempo_hora_aula_programado'
+    )
     
-    def _compute_tempo_programado(self):
-        
+    def _inverse_tempo_hora_aula_programado(self):
+        for rec in self:
+            if rec.tempo_hora_aula_programado > 4:
+                rec.tempo_hora_aula_programado = 4
+            if rec.tempo_hora_aula_programado < 1: 
+                rec.tempo_hora_aula_programado = 1
+            rec.hora_termino_agendado = rec.hora_inicio_agendado + timedelta(hours=rec.tempo_hora_aula_programado)
+
+
+    @api.depends("hora_termino_agendado","hora_inicio_agendado")
+    def _compute_tempo_hora_aula_programado(self):
         for rec in self:
             if rec.hora_termino_agendado and rec.hora_inicio_agendado:
                 rec.tempo_hora_aula_programado = (rec.hora_termino_agendado - rec.hora_inicio_agendado).total_seconds()/3600
+                if(rec.tempo_hora_aula_programado < 0):
+                    rec.tempo_hora_aula_programado = 3
+
+    @api.onchange('tempo_hora_aula_programado')
+    def onchange_tempo_hora_aula_programado(self):
+        self._inverse_tempo_hora_aula_programado()
 
     hora_inicio = fields.Datetime(
         string='Inicio',
         tracking=True
     )
 
+    
     hora_termino = fields.Datetime(
         string='Término',       
         tracking=True
@@ -242,7 +266,9 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
         return res
 
     
-
+    '''
+        Retorna as matriculas disciplinas que estao inscritas ou suspensas
+    '''
 
     def _get_matriculas_ativas(self):
         _logger.info("Pegando matriculas ativas")
@@ -250,25 +276,31 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
         matricula_disciplina_ids = self.env['geracad.curso.matricula.disciplina'].search([
                 '&',
                 ('turma_disciplina_id','=',self.turma_disciplina_id.id),
-                ('state','in',['inscrito'])
+                ('state','in',['inscrito','suspensa'])
 
                 ])
         _logger.info(matricula_disciplina_ids)
         return matricula_disciplina_ids
-            
+
+    '''
+        Monta a lista de frequencia baseada nas matriculas ativas (inscritos, suspensos)
+        colocando em default presenca para os inscritos e falta para os suspensos
+    '''        
             
 
     def _monta_frequencia(self):
         _logger.info("Montando a frequencia dos alunos")
         tempo_hora_aula_teorico = 60*50
         for rec in self:
+
+          
             matricula_disciplina_ids = rec._get_matriculas_ativas()
             hora_1 = True
             hora_2 = False
             hora_3 = False
             hora_4 = False
 
-           
+        
             if rec.hora_termino_agendado and rec.hora_inicio_agendado:
                 tempo_hora_aula_programado = (rec.hora_termino_agendado - rec.hora_inicio_agendado).total_seconds()
                 if tempo_hora_aula_programado >= 2*tempo_hora_aula_teorico:
@@ -279,6 +311,9 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
                     hora_4 = True
 
             for matricula_disciplina in matricula_disciplina_ids:
+                # se matricula tiver suspensa coloca falta
+                if matricula_disciplina.state in ['suspensa']:
+                    hora_1 = hora_2 = hora_3 = hora_4 = False
                 
                 rec.write({
                     'frequencia_ids':[
@@ -334,7 +369,33 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
                
             )
 
+    def action_open_frequencia_view(self):
+ 
+        
 
+        if self._context['action'] == "agendar":
+            self.action_agendar()
+            return
+
+        if self._context['action'] == "iniciar":
+            self.action_iniciar()
+       
+            
+            
+        res_model = 'geracad.curso.turma.disciplina.aulas' 
+        return {
+            'name': ('Frequencia'),
+            'view_type': 'form',
+            'view_mode': 'form',
+           # 'view_id': [view_id],
+            'res_model': res_model, 
+            'type': 'ir.actions.act_window',
+            'context': {'default_id': self.id,'create': 0},
+            'target': 'new',
+            'res_id': self.id,
+            'nodestroy': True,
+            
+        }
 
     def action_finalizar(self):
         _logger.info("finalizando")
@@ -371,6 +432,10 @@ class GeracadCursoTurmaDisciplinaAulasFrequencia(models.Model):
     matricula_disciplina_id = fields.Many2one(
         "geracad.curso.matricula.disciplina",
         string="Matrícula Disciplina"
+    )
+    matricula_disciplina_id_state = fields.Selection(
+        related='matricula_disciplina_id.state',
+        string="Matrícula status"
     )
     curso_matricula_name = fields.Char(
       

@@ -39,7 +39,7 @@
           <field name="curso_turma_id" readonly="1" optional="hide" />
           <field name="turma_disciplina_id"  readonly="1" optional="show"/>
           <field name="disciplina_id"  readonly="1" optional="hide"/>
-          <field name="faltas" optional="show"/>
+          <field name="faltas" optional="show" />
           <field name="nota_1" optional="show"/>
           <field name="nota_2" optional="show"/>
           <field name="final" optional="show"/>
@@ -90,7 +90,7 @@
           
           <header>
           
-          <button name="action_lancar_nota" invisble="1" states="inscrito,draft" confirm="Despois de lançada, a nota não poderá mais ser alterada!" string="Lançar Nota" type="object" class="oe_highlight"/>
+           <button name="action_lancar_nota"   groups="geracad_curso.group_geracad_curso_secretaria"  states="inscrito,draft" confirm="Verifique se as notas estão corretas, a nota não poderá mais ser alterada depois de lançada!" string="Lançar Nota" type="object" class="oe_highlight"/> 
           
            <field name="state" widget="statusbar" />
           

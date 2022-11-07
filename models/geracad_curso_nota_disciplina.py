@@ -172,7 +172,7 @@ class GeracadCursoNotaDisciplina(models.Model):
                 periodo = grade.periodo
         return periodo
         
-        
+    
    
     #@api.depends('disciplina_matricula_id','curso_matricula_id')
     def _compute_periodo(self):
@@ -239,27 +239,36 @@ class GeracadCursoNotaDisciplina(models.Model):
     active = fields.Boolean(default=True)
     
     _sql_constraints = [ ('curso_disciplina_matricula_id_turma_disciplina_id_unique','UNIQUE(disciplina_matricula_id, turma_disciplina_id)','Aluno já com notas nessa turma disciplina') ]
-   
+    
+    def _validationStatus(self):
+        if(self.state not in ['draft','inscrito']):
+            raise ValidationError('O aluno ' + self.aluno_nome + ' está ' + self.disciplina_matricula_id.state + ' e não pode ser alterado a sua nota' )
+
+
     @api.constrains('faltas')
     def _check_faltas(self):  
+        self._validationStatus()
         for record in self:
             if record.faltas < 0 :
                 raise ValidationError("As faltas não devem ser menor que 0" )
     
     @api.constrains('nota_1')
     def _check_nota_1(self):  
+        self._validationStatus()
         for record in self:
             if record.nota_1 < 0 or record.nota_1 > 10.0:
                 raise ValidationError("A nota 1 deve estar entre 0 e 10")
     
     @api.constrains('nota_2')
     def _check_nota_2(self):  
+        self._validationStatus()
         for record in self:
             if record.nota_2 < 0 or record.nota_2 > 10.0:
                 raise ValidationError("A nota 2 deve estar entre 0 e 10")
     
     @api.constrains('final')
     def _check_final(self):  
+        self._validationStatus()
         for record in self:
             if record.final < 0 or record.final > 10.0:
                 raise ValidationError("A nota Final deve estar entre 0 e 10")
@@ -297,7 +306,30 @@ class GeracadCursoNotaDisciplina(models.Model):
                             else:
                                 record.situation = 'AP'
                         else:
-                            record.situation = 'RC'
+                            record.situation = 'RC' 
+
+    
+    
+    def write(self, values):
+        """
+            Update all record(s) in recordset, with new value comes as {values}
+            return True on success, False otherwise
+    
+            @param values: dict of new values to be set
+    
+            @return: True on success, False otherwise
+        """
+        # if(self.state in ['concluida']):
+        #     raise ValidationError(_('Esta nota já foi lançada e não pode ser alterada'))
+        # if(self.state in ['cancelada']):
+        #     raise ValidationError(_('O  aluno está cancelado e não pode ser alterado a sua nota'))
+        # if(self.disciplina_matricula_id.state not in ['draft','inscrito']):
+        #     raise ValidationError(_('O aluno ' + self.aluno_nome + ' está ' + self.disciplina_matricula_id.state + ' e não pode ser alterado a sua nota'))
+        
+        result = super(GeracadCursoNotaDisciplina, self).write(values)
+    
+        return result
+    
 
     """
 
