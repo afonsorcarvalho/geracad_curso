@@ -226,6 +226,7 @@ class GeracadCursoFinanceiroParcelas(models.Model):
             rec.write({'state' :'cancelado'})
 
     def action_pagar_parcela(self):
+        
         if self.state == 'recebido' or self.esta_pago:
             raise ValidationError('Parcela já está paga!')
         if self.state == 'suspenso':
@@ -252,19 +253,20 @@ class GeracadCursoFinanceiroParcelas(models.Model):
         return vals
     
     def action_cancelar_pagamento_parcela(self):
-        if self.state != 'recebido' or not self.esta_pago:
-            raise ValidationError('A Parcela não foi paga ainda! ')
-        if self.state == 'suspenso':
-            raise ValidationError('Parcela está suspensa. Provavelmente a matrícula do aluno está trancada!')
-        if self.state == 'cancelada':
-            raise ValidationError('Parcela está cancelada. Não pode ser paga!')
+        for rec in self:
+            if rec.state != 'recebido' or not rec.esta_pago:
+                raise ValidationError('A Parcela não foi paga ainda! ')
+            if rec.state == 'suspenso':
+                raise ValidationError('Parcela está suspensa. Provavelmente a matrícula do aluno está trancada!')
+            if rec.state == 'cancelada':
+                raise ValidationError('Parcela está cancelada. Não pode ser paga!')
 
-        _logger.debug("CANCELAR PAGAMENTO DE PARCELA")
-        self.write({
-            'state': 'vigente',
-            'valor_pago': 0.0,
-            'esta_pago' : False,
-            'data_pagamento': False,
-            
+            _logger.debug("CANCELAR PAGAMENTO DE PARCELA")
+            rec.write({
+                'state': 'vigente',
+                'valor_pago': 0.0,
+                'esta_pago' : False,
+                'data_pagamento': False,
+                
 
-        })
+            })
