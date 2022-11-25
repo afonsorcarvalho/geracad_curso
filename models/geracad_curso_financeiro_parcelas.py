@@ -157,6 +157,9 @@ class GeracadCursoFinanceiroParcelas(models.Model):
         self.name = self.contrato_id.name + ""
     
     
+             
+    
+    
     def action_ajeita_status_parcela(self):
         
         _logger.info("ajeitando estatus da parcela")
@@ -215,6 +218,8 @@ class GeracadCursoFinanceiroParcelas(models.Model):
             BUTTON ACTIONS
 
     """
+    
+
 
     def action_cancelar_parcela(self):
         for rec in self:
@@ -256,8 +261,10 @@ class GeracadCursoFinanceiroParcelas(models.Model):
 
         _logger.debug("CANCELAR PAGAMENTO DE PARCELA")
         self.write({
-            'state': 'recebido',
-            'valor_pago': 0,
+            'state': 'vigente',
+            'valor_pago': 0.0,
             'esta_pago' : False,
+            'data_pagamento': False,
+            
 
         })
