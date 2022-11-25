@@ -35,7 +35,7 @@
          <field name="aluno_email" optional="hide"/>
          <field name="sacado" optional="hide"/>
          <field name="curso_nome" optional="hide"/>
-         <field name="data_vencimento" optional="show" widget="remaining_days"/>
+         <field name="data_vencimento" optional="show" />
          <field name="data_pagamento" optional="show"/>
          
          <field name="valor" sum="Total" widget="monetary" optional="show"/>
