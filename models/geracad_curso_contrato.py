@@ -45,6 +45,11 @@ class GeracadCursoContrato(models.Model):
         string='Matricula',
         required=True
         )
+    curso_type = fields.Many2one(
+        'geracad.curso.type',
+        related='curso_matricula_id.curso_id.type_curso',
+       
+        )
     aluno_id = fields.Many2one(
         
         related = 'curso_matricula_id.aluno_id',

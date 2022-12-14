@@ -7,13 +7,13 @@
 		<field name="name">Contrato Aluno</field>
 		<field name="default" eval="True" />
 		<field name="orientation">Portrait</field>
-		<field name="dpi">135</field>
-		<field name="margin_top">20</field>
+		<field name="dpi">130</field>
+		<field name="margin_top">30</field>
 		<field name="margin_bottom">15</field>
-		<field name="margin_left">3</field>
-		<field name="margin_right">3</field>
+		<field name="margin_left">15</field>
+		<field name="margin_right">10</field>
 		<field name="header_line" eval="False" />
-		<field name="header_spacing">16</field>
+		<field name="header_spacing">20</field>
 	</record>
   <template id='view_contrato_aluno_template'>
     <style></style>
@@ -24,8 +24,14 @@
 
             <h2 align="center">CONTRATO DE PRESTAÇÃO  DE SERVIÇOS EDUCACIONAIS</h2>
 
-
-            <h3 align="center">CURSOS TÉCNICOS</h3>
+            
+            <t t-if="o.curso_type.name == 'Qualificação'">
+              <h3 align="center">CURSO DE QUALIFICAÇÃO</h3>
+                
+            </t>
+            
+            <t t-if="o.curso_type.name == 'Técnico'">
+              <h3 align="center">CURSOS TÉCNICOS</h3></t>
 
             <br />
             <p>
@@ -80,29 +86,30 @@
               <p align="justify">
                 Parágrafo
                 <strong>1º</strong>
-                : O aluno que cursar e obtiver aprovação em todos os períodos que compõem o Curso Técnico, terá direito ao Diploma de Técnico;
-              </p>
-              <p align="justify">
-                Parágrafo
-                <strong>2º</strong>
                 : O aluno beneficiário estará sujeito às normas do Regimento Interno;
               </p>
               <p align="justify">
                 Parágrafo
+                <strong>2º</strong>
+                : O quorom mínimo para o início do Curso é de 30 (trinta) alunos, podendo o início ser prorrogado por até 3 (três) vezes.
+              </p>
+              <p align="justify">
+                Parágrafo
                 <strong>3º</strong>
+                : O aluno que  ficar reprovado em alguma disciplina, terá que refazê-la em período a ser definido pela Coordenação, onde será cobrado o valor de R$ 200,00 (Duzentos reais), cada.
+              </p>
+              <t t-if="o.curso_type.name == 'Técnico'">
+              <p align="justify">
+                Parágrafo
+                <strong>4º</strong>
                 : Não estão inclusos neste contrato os serviços especiais de recuperação, reforço, 2ª chamada, dependência, adaptação, exames especiais, reciclagem, os opcionais  e de aplicação facultativa para o aluno, bem como  uniforme, alimento, transporte escolar,  material didático e de uso individual obrigatório, que poderão ser objeto de ajuste  à parte  e ainda, fornecimento de segunda via de documentos, os quais terão valores comunicados em circular própria. Vale ressaltar que as provas de 2a chamada, reposição, recuperação e exame final, será cobrado o valor de R$: 20,00 ( Vinte reais ), cada, devendo ser pago até 24h antes da realização das mesmas.
               </p>
               <p align="justify">
                 Parágrafo
-                <strong>4º</strong>
-                : O aluno que  ficar reprovado em alguma disciplina, terá que refazê-la em período a ser definido pela Coordenação, onde será cobrado o valor de R$ 200,00 (Duzentos reais), cada.
-              </p>
-              <p align="justify">
-                Parágrafo
                 <strong>5º</strong>
-                : O quorom mínimo para o início do Curso é de 30 (trinta) alunos, podendo o início ser prorrogado por até 3 (três) vezes.
+                : O aluno que cursar e obtiver aprovação em todos os períodos que compõem o Curso Técnico, terá direito ao Diploma de Técnico;
               </p>
-
+               </t>
 
               <t t-if="o.qtd_parcelas==1">
                 <p align="justify">
