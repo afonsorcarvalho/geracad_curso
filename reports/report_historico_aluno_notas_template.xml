@@ -50,13 +50,13 @@
 							<span t-field="notas_line.disciplina_id.name" />
 						</td>
 						
-						<t t-if="state == 'formado'">
+						<t t-if="o.state == 'formado'">
 							<td class="text-center col-ch">
 								<span t-field="notas_line.carga_horaria" />
 							</td>
 							
 						</t>
-						<t t-if="state != 'formado'">
+						<t t-if="o.state != 'formado'">
 						<td class="text-center col-ch">
 							<span t-field="notas_line.disciplina_id.carga_horaria" />
 						</td>
