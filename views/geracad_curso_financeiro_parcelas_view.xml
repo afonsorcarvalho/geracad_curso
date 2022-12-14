@@ -34,6 +34,7 @@
          <field name="aluno_telefone" string="Telefone" optional="hide"/>
          <field name="aluno_email" optional="hide"/>
          <field name="sacado" optional="hide"/>
+         <field name="sacado_cpf" string="CPF Sacado" optional="hide"/>
          <field name="curso_nome" optional="hide"/>
          <field name="data_vencimento" optional="show" />
          <field name="data_pagamento" optional="show"/>
