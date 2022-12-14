@@ -49,11 +49,19 @@
 						<td  class="col-disciplina">
 							<span t-field="notas_line.disciplina_id.name" />
 						</td>
-
+						
+						<t t-if="state == 'formado'">
+							<td class="text-center col-ch">
+								<span t-field="notas_line.carga_horaria" />
+							</td>
+							
+						</t>
+						<t t-if="state != 'formado'">
 						<td class="text-center col-ch">
 							<span t-field="notas_line.disciplina_id.carga_horaria" />
 						</td>
-
+						</t>
+						
 						<td class="text-center col-falta" >
 							<span t-field="notas_line.faltas" />
 						</td>
