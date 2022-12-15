@@ -212,11 +212,7 @@ class GeracadCursoTurmDisciplina(models.Model):
     e_pendencia = fields.Boolean("É pendência")
     e_aproveitamento = fields.Boolean("É aproveitamento")
 
-    alunos_count = fields.Integer(
-        string='Alunos', 
-        compute='_compute_alunos_count',
-            
-        )
+   
     aulas_count = fields.Integer(
         string='aulas', 
         compute='_compute_aulas_count',

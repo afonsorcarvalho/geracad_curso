@@ -6,7 +6,7 @@
       <field name="name">cursos.turma.disciplina.list</field>
       <field name="model">geracad.curso.turma.disciplina</field>
       <field name="arch" type="xml">
-        <tree>
+        <tree default_order='data_abertura desc'>
           <field name="id" optional="hide" />
           <field name="name" string="Código" />
           <field name="disciplina_id" />
@@ -15,6 +15,7 @@
           <field name="matricula_aberta" optional="show" />
           <field name="professor_id" optional="show" context="{'default_e_professor': 1}" />
           <field name="data_abertura" optional="show" />
+          <field name="total_horas_aulas_ministradas" optional="show" />
           <field name="data_inicio" optional="hide" />
           <field name="data_previsao_termino" optional="hide" />
           <field name="data_encerramento" optional="show" />
