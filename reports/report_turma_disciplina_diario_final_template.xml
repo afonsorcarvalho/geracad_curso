@@ -166,7 +166,7 @@
                                                     
                                                 </t>
                                                 <t t-if="not o.get_presenca_aula_matricula(aula,rec.disciplina_matricula_id)">
-                                                    P
+                                                    X
                                                     
                                                 </t>
                                                 

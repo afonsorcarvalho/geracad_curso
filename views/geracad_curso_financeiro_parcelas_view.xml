@@ -20,15 +20,12 @@
           <!-- <button name="action_cancelar_pagamento_parcela" string="Cancelar Pagamento" type="object" class="btn-primary"/> -->
          <field name="name" optional="hide"/>
          <field name="state" widget="badge" optional="show"
-         
          decoration-success="state=='recebido'"
          />
          <field name="numero_parcela" optional="show"/>
-         
          <field name="curso_matricula_id"  optional="show"/>
          <field name="unidade_curso_turma_id" optional="hiden"/>
          <field name="type_curso" optional="hide"/>
-         
          <field name="aluno_id" optional="hide"/>
          <field name="aluno_mobile" optional="hide"/>
          <field name="aluno_telefone" string="Telefone" optional="hide"/>
@@ -37,8 +34,7 @@
          <field name="sacado_cpf" string="CPF Sacado" optional="hide"/>
          <field name="curso_nome" optional="hide"/>
          <field name="data_vencimento" optional="show" />
-         <field name="data_pagamento" optional="show"/>
-         
+         <field name="data_pagamento" optional="show"/> 
          <field name="valor" sum="Total" widget="monetary" optional="show"/>
          <field name="valor_pago" sum="Total Pago" widget="monetary" optional="show"/>
          <field name="esta_pago" optional="hide"/>
@@ -46,11 +42,6 @@
          <field name="multa" sum="Multas" optional="hide"/>
          <field name="desconto" sum="descontos" optional="hide"/>
          <field name="forma_de_pagamento" optional="show"/>
-
-         
-       
-        
-      
         </tree>
    
       </field>
@@ -74,12 +65,8 @@
       <field name="name">geracad.curso.financeiro.parcelas.form</field>
       <field name="model">geracad.curso.financeiro.parcelas</field>
       <field name="arch" type="xml">
-          <form string="Parcelas" 
-          
+          <form string="Parcelas"        
           create="false"
-          
-          
-          
            >
             <header>
               <button name="action_pagar_parcela" 

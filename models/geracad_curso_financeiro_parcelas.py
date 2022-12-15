@@ -118,7 +118,6 @@ class GeracadCursoFinanceiroParcelas(models.Model):
     desconto = fields.Float("Desconto")
     observacao = fields.Text("Anotações")
     
-
     forma_de_pagamento = fields.Selection(
         string = 'Forma de Pagamento',
         selection = [('dinheiro', 'Dinheiro'), 
@@ -135,8 +134,6 @@ class GeracadCursoFinanceiroParcelas(models.Model):
         tracking=True
 
     )
-    
-
 
     sacado = fields.Many2one('res.partner',string="Sacado")
     sacado_cpf = fields.Char(string="CPF", related='sacado.l10n_br_cnpj_cpf', store=True)
