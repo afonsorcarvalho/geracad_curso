@@ -57,12 +57,13 @@
               <span t-field="o.valor_pago" />
               referente a  
               <span style="text-transform:uppercase; font-weight: 800" t-field="o.numero_parcela" />º
-              parcela do curso  <span style="text-transform:uppercase;; font-weight: 800" t-field="o.curso_matricula_id.curso_id.name" />
+              parcela (<span >
+              Vencimento:
+              <span t-field="o.data_vencimento"  t-options='{"widget": "date","format": "dd/MM/yyyy"}' style="text-transform:uppercase; font-weight: 800"/>
+              
+              </span>) do curso  <span style="text-transform:uppercase; font-weight: 800" t-field="o.curso_matricula_id.curso_id.name" />
             </p>
-
-            
-
-            
+           
             <br />
             <br />
             <div class="row">
