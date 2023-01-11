@@ -147,7 +147,7 @@
 
                                 <t t-foreach="o.notas" t-as="rec">
                                      
-                                    <t t-if="o.notas.disciplina_matricula_state != 'cancelada'">
+                                    <t t-if="rec.disciplina_matricula_state != 'cancelada'">
                                         
                                    
                                     
