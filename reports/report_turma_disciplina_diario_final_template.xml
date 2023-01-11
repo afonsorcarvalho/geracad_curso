@@ -146,6 +146,11 @@
                                 <t t-set="count" t-value="1" />
 
                                 <t t-foreach="o.notas" t-as="rec">
+                                     
+                                    <t t-if="o.notas.disciplina_matricula_state != 'cancelada'">
+                                        
+                                   
+                                    
 
                                     <tr>
                                         <td class="pri_col">
@@ -205,6 +210,7 @@
                                             </div>
                                         </td>
                                     </tr>
+                                </t>
 
                                 </t>
                             </tbody>
