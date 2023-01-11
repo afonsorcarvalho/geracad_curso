@@ -682,7 +682,10 @@ class GeracadCursoTurmDisciplina(models.Model):
         self.write({'data_encerramento' : data_hoje})
     
     def _finaliza_matricula_turma_disciplina(self):
-        matricula_disciplina_ids = self.env['geracad.curso.matricula.disciplina'].search([('turma_disciplina_id','=',self.id)])
+        matricula_disciplina_ids = self.env['geracad.curso.matricula.disciplina'].search([
+            ('turma_disciplina_id','=',self.id),
+            ('state','not in',['cancelada','suspensa','encerrada']),
+            ])
         for matricula_disciplina in matricula_disciplina_ids:
             matricula_disciplina.action_finaliza_matricula_disciplina()
     
