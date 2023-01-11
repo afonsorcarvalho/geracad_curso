@@ -461,9 +461,9 @@ class GeracadCursoTurmDisciplina(models.Model):
                     
                     matriculas_disciplinas_alunos = self.env['geracad.curso.matricula.disciplina'].search([
                        
-                        '&',
+                        
                         ('turma_disciplina_id','=',self.id),
-                        ('state','=','inscrito'),
+                        
                    
                     ])  
                     _logger.debug(matriculas_disciplinas_alunos)
