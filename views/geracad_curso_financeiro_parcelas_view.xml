@@ -20,7 +20,7 @@
           <!-- <button name="action_cancelar_pagamento_parcela" string="Cancelar Pagamento" type="object" class="btn-primary"/> -->
          <field name="name" optional="hide"/>
          <field name="state" widget="badge" optional="show"
-         decoration-success="state=='recebido'"
+         decoration-success="state=='recebido' or esta_pago==1"
          />
          <field name="numero_parcela" optional="show"/>
          <field name="curso_matricula_id"  optional="show"/>
