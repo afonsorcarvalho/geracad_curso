@@ -128,7 +128,7 @@ class GeracadCursoGerarHistoricoFinal(models.TransientModel):
                 'nota_2': nota_disciplina.nota_2,
                 'final': nota_disciplina.final,
                 'media': nota_disciplina.media,
-                'carga_horaria': nota_disciplina.turma_disciplina_carga_horaria,
+                'carga_horaria': nota_disciplina.disciplina_id.carga_horaria,
                 'situation': nota_disciplina.situation,
                 'state': 'concluida'
 
