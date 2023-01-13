@@ -858,8 +858,9 @@ class GeracadCursoMatricula(models.Model):
             notas = self.env["geracad.curso.nota.disciplina"].search([('curso_matricula_id','=',rec.id)])
             for nota in notas:
                 nota.periodo = nota.turma_disciplina_id.periodo
+               
 
-    def _atualiza_periodo_turma_disciplina_com_grade(self):
+    def _atualiza_periodo_CH_turma_disciplina_com_grade(self):
         '''
             Função que atualiza as turmas de disciplinas com os respectivos periodos de acordo 
             com a grade curricular da matricula do curso do aluno 
@@ -888,14 +889,15 @@ class GeracadCursoMatricula(models.Model):
                     _logger.info(turma_disciplina)
                     _logger.info(grade.periodo)
                     turma_disciplina.write({
-                        'periodo' : grade.periodo
+                        'periodo' : grade.periodo,
+                        'carga_horaria' : grade.disciplina_id_carga_horaria
                         })
 
     def action_atualizar_historico(self):
         if not self.curso_grade_version:
-            raise ValidationError('Por favor, insiria a Versão da Grade na matrícula')
+            raise ValidationError('Por favor, insira a Versão da Grade na matrícula')
         for rec in self:
-            rec._atualiza_periodo_turma_disciplina_com_grade()
+            rec._atualiza_periodo_CH_turma_disciplina_com_grade()
             rec._atualiza_periodo_de_nota_com_turma_disciplina()
         
         return self.env.ref("geracad_curso.action_historico_aluno_report").report_action(self)
@@ -924,7 +926,8 @@ class GeracadCursoMatricula(models.Model):
         _logger.info("Gerando Histórico final")
         if not self.curso_grade_version:
             raise ValidationError('Por favor, insiria a Versão da Grade na matrícula')
-        
+        self._atualiza_periodo_CH_turma_disciplina_com_grade()
+        self._atualiza_periodo_de_nota_com_turma_disciplina()
         _logger.info("PROCURANDO TURMAS DISCIPLINAS SEM PERIODO")
         
         dummy, act_id = self.env["ir.model.data"].sudo().get_object_reference(
