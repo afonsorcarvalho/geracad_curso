@@ -27,6 +27,7 @@
          <field name="unidade_curso_turma_id" optional="hiden"/>
          <field name="type_curso" optional="hide"/>
          <field name="aluno_id" optional="hide"/>
+         <field name="aluno_cpf" optional="hide"/>
          <field name="aluno_mobile" optional="hide"/>
          <field name="aluno_telefone" string="Telefone" optional="hide"/>
          <field name="aluno_email" optional="hide"/>

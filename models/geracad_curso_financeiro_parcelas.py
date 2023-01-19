@@ -57,6 +57,13 @@ class GeracadCursoFinanceiroParcelas(models.Model):
         readonly=True,
         store=True,
         )   
+    aluno_cpf = fields.Char(
+        
+        related = 'curso_matricula_id.aluno_id.l10n_br_cnpj_cpf',
+        string='CPF',
+        readonly=True,
+        store=True,
+        )   
     aluno_telefone = fields.Char(
         related = 'curso_matricula_id.aluno_id.phone',
         string='Telefone',

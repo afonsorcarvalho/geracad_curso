@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+import csv
+import io
+import os
 import json
 from odoo import models, fields, api, _
 from datetime import date, timedelta
@@ -12,6 +15,7 @@ from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT, misc
 
 import logging
 
+
 _logger = logging.getLogger(__name__)
 
 class GeracadCursoMatricula(models.Model):
@@ -24,7 +28,7 @@ class GeracadCursoMatricula(models.Model):
     _inherit = ['portal.mixin','mail.thread']
     
 
-
+  
     name = fields.Char("Código", tracking=True)
 
     company_id = fields.Many2one(
@@ -1041,6 +1045,97 @@ class GeracadCursoMatricula(models.Model):
         
 
    
+"""
+SELECT historicos_codigo,D.disciplinas_id,historicos_disciplina_nome,historicos_periodo, historicos_ch,historicos_matriculas_disciplinas_id,historicos_faltas,historicos_n1,historicos_n2, historicos_final, historicos_media, historicos_situacao, historicos_datafim, historicos_cursos_nome, historicos_cursos_registro, historicos_qtd_periodos, TD.turmas_disciplinas_codigo FROM `geracad_historicos`
+LEFT JOIN geracad_matriculas_disciplinas AS md
+on historicos_matriculas_disciplinas_id = md.matriculas_disciplinas_id
+LEFT JOIN geracad_turmas_disciplinas as TD
+on md.matriculas_disciplinas_turmas_disciplinas_id = TD.turmas_disciplinas_id
+LEFT JOIN geracad_disciplinas as D
+on D.disciplinas_id = TD.turmas_disciplinas_disciplinas_id
+
+"""
+COD_MATRICULA = 0
+ID_DISCIPLINA = 1
+NAME_DISCIPLINA = 2
+PERIODO = 3
+CH = 4
+MATRICULA_DISCIPLINA_ID = 5
+FALTAS = 6
+N1 = 7
+N2 = 8
+FINAL = 9
+MEDIA = 10
+SITUACAO = 11
+DATA_FIM = 12
+NAME_CURSO = 13
+CURSO_REGISTRO = 14
+QTD_PERIODOS = 15
+COD_DISICPLINA = 16
+class ModelName(models.AbstractModel):
+    _name = 'geracad.corrige.historico.final'
+
+
+
+    def get_file(self):
+        dir_name = os.path.dirname(__file__)
+        _logger.info(dir_name)
+        path_file = "geracad_historicos.csv"
+        absolute_path = os.path.join(dir_name, path_file)
+        _logger.info(absolute_path)
+        f = open(absolute_path, "r")
+       
+        
+        
+        csv_data = f.read()
+        data_file = io.StringIO(csv_data)
+        data_file.seek(0)
+        file_reader = []
+        csv_reader = csv.reader(data_file, delimiter=',')
+        file_reader.extend(csv_reader)
+        i=0
+       
+        return file_reader
+        for line in file_reader:
+            print("MATRICULA: " + line[COD_MATRICULA] + " " + line[COD_DISICPLINA]+ " " + line[CH] + " " + line[FALTAS] + " " + line[N1] + " " + line[N2] + " " + line[FINAL] + " " + line[MEDIA] + " " + line[SITUACAO] + " " + line[DATA_FIM])
+            i=i+1
+
+    def corrige_historico_final(self):
+        list_historico_csv = self.get_file()
+        
+        line = list_historico_csv[0]
+        matricula = self.env["geracad.curso.matricula"].search([('name','=',line[COD_MATRICULA])],limit=1)
+        if matricula:
+            _logger.info("matricula encontrada %s",matricula.name)
+            if matricula.state == 'formado':
+                _logger.info("matricula %s já está formado ",matricula.name)
+            else:
+                _logger.info("iniciando formatura da matricula %s",matricula.name)
+                _logger.info("pegando todas as notas do arquivo com matricula %s",matricula.name)
+                notas_matricula = []
+                for line_desta_matricula in list_historico_csv:
+                    if  True in list(map(lambda el : line[COD_MATRICULA] in el ,line_desta_matricula)):
+                        _logger.info("nota encontrada para matricula ")
+                        _logger.info(line_desta_matricula)
+                        _logger.info("Procurando turma disciplina %s",line_desta_matricula[COD_DISICPLINA])
+                        # procurando turma disciplina com o codigo da turma
+                        turma_disciplina = self.env["geracad.curso.turma_disciplina"].search([('name','=',line_desta_matricula[COD_DISICPLINA])])
+                        if turma_disciplina:
+                            #procurando a matricula na turma disciplina 
+                            self.env["curso.matricula.disciplina"].search([('turma_disciplina_id','=',turma_disciplina[0].id)])
+                        # para criar uma linha de nota de histórico final precisa da matricula disciplina
+                    
+                        self.env["geracad.curso.nota.disciplina.historico.final"]
+                
+
+
+
+        else:
+            _logger.info("não encontrada a matricula %s",line[COD_MATRICULA])
+        
+
+
+    
 
         
 
