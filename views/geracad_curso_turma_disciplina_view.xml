@@ -142,14 +142,16 @@
           </header>
           <sheet>
             <div class="oe_button_box" name="button_box">
-              <button name="action_go_alunos_disciplinas"  groups="geracad_curso.group_geracad_curso_secretaria" type="object" class="oe_stat_button" icon="fa-file-text-o">
+              <button name="action_go_alunos_disciplinas"  
+              groups="geracad_curso.group_geracad_curso_secretaria,geracad_curso.group_geracad_curso_secretaria_only_read" type="object" class="oe_stat_button" icon="fa-file-text-o">
                 <div class="o_field_widget o_stat_info">
 
                   <field name="alunos_count" class="o_state_value" />
                   <span class="o_stat_text">Alunos</span>
                 </div>
               </button>
-              <button name="action_go_notas_disciplinas"  groups="geracad_curso.group_geracad_curso_secretaria"  type="object" class="oe_stat_button" icon="fa-file-text-o">
+              <button name="action_go_notas_disciplinas"  
+                groups="geracad_curso.group_geracad_curso_secretaria,geracad_curso.group_geracad_curso_secretaria_only_read"  type="object" class="oe_stat_button" icon="fa-file-text-o">
                 <div class="o_field_widget o_stat_info">
                   <span class="o_stat_text">Notas</span>
                 </div>
@@ -166,7 +168,8 @@
               help="Atualiza os alunos inscritos no curso, adicionando os que não estão matriculados na disciplina" />
 
             <group>
-              <group string="Dados da Turma Disciplina" groups="geracad_curso.group_geracad_curso_secretaria" >
+              <group string="Dados da Turma Disciplina" 
+                groups="geracad_curso.group_geracad_curso_secretaria,geracad_curso.group_geracad_curso_secretaria_only_read" >
                 <field name="curso_turma_id" string="Turma Curso" options="{'no_create': True }" attrs="{'readonly' : [('state','!=', 'draft')]  }" />
                 <field name="tipo" string="Tipo" attrs="{'readonly' : [('state','!=', 'draft')]  }" />
 
@@ -185,7 +188,7 @@
                 <field name="sala_id" options="{'no_create': True}" />
                 <field name="total_horas_aulas_ministradas"  />
               </group>
-              <group string="Datas e Status" groups="geracad_curso.group_geracad_curso_secretaria">
+              <group string="Datas e Status" groups="geracad_curso.group_geracad_curso_secretaria,geracad_curso.group_geracad_curso_secretaria_only_read">
                 <field name="data_abertura" attrs="{'readonly' : [('state','!=', 'draft')]  }" />
                 <field name="data_inicio" attrs="{'readonly' : [('state','not in', ['draft','aberta','aulas_cencerradas'])]  }"/>
                 <field name="data_previsao_termino" attrs="{'readonly' : [('state','not in', ['draft','aberta','aulas_cencerradas'])]  }" />
@@ -195,7 +198,7 @@
               </group>
 
             </group>
-            <group string="Outras informações" groups="geracad_curso.group_geracad_curso_secretaria">
+            <group string="Outras informações" groups="geracad_curso.group_geracad_curso_secretaria,geracad_curso.group_geracad_curso_secretaria_only_read">
               <group>
                 <field name="matricula_aberta" attrs="{'readonly' : [('state','!=', 'draft')]  }" />
                 <field name="e_pendencia" attrs="{'readonly' : [('state','!=', 'draft')]  }" />
@@ -227,7 +230,7 @@
                       <field name="nota_2" attrs="{'readonly' : [('state','in', ['cancelada','concluida'])]  }" />
                       <field name="final" attrs="{'readonly' : [('state','in', ['cancelada','concluida'])]  }" />
                       <field name="media"  />
-                      <field name="state" groups="geracad_curso.group_geracad_curso_secretaria"
+                      <field name="state" groups="geracad_curso.group_geracad_curso_secretaria,geracad_curso.group_geracad_curso_secretaria_only_read"
                       
                        />
 
