@@ -304,7 +304,10 @@ class GeracadCursoNotaDisciplina(models.Model):
                             if (record.nota_1 + record.nota_2) >= 14:
                                 record.situation = 'AM'
                             else:
-                                record.situation = 'AP'
+                                if(record.final > 0):
+                                    record.situation = 'AP'
+                                else:
+                                    record.situation = 'RC'
                         else:
                             record.situation = 'RC' 
 
