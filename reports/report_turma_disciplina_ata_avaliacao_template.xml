@@ -138,6 +138,7 @@
                                 <t t-set="count" t-value="1" />
 
                                 <t t-foreach="o.notas" t-as="rec">
+                                    <t t-if="rec.state not in ['cancelada','trancada','suspensa']">
                                     <tr>
                                         <td class="pri_col">
                                             <t t-esc="count" />
@@ -151,7 +152,7 @@
                                         <td style="border-top:none;border-right:none;"></td>
                                         <td style="border-top:none;"></td>
                                     </tr>
-
+                                    </t>
 
                                 </t>
                             </tbody>
