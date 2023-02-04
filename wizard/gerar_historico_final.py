@@ -61,7 +61,7 @@ class GeracadCursoGerarHistoricoFinal(models.TransientModel):
         _logger.info(nota_disciplinas)
         # apenas paga log
         for d in nota_disciplinas:
-            _logger.info(str(d.disciplina_id.id) + '-' + d.disciplina_id.codigo + ' ' + d.disciplina_id.name)
+            _logger.info(str(d.disciplina_id.id) + '-' + str(d.disciplina_id.codigo) + ' ' + str(d.disciplina_id.name))
         
         # pegando apenas os ids das disciplinas, para saber quais estao duplicadas
         disciplinas_ids = list(map(lambda x: x.disciplina_id.id, nota_disciplinas))
