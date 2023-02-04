@@ -102,7 +102,7 @@ class GeracadCursoGerarHistoricoFinal(models.TransientModel):
                
         _logger.info("DISCIPLINAS LIMPAS DE DUPLICIDADE") 
         for d in list_nota_disciplinas:
-            _logger.info(str(d.disciplina_id.id) + '-' + d.disciplina_id.codigo + ' ' + d.disciplina_id.name + ' MEDIA=' + str(d.media ))
+            _logger.info(str(d.disciplina_id.id) + '-' + str(d.disciplina_id.codigo) + ' ' + str(d.disciplina_id.name) + ' MEDIA=' + str(d.media ))
 
         return list_nota_disciplinas
 
