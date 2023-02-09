@@ -247,7 +247,7 @@ class GeracadCursoNotaDisciplina(models.Model):
 
     @api.constrains('faltas')
     def _check_faltas(self):  
-        self._validationStatus()
+        #self._validationStatus()
         for record in self:
             if record.faltas < 0 :
                 raise ValidationError("As faltas não devem ser menor que 0" )
