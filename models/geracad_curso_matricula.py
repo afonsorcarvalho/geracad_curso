@@ -398,12 +398,14 @@ class GeracadCursoMatricula(models.Model):
                 periodo_nota = nota_disciplina_id.periodo
             if periodo_nota == int(periodo):
                 nota_disciplina_ids_periodo.append(nota_disciplina_id)
+        return nota_disciplina_ids_periodo
     
 
         
         
 
     def _tem_notas_periodo(self,periodo):
+        
         count_disciplinas = len(self._get_notas_periodo(periodo))
         return count_disciplinas
     
