@@ -53,27 +53,32 @@
                             .diario_assinatura{
                                 text-align:center;
                             }
+                            <!-- TODO VERIFICA QUE AS DATAS NÃO ESTÃO SAINDO CERTAS QUANDO PASSAM DE UMA PAGINA NO DIÁRIO --> 
                             
                             th.data_falta {
-                                height:80px;
-                                width:15px;
-                                white-space: nowrap;
-                                position:relative;
+                                height:94px;
+                                width:12px;
                                 font-size: small;
                             }
-                            th.data_falta > div{
+                            div.data_falta {
                                
                                 transform: rotate(-90deg);
                                 -webkit-transform: rotate(-90deg);
                                 -ms-transform: rotate(-90deg);
-                                position:absolute;
-                                left:0;
-                                right:0;
-                                top: 52px;
+                                position:relative;
+                                display: inline-block;
+                                width:15px;
+                                height: 0px;
+                                left:-9px;
+                                right:-2px;
+                                top: -12px;
                                 margin:auto;
                             }
+                            div.data_falta > span{
+                                
+                                width: 80px;
+                            }
                         
-                            
                         
                             
                         </style>

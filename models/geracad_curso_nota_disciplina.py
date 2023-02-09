@@ -301,7 +301,7 @@ class GeracadCursoNotaDisciplina(models.Model):
                     else:
                         media = self._calcula_media(record.nota_1,record.nota_2, record.final)
                         if(record.final > 0): 
-                            if media >= 6:
+                            if media >= 5:
                                     record.situation = 'AP'
                             else:
                                 record.situation = 'RC'                                

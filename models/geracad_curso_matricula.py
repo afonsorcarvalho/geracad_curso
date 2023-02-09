@@ -219,11 +219,14 @@ class GeracadCursoMatricula(models.Model):
 
     active = fields.Boolean(default=True)
 
+    #TODO verficar se aluno já está matriculado na turma cuso, para que não possa haver 
+    # o mesmo aluno matriculado duas vezes
     @api.model
     def create(self, vals):
         if 'company_id' in vals:
              curso_turma = self.env['geracad.curso.turma'].search([('id', '=', vals['curso_turma_id'] )])
              self = self.with_company(curso_turma.company_id)
+        
 
         if vals.get('name', _('New')) == _('New'):
              seq_date = None
@@ -398,7 +401,7 @@ class GeracadCursoMatricula(models.Model):
     
 
         
-        return nota_disciplina_ids_periodo
+        
 
     def _tem_notas_periodo(self,periodo):
         count_disciplinas = len(self._get_notas_periodo(periodo))
