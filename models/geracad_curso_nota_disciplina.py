@@ -213,6 +213,7 @@ class GeracadCursoNotaDisciplina(models.Model):
         ('AB', 'AB'), # abandono
         ('EA', 'EA'), # estudos aproveitados
         ('FA', 'FA'),
+        ('SU', 'SU'), # Suspenso pelo financeiro
         ], default='IN', string="Situação",tracking=True)
 
 
@@ -285,14 +286,13 @@ class GeracadCursoNotaDisciplina(models.Model):
                media = (media + final)/2
 
         return media
-        
-
-    @api.onchange('nota_1','nota_2','final','faltas')
-    def _onchange_categ_id(self):    
-        _logger.debug("mudou nota")
+    
+    def calcula_situation(self):
         
         for record in self:
-            if record.state != 'concluida':
+            status_matricula_disciplina = record.disciplina_matricula_id.state
+           
+            if status_matricula_disciplina in  ['inscrito','draft']:
                 if record.turma_disciplina_id.e_aproveitamento:
                     record.situation = 'EA'
                 else:
@@ -310,6 +310,33 @@ class GeracadCursoNotaDisciplina(models.Model):
                                 record.situation = 'AM'
                             else:
                                 record.situation = 'RC'
+            elif status_matricula_disciplina == 'trancado':
+                record.situation = 'TR'
+            elif status_matricula_disciplina == 'abandono':
+                record.situation = 'AB'
+            elif status_matricula_disciplina == 'suspensa':
+                record.situation = 'SU'
+            elif status_matricula_disciplina == 'cancelada':
+                record.situation = 'CA'
+            elif status_matricula_disciplina == 'expulso':
+                record.situation = 'CA'
+            elif status_matricula_disciplina == 'falecido':
+                record.situation = 'CA'
+            elif status_matricula_disciplina == 'transferido':
+                record.situation = 'CA'
+            
+
+
+
+                    
+
+        
+
+    @api.onchange('nota_1','nota_2','final','faltas')
+    def _onchange_notas_faltas(self):     
+        for record in self:
+            if record.state != 'concluida':
+                record.calcula_situation()
                             
 
     
@@ -323,6 +350,7 @@ class GeracadCursoNotaDisciplina(models.Model):
     
             @return: True on success, False otherwise
         """
+       
         # if(self.state in ['concluida']):
         #     raise ValidationError(_('Esta nota já foi lançada e não pode ser alterada'))
         # if(self.state in ['cancelada']):

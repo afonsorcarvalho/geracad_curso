@@ -24,64 +24,65 @@
                 <t t-call="web.external_layout">
                     <style type="text/css">
 
-                            .col, col-4, col-12, col-6 {
-                                padding:0px;
-                            }
-                            .table thead {
-                                margin-top: 5px;
-                            }
-                            .table tfoot{
-                                font-size:10px;
+                        .col, col-4, col-12, col-6 {
+                            padding:0px;
+                        }
+                        .table thead {
+                            margin-top: 5px;
+                        }
+                        .table tfoot{
+                            font-size:10px;
 
-                            }
-                            .table td, .table th{
-                                margin:0px;
-                                padding:3px;
-                            }
+                        }
+                        .table td, .table th{
+                            margin:0px;
+                            padding:3px;
+                        }
 
-                         
-                            .table-bordered th, .table-bordered td{
-                                border:1px solid #000000
-                            }
+                     
+                        .table-bordered th, .table-bordered td{
+                            border:1px solid #000000
+                        }
 
-                            .situation{
-                                font-weight: bold;
-                            }
-                            .diario_date{
-                                text-align:center;
-                            }
-                            .diario_assinatura{
-                                text-align:center;
-                            }
-                            <!-- TODO VERIFICA QUE AS DATAS NÃO ESTÃO SAINDO CERTAS QUANDO PASSAM DE UMA PAGINA NO DIÁRIO --> 
-                            
-                            th.data_falta {
-                                height:94px;
-                                width:12px;
-                                font-size: small;
-                            }
-                            div.data_falta {
-                               
-                                transform: rotate(-90deg);
-                                -webkit-transform: rotate(-90deg);
-                                -ms-transform: rotate(-90deg);
-                                position:relative;
-                                display: inline-block;
-                                width:15px;
-                                height: 0px;
-                                left:-9px;
-                                right:-2px;
-                                top: -12px;
-                                margin:auto;
-                            }
-                            div.data_falta > span{
-                                
-                                width: 80px;
-                            }
+                        .situation{
+                            font-weight: bold;
+                        }
+                        .diario_date{
+                            text-align:center;
+                        }
+                        .diario_assinatura{
+                            text-align:center;
+                        }
+                        <!-- TODO VERIFICA QUE AS DATAS NÃO ESTÃO SAINDO CERTAS QUANDO PASSAM DE UMA PAGINA NO DIÁRIO --> 
                         
-                        
+                        th.data_falta {
+                            height:94px;
+                            width:12px;
+                            font-size: small;
+                        }
+                        div.data_falta {
+                           
+                            transform: rotate(-90deg);
+                            -webkit-transform: rotate(-90deg);
+                            -ms-transform: rotate(-90deg);
+                            position:relative;
+                            display: inline-block;
+                            width:15px;
+                            height: 0px;
+                            left:-9px;
+                           
+                        }
+                        div.data_falta &gt; span{
                             
-                        </style>
+                            width: 80px;
+                            display: block;
+                            margin-top:0px;
+                            margin-left:10px;
+                        }
+                    
+                    
+                        
+                    </style>
                     <div class="page">
 
                         <table class="table table-condensed table-bordered" cellpadding="0" cellspacing="0" padding="0" margin="0">

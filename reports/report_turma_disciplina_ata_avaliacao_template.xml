@@ -60,7 +60,7 @@
                                 <td colspan="7" valign="middle" align="center"  height="100px">
 
 
-                                    <h2 style="text-align:center;">ATA DE RESULTADO DE AVALIAÇÃO</h2>
+                                    <h2 style="text-align:center;">ATA DE FREQUÊNCIA E RESULTADO DE AVALIAÇÃO</h2>
 
 
                                 </td>
@@ -112,22 +112,28 @@
                         <table class="table table-condensed table-bordered" cellpadding="0" cellspacing="0" padding="0" margin="0">
                             <thead>
 
-                                <tr>
-                                    <th width="30px" align="center" style="border-right:none;background-color:#F3F3F3;">
+                                <tr rowspan="2">
+                                    <th width="30px" rowspan="2" align="center" style="border-right:none;background-color:#F3F3F3;">
                                         <div style="text-align:center;">Nº</div>
                                     </th>
-                                    <th style="border-right:none;background-color:#F3F3F3;">ALUNO</th>
-                                    <th style="border-right:none;">
-                                        <div style="text-align:center;background-color:#F3F3F3;">NOTA</div>
+                                    <th rowspan="2"  style="text-align:center;background-color:#F3F3F3;">ALUNO</th>
+                                    <th style="text-align:center;background-color:#F3F3F3;"  rowspan="2">
+                                        <div >NOTA</div>
                                     </th>
-                                    <th style="border-right:none;">
-                                        <div style="text-align:center;background-color:#F3F3F3;">DATA DE RECEBIMENTO</div>
+                                    
+                                    <th  style="text-align:center;background-color:#F3F3F3;" rowspan="2">
+                                        <div >FALTAS</div>
                                     </th>
-                                    <th style="border-right:none;">
-                                        <div style="text-align:center;background-color:#F3F3F3;">FALTAS</div>
+                                    <th colspan="2" >
+                                        <div style="text-align:center;background-color:#F3F3F3;">ASSINATURAS DO ALUNO</div>
                                     </th>
-                                    <th>
-                                        <div style="text-align:center;background-color:#F3F3F3;">ASSINATURA DO ALUNO</div>
+                                </tr>
+                                <tr>
+                                    <th width="250px"  style="text-align:center;background-color:#F3F3F3;" >
+                                        <div >PRESENÇA</div>
+                                    </th>
+                                    <th width="250px"  style="text-align:center;background-color:#F3F3F3;" >
+                                        <div >RECEBIMENTO</div>
                                     </th>
                                 </tr>
 

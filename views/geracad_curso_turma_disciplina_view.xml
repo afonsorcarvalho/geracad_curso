@@ -141,22 +141,33 @@
             Todas as matrículas na disciplina dos alunos irão para o status de concluída.
             Esta ação não poderá ser desfeita!!!
             " />
+           
+
             <button name="action_finalizar_aulas" string="Finalizar Aulas" class="oe_highlight"
               states="aberta" type="object"
               groups="geracad_curso.group_geracad_curso_secretaria" />
+
+            <button name="action_finalizar_aulas" string="Finalizar Diário" class="oe_highlight"
+              states="aberta" type="object"
+              confirm="Tem certeza que deseja finalizar o diário? Verifique se está tudo correto. Depois de finalizado não poderá mais ser alterado!"
+              groups="geracad_curso.group_geracad_curso_professor" />
+
             <button name="action_cancelar_turma_disciplina" string="Cancelar" states="aberta"
               type="object"
               confirm="Tem certeza que deseja cancelar essa turma? Esta ação não poderá ser defeita"
               groups="geracad_curso.group_geracad_curso_secretaria" />
+
             <button name="action_suspender_turma_disciplina" string="Suspender" states="aberta"
               type="object"
               groups="geracad_curso.group_geracad_curso_secretaria" />
+
             <button name="action_abrir_turma_disciplina" string="Abrir" states="suspensa"
               type="object"
               groups="geracad_curso.group_geracad_curso_secretaria" />
             <field name="state" widget="statusbar"
               statusbar_visible="aberta,aulas_encerradas,encerrada" />
           </header>
+
           <sheet>
             <div class="oe_button_box" name="button_box">
               <button name="action_go_alunos_disciplinas"
@@ -240,41 +251,46 @@
 
               </group>
             </group>
-            <group>
-              <p>
-                O status das Aulas são:
-              </p>
-            </group>
+            
             <notebook>
               <page string="Notas">
                 <group>
+
+                  <p class="alert alert-danger">Professor, alunos com status de matrícula <b>suspensa</b> deverão ser encaminhados à coordenação para regularização</p>
+                </group>
+                <group>
                   <field name="notas" nolabel="1" readonly="0"
-                    attrs="{'readonly' : [('state','not in', ['draft','aberta','aulas_cencerradas'])]  }">
-                    <tree editable="1" edit="1" delete="0" create="0" default_order=""
-                      decoration-muted="state in ['cancelada','concluida']"
-                      decoration-success="situation in ['AM','EA','AP']"
-                      decoration-danger="situation in ['RF','RC']"
-                    >
-                      <!-- <field name="disciplina_matricula_id"  optional="hide"/> -->
+                  attrs="{'readonly' : [('state','not in', ['draft','aberta','aulas_cencerradas'])]  }">
+                  <tree editable="1" edit="1" delete="0" create="0" default_order=""
+                  decoration-muted="disciplina_matricula_state in ['suspensa','trancada','cancelada','concluida']"
+                  decoration-success="situation in ['AM','EA','AP']"
+                  decoration-danger="situation in ['RF','RC']"
+                  >
+                  <!-- <field name="disciplina_matricula_id"  optional="hide"/> -->
                       <field name="curso_matricula_codigo"
                       />
 
                       <field name="aluno_nome" />
                       <field name="faltas"
-                        attrs="{'readonly' : [('state','in', ['cancelada','concluida'])]  }" />
+                        attrs="{'readonly' : [('disciplina_matricula_state','in', ['suspensa','trancada','cancelada','concluida'])]  }" />
                       <field name="nota_1"
-                        attrs="{'readonly' : [('state','in', ['cancelada','concluida'])]  }" />
+                        attrs="{'readonly' : [('disciplina_matricula_state','in', ['suspensa','trancada','cancelada','concluida'])]  }" />
                       <field name="nota_2"
-                        attrs="{'readonly' : [('state','in', ['cancelada','concluida'])]  }" />
+                        attrs="{'readonly' : [('disciplina_matricula_state','in', ['suspensa','trancada','cancelada','concluida'])]  }" />
                       <field name="final"
-                        attrs="{'readonly' : [('state','in', ['cancelada','concluida'])]  }" />
+                        attrs="{'readonly' : [('disciplina_matricula_state','in', ['suspensa','trancada','cancelada','concluida'])]  }" />
                       <field name="media" />
-                      <field name="state"
+                      <!-- <field name="state"
+                        groups="geracad_curso.group_geracad_curso_secretaria,geracad_curso.group_geracad_curso_secretaria_only_read"
+                      /> -->
+                      <field name="disciplina_matricula_state"
                         groups="geracad_curso.group_geracad_curso_secretaria,geracad_curso.group_geracad_curso_secretaria_only_read"
                       />
 
                       <field name="situation" string="Situação"
-                        attrs="{'readonly' : [('state','in', ['cancelada','concluida'])]  }" />
+                        
+                        readonly="1"
+                        />
                     </tree>
 
                   </field>

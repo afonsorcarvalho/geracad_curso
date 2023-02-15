@@ -312,7 +312,7 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
 
             for matricula_disciplina in matricula_disciplina_ids:
                 # se matricula tiver suspensa coloca falta
-                if matricula_disciplina.state in ['suspensa']:
+                if matricula_disciplina.state in ['suspensa','trancado','abandono']:
                     hora_1 = hora_2 = hora_3 = hora_4 = False
                 
                 rec.write({

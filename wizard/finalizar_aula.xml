@@ -7,13 +7,16 @@
         <field name="arch" type="xml">
             <form string="Finalizar Aulas">
                 <sheet>
-                    <group>
-                       
-                           
+                    <p class="alert alert-danger">
+                        Apenas finalize as aulas quando todo o diário estiver preenchido com notas, assuntos, frequência nas aulas. 
+                        Todas as aulas deverão estar com status "concluída".
+                        Caso precise alterar algum dado do diário após finalizado as aulas, deverá o professor pedir na coordenação para que seja novamente
+                        aberto para alteração.
+
+                    </p>
+                    <group>                           
                             <field name="turma_disciplina_id" readonly="1"/>
-                            <field name="data_termino"/>
-                            
-                       
+                            <field name="data_termino" readonly="1"/>
                     </group>
                 </sheet>
                 <footer>
