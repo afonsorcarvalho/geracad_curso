@@ -273,7 +273,7 @@ class GeracadCursoTurmDisciplina(models.Model):
             ('turma_disciplina_id','=',self.id)
             ])
         for nota in nota_ids:
-            nota.write({
+            nota.sudo().write({
                 'periodo': self.periodo
             })
 
@@ -701,14 +701,17 @@ class GeracadCursoTurmDisciplina(models.Model):
         )
         vals = self.env["ir.actions.act_window"].sudo().browse(act_id).read()[0]
         vals["context"] = {
-           
-           
             "default_turma_disciplina_id": self.id,
-            
         }
         return vals
-
-
+    
+    def action_reabrir_aulas(self):
+        self.write({
+            'state': 'aberta',
+            'matricula_aberta': True,
+            'data_termino': None,
+            'data_encerramento': None,
+            })
 
     def action_encerrar_turma_disciplina(self):
         self._encerra_notas_turma_disciplina()

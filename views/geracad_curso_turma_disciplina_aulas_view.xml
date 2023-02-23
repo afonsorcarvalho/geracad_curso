@@ -118,6 +118,12 @@
                   attrs="{'invisible': [('state', 'not in', ['em_andamento'])]}"
                   class="btn-danger"
                   />
+
+                  <button name="action_reiniciar" type="object" string="Reiniciar"
+                  attrs="{'invisible': [('state', 'not in', ['concluida'])]}"
+                  class="btn-danger"
+                  confirm="Se reiniciar, a lista de frequência será apagada e aula voltará para o status rascunho. Você tem certeza?"
+                  />
                   <field name="state" widget="statusbar" />
           </header>
           <sheet>
@@ -136,7 +142,8 @@
               </button>
 
             </div> -->
-
+            <widget name="web_ribbon" title="Concluída" attrs="{'invisible': [('state', '!=', 'concluida')]}"/>
+           
             <h1>
               <field name="name" placeholder="Digite o Assunto..." attrs="{'readonly' : [('state','in', ['concluida'])]  }" />
             </h1>

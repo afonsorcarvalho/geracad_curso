@@ -7,7 +7,7 @@
             <field name="sequence">7</field>
         </record>
         <record id="group_geracad_curso_user" model="res.groups">
-            <field name="name">User</field>
+            <field name="name">Usuário</field>
             <field name="category_id" ref="module_category_geracad_curso"/>
             <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
         </record>
@@ -16,10 +16,15 @@
             <field name="category_id" ref="module_category_geracad_curso"/>
             <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
         </record>
+        <record id="group_geracad_curso_secretaria_reabrir_diario" model="res.groups">
+            <field name="name">Reabrir diário</field>
+            <field name="category_id" ref="module_category_geracad_curso"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
         <record id="group_geracad_curso_secretaria_only_read" model="res.groups">
             <field name="name">Secretaria Somente Leitura</field>
             <field name="category_id" ref="module_category_geracad_curso"/>
-            <!-- <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/> -->
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
         </record>
         <record id="group_geracad_curso_professor" model="res.groups">
             <field name="name">Professor</field>
@@ -69,21 +74,21 @@
        <record model="ir.rule" id="geracad_curso_nota_disciplina_secretaria_rule">
             <field name="name">Notas: todas as notas</field>
             <field name="model_id" ref="model_geracad_curso_nota_disciplina"/>
-            <field name="groups" eval="[(4, ref('group_geracad_curso_secretaria'))]"/>
+            <field name="groups" eval="[(4, ref('group_geracad_curso_secretaria')),(4, ref('group_geracad_curso_secretaria_only_read'))]"/>
             <field name="domain_force">[ (1, '=', 1)]</field>
             <field name="perm_unlink">False</field>
         </record> 
         <record model="ir.rule" id="geracad_curso_turma_disciplina_aulas_secretaria_rule">
             <field name="name">Aulas: todas as aulas</field>
             <field name="model_id" ref="model_geracad_curso_turma_disciplina_aulas"/>
-            <field name="groups" eval="[(4, ref('group_geracad_curso_secretaria'))]"/>
+            <field name="groups" eval="[(4, ref('group_geracad_curso_secretaria')),(4, ref('group_geracad_curso_secretaria_only_read'))]"/>
             <field name="domain_force">[ (1, '=', 1)]</field>
             <field name="perm_unlink">False</field>
         </record> 
         <record model="ir.rule" id="geracad_curso_turma_disciplina_secretaria_rule">
             <field name="name">Turmas disciplinas: todas as turmas</field>
             <field name="model_id" ref="model_geracad_curso_turma_disciplina"/>
-            <field name="groups" eval="[(4, ref('group_geracad_curso_secretaria'))]"/>
+            <field name="groups" eval="[(4, ref('group_geracad_curso_secretaria')),(4, ref('group_geracad_curso_secretaria_only_read'))]"/>
             <field name="domain_force">[ (1, '=', 1)]</field>
             <field name="perm_unlink">False</field>
             <field name="perm_write">True</field>

@@ -51,7 +51,6 @@
           <field name="data_encerramento" />
           <field name="company_id" />
           <field name="state" />
-
           <filter name="filter_data_abertura" date="data_abertura"
             string="Data de Abertura" />
           <filter name="filter_data_inicio" date="data_inicio"
@@ -60,7 +59,6 @@
             string="Data previsão de término" />
           <filter name="filter_data_encerramento" date="data_encerramento"
             string="Data de encerramento" />
-
           <filter name="groupby_unidade" string="Unidade" context="{'group_by' : 'company_id'}"></filter>
           <filter name="groupby_e_pendencia" string="Pendência"
             context="{'group_by' : 'e_pendencia'}"></filter>
@@ -83,17 +81,11 @@
           <filter name="e_a_distancia" string="A Distância" domain="[('tipo','=', 'a_distancia')]" />
           <filter name="data_encerramento" string="Data de encerramento" domain="[]"
             context="{'group_by':'data_encerramento'}" />
-
           <filter name="state" string="Status" domain="[]" context="{'group_by':'state'}" />
-
-
           <searchpanel>
             <field name="state" string="Status" enable_counters="1" select="multi" />
             <field name="company_id" string="Unidade" enable_counters="1" select="multi" />
-
-
           </searchpanel>
-
         </search>
       </field>
     </record>
@@ -130,7 +122,7 @@
       <field name="name">geracad.curso.turma.disciplina.form</field>
       <field name="model">geracad.curso.turma.disciplina</field>
       <field name="arch" type="xml">
-        <form string="Disciplina">
+        <form string="Diário de Disciplina">
           <header>
 
             <button name="action_encerrar_turma_disciplina" string="Encerrar Turma"
@@ -149,8 +141,15 @@
 
             <button name="action_finalizar_aulas" string="Finalizar Diário" class="oe_highlight"
               states="aberta" type="object"
-              confirm="Tem certeza que deseja finalizar o diário? Verifique se está tudo correto. Depois de finalizado não poderá mais ser alterado!"
               groups="geracad_curso.group_geracad_curso_professor" />
+
+            <button name="action_reabrir_aulas" string="Reabrir Diário" class="oe_highlight"
+              states="aulas_encerradas" type="object"
+              confirm="Tem certeza que deseja finalizar o diário? Verifique se está tudo correto.
+               Depois de finalizado não poderá mais ser alterado!
+               Para correção após finalizado, deverá o professor entrar em contato com a coordenação pedindo reabertura do diário.
+              "
+              groups="geracad_curso.group_geracad_curso_secretaria_reabrir_diario" />
 
             <button name="action_cancelar_turma_disciplina" string="Cancelar" states="aberta"
               type="object"
@@ -169,6 +168,8 @@
           </header>
 
           <sheet>
+            <widget name="web_ribbon" title="Encerrada" attrs="{'invisible': [('state', '!=', 'encerrada')]}"/>
+            <widget name="web_ribbon" title="Aulas Encerradas"  bg_color="bg-warning" attrs="{'invisible': [('state', '!=', 'aulas_encerradas')]}"/>
             <div class="oe_button_box" name="button_box">
               <button name="action_go_alunos_disciplinas"
                 groups="geracad_curso.group_geracad_curso_secretaria,geracad_curso.group_geracad_curso_secretaria_only_read"
@@ -195,8 +196,8 @@
             <button name="action_adiciona_alunos_turma_curso" string="Atualizar alunos"
               class="oe_highlight" states="aberta" type="object"
               groups="geracad_curso.group_geracad_curso_secretaria"
+              confirm="Atualizar alunos irá adicionar todos os alunos inscritos na turma curso selecionada. Tem certeza que gostaria de atualizar os alunos?"
               help="Atualiza os alunos inscritos no curso, adicionando os que não estão matriculados na disciplina" />
-
             <group>
               <group string="Dados da Turma Disciplina"
                 groups="geracad_curso.group_geracad_curso_secretaria,geracad_curso.group_geracad_curso_secretaria_only_read">
@@ -317,9 +318,9 @@
                     definitivo, podendo apenas ser mudado o assunto da aula. </li>
                     </ul>
                     Caso tenha alguma falta justificada posteriormente, deverá o professor ajustar
-                    manualmente o número de faltas do aluno em <b>Notas</b>. No caso de erro de
-                    datas e horas, deverá ser comunicado ao Administrador para que possa ser
-                    corrigido. </p>
+                    manualmente o número de faltas do aluno na aba <b>Notas</b>.<br/> No caso de erro de
+                    datas e horas, depois de finalizada a aula, esta deverá ser reiniciada através do botão [Frequência] e depois [Reiniciar] dentro da janela <b>Frequência</b>, 
+                    então a aula voltará ao status <b>rascunho</b>, podendo ser modificada qualquer campo.  </p>
 
 
                 </group>
@@ -384,6 +385,13 @@
                         states="em_andamento"
                         type="object"
                         class="btn-danger" />
+
+                      <!-- <button name="action_open_frequencia_view"
+                        string="Reiniciar"
+                        context="{'action': 'reiniciar' }"
+                        states="em_andamento,concluida"
+                        type="object"
+                        class="btn-danger" /> -->
 
 
                     </tree>

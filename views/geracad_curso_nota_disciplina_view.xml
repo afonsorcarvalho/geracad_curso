@@ -11,13 +11,7 @@
          delete="false"
          edit="true"
          duplicate="false"
-	 editable="bottom"
-         
-       
-         
-         
          class="oe_edit_only"
-         
          >
          <header>
 

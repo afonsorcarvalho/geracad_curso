@@ -338,6 +338,29 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
         for rec in self:
             for frequencia in rec.frequencia_ids:
                 frequencia.matricula_disciplina_id.nota.faltas += frequencia.count_faltas
+    
+    def _remove_frequencia_na_nota_disciplina(self):
+        '''
+            Função que conta as faltas da frequencia na nota de cada aluno
+            e retira do diário as faltas.
+
+        '''
+        _logger.info("Calculando e removendo as faltas na turma")
+        for rec in self:
+            for frequencia in rec.frequencia_ids:
+                frequencia.matricula_disciplina_id.nota.faltas -= frequencia.count_faltas
+
+    def _delete_frequencia(self):
+        '''
+            Função apaga toda a lista de frequencia.
+
+        '''
+        _logger.info("Excluindo lista de frequencia")
+        for rec in self:
+            rec.write({
+                'frequencia_ids' : [(5,0,0)],
+            })
+            
    
     def action_agendar(self):
 
@@ -379,6 +402,9 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
 
         if self._context['action'] == "iniciar":
             self.action_iniciar()
+
+        if self._context['action'] == "reiniciar":
+            self.action_reiniciar()
        
             
             
@@ -399,11 +425,7 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
 
     def action_finalizar(self):
         _logger.info("finalizando")
-       
-    
-
         for rec in self:
-            
             if rec.state in ['concluida']:
                 raise ValidationError(_('Esta aula já foi concluída'))
             if rec.state not in ['em_andamento']:
@@ -414,6 +436,23 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
             rec.write({
                 'state': 'concluida',
                 'hora_termino': fields.Datetime.now()
+            })
+    def action_reiniciar(self):
+        _logger.info("Reiniciando")
+        for rec in self:
+            _logger.info("STATE TURMA " + rec.turma_disciplina_id.state )
+            if rec.turma_disciplina_id.state not in ['draft', 'aberta','em_andamento']:
+                raise ValidationError(_('Esta turma de disciplina está encerrada, suspensa ou cancelada. Não é possível reiniciar lista de frequência'))
+            
+            if rec.state in ['draft','agendada']:
+                raise ValidationError(_('Esta aula já está em '  + rec.state + '. Só aulas em andamento ou concluídas podem ser reiniciadas.'))
+           
+            if rec.state == 'concluida':
+                rec._remove_frequencia_na_nota_disciplina()
+            rec._delete_frequencia()
+            rec.write({
+                'state': 'draft',
+                'hora_termino': None,
             })
 
 class GeracadCursoTurmaDisciplinaAulasFrequencia(models.Model):
