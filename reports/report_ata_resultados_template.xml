@@ -132,7 +132,7 @@
 									
 									<t t-foreach="disciplinas_grade" t-as="lines">
 										<th t-att-width="col_width_disciplinas" class="data_falta" >
-											<div class="data_falta nomes_disciplinas"><span class="text-uppercase " t-esc="lines" /></div>
+											<div class="data_falta nomes_disciplinas"><span class="text-uppercase " t-esc="lines[:36]" /></div>
 										</th>
 									</t>
 
@@ -149,7 +149,7 @@
 										<td><span class="text-uppercase nomes"  t-esc="item" /></td>
 										<td>
 											<div class="nomes ">
-												<span class="text-uppercase"  t-esc="lines" />
+												<span class="text-uppercase"  t-esc="lines[:31]" />
 											</div>
 										</td>
 
