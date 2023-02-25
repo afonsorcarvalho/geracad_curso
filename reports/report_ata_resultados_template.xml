@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="paperformat_ata_resultado" model="report.paperformat">
+		<field name="name">Ata de Resultados Finais</field>
+		<field name="default" eval="True" />
+		<field name="orientation">Landscape</field>
+		<field name="dpi">130</field>
+		<field name="margin_top">20</field>
+		<field name="margin_bottom">15</field>
+		<field name="margin_left">3</field>
+		<field name="margin_right">3</field>
+		<field name="header_line" eval="False" />
+		<field name="header_spacing">16</field>
+	</record>
+	<template id="report_ata_resultados_template">
+
+		<t t-call="web.html_container">
+			<t t-foreach="docs" t-as="o">
+				<t t-call="web.external_layout">
+					<style type="text/css">
+
+                        .col, col-4, col-12, col-6 {
+                            padding:0px;
+                        }
+                        .table thead {
+                            margin-top: 5px;
+							height: 400px;
+                        }
+                        .table tfoot{
+                            font-size:10px;
+
+                        }
+						.table thead &gt; tr {
+							
+
+						}
+                        .table td, .table th{
+                            margin:0px;
+                            padding:0px;
+                        }
+
+                     
+                        .table-bordered th, .table-bordered td{
+                            border:1px solid #000000
+                        }
+
+                        .situation{
+                            font-weight: bold;
+							font-size: 11px;
+                        }
+                        .diario_date{
+                            text-align:center;
+                        }
+                        .diario_assinatura{
+                            text-align:center;
+                        }
+                        <!-- TODO VERIFICA QUE AS DATAS NÃO ESTÃO SAINDO CERTAS QUANDO PASSAM DE UMA PAGINA NO DIÁRIO --> 
+                        
+                        th.data_falta {
+                            height:80px;
+                            width:12px;
+                            
+                        }
+                        div.data_falta {
+                           
+                            transform: rotate(-90deg);
+                            -webkit-transform: rotate(-90deg);
+                            -ms-transform: rotate(-90deg);
+                            position:relative;
+                            display: inline-block;
+                            width:15px;
+                            height: 0px;
+                            left:-9px;
+                           
+                        }
+                        div.data_falta &gt; span{
+                            
+                            width: 400px;
+                            display: block;
+                            margin-top:5px;
+                            margin-left:10px;
+                        }
+						div.nomes &gt; span{
+							margin-left:10px;
+							font-size: 11px;
+
+						}
+						div.nomes_disciplinas &gt; span{
+							
+							font-size: 12px;
+
+						}
+                    </style>
+					<div class="page">
+						
+						<t t-set="col_width_disciplinas" t-value="str('22px')" />
+						
+						<table class="table table-sm table-bordered table-striped">
+							<thead>
+								<t t-set="disciplinas_com_qtd_por_periodo" t-value="o.get_disciplinas_grade()" />
+								<t t-set="disciplinas_grade" t-value="disciplinas_com_qtd_por_periodo[:-1]" />
+								<t t-set="periodos_disciplinas" t-value="disciplinas_com_qtd_por_periodo[-1]" />
+								
+								<t t-set="periodo" t-value="0" />
+								<tr>
+									<th width="20px" rowspan="2" class="text-uppercase text-center align-middle">Nº</th>
+									<th width="200px" rowspan="2" class="text-uppercase text-center align-middle">
+										<div>
+											<div>
+												<h1>
+
+													<t t-esc="o.curso_turma_id.name" />
+												</h1>
+												
+											</div>
+											
+
+										</div>	
+									</th>
+									<t t-foreach="periodos_disciplinas" t-as="colspan">
+										<t t-set="periodo" t-value="periodo+1" />
+
+										<th class="text-center" t-att-colspan="colspan">
+										Período <t t-esc="periodo" />
+										</th>
+									</t>
+									
+								</tr>
+								
+								<tr height="300px">
+									
+									
+									<t t-foreach="disciplinas_grade" t-as="lines">
+										<th t-att-width="col_width_disciplinas" class="data_falta" >
+											<div class="data_falta nomes_disciplinas"><span class="text-uppercase " t-esc="lines" /></div>
+										</th>
+									</t>
+
+								</tr>
+							</thead>
+							<tbody>			
+								
+								<t t-set="item" t-value="0" />
+								
+								<t t-foreach="o.get_dados()" t-as="lines">
+									<t t-set="item" t-value="item + 1" />
+
+									<tr>
+										<td><span class="text-uppercase nomes"  t-esc="item" /></td>
+										<td>
+											<div class="nomes ">
+												<span class="text-uppercase"  t-esc="lines" />
+											</div>
+										</td>
+
+										<t t-foreach="disciplinas_grade" t-as="disciplina">
+											<td t-att-width="col_width_disciplinas" class="text-center">
+												<t t-if="lines_value.get(disciplina)">
+													<t t-set="dados_disciplina" t-value="lines_value[disciplina]" />
+
+													<t t-if="dados_disciplina['situation'] in ['AM','AP']">
+														<span class="text-success situation" t-esc="dados_disciplina['situation']" />
+													</t>
+													<t t-if="dados_disciplina['situation'] in ['RC','RF']">
+														<span class="text-danger situation" t-esc="dados_disciplina['situation']" />
+													</t>
+													<t t-if="dados_disciplina['situation'] in ['IN']">
+														<span class="text-darK situation" t-esc="dados_disciplina['situation']" />
+													</t>
+													<t t-if="dados_disciplina['situation'] not in ['AM','AP','RC','RF','IN']">
+														<span class="text-muted situation" t-esc="dados_disciplina['situation']" />
+													</t>				
+												</t> 
+											</td>
+										</t>
+									</tr>
+								</t>
+							</tbody>
+						</table>
+					</div>
+				</t>
+			</t>
+		</t>
+	</template>
+</odoo>

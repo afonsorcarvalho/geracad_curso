@@ -5,7 +5,7 @@
         <field name="name">wizard.geracad.curso.pendencias.financeira.aluno</field>
         <field name="model">geracad.curso.pendencias.financeira.aluno.wizard</field>
         <field name="arch" type="xml">
-            <form string="Pendências financeiras">
+            <form string="Pendências financeiras aluno">
                 <sheet>
                     <group>
                        

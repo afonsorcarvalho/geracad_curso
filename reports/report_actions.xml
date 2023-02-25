@@ -218,6 +218,23 @@
     <!-- <field name="paperformat_id" ref="report.paperformat_euro" /> --> 
     <field name="help">Pendência Financeira Aluno</field>
 </record>
+<record id="action_ata_resultados_report" model="ir.actions.report">
+    <field name="name">Relatório Ata de Resultados</field>
+    <field name="model">geracad.curso.ata.resultados.wizard</field>
+    <field name="report_type">qweb-html</field>
+    <field name="report_name">geracad_curso.report_ata_resultados_template</field>
+    <field name="report_file">geracad_curso.report_ata_resultados_template</field>
+    <field name="groups_id" 
+    eval="[(4, ref('geracad_curso.group_geracad_curso_secretaria'))]"/>
+    <field name="attachment_use" eval="False"/>
+    <field name="paperformat_id" ref="paperformat_ata_resultado"/> 
+     <field name="print_report_name">'Ata de Resultados Finais Turma - %s' % (object.curso_turma_id.name)</field> 
+    
+    
+    
+    <!-- <field name="paperformat_id" ref="report.paperformat_euro" /> --> 
+    <field name="help">Pendência Financeira Aluno</field>
+</record>
 <record id="action_pendencias_financeira_turma_report" model="ir.actions.report">
     <field name="name">Relatório de pendência financeira Turma</field>
     <field name="model">geracad.curso.pendencias.financeira.turma.wizard</field>

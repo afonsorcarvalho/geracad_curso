@@ -70,12 +70,14 @@
         'reports/report_recibo_parcela_template.xml',
         'reports/report_pendencias_financeira_aluno_template.xml',
         'reports/report_pendencias_financeira_turma_template.xml',
+        'reports/report_ata_resultados_template.xml',
         'reports/report_actions.xml',
         'wizard/pagamento_parcela.xml',
         'wizard/finalizar_aula.xml',
         'wizard/gerar_historico_final.xml',
         'wizard/pendencias_financeira_aluno_wizard.xml',
         'wizard/pendencias_financeira_por_turma_wizard.xml',
+        'wizard/curso_ata_resultados_wizard.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

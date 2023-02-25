@@ -29,6 +29,7 @@
                         }
                         .table thead {
                             margin-top: 5px;
+                            
                         }
                         .table tfoot{
                             font-size:10px;
