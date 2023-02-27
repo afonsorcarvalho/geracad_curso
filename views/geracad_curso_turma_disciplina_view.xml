@@ -348,7 +348,7 @@
 
                       </control>
                       <field name="hora_inicio_agendado" string="Data Inicio"
-                        attrs="{'readonly' : [('state','not in', ['draft','agendado'])]  }" />
+                        attrs="{'readonly' : [('state','not in', ['draft','agendada'])]  }" />
                       <field name="tempo_hora_aula_programado" string="Tempo(h)"
                         attrs="{'readonly' : [('state','not in', ['draft','agendada'])]  }" />
                       <field name="hora_termino_agendado" string="Data Término"
