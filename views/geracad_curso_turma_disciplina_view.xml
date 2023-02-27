@@ -272,7 +272,11 @@
                       />
 
                       <field name="aluno_nome" />
-                      <field name="faltas"
+                      <field name="faltas_lista_frequencia"
+                        readonly="1" />
+                      <field name="faltas_abonadas"
+                        readonly="1" />
+                      <field name="faltas" 
                         attrs="{'readonly' : [('disciplina_matricula_state','in', ['suspensa','trancada','cancelada','concluida'])]  }" />
                       <field name="nota_1"
                         attrs="{'readonly' : [('disciplina_matricula_state','in', ['suspensa','trancada','cancelada','concluida'])]  }" />

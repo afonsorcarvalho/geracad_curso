@@ -146,9 +146,65 @@ class GeracadCursoNotaDisciplina(models.Model):
         string='Faltas',
         default=0,
         tracking=True,
-        group_operator="avg",
+        group_operator="sum",
     )
+
+   
     
+    # abonos_faltas_ids = fields.One2many(colmodel ="geracad.curso.nota.disciplina.abono.falta",
+    #                                     string= 'Histórico Abonos', inverse_name = "nota_id")
+    
+    faltas_lista_frequencia = fields.Integer(
+        string='Faltas freq.',
+        default=0,
+        # store=True,
+        group_operator="sum",
+        #compute="_calcula_frequencia_atual_na_turma_disciplina"
+
+    )
+    faltas_abonadas = fields.Integer(
+        string='Abonadas',
+        default=0,
+        store=True,
+        group_operator="sum",
+        compute="_calcula_faltas_abonadas"
+        
+
+    )
+    def atualiza_faltas(self):
+        for rec in self:
+            rec._calcula_frequencia_atual_na_turma_disciplina()
+            rec._calcula_faltas_abonadas()
+    
+    @api.depends('faltas','faltas_lista_frequencia','faltas_abonadas')
+    def _calcula_faltas_abonadas(self):
+        faltas_saldo = 0
+        for rec in self:
+            faltas_saldo = rec.faltas_lista_frequencia - rec.faltas
+            if faltas_saldo < 0:
+                faltas_saldo =0
+            rec.faltas_abonadas = faltas_saldo
+            
+            
+
+    @api.depends('faltas','faltas_lista_frequencia','faltas_abonadas')
+    def _calcula_frequencia_atual_na_turma_disciplina(self):
+        _logger.info("Calculando faltas de aluno na turma de disciplina")
+        for rec in self:
+            #pegando todas as frequencias da matricula do aluno nesta turma de disciplina
+            frequencias_da_matricula_ids = rec.env['geracad.curso.turma.disciplina.aulas.frequencia'].search([
+                        ('turma_disciplina_id', '=',rec.turma_disciplina_id.id ), 
+                        ('matricula_disciplina_id', '=', rec.disciplina_matricula_id.id) 
+                        ], offset=0, limit=None, order=None, count=None)
+            soma_faltas = 0
+            for frequencia in frequencias_da_matricula_ids:
+                soma_faltas += frequencia.count_faltas
+            
+            rec.faltas_lista_frequencia = soma_faltas
+          
+            
+
+
     periodo = fields.Integer(
         string='periodo',
         compute="_compute_periodo",
@@ -216,18 +272,6 @@ class GeracadCursoNotaDisciplina(models.Model):
         ('SU', 'SU'), # Suspenso pelo financeiro
         ], default='IN', string="Situação",tracking=True)
 
-
-   
-    # aluno_nome = _id = fields.Many2one(
-        
-    #     related = 'curso_matricula_id.aluno_id.name',
-    #     string='Nome do Aluno',
-    #     readonly=True,
-    #     store=True,
-    #     )   
-   
-   
-    
    
     
     state = fields.Selection([
@@ -251,7 +295,7 @@ class GeracadCursoNotaDisciplina(models.Model):
         #self._validationStatus()
         for record in self:
             if record.faltas < 0 :
-                raise ValidationError("As faltas não devem ser menor que 0" )
+                record.faltas = 0
     
     @api.constrains('nota_1')
     def _check_nota_1(self):  
@@ -335,6 +379,7 @@ class GeracadCursoNotaDisciplina(models.Model):
     @api.onchange('nota_1','nota_2','final','faltas')
     def _onchange_notas_faltas(self):     
         for record in self:
+            record.faltas_abonadas = record.faltas_lista_frequencia - record.faltas
             if record.state != 'concluida':
                 record.calcula_situation()
                             
@@ -374,4 +419,23 @@ class GeracadCursoNotaDisciplina(models.Model):
             'state': 'concluida'
         })
         
+# class GeracadCursoNotaDisciplinaAbonoFalta(models.Model):
+#     _name = "geracad.curso.nota.disciplina.abono.falta"
+#     _description = "Abono de faltas das Disciplinas de Cursos"
+#     _check_company_auto = True
+   
+  
+#     _inherit = ['mail.thread']
+
+#     nota_id =  fields.Many2one(
+#         'geracad.curso.nota.disciplina',
+#         string='Nota',
+#         )
+#     faltas_abonadas  = fields.Integer(
+#         string='Faltas Abonadas',
+#     )
+#     justificativa  = fields.Char(
+#         string='Justificativa',
+#     )
+    
 

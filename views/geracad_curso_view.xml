@@ -486,6 +486,12 @@
       <field name="view_mode">form</field>
      <field name="target">new</field>
     </record>
+
+    <record id="action_ajuda_url" model="ir.actions.act_url">
+      <field name="name">Website</field>
+      <field name="url">/slides/aprendendo-o-sistema-de-gerenciamento-academico-geracad-2</field>
+      <field name="target">new</field>
+  </record>
    <!--  <record id="action_geracad_curso_pendencias_financeiras_aluno_wizard_form_view" model="ir.actions.act_window.view">
       
       <field name="view_mode">form</field>
@@ -511,8 +517,7 @@
     
     <menuitem name="Financeiro" id="geracad_curso.menu_root_financeiro" sequence="9" web_icon="geracad_curso,static/description/financeiro.png" action="geracad_curso_financeiro_parcelas_action_window" groups="group_geracad_curso_finaceiro" />
     
-    <!-- menu categories -->
-    
+    <!-- SUBMENU CURSOS -->
     
     <menuitem name="Alunos" id="geracad_curso.menu_alunos" sequence="1" parent="geracad_curso.menu_root" />
     <menuitem name="Professores" id="geracad_curso.menu_professores_2" sequence="1" parent="geracad_curso.menu_root" action="geracad_curso_professores_action_window" />
@@ -523,6 +528,10 @@
     <menuitem name="Financeiro" id="geracad_curso.financeiro" sequence="5" groups="group_geracad_curso_finaceiro" parent="geracad_curso.menu_root" />
     <menuitem name="Configuração" id="geracad_curso.configuracao" sequence="100" parent="geracad_curso.menu_root" />
 
+    <!-- SUBMENU CURSOS/RELATORIOS -->
+    <menuitem name="Ata de Situação por turma" id="geracad_curso.relatorios_ata_resultados_menu" parent="geracad_curso.menu_relatorios"
+      action="action_geracad_curso_ata_resultados_wizard_window"
+    />
     
     <!-- SUBMENU DISCIPLINAS -->
     <menuitem name="Turmas" id="geracad_curso.menu_disciplinas_turma" sequence="1" parent="geracad_curso.menu_root_disciplinas" />
@@ -549,17 +558,21 @@
     <!-- SUBMENU TURMAS -->
     <menuitem name="Curso" id="geracad_curso.turma_curso_menu_list" parent="geracad_curso.menu_turmas" action="geracad_curso_turma_action_window" />
     <menuitem name="Disciplina" id="geracad_curso.turma_disciplina_menu_list" parent="geracad_curso.menu_turmas" action="geracad_curso_turma_disciplina_action_window" groups="group_geracad_curso_user,group_geracad_curso_secretaria,group_geracad_curso_administrator" />
-    <!-- SUBMENU RELATORIOS -->
-    <menuitem name="Ata de Situação por turma" id="geracad_curso.relatorios_ata_resultados_menu" parent="geracad_curso.menu_relatorios"
-      action="action_geracad_curso_ata_resultados_wizard_window"
-    />
+
+
     <!-- SUBMENU FINANCEIRO -->
     <menuitem name="Relatórios" id="geracad_curso.financeiro_relatorios_menu" parent="geracad_curso.menu_root_financeiro"/>
     <!-- SUBMENU FINANCEIRO/PENDENCIAS -->
     <menuitem name="Pendências por Aluno" id="geracad_curso.financeiro_visualizar_pendencias_menu_form" parent="geracad_curso.financeiro_relatorios_menu" action="action_geracad_curso_pendencias_financeiras_aluno_wizard_window" />
     <menuitem name="Pendências por Turma" id="geracad_curso.financeiro_visualizar_pendencias_por_turma_menu_form" parent="geracad_curso.financeiro_relatorios_menu" action="action_geracad_curso_pendencias_financeiras_turma_wizard_window" />
-   
-   
+    
+    <!-- SUBMENU DIÁRIOS -->
+    <menuitem name="Ajuda" id="geracad_curso.diarios_ajuda_menu" parent="geracad_curso.menu_root_diarios"
+    action="action_ajuda_url"
+    />
+    
+    <!-- SUBMENU DIÁRIOS/AJUDA -->
+    
 
     <!-- configuração -->
     <menuitem name="Professores" id="geracad_curso.menu_configuracao_professores" parent="geracad_curso.configuracao" action="geracad_curso_professores_action_window" sequence="0" />

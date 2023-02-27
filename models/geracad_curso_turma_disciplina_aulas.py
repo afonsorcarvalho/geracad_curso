@@ -99,6 +99,16 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
         tracking=True,
         required=True
     )
+    def atualiza_faltas(self):
+        '''
+            atualiza faltas na nota da turma disciplina
+        '''
+        notas = self.turma_disciplina_id.notas
+        for nota in notas:
+            nota.atualiza_faltas()
+            
+
+
     @api.constrains('tempo_hora_aula_programado')
     def _check_tempo_hora_aula_programado(self):
         if self.tempo_hora_aula_programado < 1 or self.tempo_hora_aula_programado > 4:
@@ -187,7 +197,7 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
         ('concluida', 'Concluída'),      
         ('cancelada', 'Cancelada'),
         
-    ], string="Status", default="draft", tracking=True)
+    ], string="Status", default="agendada", tracking=True)
 
     sala_id = fields.Many2one(
         'geracad.curso.sala',
@@ -300,20 +310,22 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
             hora_3 = False
             hora_4 = False
 
-        
-            if rec.hora_termino_agendado and rec.hora_inicio_agendado:
-                tempo_hora_aula_programado = (rec.hora_termino_agendado - rec.hora_inicio_agendado).total_seconds()
-                if tempo_hora_aula_programado >= 2*tempo_hora_aula_teorico:
-                    hora_2 = True
-                if tempo_hora_aula_programado >= 3*tempo_hora_aula_teorico:
-                    hora_3 = True
-                if tempo_hora_aula_programado >= 4*tempo_hora_aula_teorico:
-                    hora_4 = True
-
             for matricula_disciplina in matricula_disciplina_ids:
                 # se matricula tiver suspensa coloca falta
                 if matricula_disciplina.state in ['suspensa','trancado','abandono']:
                     hora_1 = hora_2 = hora_3 = hora_4 = False
+                elif rec.hora_termino_agendado and rec.hora_inicio_agendado:
+                    hora_1 = True
+                    tempo_hora_aula_programado = (rec.hora_termino_agendado - rec.hora_inicio_agendado).total_seconds()
+                    if tempo_hora_aula_programado >= 2*tempo_hora_aula_teorico:
+                        hora_2 = True
+                    if tempo_hora_aula_programado >= 3*tempo_hora_aula_teorico:
+                        hora_3 = True
+                    if tempo_hora_aula_programado >= 4*tempo_hora_aula_teorico:
+                        hora_4 = True
+                else:
+                    hora_1 = hora_2 = hora_3 = hora_4 = True
+
                 
                 rec.write({
                     'frequencia_ids':[
@@ -329,6 +341,8 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
                     ]
                    
                 })
+    
+
 
     def _adiciona_frequencia_na_nota_disciplina(self):
         '''
@@ -360,6 +374,7 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
             rec.write({
                 'frequencia_ids' : [(5,0,0)],
             })
+            rec.atualiza_faltas()
             
    
     def action_agendar(self):
@@ -450,8 +465,10 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
             if rec.state == 'concluida':
                 rec._remove_frequencia_na_nota_disciplina()
             rec._delete_frequencia()
+            
             rec.write({
-                'state': 'draft',
+                'state': 'agendada',
+                'hora_inicio': None,
                 'hora_termino': None,
             })
 
@@ -468,6 +485,12 @@ class GeracadCursoTurmaDisciplinaAulasFrequencia(models.Model):
         'geracad.curso.turma.disciplina.aulas',
         string='Aulas',
         )
+    turma_disciplina_id = fields.Many2one(
+        related='turma_aula_id.turma_disciplina_id',
+        readonly=True,
+        store=True
+    )
+    
     matricula_disciplina_id = fields.Many2one(
         "geracad.curso.matricula.disciplina",
         string="Matrícula Disciplina"
@@ -490,7 +513,12 @@ class GeracadCursoTurmaDisciplinaAulasFrequencia(models.Model):
         readonly=True,
         store=True
         )
+
     
+    def write(self, values):
+        res = super().write(values)
+        self.turma_aula_id.atualiza_faltas()
+        return res
     
     hora_1 = fields.Boolean("1ª hora", default=False)
     @api.onchange('hora_1')
@@ -510,6 +538,8 @@ class GeracadCursoTurmaDisciplinaAulasFrequencia(models.Model):
     count_faltas =  fields.Integer(
         string='Faltas',compute="_compute_faltas"
     )
+
+
 
 
     @api.depends('hora_1','hora_2','hora_3','hora_4')
@@ -539,6 +569,8 @@ class GeracadCursoTurmaDisciplinaAulasFrequencia(models.Model):
             _logger.info("qtd de faltas")
             _logger.info(faltas)
             rec.count_faltas = faltas
+           
+            
     
 
     def _calcula_hora_aula(self, hora_ini, hora_fim):
