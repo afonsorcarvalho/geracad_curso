@@ -572,6 +572,13 @@
     />
     
     <!-- SUBMENU DIÁRIOS/AJUDA -->
+
+    <!-- SUBMENU AULAS -->
+    <menuitem name="Ajuda" id="geracad_curso.aulas_ajuda_menu" parent="geracad_curso.menu_root_aulas"
+    action="action_ajuda_url"
+    />
+    
+    <!-- SUBMENU AULAS/AJUDA -->
     
 
     <!-- configuração -->
