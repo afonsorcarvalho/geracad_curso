@@ -529,7 +529,7 @@
     <menuitem name="Configuração" id="geracad_curso.configuracao" sequence="100" parent="geracad_curso.menu_root" />
 
     <!-- SUBMENU CURSOS/RELATORIOS -->
-    <menuitem name="Ata de Situação por turma" id="geracad_curso.relatorios_ata_resultados_menu" parent="geracad_curso.menu_relatorios"
+    <menuitem name="Mapa de Situação por turma" id="geracad_curso.relatorios_ata_resultados_menu" parent="geracad_curso.menu_relatorios"
       action="action_geracad_curso_ata_resultados_wizard_window"
     />
     

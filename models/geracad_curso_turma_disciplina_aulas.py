@@ -480,7 +480,6 @@ class GeracadCursoTurmaDisciplinaAulasFrequencia(models.Model):
     company_id = fields.Many2one(
         'res.company',string="Unidade", required=True, default=lambda self: self.env.company
     )
-
     turma_aula_id = fields.Many2one(
         'geracad.curso.turma.disciplina.aulas',
         string='Aulas',
@@ -490,6 +489,13 @@ class GeracadCursoTurmaDisciplinaAulasFrequencia(models.Model):
         readonly=True,
         store=True
     )
+    _sql_constraints = [
+            (
+                'constraint_turma_disciplina_id_matricula_disciplina_id_uniq_name',
+                'unique(turma_disciplina_id,matricula_disciplina_id)',
+                'Não pode ter duas vezes o mesmo aluno na frequencia'
+            ),
+        ]
     
     matricula_disciplina_id = fields.Many2one(
         "geracad.curso.matricula.disciplina",
@@ -598,6 +604,8 @@ class GeracadCursoTurmaDisciplinaAulasFrequencia(models.Model):
         _logger.info("HORA AULA RETORNADA")
         _logger.info(hora_aula)
         return hora_aula
+
+       
 
 
     
