@@ -186,6 +186,13 @@ class GeracadCursoMatriculaDisciplina(models.Model):
             'state':'finalizado'
         })
 
+    def _reabre_matricula_disciplina(self):
+
+        if self.curso_matricula_id.state  == 'inscrito':
+            self.write({
+                'state':'inscrito'
+            })
+
     def _suspende_matricula_disciplina(self):
         self.write({
             'state':'suspensa'
@@ -206,6 +213,7 @@ class GeracadCursoMatriculaDisciplina(models.Model):
         self.write({
             'state':'cancelada'
         })
+        
     def _tranca_matricula_disciplina(self):
         self.write({
             'state':'trancado'
@@ -283,6 +291,10 @@ class GeracadCursoMatriculaDisciplina(models.Model):
         for rec in self:
             rec._set_data_conclusao_matricula_disciplina()
             rec._finaliza_matricula_disciplina()
+
+    def action_reabrir_matricula_disciplina(self):
+        for rec in self:
+            rec._reabre_matricula_disciplina()
 
     def action_tranca_matricula_disciplina(self):
         for rec in self:

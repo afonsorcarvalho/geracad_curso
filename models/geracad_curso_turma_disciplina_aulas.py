@@ -309,7 +309,7 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
             hora_2 = False
             hora_3 = False
             hora_4 = False
-
+            frequencias_ids_write = []
             for matricula_disciplina in matricula_disciplina_ids:
                 # se matricula tiver suspensa coloca falta
                 if matricula_disciplina.state in ['suspensa','trancado','abandono']:
@@ -325,11 +325,8 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
                         hora_4 = True
                 else:
                     hora_1 = hora_2 = hora_3 = hora_4 = True
-
                 
-                rec.write({
-                    'frequencia_ids':[
-                         (0,0, {
+                frequencias_ids_write.append((0,0, {
                         'turma_aula_id': rec.id,
                         'matricula_disciplina_id': matricula_disciplina.id,
                         'hora_1': hora_1,
@@ -337,8 +334,10 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
                         'hora_3': hora_3,
                         'hora_4': hora_4,
                         
-                    })
-                    ]
+                    })) 
+                
+            rec.write({
+                    'frequencia_ids': frequencias_ids_write
                    
                 })
     

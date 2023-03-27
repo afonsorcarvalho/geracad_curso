@@ -14,7 +14,7 @@
                     </p>
                     <group>                           
                             <field name="turma_disciplina_id" readonly="1"/>
-                            <field name="data_termino" readonly="1"/>
+                            <field name="data_termino" readonly="0"/>
                     </group>
                 </sheet>
                 <footer>

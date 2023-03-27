@@ -144,7 +144,7 @@
               groups="geracad_curso.group_geracad_curso_professor" />
 
             <button name="action_reabrir_aulas" string="Reabrir Diário" class="oe_highlight"
-              states="aulas_encerradas" type="object"
+              states="aulas_encerradas,encerrada" type="object"
               confirm="Tem certeza que deseja finalizar o diário? Verifique se está tudo correto.
                Depois de finalizado não poderá mais ser alterado!
                Para correção após finalizado, deverá o professor entrar em contato com a coordenação pedindo reabertura do diário.

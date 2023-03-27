@@ -418,6 +418,12 @@ class GeracadCursoNotaDisciplina(models.Model):
         self.write({
             'state': 'concluida'
         })
+
+    def action_reabrir_nota(self):    
+        _logger.debug("Nota Reaberta para edição")
+        self.write({
+            'state': 'draft'
+        })
         
 # class GeracadCursoNotaDisciplinaAbonoFalta(models.Model):
 #     _name = "geracad.curso.nota.disciplina.abono.falta"

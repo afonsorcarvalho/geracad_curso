@@ -447,39 +447,28 @@ class GeracadCursoTurmDisciplina(models.Model):
         if self.curso_turma_id:
             _logger.debug("ADICIONADA A TURMA NO FORMULARIO")
             _logger.debug(self.curso_turma_id.name)
-            #pega todos os alunos inscritos na turma do curso desta turma de disciplina
-            matriculas_cursos_alunos = self.env['geracad.curso.matricula'].search([('curso_turma_id','=',self.curso_turma_id.id)])
-            _logger.debug("MATRICULAS DE CURSOS ENCONTRADAS:")
-            _logger.debug(matriculas_cursos_alunos)
-           
+            #pega todos os alunos inscritos na turma do curso
+            matriculas_alunos_inscritos_no_curso = self.env['geracad.curso.matricula'].search([
+                ('curso_turma_id','=',self.curso_turma_id.id),
+                ('state','=','inscrito')])
+                               
+            matricula_disciplina_create = []
+            #alunos já inscritos na disciplina
+            _logger.debug("PROCURANDO MATRICULA ALUNO JA ESTÁ INSCRITO NA TURMA DISCIPLINA")
+            ids_matriculas_ja_inscritos_na_disciplina = self.env['geracad.curso.matricula.disciplina'].search([
+                        ('turma_disciplina_id','=',self.id)
+                    ]).mapped('id') 
             
-            for matricula_curso in matriculas_cursos_alunos:     
-                _logger.debug(matricula_curso.name)
-
-                if matricula_curso.state == 'inscrito': 
-                    _logger.debug("PROCURANDO SE MATRICULA JA ESTA ADICIONADA")
-                    
-                    matriculas_disciplinas_alunos = self.env['geracad.curso.matricula.disciplina'].search([
-                       
-                        
-                        ('turma_disciplina_id','=',self.id),
-                        
-                   
-                    ])  
-                    _logger.debug(matriculas_disciplinas_alunos)
-                    ids_matriculas_cursos_alunos = list(map(lambda x: x.curso_matricula_id.id,matriculas_disciplinas_alunos))
-                    _logger.debug(ids_matriculas_cursos_alunos)
-                    if matricula_curso.id not in ids_matriculas_cursos_alunos:
-                        _logger.debug("MATRICULANDO ALUNO")
-                        _logger.debug("ADICIONANDO MATRICULA: " + str(matricula_curso.name))
-                        self.env['geracad.curso.matricula.disciplina'].create({
-                            'curso_matricula_id': matricula_curso.id,
+            ids_matricula_disciplina_inscrever = matriculas_alunos_inscritos_no_curso.filtered(lambda r: r.id not in ids_matriculas_ja_inscritos_na_disciplina).mapped("id")
+            _logger.debug("ADICIONADA A TURMA NO FORMULARIO")
+            _logger.debug(ids_matricula_disciplina_inscrever)
+            matricula_disciplina_create = list(map(lambda r: {
+                            'curso_matricula_id': r,
                             'turma_disciplina_id': self.id,
                             'state': 'inscrito'
-                        })
-                    else:
-                         _logger.debug("ALUNO JA MATRICULADO")
+                        }, ids_matricula_disciplina_inscrever))
 
+            self.env['geracad.curso.matricula.disciplina'].create(matricula_disciplina_create)
             
     
     @api.depends('name', 'disciplina_id')
@@ -669,6 +658,19 @@ class GeracadCursoTurmDisciplina(models.Model):
         for nota in nota_ids:
             nota.action_lancar_nota()
 
+    def _reabrir_notas_turma_disciplina(self):
+        nota_ids = self.env['geracad.curso.nota.disciplina'].search([('turma_disciplina_id','=',self.id)])
+        nota_ids.action_reabrir_nota()
+
+    def _reabrir_matriculas_turma_disciplina(self):
+        nota_ids = self.env['geracad.curso.nota.disciplina'].search([('turma_disciplina_id','=',self.id)])
+        nota_ids.action_reabrir_nota()
+        matriculas_disciplina_ids = self.env['geracad.curso.matricula.disciplina'].search([('turma_disciplina_id','=',self.id)])
+        matriculas_disciplina_ids.action_reabrir_matricula_disciplina()
+        
+
+
+
     def _cancela_notas_turma_disciplina(self):
         nota_ids = self.env['geracad.curso.nota.disciplina'].search([('turma_disciplina_id','=',self.id)])
         for nota in nota_ids:
@@ -706,12 +708,26 @@ class GeracadCursoTurmDisciplina(models.Model):
         return vals
     
     def action_reabrir_aulas(self):
+
         self.write({
             'state': 'aberta',
             'matricula_aberta': True,
             'data_termino': None,
             'data_encerramento': None,
             })
+        self._reabrir_notas_turma_disciplina()
+        self._reabrir_matriculas_turma_disciplina()
+
+    def action_reabrir_turma(self):
+
+        self.write({
+            'state': 'aberta',
+            'matricula_aberta': True,
+            'data_termino': None,
+            'data_encerramento': None,
+            })
+        
+        self._reabrir_notas_turma_disciplina()
 
     def action_encerrar_turma_disciplina(self):
         self._encerra_notas_turma_disciplina()
