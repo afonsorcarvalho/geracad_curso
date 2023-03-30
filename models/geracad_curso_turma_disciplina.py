@@ -457,7 +457,7 @@ class GeracadCursoTurmDisciplina(models.Model):
             _logger.debug("PROCURANDO MATRICULA ALUNO JA ESTÁ INSCRITO NA TURMA DISCIPLINA")
             ids_matriculas_ja_inscritos_na_disciplina = self.env['geracad.curso.matricula.disciplina'].search([
                         ('turma_disciplina_id','=',self.id)
-                    ]).mapped('id') 
+                    ]).mapped(lambda r: r.curso_matricula_id.id) 
             
             ids_matricula_disciplina_inscrever = matriculas_alunos_inscritos_no_curso.filtered(lambda r: r.id not in ids_matriculas_ja_inscritos_na_disciplina).mapped("id")
             _logger.debug("ADICIONADA A TURMA NO FORMULARIO")
@@ -644,6 +644,24 @@ class GeracadCursoTurmDisciplina(models.Model):
                 'editable': "bottom",
             }
         }
+    
+    def action_matricular_aluno(self):
+        
+
+        _logger.info("action matricular aluno disciplina")
+
+        return {
+            'name': _('Alunos Matriculados'),
+            'type': 'ir.actions.act_window',
+            'target':'current',
+            'view_mode': 'form',
+            'res_model': 'geracad.curso.matricula.disciplina',
+            'domain': [('turma_disciplina_id', '=', self.id)],
+            'context': {
+                'default_turma_disciplina_id': self.id,
+               
+            }
+        }
 
 
     def action_suspender_turma_disciplina(self):
@@ -653,6 +671,10 @@ class GeracadCursoTurmDisciplina(models.Model):
 
         })
 
+    def _calcula_notas_situation(self):
+        nota_ids = self.env['geracad.curso.nota.disciplina'].search([('turma_disciplina_id','=',self.id)])
+        nota_ids.action_atualiza_situation()
+        
     def _encerra_notas_turma_disciplina(self):
         nota_ids = self.env['geracad.curso.nota.disciplina'].search([('turma_disciplina_id','=',self.id)])
         for nota in nota_ids:
@@ -695,7 +717,8 @@ class GeracadCursoTurmDisciplina(models.Model):
         matricula_disciplina_ids = self.env['geracad.curso.matricula.disciplina'].search([('turma_disciplina_id','=',self.id)])
         matricula_disciplina_ids.action_cancela_matricula_disciplina()
 
-
+    def action_atualiza_situation(self):
+        self._calcula_notas_situation()
 
     def action_finalizar_aulas(self):
         dummy, act_id = self.env["ir.model.data"].sudo().get_object_reference(

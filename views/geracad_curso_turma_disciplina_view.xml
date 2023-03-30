@@ -135,13 +135,14 @@
             " />
            
 
-            <button name="action_finalizar_aulas" string="Finalizar Aulas" class="oe_highlight"
+            <button name="action_matricular_aluno" string="Matricular Aluno" class="oe_highlight"
               states="aberta" type="object"
               groups="geracad_curso.group_geracad_curso_secretaria" />
+            
 
             <button name="action_finalizar_aulas" string="Finalizar Diário" class="oe_highlight"
               states="aberta" type="object"
-              groups="geracad_curso.group_geracad_curso_professor" />
+              groups="geracad_curso.group_geracad_curso_professor,geracad_curso.group_geracad_curso_secretaria" />
 
             <button name="action_reabrir_aulas" string="Reabrir Diário" class="oe_highlight"
               states="aulas_encerradas,encerrada" type="object"
@@ -151,7 +152,7 @@
               "
               groups="geracad_curso.group_geracad_curso_secretaria_reabrir_diario" />
 
-            <button name="action_cancelar_turma_disciplina" string="Cancelar" states="aberta"
+            <button name="action_cancelar_turma_disciplina" string="Cancelar"  states="aberta"
               type="object"
               confirm="Tem certeza que deseja cancelar essa turma? Esta ação não poderá ser defeita"
               groups="geracad_curso.group_geracad_curso_secretaria" />
@@ -260,6 +261,11 @@
                   <p class="alert alert-danger">Professor, alunos com status de matrícula <b>suspensa</b> deverão ser encaminhados à coordenação para regularização</p>
                 </group>
                 <group>
+                  <button name="action_atualiza_situation" states="aberta" type="object" string="Atualiza Situação" 
+                  groups="geracad_curso.group_geracad_curso_secretaria" />
+                </group>
+                <group>
+                 
                   <field name="notas" nolabel="1" readonly="0"
                   attrs="{'readonly' : [('state','not in', ['draft','aberta','aulas_cencerradas'])]  }">
                   <tree editable="1" edit="1" delete="0" create="0" default_order=""
@@ -267,6 +273,7 @@
                   decoration-success="situation in ['AM','EA','AP']"
                   decoration-danger="situation in ['RF','RC']"
                   >
+                 
                   <!-- <field name="disciplina_matricula_id"  optional="hide"/> -->
                       <field name="curso_matricula_codigo"
                       />

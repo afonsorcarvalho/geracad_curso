@@ -340,7 +340,7 @@ class GeracadCursoNotaDisciplina(models.Model):
                 if record.turma_disciplina_id.e_aproveitamento:
                     record.situation = 'EA'
                 else:
-                    if record.faltas > 0.25*record.turma_disciplina_id.carga_horaria:
+                    if record.faltas > 0.25*record.turma_disciplina_id.disciplina_id.carga_horaria:
                         record.situation = 'RF'
                     else:
                         media = self._calcula_media(record.nota_1,record.nota_2, record.final)
@@ -418,7 +418,9 @@ class GeracadCursoNotaDisciplina(models.Model):
         self.write({
             'state': 'concluida'
         })
-
+    def action_atualiza_situation(self):
+        self.calcula_situation()
+    
     def action_reabrir_nota(self):    
         _logger.debug("Nota Reaberta para edição")
         self.write({

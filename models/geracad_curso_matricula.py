@@ -680,6 +680,8 @@ class GeracadCursoMatricula(models.Model):
         }
 
     def action_suspender(self):
+        if self.state in ['formado']:
+            raise ValidationError(_('Aluno formado não pode ser suspenso.'))
         _logger.info("Suspender Matricula")
         self.matriculas_disciplina_ids.action_suspende_matricula_disciplina()
       
@@ -687,6 +689,8 @@ class GeracadCursoMatricula(models.Model):
         self.write({'state': 'suspensa'})
 
     def action_cancelar(self):
+        if self.state in ['formado']:
+            raise ValidationError(_('Aluno formado não pode ser cancelado.'))
         _logger.info("Cancelar Matricula")
         self.matriculas_disciplina_ids.action_cancela_matricula_disciplina()
       
@@ -695,18 +699,19 @@ class GeracadCursoMatricula(models.Model):
         self.write({'state': 'cancelada'})
 
     def action_trancar(self):
+        if self.state in ['formado']:
+            raise ValidationError(_('Aluno formado não pode ser trancado.'))
         _logger.info("Matrícula Trancada")
         for matricula_disciplina in self.matriculas_disciplina_ids:
             _logger.info(matricula_disciplina.name)
 
-            nota_ids = self.env["geracad.curso.nota.disciplina"].search([('disciplina_matricula_id','=',matricula_disciplina.id)])
-            for nota in nota_ids:
-                if nota.situation == 'IN':
-                    _logger.info("trancada")
-                    nota.write({
-                        'situation': 'TR',
-                        
-                    })
+            nota_ids = self.env["geracad.curso.nota.disciplina"].search([
+                ('disciplina_matricula_id','=',matricula_disciplina.id),
+                ('situation','in',['IN']),
+                ])
+            nota_ids.write({
+                 'situation': 'TR',
+            })
             matricula_disciplina.write({
                 'state': 'trancado'
 
@@ -716,28 +721,35 @@ class GeracadCursoMatricula(models.Model):
         self._suspende_contrato()
 
     def action_reativar(self):
-        _logger.info("Matrícula Reativada")
 
-        
-        if self.state in ['trancado','abandono']:
-            self._muda_state_parcelas('vigente',True)
-            self._reativa_contrato()
-       
-        for matricula_disciplina in self.matriculas_disciplina_ids:
-            matricula_disciplina.atualiza_frequencia_aulas()
-            matricula_disciplina.reativa_situation_notas()
-            matricula_disciplina.write({
-                'state': 'inscrito'
-            })
+        for rec in self:
+            if rec.state in ['formado']:
+                raise ValidationError(_('Aluno formado não pode ser reativado.'))
+            _logger.info("Matrícula Reativada")
+            if rec.state in ['trancado','abandono','suspensa']:
+                rec.write({'state': 'inscrito'})
+                rec._muda_state_parcelas('vigente',True)
+                rec._reativa_contrato()
+                matriculas_disciplinas_ids = rec.matriculas_disciplina_ids.filtered(lambda r: r.state in ['trancado','abandono','suspensa'] )
+                matriculas_disciplinas_ids_turma_encerrada = matriculas_disciplinas_ids.filtered(lambda r: r.turma_disciplina_id.state in ['encerrada'] )
+                # colocando matricula disciplina com inscrito
+                matriculas_disciplinas_ids.write({
+                    'state': 'inscrito'
+                })
+                matriculas_disciplinas_ids.atualiza_frequencia_aulas()
+                notas = matriculas_disciplinas_ids.mapped(lambda r: r.nota)
+                notas.calcula_situation()
+                # colocando status de matricula de turmas encerradas como concluido
+                matriculas_disciplinas_ids_turma_encerrada.write({
+                    'state': 'finalizado'
+                })
+            
+            rec._atualiza_periodo_CH_turma_disciplina_com_grade()
+            rec._atualiza_periodo_de_nota_com_turma_disciplina()
 
-        self.write({'state': 'inscrito'})
-    
- 
- 
-
-
-    
     def action_abandono(self):
+        if self.state in ['formado']:
+            raise ValidationError(_('Aluno formado não pode de status de abandonado.'))
         _logger.info("Matrícula Abandonada")
         for matricula_disciplina in self.matriculas_disciplina_ids:
             _logger.info(matricula_disciplina.name)
@@ -760,11 +772,9 @@ class GeracadCursoMatricula(models.Model):
         self._cancela_parcelas_a_vencer()
         self._cancela_contrato()
 
-
-    
-    
-
     def action_habilita_edit_turma_curso(self):
+        if self.state in ['formado']:
+            raise ValidationError(_('Aluno formado não pode ser mudado de turma.'))
         _logger.info("Edita Turma Curso")
         self.write({
             'edit_turma_curso': True,
@@ -903,6 +913,8 @@ class GeracadCursoMatricula(models.Model):
                         })
 
     def action_atualizar_historico(self):
+        if self.state in ['formado']:
+            raise ValidationError(_('Aluno formado não pode atualizar histórico.'))
         if not self.curso_grade_version:
             raise ValidationError('Por favor, insira a Versão da Grade na matrícula')
         for rec in self:
@@ -926,12 +938,15 @@ class GeracadCursoMatricula(models.Model):
         # return self.env['geracad.curso.disciplnas'].search([('id','in',disciplinas_pendentes)])
 
     def action_gera_historico_final(self):
+
+
         '''
             Action que gera a wizard de geração do histórico final da matrícula
             Mostrando as disciplinas faltantes e concluídas
         '''
 
-        
+        if self.state in ['formado']:
+            raise ValidationError(_('Aluno formado não pode ser gerado histórico final.'))
         _logger.info("Gerando Histórico final")
         if not self.curso_grade_version:
             raise ValidationError('Por favor, insiria a Versão da Grade na matrícula')

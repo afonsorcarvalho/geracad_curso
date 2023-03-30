@@ -233,9 +233,9 @@ class GeracadCursoMatriculaDisciplina(models.Model):
         data_hoje = date.today()
         self.write({'data_conclusao' : data_hoje})
         
-    def reativa_situation_notas(self):
-        if self.nota.situation in  ['TR','AB']:
-            self.nota.situation = 'IN'
+    # def reativa_situation_notas(self):
+    #     if self.nota.situation in  ['TR','AB']:
+    #         self.nota.calcula_situation()
         
     def atualiza_frequencia_aulas(self):
         _logger.info("ATUALIZANDO FREQUENCIA DO ALUNO")
@@ -248,37 +248,38 @@ class GeracadCursoMatriculaDisciplina(models.Model):
         # VERIFICA SE ALUNO JÁ ESTAVA NA FREQUENCIA
         # SE NÃO COLOCA O ALUNO E COLOCA FALTA
 
-        aulas_ids = self.env["geracad.curso.turma.disciplina.aulas"].search([
-            ('turma_disciplina_id','=',self.turma_disciplina_id.id)
+        for rec in self:
+            aulas_ids = self.env["geracad.curso.turma.disciplina.aulas"].search([
+                ('turma_disciplina_id','=',rec.turma_disciplina_id.id)
 
-            ])
-        _logger.info("AULAS DA TURMA DISCIPLINA QUE O ALUNO ESTA MATRICULADO")
-        _logger.info(aulas_ids)
-        
-        for aulas in aulas_ids:
-            _logger.info(aulas.name)
-            not_frequencia_ids = self.env['geracad.curso.turma.disciplina.aulas.frequencia'].search([
-                '&',
-                ('matricula_disciplina_id','not in', [self.id]),
-                ('turma_aula_id','=', aulas.id)
-                
                 ])
-            _logger.info('AULAS QUE O ALUNO NAO ESTAVA INSCRITO')
-            _logger.info(not_frequencia_ids)
+            _logger.info("AULAS DA TURMA DISCIPLINA QUE O ALUNO ESTA MATRICULADO")
+            _logger.info(aulas_ids)
+            
+            for aulas in aulas_ids:
+                _logger.info(aulas.name)
+                not_frequencia_ids = self.env['geracad.curso.turma.disciplina.aulas.frequencia'].search([
+                    '&',
+                    ('matricula_disciplina_id','not in', [rec.id]),
+                    ('turma_aula_id','=', aulas.id)
+                    
+                    ])
+                _logger.info('AULAS QUE O ALUNO NAO ESTAVA INSCRITO')
+                _logger.info(not_frequencia_ids)
 
-            for not_frequencia in not_frequencia_ids:
+                for not_frequencia in not_frequencia_ids:
 
-                _logger.info("COLOCANDO ALUNO COM FALTA NESSA AULA")
-                _logger.info(not_frequencia)
-                frequencia = not_frequencia.create({
-                    'matricula_disciplina_id': self.id,
-                    'turma_aula_id': aulas.id
+                    _logger.info("COLOCANDO ALUNO COM FALTA NESSA AULA")
+                    _logger.info(not_frequencia)
+                    frequencia = not_frequencia.create({
+                        'matricula_disciplina_id': rec.id,
+                        'turma_aula_id': aulas.id
 
-                })
-                _logger.info("QUANTIDADE DE FALTAS ADICIONADAS AO ALUNO")
-                _logger.info(frequencia.count_faltas)
-                frequencia.matricula_disciplina_id.nota.faltas += frequencia.count_faltas
-               
+                    })
+                    _logger.info("QUANTIDADE DE FALTAS ADICIONADAS AO ALUNO")
+                    _logger.info(frequencia.count_faltas)
+                    frequencia.matricula_disciplina_id.nota.faltas += frequencia.count_faltas
+                
 
     
     """
@@ -305,11 +306,13 @@ class GeracadCursoMatriculaDisciplina(models.Model):
         for rec in self:
             if rec.state == 'draft' or rec.state == 'inscrito':
                 rec._cancela_matricula_disciplina()
+
     def action_suspende_matricula_disciplina(self):
         for rec in self:
             if rec.state == 'draft' or rec.state == 'inscrito':
                 rec._suspende_matricula_disciplina()
-            
+             
+
     def action_go_notas_disciplinas(self):
 
         _logger.info("action open notas disciplinas")
