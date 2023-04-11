@@ -2,7 +2,7 @@
 
 from re import M
 from odoo import models, fields, api, _
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from babel.dates import format_datetime, format_date
 from odoo.tools.misc import formatLang, format_date as odoo_format_date, get_lang
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT, misc
@@ -161,7 +161,16 @@ class GeracadCursoFinanceiroParcelas(models.Model):
         self.name = self.contrato_id.name + ""
     
     
-             
+    def _cron_send_email_a_vencer(self):
+        data_hoje = date.today()
+        parcelas_id = self.env["geracad.curso.financeiro.parcelas"].search([('data_vencimento','=', data_hoje)])
+        _logger.info(parcelas_id)
+        for parcela in parcelas_id:
+           _logger.info(parcela.data_vencimento)
+           template_id = self.env.ref('geracad_curso.email_template_lembrete_vencimento_parcela').id
+           self.env['mail.template'].browse(template_id).send_mail(parcela.id, force_send=True)
+
+
     
     
     def action_ajeita_status_parcela(self):

@@ -7,5 +7,7 @@ from . import gerar_historico_final
 from . import pendencias_financeira_aluno_wizard
 from . import pendencias_financeira_por_turma_wizard
 from . import curso_ata_resultados_wizard
+from . import curso_mapa_pagamento_wizard
+
 
 

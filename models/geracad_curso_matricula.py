@@ -122,6 +122,7 @@ class GeracadCursoMatricula(models.Model):
         domain=[('e_aluno','=',True)]
         
         )  
+    
     nome_pai = fields.Char( 
         related='aluno_id.nome_pai',
         string="Nome do Pai",
