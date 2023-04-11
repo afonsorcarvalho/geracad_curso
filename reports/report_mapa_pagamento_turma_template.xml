@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="paperformat_mapa_pagamento_turma" model="report.paperformat">
+		<field name="name">Mapa de pagaemntos</field>
+		<field name="default" eval="True" />
+		<field name="orientation">Landscape</field>
+		<field name="dpi">130</field>
+		<field name="margin_top">20</field>
+		<field name="margin_bottom">15</field>
+		<field name="margin_left">3</field>
+		<field name="margin_right">3</field>
+		<field name="header_line" eval="False" />
+		<field name="header_spacing">16</field>
+	</record>
+	<template id="report_mapa_pagamento_turma_template">
+
+		<t t-call="web.html_container">
+			<t t-foreach="docs" t-as="o">
+				<t t-call="web.external_layout">
+					<style type="text/css">
+
+                        .col, col-4, col-12, col-6 {
+                            padding:0px;
+                        }
+                        .table thead {
+                            margin-top: 5px;
+							height: 200px;
+                        }
+                        .table tfoot{
+                            font-size:10px;
+
+                        }
+						.table thead &gt; tr {
+							
+
+						}
+                        .table td, .table th{
+                            margin:0px;
+                            padding:0px;
+                        }
+
+                     
+                        .table-bordered th, .table-bordered td{
+                            border:1px solid #000000
+                        }
+
+                        .situation{
+                            font-weight: bold;
+							font-size: 11px;
+                        }
+                        .diario_date{
+                            text-align:center;
+                        }
+                        .diario_assinatura{
+                            text-align:center;
+                        }
+                        <!-- TODO VERIFICA QUE AS DATAS NÃO ESTÃO SAINDO CERTAS QUANDO PASSAM DE UMA PAGINA NO DIÁRIO --> 
+                        
+                        th.data_falta {
+                            height:80px;
+                            width:12px;
+                            
+                        }
+                        div.data_falta {
+                           
+                            transform: rotate(-90deg);
+                            -webkit-transform: rotate(-90deg);
+                            -ms-transform: rotate(-90deg);
+                            position:relative;
+                            display: inline-block;
+                            width:15px;
+                            height: 0px;
+                            left:-9px;
+                           
+                        }
+                        div.data_falta &gt; span{
+                            
+                            width: 400px;
+                            display: block;
+                            margin-top:5px;
+                            margin-left:10px;
+                        }
+						div.nomes {
+							margin-left:10px;
+							font-size: 11px;
+
+						}
+						div.nomes_disciplinas &gt; span{
+							
+							font-size: 12px;
+
+						}
+                    </style>
+					<div class="page">
+						
+						<t t-set="col_width_disciplinas" t-value="str('22px')" />
+						<div class="mx-auto text-center"><h1>MAPA DE FINANCEIRO POR TURMA</h1></div>
+						<table class="table table-sm table-bordered table-striped">
+							<thead>
+								<t t-set="parcelas_group" t-value="o.get_parcelas_group()" />
+								
+								
+								
+								<tr>
+									<th width="20px" rowspan="2"  class="text-uppercase text-center align-middle">Nº</th>
+									<th width="100px" rowspan="2" class="text-uppercase text-center align-middle">
+										<div>
+											<div>
+												<h1>
+
+													<t t-esc="o.curso_turma_id.name" />
+												</h1>
+												
+											</div>
+											
+
+										</div>	
+									</th>
+									
+									<t t-set="qtd_col" t-value="o.get_max_parcela()" />
+									
+									
+									
+									<th t-att-colspan="qtd_col" ><div class="text-center mx-auto"> PARCELAS</div> </th>
+									
+									
+									
+								</tr>
+								<tr>
+									
+									<t t-foreach="parcelas_group" t-as="lines">
+										<th t-att-width="col_width_disciplinas"  >
+											<div class="text-center" > <span class="text-uppercase text-center" t-esc="str(lines['numero_parcela'])" /></div>
+										</th>
+									</t>
+									
+								</tr>
+								<!-- <tr height="300px">
+									
+									
+									<t t-foreach="parcelas_meses" t-as="lines">
+										<th t-att-width="col_width_disciplinas" class="data_falta" >
+											<div class="data_falta nomes_disciplinas"><span class="text-uppercase " t-esc="lines[:36]" /></div>
+										</th>
+									</t>
+
+								</tr> -->
+							</thead>
+							<tbody>			
+								
+								<t t-set="item" t-value="0" />
+								<t t-set="dados" t-value="o.get_dados()" />
+								
+								<t t-foreach="dados.keys()" t-as="line">
+									<t t-set="item" t-value="item + 1" />
+
+									<tr>
+										<td><span class="text-uppercase nomes"  t-esc="item" /></td>
+										<td>
+											<t t-if="dados[line]['status_matricula'] not in ['trancado','suspenso','abandono','expulso','falecido']">
+											<div class="nomes ">
+												<span class="text-uppercase"  t-esc="line" />
+											</div>
+										</t>
+											<t t-if="dados[line]['status_matricula'] in ['trancado','suspenso','abandono','expulso','falecido']">
+											
+												<div class="nomes">
+													<s><span class="text-uppercase"  t-esc="line" /></s> <span class="text-danger">
+													<t t-esc="dados[line]['status_matricula']" />
+													</span>
+												</div>
+											</t>
+										</td>
+										<!-- <t t-foreach="dados[line].values()" t-as="col">
+											<td t-att-width="col_width_disciplinas" class="data_falta" >
+												<div class="data_falta nomes_disciplinas"><span class="text-uppercase " t-esc="col" /></div>
+											</td>
+										</t>   -->
+
+										<t t-foreach="dados[line]['parcelas'].keys()" t-as="parcela">
+											
+												
+												<t t-if="dados[line]['parcelas'][parcela].get('state','') == 'recebido'">
+													<td  t-att-width="col_width_disciplinas" class="text-center bg-success">
+													</td>
+												</t>
+												<t t-if="dados[line]['parcelas'][parcela].get('state','') in ['aberta']">
+													<td  t-att-width="col_width_disciplinas" class="text-center bg-warning">
+													</td>
+												</t>
+												<t t-if="dados[line]['parcelas'][parcela].get('state','') in ['vencido']">
+													<td  t-att-width="col_width_disciplinas" class="text-center bg-danger">
+													</td>
+												</t>
+												<t t-if="dados[line]['parcelas'][parcela].get('state','') not in ['recebido','aberta','vencido']">
+													<td  t-att-width="col_width_disciplinas" class="text-center ">
+													</td>
+												</t>
+												
+											   
+											
+										</t> 
+									</tr>
+								</t>
+							</tbody>
+						</table>
+						<br></br>
+						
+						
+						<t t-esc="o.get_date_str()" />
+						<br></br>
+						<br></br>
+						Legenda:
+						
+							<div class="col-3">
+								<div class="row">
+									
+									
+									<div style="width:20px;height:20px" class="bg-danger"></div>	
+									
+									<div class="col text-left">
+										<div class="px-2">Parcela Vencida</div>
+									</div>				
+								
+									
+									<div style="width:20px;height:20px" class="bg-warning "></div>
+								
+									<div class="col">
+										<div class="px-2"  >Parcela à receber</div>
+									</div>	
+								
+									
+									<div style="width:20px;height:20px" class=" bg-success "></div>
+									
+									<div class="col">
+										<div class="px-2" >Parcela recebida</div>
+									</div>
+								</div>
+							</div>
+						
+						
+					</div>
+				</t>
+			</t>
+		</t>
+	</template>
+</odoo>
