@@ -30,6 +30,10 @@ class GeracadAtaResultadoCursoWizard(models.TransientModel):
             'media': dado.media,
             'periodo': dado.periodo,
             }}
+    def _get_state_matricula(self):
+        matriculas = self.env["geracad.curso.matricula"].search([('curso_turma_id','=', self.curso_turma_id.id)], order="nome_aluno")
+        return matriculas.mapped(lambda x: {x.nome_aluno: {'state': x.state}})                                                                                                                                                                                                                                                               
+        
     
     def get_disciplinas_grade(self):
         turma_curso_id = self.env["geracad.curso.turma"].search([('id','=', self.curso_turma_id.id)])
@@ -62,7 +66,9 @@ class GeracadAtaResultadoCursoWizard(models.TransientModel):
     def get_dados(self):
         _logger.info("GET DATA")
         notas = []
-        notas = self.env["geracad.curso.nota.disciplina"].search([('curso_turma_id','=', self.curso_turma_id.id)],order="aluno_nome ASC, periodo ASC")
+        notas = self.env["geracad.curso.nota.disciplina"].search([
+            ('curso_turma_id','=', self.curso_turma_id.id),
+            ('disciplina_matricula_state','not in',['cancelada','trancado','abandono'])],order="aluno_nome ASC, periodo ASC")
        
         lines = {}
         for nota in notas:
