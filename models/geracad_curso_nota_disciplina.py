@@ -41,6 +41,7 @@ class GeracadCursoNotaDisciplina(models.Model):
         store=True
         
         )
+    
     curso_matricula_codigo = fields.Char("Código",
         related='curso_matricula_id.name', 
         store=True,
