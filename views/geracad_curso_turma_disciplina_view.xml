@@ -152,6 +152,11 @@
               "
               groups="geracad_curso.group_geracad_curso_secretaria_reabrir_diario" />
 
+            <button name="action_desfazer_cancelamento_turma_disciplina" string="Desfazer Cancelamento"  states="cancelada"
+              type="object"
+             
+              groups="geracad_curso.group_geracad_curso_secretaria" />
+
             <button name="action_cancelar_turma_disciplina" string="Cancelar"  states="aberta"
               type="object"
               confirm="Tem certeza que deseja cancelar essa turma? Esta ação não poderá ser defeita"

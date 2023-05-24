@@ -768,6 +768,14 @@ class GeracadCursoTurmDisciplina(models.Model):
             'state': 'cancelada',
             'matricula_aberta': False,
             })
+        
+    def action_desfazer_cancelamento_turma_disciplina(self):
+        self._reabrir_matriculas_turma_disciplina()
+     
+        self.write({
+            'state': 'aberta',
+            'matricula_aberta': True,
+            })
 
     def action_abrir_turma_disciplina(self):
         self.write({

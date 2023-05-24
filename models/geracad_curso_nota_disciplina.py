@@ -91,7 +91,7 @@ class GeracadCursoNotaDisciplina(models.Model):
         related='disciplina_matricula_id.turma_disciplina_id',
         readonly=True,
         store=True,
-        )
+        ) 
     turma_disciplina_data_abertura = fields.Date(
         string='Data de Abertura',
         related='disciplina_matricula_id.turma_disciplina_id.data_abertura',
