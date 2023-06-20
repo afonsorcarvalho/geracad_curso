@@ -742,7 +742,7 @@ class GeracadCursoMatricula(models.Model):
                 matriculas_disciplinas_ids.write({
                     'state': 'inscrito'
                 })
-                matriculas_disciplinas_ids.atualiza_frequencia_aulas()
+                #matriculas_disciplinas_ids.atualiza_frequencia_aulas()
                 notas = matriculas_disciplinas_ids.mapped(lambda r: r.nota)
                 notas.calcula_situation()
                 # colocando status de matricula de turmas encerradas como concluido
