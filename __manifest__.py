@@ -81,6 +81,7 @@
         'wizard/pendencias_financeira_por_turma_wizard.xml',
         'wizard/curso_ata_resultados_wizard.xml',
         'wizard/curso_mapa_pagamento_wizard.xml',
+        'wizard/wizard_notas_dialog.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

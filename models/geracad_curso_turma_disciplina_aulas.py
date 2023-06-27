@@ -4,7 +4,7 @@ from ast import For
 from email.policy import default
 
 from odoo import models, fields, api, _
-from datetime import date, datetime, timedelta
+from datetime import date, datetime,time, timedelta
 
 from babel.dates import format_datetime, format_date
 from dateutil.relativedelta import relativedelta
@@ -46,6 +46,8 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
         domain=[('state','=','aberta')],
 
         )
+    hora_default = fields.Float()
+    duration_default = fields.Integer()
 
     # @api.onchange("turma_disciplina_id" )
     # def onchange_turma_disciplina_id(self):
@@ -95,10 +97,34 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
 
     hora_inicio_agendado = fields.Datetime(
         string='Inicio Programado',
-        default= lambda self: datetime.utcnow().replace(hour=22,minute=0,second=0) ,
+        
+        #default= lambda self: datetime.utcnow().replace(hour=int(self.turma_disciplina_id.hora_inicio_padrao),minute=0,second=0) ,
+        default=lambda self: self._default_hora_inicio_agendado(),
         tracking=True,
         required=True
     )
+   
+    @api.onchange('hora_inicio_agendado')
+    def _onchange_hora_inicio_agendado(self):
+        _logger.info(self.env.context)
+        context = self.env.context
+        self.hora_termino_agendado = self.hora_inicio_agendado+timedelta(hours=int(context['default_tempo_hora_aula_programado']))
+
+
+    def _default_hora_inicio_agendado(self):
+        current_date = fields.Date.context_today(self.with_context(tz=self.env.user.tz))
+        _logger.info(f"DT HOJE: {current_date}")
+        _logger.info(f"turma: {self.turma_disciplina_id}")
+        _logger.info(f"horapadrao: {self.turma_disciplina_id.hora_inicio_padrao}")
+
+        if self.turma_disciplina_id.hora_inicio_padrao:
+            current_time = time(int(self.turma_disciplina_id.hora_inicio_padrao),0,0)
+            _logger.info(f"hora padrao: {current_time}")
+            _logger.info(f"DT combinada: {datetime.combine(current_date, current_time)}")
+
+            return datetime.combine(current_date, current_time)
+
+        return current_date
     def atualiza_faltas(self):
         '''
             atualiza faltas na nota da turma disciplina
@@ -124,7 +150,7 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
 
     hora_termino_agendado = fields.Datetime(
         string='Término Programado',     
-        default= lambda self: datetime.now() +  relativedelta(hours=3),
+        default= lambda self: datetime.now() +  relativedelta(hours=self.turma_disciplina_id.qtd_horas_aula_padrao),
         tracking=True,    
         required=True
     )

@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import warnings
 from odoo import models, fields, api, _
 from datetime import date
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, Warning
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -269,7 +270,8 @@ class GeracadCursoNotaDisciplina(models.Model):
         ('TR', 'TR'), # trancado
         ('AB', 'AB'), # abandono
         ('EA', 'EA'), # estudos aproveitados
-        ('FA', 'FA'),
+        ('FA', 'FA'), # falecido
+        ('EX', 'EX'), # expulso
         ('SU', 'SU'), # Suspenso pelo financeiro
         ], default='IN', string="Situação",tracking=True)
 
@@ -332,6 +334,23 @@ class GeracadCursoNotaDisciplina(models.Model):
 
         return media
     
+    def _esta_aprovado_por_notas(self):
+        media = (self.nota_1 + self.nota_2)/2
+      
+        if(media < 7):
+            if self.final > 0:
+                media = (media + self.final)/2
+                if media < 5:
+                    return False
+                else:
+                    return True
+            else:
+                return False
+        else:
+            return True
+            
+        
+
     def calcula_situation(self):
         
         for record in self:
@@ -364,18 +383,12 @@ class GeracadCursoNotaDisciplina(models.Model):
             elif status_matricula_disciplina == 'cancelada':
                 record.situation = 'CA'
             elif status_matricula_disciplina == 'expulso':
-                record.situation = 'CA'
+                record.situation = 'EX'
             elif status_matricula_disciplina == 'falecido':
-                record.situation = 'CA'
+                record.situation = 'FA'
             elif status_matricula_disciplina == 'transferido':
-                record.situation = 'CA'
+                record.situation = 'TR'
             
-
-
-
-                    
-
-        
 
     @api.onchange('nota_1','nota_2','final','faltas')
     def _onchange_notas_faltas(self):     
@@ -383,6 +396,13 @@ class GeracadCursoNotaDisciplina(models.Model):
             record.faltas_abonadas = record.faltas_lista_frequencia - record.faltas
             if record.state != 'concluida':
                 record.calcula_situation()
+                if record.situation == 'RF':
+                    if record._esta_aprovado_por_notas():
+                        return {
+                            'value': {'faltas': record.turma_disciplina_carga_horaria*0.25},
+                            'warning': {'title': "Warning", 'message': "O aluno está reprovado por falta, mas poderá ser aprovado por conteúdo. O sistema irá abonar as faltas automaticamente do aluno"},
+                        }
+                                    
                             
 
     
@@ -427,6 +447,26 @@ class GeracadCursoNotaDisciplina(models.Model):
         self.write({
             'state': 'draft'
         })
+
+class NotasDialog(models.TransientModel):
+    _name = 'geracad.curso.nota.dialog'
+    
+    name = fields.Char('Name')
+    description = fields.Text('Description')
+    nota_id =  fields.Many2one(
+        "geracad.curso.nota.disciplina",
+     
+        )
+    
+    def action_confirm(self):
+        # Lógica para confirmar a ação
+        #
+        # Ajeitar a nota do cara
+        return {'type': 'ir.actions.act_window_close'}
+    
+    def action_cancel(self):
+        # Lógica para cancelar a ação
+        return {'type': 'ir.actions.act_window_close'}
         
 # class GeracadCursoNotaDisciplinaAbonoFalta(models.Model):
 #     _name = "geracad.curso.nota.disciplina.abono.falta"

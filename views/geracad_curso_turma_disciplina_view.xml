@@ -258,6 +258,15 @@
 
               </group>
             </group>
+            <group>
+              <group>
+                <field name="hora_inicio_padrao" widget="float_time" help="Coloque a hora padrão de início da sua aula. Isso fará que ao criar aula ela já tenha como hora de início sempre a mesma"/>
+                <field name="qtd_horas_aula_padrao" help="Coloque o tempo de duração da sua aula padrão. Isso fará que ao criar aula ela já tenha como hora/aula sempre o mesmo valor"/>
+                <field name="data_hora_inicio_padrao" 
+                invisible="1"
+                />
+              </group>
+            </group>
             
             <notebook>
               <page string="Notas">
@@ -274,7 +283,7 @@
                   <field name="notas" nolabel="1" readonly="0"
                   attrs="{'readonly' : [('state','not in', ['draft','aberta','aulas_cencerradas'])]  }">
                   <tree editable="1" edit="1" delete="0" create="0" default_order=""
-                  decoration-muted="disciplina_matricula_state in ['suspensa','trancada','cancelada','concluida']"
+                  decoration-muted="disciplina_matricula_state in ['suspensa','trancado','cancelada','finalizado']"
                   decoration-success="situation in ['AM','EA','AP']"
                   decoration-danger="situation in ['RF','RC']"
                   >
@@ -289,13 +298,13 @@
                       <field name="faltas_abonadas"
                         readonly="1" />
                       <field name="faltas" 
-                        attrs="{'readonly' : [('disciplina_matricula_state','in', ['suspensa','trancada','cancelada','concluida'])]  }" />
+                        attrs="{'readonly' : [('disciplina_matricula_state','in', ['suspensa','trancado','cancelada','finalizado'])]  }" />
                       <field name="nota_1"
-                        attrs="{'readonly' : [('disciplina_matricula_state','in', ['suspensa','trancada','cancelada','concluida'])]  }" />
+                        attrs="{'readonly' : [('disciplina_matricula_state','in', ['suspensa','trancado','cancelada','finalizado'])]  }" />
                       <field name="nota_2"
-                        attrs="{'readonly' : [('disciplina_matricula_state','in', ['suspensa','trancada','cancelada','concluida'])]  }" />
+                        attrs="{'readonly' : [('disciplina_matricula_state','in', ['suspensa','trancado','cancelada','finalizado'])]  }" />
                       <field name="final"
-                        attrs="{'readonly' : [('disciplina_matricula_state','in', ['suspensa','trancada','cancelada','concluida'])]  }" />
+                        attrs="{'readonly' : [('disciplina_matricula_state','in', ['suspensa','trancado','cancelada','finalizado'])]  }" />
                       <field name="media" />
                       <!-- <field name="state"
                         groups="geracad_curso.group_geracad_curso_secretaria,geracad_curso.group_geracad_curso_secretaria_only_read"
@@ -342,7 +351,12 @@
                 </group>
                 <group>
                   <field name="aulas" nolabel="1" readonly="0"
-                    attrs="{'readonly' : [('state','not in', ['draft','aberta','aulas_cencerradas'])]  }">
+                    attrs="{'readonly' : [('state','not in', ['draft','aberta','aulas_cencerradas'])]  }"
+                    context="{'default_tempo_hora_aula_programado':qtd_horas_aula_padrao,
+                    'default_hora_inicio_agendado': data_hora_inicio_padrao,
+                              
+                              }"
+                    >
 
                     <tree editable="bottom" multi_edit="1" edit="1" delete="1" create="1"
                       default_order="hora_inicio_agendado"
@@ -368,6 +382,7 @@
                       <field name="turma_disciplina_id" string="Turma"
                         invisible="1"
                       />
+                   
                       <field name="name" string="Assunto" />
 
                       <field name="tipo_de_aula" />

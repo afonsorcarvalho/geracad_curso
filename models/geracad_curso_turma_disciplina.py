@@ -3,9 +3,12 @@
 
 import json
 from re import search
+import math
 from odoo import models, fields, api, _
-from datetime import date
+import pytz
+
 from babel.dates import format_datetime, format_date
+from datetime import date, datetime,time
 from dateutil.relativedelta import relativedelta
 from odoo.exceptions import ValidationError
 
@@ -162,6 +165,41 @@ class GeracadCursoTurmDisciplina(models.Model):
         string='Inicio das aulas',
         default=fields.Date.context_today,
         tracking=True
+    )
+    hora_inicio_padrao = fields.Float(
+        string='Inicio Aula Padrao',
+        default = 19.0,
+        required=True
+        
+        
+    )
+    data_hora_inicio_padrao =  fields.Datetime(
+        string='Inicio Aula Padrao',
+       compute="_compute_data_hora_inicio_padrao"
+        
+        
+    )
+    @api.depends('hora_inicio_padrao')
+    def _compute_data_hora_inicio_padrao(self):
+        
+        current_date = datetime.now()
+
+        for record in self:
+            
+            if self.hora_inicio_padrao:
+                current_time = time(int(self.hora_inicio_padrao)+3,int(math.modf(self.hora_inicio_padrao)[0]*60),0)
+                _logger.info(f"hora padrao: {current_time}")
+                _logger.info(f"DT combinada: {datetime.combine(current_date, current_time)}")
+
+                record.data_hora_inicio_padrao = datetime.combine(current_date, current_time)
+            else:
+                record.data_hora_inicio_padrao = current_date
+    
+    qtd_horas_aula_padrao = fields.Integer(
+        string='Horas/aula Padrao',
+        default = 3,   
+           
+        required=True  
     )
     data_termino = fields.Date(
         string='Término das aulas',
