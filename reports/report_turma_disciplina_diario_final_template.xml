@@ -154,7 +154,7 @@
 
                                 <t t-foreach="o.notas" t-as="rec">
                                      
-                                    <t t-if="rec.disciplina_matricula_state != 'cancelada'">
+                                    <t t-if="rec.disciplina_matricula_state not in ['cancelada','trancado','suspensa','abandono']">
                                         
                                    
                                     
