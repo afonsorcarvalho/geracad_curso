@@ -107,8 +107,12 @@ class GeracadCursoTurmaDisciplinaAulas(models.Model):
     @api.onchange('hora_inicio_agendado')
     def _onchange_hora_inicio_agendado(self):
         _logger.info(self.env.context)
-        context = self.env.context
-        self.hora_termino_agendado = self.hora_inicio_agendado+timedelta(hours=int(context['default_tempo_hora_aula_programado']))
+        context = dict(self.env.context )
+        if context.get('default_tempo_hora_aula_programado'):
+            delta_hours = int(context['default_tempo_hora_aula_programado'])
+        else:
+            delta_hours = 3
+        self.hora_termino_agendado = self.hora_inicio_agendado+timedelta(hours=delta_hours)
 
 
     def _default_hora_inicio_agendado(self):
