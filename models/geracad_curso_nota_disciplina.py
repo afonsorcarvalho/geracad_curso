@@ -436,17 +436,19 @@ class GeracadCursoNotaDisciplina(models.Model):
     """
     def action_lancar_nota(self):    
         _logger.debug("Nota Lançada")
-        self.write({
-            'state': 'concluida'
-        })
+        if self.disciplina_matricula_id not in ['cancelada']:
+            self.write({
+                'state': 'concluida'
+            })
     def action_atualiza_situation(self):
         self.calcula_situation()
     
     def action_reabrir_nota(self):    
         _logger.debug("Nota Reaberta para edição")
-        self.write({
-            'state': 'draft'
-        })
+        if self.disciplina_matricula_id not in ['cancelada']:
+            self.write({
+                'state': 'draft'
+            })
 
 class NotasDialog(models.TransientModel):
     _name = 'geracad.curso.nota.dialog'
