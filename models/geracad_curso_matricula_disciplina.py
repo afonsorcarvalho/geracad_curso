@@ -200,16 +200,12 @@ class GeracadCursoMatriculaDisciplina(models.Model):
 
     def _cancela_matricula_disciplina(self):
         
-        if self.nota.state != 'concluida':
-            if self.nota.situation == 'IN':
-                self.nota.write({
-                    'state':'cancelada',
-                    'situation' : 'CA',
-                })
-            else:
-                self.nota.write({
-                    'state':'cancelada',  
-                })
+       
+           
+        self.nota.write({
+            'state':'cancelada',
+            'situation' : 'CA',
+        })
         self.write({
             'state':'cancelada'
         })
@@ -304,7 +300,7 @@ class GeracadCursoMatriculaDisciplina(models.Model):
 
     def action_cancela_matricula_disciplina(self):
         for rec in self:
-            if rec.state == 'draft' or rec.state == 'inscrito':
+            if rec.state in ['draft','inscrito']:
                 rec._cancela_matricula_disciplina()
 
     def action_suspende_matricula_disciplina(self):

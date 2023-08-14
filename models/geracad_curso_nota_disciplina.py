@@ -436,9 +436,13 @@ class GeracadCursoNotaDisciplina(models.Model):
     """
     def action_lancar_nota(self):    
         _logger.debug("Nota Lançada")
-        if self.disciplina_matricula_id not in ['cancelada']:
+        if self.disciplina_matricula_id.state not in ['cancelada']:
             self.write({
                 'state': 'concluida'
+            })
+        else:
+            self.write({
+                'state': 'cancelada'
             })
     def action_atualiza_situation(self):
         self.calcula_situation()
