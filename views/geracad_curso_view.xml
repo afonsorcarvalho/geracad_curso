@@ -15,6 +15,8 @@
 
           <field name="type_curso" placeholder="Tipo do Curso" />
           <field name="quantidade_de_periodos" placeholder="Quantidade de períodos" optional="hide" />
+          <field name="qtd_parcelas" placeholder="Quantidade de parcelas" optional="show" />
+          
         </tree>
 
       </field>
@@ -41,7 +43,7 @@
                 <field name="quantidade_de_periodos" string="Períodos" placeholder="Períodos" />
                 <field name="carga_horaria_total" placeholder="Carga horária" />
               </group>
-              <group></group>
+              <group><field name="qtd_parcelas" placeholder="Quantidade de parcelas"  /></group>
             </group>
 
             <notebook>

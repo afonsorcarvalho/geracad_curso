@@ -51,6 +51,11 @@ class GeracadCurso(models.Model):
     )
     carga_horaria_total = fields.Integer(string="Carga Horária", compute='_compute_carga_horaria_total', tracking=True,)
 
+    qtd_parcelas = fields.Integer(
+        string='Quantidade Parcelas',
+    )
+    
+
     #função usada somente para atualizar grade para modo versão
     def atualiza_grade_modo_versao(self):
         _logger.info('AJEITANDO GRADE')

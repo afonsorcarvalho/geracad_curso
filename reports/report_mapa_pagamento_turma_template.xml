@@ -98,6 +98,7 @@
 						<table class="table table-sm table-bordered table-striped">
 							<thead>
 								<t t-set="parcelas_group" t-value="o.get_parcelas_group()" />
+								<t t-set="parcelas_count_max" t-value="o.get_parcelas_count_max()" />
 								
 								
 								
@@ -127,13 +128,14 @@
 									
 								</tr>
 								<tr>
+									 
 									
-									<t t-foreach="parcelas_group" t-as="lines">
+									
+									<t t-foreach="parcelas_count_max" t-as="lines">
 										<th t-att-width="col_width_disciplinas"  >
-											<div class="text-center" > <span class="text-uppercase text-center" t-esc="str(lines['numero_parcela'])" /></div>
+											<div class="text-center" > <span class="text-uppercase text-center" t-esc="str(lines)" /></div>
 										</th>
 									</t>
-									
 								</tr>
 								<!-- <tr height="300px">
 									
@@ -152,7 +154,7 @@
 								<t t-set="dados" t-value="o.get_dados()" />
 								
 								<t t-foreach="dados.keys()" t-as="line">
-									<t t-set="item" t-value="item + 1" />
+									<t t-set="item" t-value="item+1" />
 
 									<tr>
 										<td><span class="text-uppercase nomes"  t-esc="item" /></td>
@@ -176,30 +178,52 @@
 												<div class="data_falta nomes_disciplinas"><span class="text-uppercase " t-esc="col" /></div>
 											</td>
 										</t>   -->
-
+										
+										<!-- <t t-esc="dados[line]['parcelas'].keys()"/> -->
+										
+										<t t-set="parcelas_existentes" t-value="0" />
+										
+										
 										<t t-foreach="dados[line]['parcelas'].keys()" t-as="parcela">
-											
+											<t t-set="parcelas_existentes" t-value="parcelas_existentes+1" />
 												
-												<t t-if="dados[line]['parcelas'][parcela].get('state','') == 'recebido'">
-													<td  t-att-width="col_width_disciplinas" class="text-center bg-success">
-													</td>
+												<t t-if="parcela != None">
+							
+													<t t-if="dados[line]['parcelas'][parcela].get('state','') == 'recebido'">
+														<td  t-att-width="col_width_disciplinas" class="text-center bg-success">
+														</td>
+													</t>
+													<t t-if="dados[line]['parcelas'][parcela].get('state','') in ['aberta']">
+														<td  t-att-width="col_width_disciplinas" class="text-center bg-warning">
+														</td>
+													</t>
+													<t t-if="dados[line]['parcelas'][parcela].get('state','') in ['vencido']">
+														<td  t-att-width="col_width_disciplinas" class="text-center bg-danger">
+														</td>
+													</t>
+													<t t-if="dados[line]['parcelas'][parcela].get('state','') not in ['recebido','aberta','vencido']">
+														<td  t-att-width="col_width_disciplinas" class="text-center ">
+														</td>
+													</t>
 												</t>
-												<t t-if="dados[line]['parcelas'][parcela].get('state','') in ['aberta']">
-													<td  t-att-width="col_width_disciplinas" class="text-center bg-warning">
-													</td>
-												</t>
-												<t t-if="dados[line]['parcelas'][parcela].get('state','') in ['vencido']">
-													<td  t-att-width="col_width_disciplinas" class="text-center bg-danger">
-													</td>
-												</t>
-												<t t-if="dados[line]['parcelas'][parcela].get('state','') not in ['recebido','aberta','vencido']">
-													<td  t-att-width="col_width_disciplinas" class="text-center ">
-													</td>
-												</t>
-												
 											   
 											
 										</t> 
+										<!-- Gerando colunas em branco pra completar a tabela -->
+										<t t-if="parcelas_existentes &lt; o.get_max_parcela()">
+											
+											<t t-set="list_white" t-value="list(range(o.get_max_parcela() + 1  - parcelas_existentes ))" />
+											
+											<t t-foreach="list_white" t-as="coluna_white">
+												<td  t-att-width="col_width_disciplinas" class="text-center ">
+												</td>
+												
+											</t>
+											
+											
+										</t>
+										
+
 									</tr>
 								</t>
 							</tbody>
@@ -234,6 +258,11 @@
 									
 									<div class="col">
 										<div class="px-2" >Parcela recebida</div>
+									</div>
+									<div style="width:20px;height:20px;border-style: solid;border-color: dark;border-width: 1px;" ></div>
+									
+									<div class="col">
+										<div class="px-2" >Parcela não gerada</div>
 									</div>
 								</div>
 							</div>

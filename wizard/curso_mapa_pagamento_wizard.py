@@ -30,13 +30,24 @@ class GeracadMapaPagamentoCursoWizard(models.TransientModel):
         matricula_ids = self.env[ "geracad.curso.matricula"].search([('curso_turma_id','=', self.curso_turma_id.id)],)
         return matricula_ids
     
+    # def get_max_parcela(self):
+    #     parcelas_ids = self.env["geracad.curso.financeiro.parcelas"].search([('curso_turma_codigo','=', self.curso_turma_id.name)], order="numero_parcela DESC")
+    #     if parcelas_ids:
+    #         return parcelas_ids[0].numero_parcela
+    def get_parcelas_count_max(self):
+        return list(range(1,self.get_max_parcela()+1))
     def get_max_parcela(self):
+        parcela_max = self.curso_turma_id.curso_id.qtd_parcelas
+        if parcela_max > 0:
+            return parcela_max
         parcelas_ids = self.env["geracad.curso.financeiro.parcelas"].search([('curso_turma_codigo','=', self.curso_turma_id.name)], order="numero_parcela DESC")
         if parcelas_ids:
             return parcelas_ids[0].numero_parcela
+        
     def get_parcelas_group(self):
         _logger.info("pegando parcelas dos alunos por mes")
         matricula_ids = self.env[ "geracad.curso.matricula"].search([('curso_turma_id','=', self.curso_turma_id.id)])
+        
         parcelas_ids = self.env["geracad.curso.financeiro.parcelas"].read_group(domain=[
             ('curso_turma_codigo','=', self.curso_turma_id.name)
             ], groupby = ['numero_parcela'],fields=['numero_parcela','data_vencimento','valor'],lazy=False)
@@ -70,7 +81,7 @@ class GeracadMapaPagamentoCursoWizard(models.TransientModel):
                                                       }
                 for parcela_group in parcelas_group: 
                     #if not lines[matricula.aluno_id.name]['parcelas'].get(parcela_group.get('numero_parcela')):
-                    lines[matricula.aluno_id.name]['parcelas'][parcela_group.get('numero_parcela')] = {}  
+                    lines[matricula.aluno_id.name]['parcelas'][parcela_group.get('id')] = {}  
                     
                 for parcela in parcela_ids:
                     if parcela.state in ['vigente', 'draft']:
@@ -80,7 +91,7 @@ class GeracadMapaPagamentoCursoWizard(models.TransientModel):
                             state = 'aberta'
                     else:
                         state = parcela.state
-                    lines[matricula.aluno_id.name] ['parcelas'][parcela.numero_parcela] = {
+                    lines[matricula.aluno_id.name] ['parcelas'][parcela.id] = {
                          'state': state,
                          'data_vencimento': parcela.data_vencimento
                         } 
