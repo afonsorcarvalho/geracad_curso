@@ -25,9 +25,7 @@ class GeracadCursoFinanceiroParcelas(models.Model):
 
     name = fields.Char("Código" )
     
-   
-    
-    
+
     company_id = fields.Many2one(
         'res.company', string="Unidade", required=True, default=lambda self: self.env.company
     )
