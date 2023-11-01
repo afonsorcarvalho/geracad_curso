@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="paperformat_historico_antigo" model="report.paperformat">
+		<field name="name">Historico</field>
+		<field name="default" eval="True" />
+		<field name="orientation">Portrait</field>
+		<field name="dpi">150</field>
+		<field name="margin_top">10</field>
+		<field name="margin_bottom">15</field>
+		<field name="margin_left">10</field>
+		<field name="margin_right">3</field>
+		<field name="header_line" eval="False" />
+		<field name="header_spacing">10</field>
+	</record>
+	<template id="view_historico_aluno_antigo_template">
+
+		<t t-call="web.html_container">
+			<style>
+
+						
+				div.titable  {
+					font-size: 24px;
+					font-weight: bold;
+					font-family: Geneva, Arial, Helvetica, sans-serif;
+					color: #006699;
+					vertical-align:center;
+					
+					
+					/*border:1px solid #eaeaea;*/
+					text-align:center;
+						margin-top:40px;
+					}
+
+				span.dado  {
+					font-weight: normal;
+
+				}
+				div.dado {
+					font-family: Verdana,Arial,sans-serif;
+					font-size: 16px;
+					margin: 0;
+					padding: 0;
+					color:#003399;
+				
+				}
+				div.cabecalho{
+					display:flex;
+					border: 1px solid #ccc;
+					flex-wrap: nowrap;
+					flex-direction: row;
+					
+				}
+				table {
+					width: 95%
+				}
+				th.cabecalho {
+					height: 80px;
+				}
+				label {
+					font: bold 100% Arial,sans-serif;
+					color: #334d55;
+				}
+				td.col-nota{
+					color:#003399;
+					text-align:center;
+				}
+				td.situation{
+					color:#003399;
+					text-align:center;
+				}
+				td.col-ch{
+					color:#333333;
+					text-align:center;
+				}
+				td.col-falta {
+					color:#333333;
+					text-align:center;
+				}
+
+
+
+
+
+
+			</style>
+			<t t-foreach="docs" t-as="o">
+
+
+				<div class="page">
+					<div class="cabecalho" style="width:100%">
+						<div style="width:80px;padding:10px;vertical-align: middle;flex:1;border: 1px solid #ccc; ">
+							<img  src="http://geracad.netcom-ma.com.br/Templates/visualizatableprofessor_template_clip_image002.gif" />
+						</div>
+						<div style="width:80px;align:right;flex:2;border: 1px solid #ccc;">
+							<div class="titable">
+								<span t-field="o.curso_nome" />
+							</div>
+
+							<t t-if="o.curso_id.resolucao">
+								<div class="dado" style="text-align:center;">
+									Resolução
+									<span t-field="o.curso_id.resolucao" />
+								</div>
+							</t>
+							<div class="dado" style="text-align:center;">
+								Histórico Escolar
+								<span t-if="o.state=='formado'">FINAL</span>
+
+							</div>
+						</div>
+					</div>
+					<table border="0px">
+
+						<tr style="border: 1px solid #eaeaea">
+							<th></th>
+						</tr>
+						<tr>
+							<th colspan="2" class="cabecalho" style="border:1px solid #C1C1C1">
+								<table style="padding:10px">
+
+									<tr>
+										<td colspan="2" width="40%">
+											<label>ALUNO:</label>
+											<span class="dado" t-field="o.aluno_id.display_name" />
+										</td>
+										<td colspan="2" width="40%">
+											<label>MATRÍCULA:</label>
+											<span class="dado" t-field="o.name" />
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2">
+											<label>CPF:</label>
+											<span class="dado" t-field="o.aluno_id.l10n_br_cnpj_cpf" />
+										</td>
+										<td colspan="2">
+											<label>DATA DE NASCIMENTO:</label>
+											<span class="dado" t-field="o.aluno_id.data_nascimento" />
+										</td>
+									</tr>
+									<tr>
+
+										<td colspan="2">
+											<label>INÍCIO:</label>
+											<span class="dado" t-field="o.data_matricula" />
+										</td>
+										<td colspan="2">
+											<label>DATA TÉRMINO:</label>
+
+											<t t-if="o.data_conclusao">
+
+												<span class="dado" t-field="o.data_conclusao" />
+											</t>
+											<t t-if="not o.data_conclusao">
+														EM ANDAMENTO
+													
+													</t>
+
+
+										</td>
+										<td class="col-auto text-uppercase" width="20%">
+											<label>SITUAÇÃO:</label>
+											<span class="dado" t-field="o.state" />
+										</td>
+
+									</tr>
+								</table>
+							</th>
+						</tr>
+
+						<tbody>
+
+							<tr align="center">
+								<td width="100%">
+									<!-- NOTAS DAS DISCIPLINAS GERAIS -->
+									<table style="width:95%; border:1px solid #eaeaea;padding:10px">
+										<t t-foreach="o._get_periodos()" t-as="periodo">
+
+
+											<t t-if="o._tem_notas_periodo(periodo)">
+
+												<t t-call="geracad_curso.view_historico_aluno_notas_antigo_template" />
+											</t>
+
+										</t>
+
+										<t t-if="o._tem_estagio()">
+											<t t-foreach="o._get_nota_estagio()" t-as="notas_line">
+
+												<thead>
+
+													<tr>
+														<th width="50%" style="text-align:left;" class="text-left col-disciplina">
+															<span t-field="notas_line.disciplina_id.name" />
+														</th>
+														<th class="text-center col-ch" width='5%'>
+															<span t-field="notas_line.disciplina_id.carga_horaria" />
+														</th>
+														<th class="text-center" width='8%'>
+															<span t-field="notas_line.faltas" />
+														</th>
+														<th class="text-center" width='8%'>
+															<span t-field="notas_line.nota_1" t-options='{"widget": "float", "precision": 2}' />
+														</th>
+														<th class="text-center" width='8%'>
+															<span t-field="notas_line.nota_2" t-options='{"widget": "float", "precision": 2}' />
+														</th>
+														<th class="text-center" width='8%'>
+															<span t-field="notas_line.final" t-options='{"widget": "float", "precision": 2}' />
+														</th>
+														<th class="text-center" width='8%'>
+															<span t-field="notas_line.media" t-options='{"widget": "float", "precision": 2}' />
+														</th>
+														<th class="text-center" width='5%'>
+															<span t-field="notas_line.situation" />
+														</th>
+
+													</tr>
+
+												</thead>
+
+											</t>
+
+										</t>
+									</table>
+								</td>
+							</tr>
+
+
+						</tbody>
+
+					</table>
+
+					<div class="row-12">
+						<div class="text-right legenda">
+									LEGENDA:  AM - APROV. MEDIA   AP - APROV. FINAL  RC - REP. CONTEUDO  RF - REP. P/ FALTA  IN - INSCRITO  CA - CANCELAMENTO  TR - TRANCAMENTO  AB - ABANDONO  EA - ESTUDOS APROVEITADOS
+							</div>
+
+					</div>
+
+					<div class="row-12">
+						<div class="col-6"></div>
+						<t t-if="o.state != 'formado'">
+							<div class="col-6" align="right">
+								<p>
+									<t t-esc="o.get_date_str()" />
+								</p>
+							</div>
+						</t>
+					</div>
+					<div class="row-12 assinaturas" style="widht:100%">
+						<div class="col-6 text-center" style="widht:50%;margin-top:15px;margin-left:50px;margin-bottom:13px;">
+							_____________________________________________
+							<br />
+
+							<t t-if="o.company_id.diretor">
+								<strong>
+									<t t-esc="o.company_id.diretor" />
+								</strong>
+								<br />
+							</t>
+							<t t-if="o.company_id.diretor_formacao">
+								<span>
+									<t t-esc="o.company_id.diretor_formacao" />
+								</span>
+								<br />
+							</t>
+							<span>Diretor(a)</span>
+							<br />
+
+
+						</div>
+						<div class="col-6 text-center" style="widht:50%;">
+							_____________________________________________
+							<br />
+							<strong>
+								<t t-esc="o.company_id.secretaria" />
+							</strong>
+							<br />
+							<span>Secretário(a) Escolar</span>
+							<br />
+
+						</div>
+					</div>
+				</div>
+
+			</t>
+		</t>
+	</template>
+</odoo>

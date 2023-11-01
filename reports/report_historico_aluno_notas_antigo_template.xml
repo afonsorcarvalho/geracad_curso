@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="view_historico_aluno_notas_antigo_template">
+		<!-- <table class="table table-sm table-striped"  > -->
+		
+			<thead>
+				
+				<tr>
+					<th width="50%" style="text-align:left;"  class="text-left" >
+						 
+						<t t-esc="periodo" />
+						º Período
+					</th>
+					<th class="text-center" width='5%'  >
+								CH
+							</th>
+					<th class="text-center" width='8%'  >
+								Faltas
+							</th>
+					<th class="text-center" width='8%' >
+								1º Nota
+							</th>
+					<th class="text-center" width='8%'  >
+								2º Nota
+							</th>
+					<th class="text-center" width='8%'  >
+								Final
+							</th>
+					<th class="text-center" width='8%'  >
+								Média
+							</th>
+					<th class="text-center" width='5%' >
+								Situação
+							</th>
+
+				</tr>
+			</thead>
+			
+			<tbody>
+				
+				<t t-foreach="o._get_notas_periodo(periodo)" t-as="notas_line">
+					
+					<t t-log="notas_line"/>
+					
+					<tr>
+						<td style="text-align:left;" class="col-disciplina" >
+							<span t-field="notas_line.disciplina_id.name" />
+						</td>
+
+						<td class="text-center col-ch">
+							<span t-field="notas_line.disciplina_id.carga_horaria" />
+						</td>
+
+						<td class="text-center col-falta" >
+							<span t-field="notas_line.faltas" />
+						</td>
+
+						<td class="text-center col-nota" > 
+							<span t-field="notas_line.nota_1"  t-options='{"widget": "float", "precision": 2}'/>
+						</td>
+
+						<td class="text-center col-nota" >
+							<span t-field="notas_line.nota_2" t-options='{"widget": "float", "precision": 2}'/>
+						</td>
+						<td class="text-center col-nota">
+							<span t-field="notas_line.final" t-options='{"widget": "float", "precision": 2}'/>
+						</td>
+						<td class="text-center col-nota" >
+							<span t-field="notas_line.media" t-options='{"widget": "float", "precision": 2}'/>
+						</td>
+						<td  class="text-center situation" >
+							<span t-field="notas_line.situation" />
+						</td>
+					</tr>
+				</t>
+			</tbody>
+			
+
+		
+	</template>
+</odoo>

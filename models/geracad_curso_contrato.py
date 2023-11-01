@@ -15,6 +15,12 @@ import logging
 _logger = logging.getLogger(__name__)
 
 class GeracadCursoContrato(models.Model):
+    """Class method to create a Geracadcad . crt .
+
+    Args:
+        models ([type]): [description]
+    """
+    
     _name = "geracad.curso.contrato"
     _description = "Contratos de Cursos"
 #  _check_company_auto = True
@@ -119,7 +125,7 @@ class GeracadCursoContrato(models.Model):
     ], string="Status", default="draft", tracking=True)
 
     active = fields.Boolean(default = True)
-    
+
     @api.depends('parcelas_contrato_ids')  
     def _compute_valor_total_contrato(self):
         _logger.info("CALCULANDO VALOR TOTAL DO CONTRATO")
@@ -134,6 +140,8 @@ class GeracadCursoContrato(models.Model):
 
     @api.depends('parcelas_contrato_ids')  
     def _compute_valor_total_a_pagar_contrato(self):
+        """Compute the total valor de pagar de contato .
+        """
         _logger.info("CALCULANDO TOTAL A PAGAR DO CONTRATO")
         self.valor_a_pagar = self.valor_total - self.valor_total_pago
 
@@ -207,8 +215,9 @@ class GeracadCursoContrato(models.Model):
                 'date_vencimento': data_vencimento_parcelas + relativedelta(months=(number)),
             })
              
-
+        
     def _tem_parcelas_pagas(self):
+
         _logger.debug("PROCURANDO PARCELAS PAGAS")
         parcelas_pagas = self.env['geracad.curso.financeiro.parcelas'].search([
            '&', 
@@ -224,6 +233,7 @@ class GeracadCursoContrato(models.Model):
         return parcelas_pagas
 
     def _verifica_parcelas_abertas_financeiro(self):
+        
         _logger.info("VERFICANDO PARCELAS EM ABERTO")
         parcelas_abertas = self.env['geracad.curso.financeiro.parcelas'].search([
             ('contrato_id','=',self.id),('state','=', 'vigente'),('esta_pago','=', False)])
@@ -273,7 +283,7 @@ class GeracadCursoContrato(models.Model):
     """
 
     def action_confirma_contrato(self):
-
+      
         if not self.parcelas_geradas:
             raise ValidationError('Contrato sem parcelas geradas. Gere as parcelas e confirme o contrato! ' )
 

@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE odoo [
+  <!ENTITY Ccedil "entity-value">
+]>
+<odoo>
+  <record id="paperformat_contrato_aluno" model="report.paperformat">
+		<field name="name">Contrato Aluno</field>
+		<field name="default" eval="True" />
+		<field name="orientation">Portrait</field>
+		<field name="dpi">140</field>
+		<field name="margin_top">30</field>
+		<field name="margin_bottom">15</field>
+		<field name="margin_left">15</field>
+		<field name="margin_right">10</field>
+		<field name="header_line" eval="False" />
+		<field name="header_spacing">20</field>
+	</record>
+  <template id='view_contrato_aluno_template'>
+    <style></style>
+    <t t-call='web.html_container'>
+      <t t-foreach='docs' t-as='o'>
+        <t t-call='web.external_layout'>
+          <div class="page">
+
+            <h2 align="center">CONTRATO DE PRESTAÇÃO  DE SERVIÇOS EDUCACIONAIS</h2>
+
+            
+            <t t-if="o.curso_type.name == 'Qualificação'">
+              <h3 align="center">CURSO DE QUALIFICAÇÃO</h3>
+                
+            </t>
+            
+            <t t-if="o.curso_type.name == 'Técnico'">
+              <h3 align="center">CURSOS TÉCNICOS</h3></t>
+
+            <br />
+            <p>
+              <p align="justify">
+                Pelo presente instrumento particular que entre si fazem, de um lado
+                <strong>
+                  <span t-field="o.company_id.l10n_br_legal_name" class="text-uppercase" />
+                </strong>
+                , CNPJ nº
+                <span t-field="o.company_id.l10n_br_cnpj_cpf" />
+                , com sede na
+                <span t-field="o.company_id.street" />
+                ,
+                <span t-field="o.company_id.l10n_br_number" />
+                ,
+                <span t-field="o.company_id.l10n_br_district" />
+                , ora
+                <strong>CONTRATADO</strong>
+                , neste ato representado por seu mandatório legal abaixo assinado e de outro lado,
+                <strong>
+                  <span t-field="o.sacado.name" />
+                </strong>
+                ,
+                <strong>CONTRATANTE</strong>
+                portador da CI nº
+                <strong>
+                  <span t-field="o.sacado.rg" />
+                </strong>
+                do CPF nº
+                <span t-field="o.sacado.l10n_br_cnpj_cpf" />
+                , tem justo e contrato o que segue:
+              </p>
+              <p align="justify">
+                <strong>Cláusula Primeira</strong>
+                : O presente contrato é celebrado com fulcro do disposto do Código Civil Brasileiro, na Constituição Federal e na Lei 8.078/90.
+              </p>
+              <p align="justify">
+                <strong>Cláusula Segunda</strong>
+                : O objeto do presente contrato é prestação de serviços educacionais, ofertando o Curso
+                <strong>
+
+                  <span t-field="o.curso_nome" class="text-uppercase" />
+                </strong>
+                , consoante previsto  na legislação de ensino em vigor  e Regimento interno do
+                <strong>CONTRATADO</strong>
+                , em benefício do aluno,
+                <strong>
+                  <span t-field="o.aluno_id.name" />
+                </strong>
+                , cujas demais informações fazem parte de Ficha de Inscrição anexa, a qual passa a integrar este contrato.
+              </p>
+              <p align="justify">
+                Parágrafo
+                <strong>1º</strong>
+                : O aluno beneficiário estará sujeito às normas do Regimento Interno;
+              </p>
+              <p align="justify">
+                Parágrafo
+                <strong>2º</strong>
+                : O quorom mínimo para o início do Curso é de 30 (trinta) alunos, podendo o início ser prorrogado por até 3 (três) vezes.
+              </p>
+              <p align="justify">
+                Parágrafo
+                <strong>3º</strong>
+                : O aluno que  ficar reprovado em alguma disciplina, terá que refazê-la em período a ser definido pela Coordenação, onde será cobrado o valor de R$ 200,00 (Duzentos reais), cada.
+              </p>
+              <t t-if="o.curso_type.name == 'Técnico'">
+              <p align="justify">
+                Parágrafo
+                <strong>4º</strong>
+                : Não estão inclusos neste contrato os serviços especiais de recuperação, reforço, 2ª chamada, dependência, adaptação, exames especiais, reciclagem, os opcionais  e de aplicação facultativa para o aluno, bem como  uniforme, alimento, transporte escolar,  material didático e de uso individual obrigatório, que poderão ser objeto de ajuste  à parte  e ainda, fornecimento de segunda via de documentos, os quais terão valores comunicados em circular própria. Vale ressaltar que as provas de 2a chamada, reposição, recuperação e exame final, será cobrado o valor de R$: 20,00 ( Vinte reais ), cada, devendo ser pago até 24h antes da realização das mesmas.
+              </p>
+              <p align="justify">
+                Parágrafo
+                <strong>5º</strong>
+                : O aluno que cursar e obtiver aprovação em todos os períodos que compõem o Curso Técnico, terá direito ao Diploma de Técnico;
+              </p>
+               </t>
+
+              <t t-if="o.qtd_parcelas==1">
+                <p align="justify">
+                  <strong>Cláusula Terceira</strong>
+                  : Pelos serviços ora contratados o
+                  <strong>CONTRATANTE</strong>
+                  pagará ao
+                  <strong>CONTRATADO</strong>
+                  , R$
+                  <strong>
+                    <span t-field="o.valor_total" />
+                  </strong>
+                  (
+                  <strong>
+                    <t t-esc="o._number_to_text(o.valor_total)" />
+                  </strong>
+                  ), em uma única parcela
+                  <!--de R$ <strong>{dadosConta[conta_receber_valor]} </strong>(<strong>{valorParcelasExtenso}</strong>) -->
+                  .
+                </p>
+                <p align="justify">
+                  <strong>Cláusula Quarta</strong>
+                  : O presente contrato tem duração de
+                  <span t-field="o.qtd_parcelas" />
+                  meses, podendo ser rescindido antes de seu vencimento: a) pelo
+                  <strong>CONTRATADO</strong>
+                  , mediante aviso prévio de 30 (trinta) dias, com fulcro no Código Civil Brasileiro; b) pelo
+                  <strong>CONTRATANTE</strong>
+                  , na hipótese de transferência , cancelamento ou desistência, mediante comunicação escrita, dependendo da quitação de débitos acaso existentes.
+                </p>
+                <p align="justify">
+                  <strong>Parágrafo único</strong>
+                  : O
+                  <strong>CONTRATADO</strong>
+                  não celebrará contrato de matrícula para outros Cursos se houver débito do
+                  <strong>CONTRATANTE</strong>
+                  relativo a curso (s) anterior (es); se, no curso anterior, as parcelas  tenham sido pagas  com atraso igual ou  superior  a 30 (trinta) dias ou por outro motivo previsto  em lei ou no Regimento Interno.
+                </p>
+              </t>
+              <t t-if="o.qtd_parcelas > 1">
+                <p align="justify">
+                  <strong>Cláusula Terceira</strong>
+                  : Pelos serviços ora contratados o
+                  <strong>CONTRATANTE</strong>
+                  pagará ao
+                  <strong>CONTRATADO</strong>
+                  ,
+                  <strong>
+                    R$
+                    <span t-field="o.valor_total" />
+                  </strong>
+                  (
+                  <strong>
+                    <t t-esc="o._number_to_text(o.valor_total)" />
+                  </strong>
+                  ), em
+                  <strong>
+                    <span t-field="o.qtd_parcelas" />
+                    parcelas
+                  </strong>
+                  de
+                  <strong>
+                    <span t-field="o.valor_parcelas" />
+                    (
+                    <span t-esc="o._number_to_text(o.valor_parcelas)" />
+                    )
+                  </strong>
+                  .
+                </p>
+                <p align="justify">
+                  Parágrafo
+                  <strong>1º</strong>
+                  : A primeira parcela será paga no ato da matrícula, sendo sua quitação imprescindível para realização deste contrato,  tendo caráter de sinal, arras e princípio de pagamento. As demais parcelas deverão ser pagas sucessivas e mensalmente, a partir de
+                  <strong>
+                    <span t-field="o.data_vencimento_parcelas" />
+                  </strong>
+                  , com vencimento no dia
+                  <span t-esc="o.data_vencimento_parcelas.day" />
+                  de cada mês.
+                </p>
+                <p align="justify">
+                  Parágrafo
+                  <strong>2º</strong>
+                  : O pagamento das referidas parcelas mensais será efetuado através de boleto bancário em favor do
+                  <strong>CONTRATADO</strong>
+                  ou em banco autorizado para tal fim.
+                </p>
+                <p align="justify">
+                  Parágrafo
+                  <strong>3º</strong>
+                  : Caso o aluno deseje trancar o seu curso, deverá encaminhar à coordenação a solicitação de trancamento, conforme modelo de solicitação disponível, devendo estar em dias com suas mensalidades. Caso o aluno deseje retornar, terá que fazer a sua nova matrícula e reiniciar o curso a partir do período concluído constante no seu histórico.
+                </p>
+                <p align="justify">
+                  Parágrafo
+                  <strong>4º</strong>
+                  : Será caracterizado abandono do curso a ausência do aluno por um período igual ou superior a 30 (trinta) dias consecutivos. Caracterizado o abandono, o aluno não poderá reiniciar o curso, sendo que a Instituição fica no direito de cobrar as mensalidades até o último mês frequentado.
+                </p>
+                <p align="justify">
+                  <strong>Cláusula Quarta</strong>
+                  :  Havendo atraso no pagamento de cada parcela escolar, o
+                  <strong>CONTRATANTE</strong>
+                  pagará, além do principal, os seguintes acréscimos : a) multa, como pena por atraso, de 2% (dois por cento) do valor  principal ; b) 0,33% ( trinta e três centésimo por cento ) do valor principal, por dia de atraso, como acréscimo  por mora.
+                </p>
+                <p align="justify">
+                  Parágrafo
+                  <strong>1º</strong>
+                  :
+                  <strong>Se o atraso for superior a 30 (trintanze) dias, o CONTRATADO poderá ainda : a) negativar o devedor em cadastro ou serviços legalmente constituídos e destinados à proteção de crédito; b) promover o protesto da dívida, mediante duplicata de serviços, letra de câmbio ou outro título de crédito que for legalmente; c) promover a cobrança através de advogados, empresas especializadas ou bancos; d) promover a cobrança judicial, através de Ação Monitória, de Execução de Contrato ou outra prevista na legislação brasileira: rescindir o contrato nos termos do Código Civil Brasileiro, nos prazos previstos  na legislação de ensino, com cobrança de Perdas e Danos.</strong>
+                </p>
+                <p align="justify">
+                  Parágrafo
+                  <strong>2º</strong>
+                  :
+                  <strong>Havendo quaisquer descumprimento ou inadimplência do presente contrato por motivo de responsabilidade do (a) CONTRATANTE, o CONTRATADO reserva-se o direito de suspender os serviços previstos neste contrato e compromete-se a notificar o(a) CONTRATANTE, por correio ou por e-mail, para que proceda a regularização da pendência, sob pena de não serem retomados os serviços ora contratados, em razão de descumprimento de cláusula contratual.</strong>
+                </p>
+                <p align="justify">
+                  Parágrafo
+                  <strong>3º</strong>
+                  : Será responsabilidade do
+                  <strong>CONTRATANTE</strong>
+                  , o ônus advindo da contratação de serviço de cobrança, desde já fixado em 10% (dez por cento) sobre o total do débito  para os casos de pagamento em procedimento judicial. Nos casos  em que a cobrança se der por meio de advogado a este serão pagos honorários a base de 20% (vinte por cento) sobre o total do débito se houver cobrança judicial ou purga judicial da mora, ou intervenção de advogados para seu recebimento. Na hipótese de acordo amigável,  este percentual será de 10% (dez por cento) sobre o total do débito.
+                </p>
+
+              </t>
+
+              <p align="justify">
+                <strong>Cláusula Quinta</strong>
+                : O presente instrumento particular foi firmado livremente pelas partes no estabelecimento do
+                <strong>CONTRATADO</strong>
+                . As partes elegem de comum acordo o Tribunal Arbitral e Mediação do Maranhão, com foro e sede na Rua Domingues Virgílio, nº 754, São Francisco, São Luís-MA, seus árbitros e regulamento interno para dirimir futuras e eventuais controvérsias oriundas da interpretação e execução deste contrato, conforme art. 4 parágrafo 2º da Lei 9.307/96, renunciando a submissão estatal.
+              </p>
+            </p>
+            <p align="right">
+              <span t-field=" o.company_id.city_id" />
+              <t t-esc="o.get_date_str()" />
+            </p>
+            <br />
+            <div class="row">
+              <div class="col-6">
+                <div class="row-6 text-uppercase text-center font-italic">
+                  __________________________________________________________
+                  <br />
+                  Netcom Treinamentos e Soluções Tecnológicas
+                  <br />
+                  CONTRATADO
+                </div>
+                <br/>
+                <br/>
+                <div class="row-6 text-center">
+                  ________________________________________________________
+                  <br />
+                  
+                  
+                  <span t-field="o.sacado.name" class="text-uppercase font-italic" />
+                  <br />
+                  CONTRATANTE
+                </div>
+
+
+              </div>
+              <div class="col-6">
+                <div class="row text-center">
+                  _________________________________________________________
+                  <br />
+                  TESTEMUNHA
+                </div>
+                <br/>
+                <br/>
+                <div class="row text-center">
+                  __________________________________________________________
+                  <br />
+                  TESTEMUNHA
+                </div>
+              </div>
+
+            </div>
+
+
+          </div>
+        </t>
+      </t>
+    </t>
+  </template>
+</odoo>
+ 
+
+ 
+ 
+ 
+ 
