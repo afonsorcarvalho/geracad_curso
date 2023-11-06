@@ -253,15 +253,17 @@ class GeracadCursoContrato(models.Model):
     def _number_to_text(self, value):
         return num2words(value, lang='pt_BR',to='currency').title()
     
-    def get_date_str(self):
+    def get_date_str(self,date2str):
         '''
         Função retorna a data no formato ex. 'São Luís-MA, 20 de Abril de 2022'
         '''
-        date_hoje = date.today()
+        _logger.info(f"Data de assinatura:{date2str}")
+        if not date2str:
+            date2str = date.today()
         locale = get_lang(self.env).code
 
         _logger.info(self.company_id.city_id.name + '-' + self.company_id.state_id.code)
-        date_str = self.company_id.city_id.name + '-' + self.company_id.state_id.code + ', ' + format_date(date_hoje,format="long",locale=locale)
+        date_str = self.company_id.city_id.name + '-' + self.company_id.state_id.code + ', ' + format_date(date2str,format="long",locale=locale)
         return   date_str
     
     #TODO 

@@ -24,7 +24,7 @@ class GeracadMapaPagamentoCursoWizard(models.TransientModel):
         required=True        
     )
    
-    
+          
     def get_alunos(self):
         _logger.info("pegando alunos")
         matricula_ids = self.env[ "geracad.curso.matricula"].search([('curso_turma_id','=', self.curso_turma_id.id)],)

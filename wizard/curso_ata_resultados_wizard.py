@@ -16,6 +16,9 @@ _logger = logging.getLogger(__name__)
 
 
 class GeracadAtaResultadoCursoWizard(models.TransientModel):
+    """
+    This wizard is used to generate the final course results report.
+    """
     _name = "geracad.curso.ata.resultados.wizard"
     _description = "Assistente de imprimir ata de resultados finais de curso"
 
@@ -25,6 +28,15 @@ class GeracadAtaResultadoCursoWizard(models.TransientModel):
     )
    
     def _monta_disciplina(self,dado):
+        """
+        Builds a dictionary containing discipline data for a student.
+
+        Args:
+            dado (geracad.curso.nota.disciplina): The course grade data.
+
+        Returns:
+            dict: A dictionary with discipline information.
+        """
         return {dado.disciplina_id.name : {
             'situation': dado.situation,
             'media': dado.media,
@@ -36,6 +48,12 @@ class GeracadAtaResultadoCursoWizard(models.TransientModel):
         
     
     def get_disciplinas_grade(self):
+        """
+        Get a list of course disciplines.
+
+        Returns:
+            list: A list of course disciplines and their count in each period.
+        """
         turma_curso_id = self.env["geracad.curso.turma"].search([('id','=', self.curso_turma_id.id)])
         grade_version = turma_curso_id.curso_grade_version
         grade_ids = grade_version.grade_ids
@@ -64,36 +82,52 @@ class GeracadAtaResultadoCursoWizard(models.TransientModel):
 
     
     def get_dados(self):
+        """
+        Retrieve student grades and organize them by student and discipline.
+
+        Returns:
+            dict: A dictionary containing student grades.
+        """
         _logger.info("GET DATA")
         notas = []
         notas = self.env["geracad.curso.nota.disciplina"].search([
             ('curso_turma_id','=', self.curso_turma_id.id),
-            ('disciplina_matricula_state','not in',['cancelada','trancado','abandono']),
-            ('situation','not in',['CA','TR'])
+          #  ('disciplina_matricula_state','not in',['cancelada','trancado','abandono']),
+          # ('situation','not in',['CA','TR'])
             
             ],order="aluno_nome ASC, periodo ASC")
-        notas = notas.filtered(lambda r: r.curso_matricula_id.state not in ['cancelada','abandono','trancado'])
-       
+        #notas = notas.filtered(lambda r: r.curso_matricula_id.state not in ['cancelada','abandono','trancado'])
+        
+        #pegando as disciplinas
+        
         lines = {}
+        disciplinas = {}
         for nota in notas:
-            disciplinas = lines.get(nota.aluno_nome)
-            _logger.info(disciplinas)
-           
-            if disciplinas:
-               
-                disciplinas.update(self._monta_disciplina(nota))
-                lines.update({nota.aluno_nome : disciplinas})   
+            aluno = nota.aluno_nome
+            _logger.info(f"Nota: {nota.aluno_nome}")
+            _logger.info(f"Aluno: {aluno}")
+            _logger.info(f"Disciplinas: {disciplinas.get(aluno)}")
+            if disciplinas.get(aluno) != None:
+
+                disciplinas[aluno].update(self._monta_disciplina(nota))
+                _logger.info(f"Disciplinas: {disciplinas}")
+                lines.update({nota.aluno_nome : {'disciplinas': disciplinas[aluno],'situacao_matricula': nota.curso_matricula_id.state}})   
             else:
                 lines.update({
-                    nota.aluno_nome : self._monta_disciplina(nota)
+                    nota.aluno_nome : {'disciplinas':self._monta_disciplina(nota), 'situacao_matricula': nota.curso_matricula_id.state}
                 })
+                disciplinas[aluno] = (self._monta_disciplina(nota))
         _logger.info(lines)
         return lines
             
     def get_date_str(self):
-        '''
-        Função retorna a data no formato ex. 'São Luís-MA, 20 de Abril de 2022'
-        '''
+        """
+        Format the current date into a localized string.
+        formato ex. 'São Luís-MA, 20 de Abril de 2022'
+        Returns:
+            str: The formatted date string.
+        """
+        
         date_hoje = date.today()
         locale = get_lang(self.env).code
 
@@ -103,7 +137,10 @@ class GeracadAtaResultadoCursoWizard(models.TransientModel):
 
     def action_confirm(self):
         """
-            Action de confirmação de wizard para gerar relatório
+        Perform the confirmation action to generate the report.
+
+        Returns:
+            dict: A report action.
         """
         _logger.debug("confirmado")
         if not self.curso_turma_id:

@@ -263,8 +263,8 @@
   contrato, conforme art. 4 parágrafo 2º da Lei 9.307/96, renunciando a submissão estatal.
               </p>
               <p align="right">
-                <span t-field=" o.company_id.city_id"/>
-                <t t-esc="o.get_date_str()"/>
+                
+                <t t-esc="o.get_date_str(o.data_assinatura_contrato)"/>
               </p>
               <br/>
               <div class="row">
