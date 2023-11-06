@@ -185,6 +185,7 @@
 													 <t t-if="situacao_matricula=='inscrito'"><span class="text-success situation">IN</span></t>
 													 <t t-if="situacao_matricula=='trancado'"><span class="text-danger situation">TR</span></t>
 													 <t t-if="situacao_matricula=='suspensa'"><span class="text-danger situation">SU</span></t>
+													 <t t-if="situacao_matricula=='abandono'"><span class="text-danger situation">AB</span></t>
 													 <t t-if="situacao_matricula=='cancelada'"><span class="text-danger situation">CA</span></t>
 													 <t t-if="situacao_matricula=='formado'"><span class="text-success situation">FM</span></t>
 													 <t t-if="situacao_matricula=='transferido'"><span class="text-success situation">TF</span></t>
