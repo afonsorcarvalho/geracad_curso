@@ -11,6 +11,18 @@
                             options="{'no_create_edit': True,'no_create': True}"
                             />                       
                     </group>
+                    <group>
+                            <field name="tipo" widget="radio"
+                            
+
+                            />                       
+                    </group>
+                    <group>
+                            <field name="apenas_formados"
+                            
+
+                            />                       
+                    </group>
                 </sheet>
                 <footer>
                     <button string="Confirmar" name="action_confirm" type="object" class="btn-primary"/>

@@ -26,6 +26,9 @@ class GeracadAtaResultadoCursoWizard(models.TransientModel):
     curso_turma_id = fields.Many2one('geracad.curso.turma',                             
         required=True        
     )
+
+    tipo = fields.Selection([('situation', 'Situação'),('media', 'Média')], default='situation')
+    apenas_formados = fields.Boolean()
    
     def _monta_disciplina(self,dado):
         """
@@ -96,7 +99,8 @@ class GeracadAtaResultadoCursoWizard(models.TransientModel):
           # ('situation','not in',['CA','TR'])
             
             ],order="aluno_nome ASC, periodo ASC")
-        #notas = notas.filtered(lambda r: r.curso_matricula_id.state not in ['cancelada','abandono','trancado'])
+        if self.apenas_formados:
+            notas = notas.filtered(lambda r: r.curso_matricula_id.state in ['formado'])
         
         #pegando as disciplinas
         

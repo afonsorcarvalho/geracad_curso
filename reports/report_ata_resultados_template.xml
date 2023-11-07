@@ -166,7 +166,7 @@
 										<td>
 											<t t-if="situacao_matricula=='inscrito'">
 											<div class="nomes ">
-												<span class="text-uppercase text-success"  t-esc="lines[:25]" />
+												<span class="text-uppercase"  t-esc="lines[:25]" />
 											</div>
 											</t>
 											<t t-if="situacao_matricula!='inscrito'">
@@ -177,14 +177,7 @@
 										</td>
 										<td  t-att-width="col_width_disciplinas">
 											<div class="situacao">
-												
-												
-												
-												
 												 <div class="text-center ">
-													
-													
-													
 													 <t t-if="situacao_matricula=='inscrito'"><span class="text-success situation">IN</span></t>
 													 <t t-if="situacao_matricula=='trancado'"><span class="text-danger situation">TR</span></t>
 													 <t t-if="situacao_matricula=='suspensa'"><span class="text-danger situation">SU</span></t>
@@ -192,35 +185,40 @@
 													 <t t-if="situacao_matricula=='cancelada'"><span class="text-danger situation">CA</span></t>
 													 <t t-if="situacao_matricula=='formado'"><span class="text-success situation">FM</span></t>
 													 <t t-if="situacao_matricula=='transferido'"><span class="text-success situation">TF</span></t>
-
 												 </div>
-												 
 											</div>
 										</td>
-
+										
+										
+										
+										
 										<t t-foreach="disciplinas_grade" t-as="disciplina">
 											<td t-att-width="col_width_disciplinas" class="text-center">
 												<t t-if="lines_value.get('disciplinas')">
 													<t t-set="disciplinas_values" t-value="lines_value.get('disciplinas')"/>
-													 <t t-set="dados_disciplina" t-value="lines_value['disciplinas'].get(disciplina)" />
-														
-																											
-														<t t-if="dados_disciplina">
+													<t t-set="dados_disciplina" t-value="lines_value['disciplinas'].get(disciplina)" />						
+													<t t-if="dados_disciplina">
+														<t t-if="o.tipo == 'situation'">									
+															<t t-if="dados_disciplina['situation'] in ['AM','AP']">
+																<span class="text-success situation" t-esc="dados_disciplina['situation']" />
+															</t>
+															<t t-if="dados_disciplina['situation'] in ['RC','RF']">
+																<span class="text-danger situation" t-esc="dados_disciplina['situation']" />
+															</t>
+															<t t-if="dados_disciplina['situation'] in ['IN']">
+																<span class="text-darK situation" t-esc="dados_disciplina['situation']" />
+															</t>
+															<t t-if="dados_disciplina['situation'] not in ['AM','AP','RC','RF','IN']">
+																<span class="text-muted situation" t-esc="dados_disciplina['situation']" />
+															</t>	
 															
-														
-																
-														 <t t-if="dados_disciplina['situation'] in ['AM','AP']">
-															<span class="text-success situation" t-esc="dados_disciplina['situation']" />
+														</t>			  
+														<t t-if="o.tipo == 'media'">
+															<t t-if="dados_disciplina['media']">
+																<span class="situation" t-esc="dados_disciplina['media']" t-options='{"widget": "float", "precision": 2}'/>
+															</t>
+	
 														</t>
-														<t t-if="dados_disciplina['situation'] in ['RC','RF']">
-															<span class="text-danger situation" t-esc="dados_disciplina['situation']" />
-														</t>
-														<t t-if="dados_disciplina['situation'] in ['IN']">
-															<span class="text-darK situation" t-esc="dados_disciplina['situation']" />
-														</t>
-														<t t-if="dados_disciplina['situation'] not in ['AM','AP','RC','RF','IN']">
-															<span class="text-muted situation" t-esc="dados_disciplina['situation']" />
-														</t>				  
 													</t>
 												</t> 
 											</td>
