@@ -90,6 +90,9 @@
 							font-size: 12px;
 
 						}
+						div.legenda {
+							font-size: 9px;
+						}
                     </style>
 					<div class="page">
 						
@@ -178,7 +181,7 @@
 												
 												
 												
-												 <div class="text-center">
+												 <div class="text-center ">
 													
 													
 													
@@ -226,6 +229,12 @@
 								</t>
 							</tbody>
 						</table>
+						<div class="legenda">
+							LEGENDA SITUAÇÃO MATRICULA<br/>
+							[IN] - INSCRITO [TR] - TRANCADO [SU] - SUSPENSO [AB] - ABANDONO [CA] - CANCELADO [FM] FORMADO<br/><br/>
+							LEGENDA SITUAÇÃO DISCIPLINA<br/>
+							[AM] - APROVADO POR MEDIA [AP] - APROVADO POR FINAL [RC] - REPROVADO POR CONTEUDO [RF] - REPROVADO POR FALTA [IN] - INSCRITO [CA] CANCELADA [TR] TRANCADA [AB] ABANDONO 
+						</div>
 					</div>
 				</t>
 			</t>
