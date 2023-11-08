@@ -98,7 +98,7 @@
 						}
                     </style>
 					<div class="page">
-						
+						<h1 class="text-center" t-if="o.apenas_formados">ATA DE RESULTADOS FINAIS</h1>
 						<t t-set="col_width_disciplinas" t-value="str('22px')" />
 						
 						<table class="table table-sm table-bordered table-striped">
@@ -221,7 +221,7 @@
 							</tbody>
 						</table>
 						<t t-if="not o.apenas_formados">	
-						<div class="legenda">
+						<div class="row legenda ">
 							
 							
 								LEGENDA SITUAÇÃO MATRICULA<br/>
@@ -237,6 +237,13 @@
 						</t>
 						
 						<t t-if="o.assinaturas">
+								<div class="row date ">
+									<div class="col-12 text-right">
+
+										<t t-esc="o.get_date_str()" />
+									</div>
+									
+								</div>
 
 								<div class="row assinaturas">		
 									<div class="col-6 text-center">
