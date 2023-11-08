@@ -12,17 +12,16 @@
                             />                       
                     </group>
                     <group>
-                            <field name="tipo" widget="radio"
-                            
+                        <group>
 
-                            />                       
+                            <field name="tipo" widget="radio"/>                       
+                        </group>
+                        <group>
+                            <field name="apenas_formados" widget="boolean_toggle"/>
+                            <field name="assinaturas" widget="boolean_toggle"/>
+                        </group>
                     </group>
-                    <group>
-                            <field name="apenas_formados"
-                            
-
-                            />                       
-                    </group>
+                   
                 </sheet>
                 <footer>
                     <button string="Confirmar" name="action_confirm" type="object" class="btn-primary"/>

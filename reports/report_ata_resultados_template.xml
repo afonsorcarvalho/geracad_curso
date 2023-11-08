@@ -93,6 +93,9 @@
 						div.legenda {
 							font-size: 9px;
 						}
+						div.assinaturas {
+							margin-top: 40px;
+						}
                     </style>
 					<div class="page">
 						
@@ -120,7 +123,7 @@
 
 										</div>	
 									</th>
-									<th t-att-width="col_width_disciplinas" rowspan="2" class="data_falta" >
+									<th t-att-width="col_width_disciplinas" rowspan="2" class="data_falta"  t-if="not o.apenas_formados">
 										<div class="data_falta nomes_disciplinas"><span class="text-uppercase text-muted" >SITUAÇÃO DA MATRÍCULA</span></div>
 									</th>
 									<t t-foreach="periodos_disciplinas" t-as="colspan">
@@ -154,28 +157,21 @@
 
 									<tr>
 										<td>
-											
-											
 												<span class="text-uppercase nomes"  t-esc="item" />
-
-											
-											
-											
-										
 										</td>
 										<td>
-											<t t-if="situacao_matricula=='inscrito'">
-											<div class="nomes ">
-												<span class="text-uppercase"  t-esc="lines[:25]" />
-											</div>
+											<t t-if="situacao_matricula in ['inscrito','formado']">
+												<div class="nomes ">
+													<span class="text-uppercase"  t-esc="lines[:25]" />
+												</div>
 											</t>
-											<t t-if="situacao_matricula!='inscrito'">
-											<div class="nomes ">
-												<span class="text-uppercase text-danger"  t-esc="lines[:25]" />
-											</div>
+											<t t-if="situacao_matricula not in ['inscrito','formado']">
+												<div class="nomes ">
+													<span class="text-uppercase text-danger"  t-esc="lines[:25]" />
+												</div>
 											</t>
 										</td>
-										<td  t-att-width="col_width_disciplinas">
+										<td  t-att-width="col_width_disciplinas" t-if="not o.apenas_formados">
 											<div class="situacao">
 												 <div class="text-center ">
 													 <t t-if="situacao_matricula=='inscrito'"><span class="text-success situation">IN</span></t>
@@ -188,10 +184,7 @@
 												 </div>
 											</div>
 										</td>
-										
-										
-										
-										
+
 										<t t-foreach="disciplinas_grade" t-as="disciplina">
 											<td t-att-width="col_width_disciplinas" class="text-center">
 												<t t-if="lines_value.get('disciplinas')">
@@ -227,12 +220,59 @@
 								</t>
 							</tbody>
 						</table>
+						<t t-if="not o.apenas_formados">	
 						<div class="legenda">
-							LEGENDA SITUAÇÃO MATRICULA<br/>
-							[IN] - INSCRITO [TR] - TRANCADO [SU] - SUSPENSO [AB] - ABANDONO [CA] - CANCELADO [FM] FORMADO<br/><br/>
-							LEGENDA SITUAÇÃO DISCIPLINA<br/>
-							[AM] - APROVADO POR MEDIA [AP] - APROVADO POR FINAL [RC] - REPROVADO POR CONTEUDO [RF] - REPROVADO POR FALTA [IN] - INSCRITO [CA] CANCELADA [TR] TRANCADA [AB] ABANDONO 
-						</div>
+							
+							
+								LEGENDA SITUAÇÃO MATRICULA<br/>
+								[IN] - INSCRITO [TR] - TRANCADO [SU] - SUSPENSO [AB] - ABANDONO [CA] - CANCELADO [FM] FORMADO<br/><br/>
+								
+								
+								<t t-if="o.tipo != 'media'">
+									LEGENDA SITUAÇÃO DISCIPLINA<br/>
+									[AM] - APROVADO POR MEDIA [AP] - APROVADO POR FINAL [RC] - REPROVADO POR CONTEUDO [RF] - REPROVADO POR FALTA [IN] - INSCRITO [CA] CANCELADA [TR] TRANCADA [AB] ABANDONO 	
+								</t>
+								
+							</div>
+						</t>
+						
+						<t t-if="o.assinaturas">
+
+								<div class="row assinaturas">		
+									<div class="col-6 text-center">
+										_____________________________________________
+										<br />
+										<t t-if="o.curso_turma_id.company_id.diretor">
+											<strong>
+												<t t-esc="o.curso_turma_id.company_id.diretor" />
+											</strong>
+											<br />
+										</t>
+										<t t-if="o.curso_turma_id.company_id.diretor_formacao">
+											<span>
+												<t t-esc="o.curso_turma_id.company_id.diretor_formacao" />
+											</span>
+											<br />
+										</t>
+										<span>Diretor(a)</span>
+										<br />
+									</div>
+									<div class="col-6 text-center">
+										_____________________________________________
+										<br />
+										<strong>
+											<t t-esc="o.curso_turma_id.company_id.secretaria" />
+										</strong>
+										<br />
+										<span>Secretário(a) Escolar</span>
+										<br />
+		
+									</div>
+								</div>
+
+							</t>
+							
+							
 					</div>
 				</t>
 			</t>

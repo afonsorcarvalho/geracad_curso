@@ -29,6 +29,7 @@ class GeracadAtaResultadoCursoWizard(models.TransientModel):
 
     tipo = fields.Selection([('situation', 'Situação'),('media', 'Média')], default='situation')
     apenas_formados = fields.Boolean()
+    assinaturas = fields.Boolean()
    
     def _monta_disciplina(self,dado):
         """
