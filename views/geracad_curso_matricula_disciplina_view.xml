@@ -7,6 +7,11 @@
       <field name="model">geracad.curso.matricula.disciplina</field>
       <field name="arch" type="xml">
         <tree expand="1">
+          <header>
+            <button name="action_cancela_matricula_disciplina" string="Cancelar"   type="object" class="btn-danger"/> 
+            <button name="action_reabrir_matricula_disciplina" string="Reativar" class="btn-danger"
+              type="object"/>
+          </header>
       
           
           <field name="curso_matricula_id" optional="hide"/>
@@ -106,6 +111,8 @@
             <header>
               <button name="action_cancela_matricula_disciplina" string="Cancelar" style="background-color:red;"
                 confirm="Tem certeza que gostaria de cancelar matrícula do aluno nessa disciplina? O cancelamento não poderá ser desfeito!" class="btn" states="inscrito" type="object"/> 
+              <button name="action_reabrir_matricula_disciplina" string="Reativar" style="background-color:red;"
+                 class="btn" states="trancado,suspensa,cancelada" type="object"/> 
               <field name="state" widget="statusbar" statusbar_visible="inscrito" statusbar_colors="{'finalizado':'green'}"/>
             </header>
             <sheet>

@@ -97,7 +97,7 @@ class GeracadAtaResultadoCursoWizard(models.TransientModel):
         notas = self.env["geracad.curso.nota.disciplina"].search([
             ('curso_turma_id','=', self.curso_turma_id.id),
           #  ('disciplina_matricula_state','not in',['cancelada','trancado','abandono']),
-          # ('situation','not in',['CA','TR'])
+           ('situation','not in',['CA'])
             
             ],order="aluno_nome ASC, periodo ASC")
         if self.apenas_formados:

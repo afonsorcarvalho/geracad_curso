@@ -174,8 +174,6 @@
           </header>
 
           <sheet>
-            <widget name="web_ribbon" title="Encerrada" attrs="{'invisible': [('state', '!=', 'encerrada')]}"/>
-            <widget name="web_ribbon" title="Aulas Encerradas"  bg_color="bg-warning" attrs="{'invisible': [('state', '!=', 'aulas_encerradas')]}"/>
             <div class="oe_button_box" name="button_box">
               <button name="action_go_alunos_disciplinas"
                 groups="geracad_curso.group_geracad_curso_secretaria,geracad_curso.group_geracad_curso_secretaria_only_read"
@@ -195,6 +193,8 @@
               </button>
 
             </div>
+            <widget name="web_ribbon" title="Encerrada" attrs="{'invisible': [('state', '!=', 'encerrada')]}"/>
+            <widget name="web_ribbon" title="Aulas Encerradas"  bg_color="bg-warning" attrs="{'invisible': [('state', '!=', 'aulas_encerradas')]}"/>
 
             <h1>
               <field name="display_name" readonly="1" />

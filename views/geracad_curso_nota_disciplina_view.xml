@@ -14,7 +14,7 @@
          class="oe_edit_only"
          >
          <header>
-
+          <button name="action_reativar_nota" type="object" string="reativar" class="btn-danger" groups="geracad_curso.group_geracad_curso_secretaria" />
          </header>
           
           <field name="curso_id" readonly="1" optional="hide" />
@@ -85,7 +85,7 @@
           <header>
           
            <button name="action_lancar_nota"   groups="geracad_curso.group_geracad_curso_secretaria"  states="inscrito,draft" confirm="Verifique se as notas estão corretas, a nota não poderá mais ser alterada depois de lançada!" string="Lançar Nota" type="object" class="oe_highlight"/> 
-          
+           <button name="action_reativar_nota" type="object" string="reativar" class="btn-danger" groups="geracad_curso.group_geracad_curso_secretaria"/>
            <field name="state" widget="statusbar" />
           
           </header>

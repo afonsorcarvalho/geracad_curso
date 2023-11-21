@@ -318,10 +318,6 @@
           </header>
           <sheet>
 
-            <widget name="web_ribbon" title="Arquivada" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}" />
-            <widget name="web_ribbon" title="Cancelada" bg_color="bg-danger" attrs="{'invisible': [('state', '!=', 'cancelada')]}" />
-            <widget name="web_ribbon" title="Encerrada" bg_color="bg-warning" attrs="{'invisible': [('state', '!=', 'encerrada')]}" />
-
             <div class="oe_button_box" name="button_box">
               <button name="action_go_matriculas" type="object" class="oe_stat_button" icon="fa-files-o">
                 <div class="o_field_widget o_stat_info">
@@ -335,6 +331,10 @@
               </button>
 
             </div>
+            <widget name="web_ribbon" title="Arquivada" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}" />
+            <widget name="web_ribbon" title="Cancelada" bg_color="bg-danger" attrs="{'invisible': [('state', '!=', 'cancelada')]}" />
+            <widget name="web_ribbon" title="Encerrada" bg_color="bg-warning" attrs="{'invisible': [('state', '!=', 'encerrada')]}" />
+
 
             <h1>
               <field name="name" string="Código" readonly="1" />

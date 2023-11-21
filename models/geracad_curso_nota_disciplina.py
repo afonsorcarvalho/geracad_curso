@@ -445,14 +445,24 @@ class GeracadCursoNotaDisciplina(models.Model):
                 'state': 'cancelada'
             })
     def action_atualiza_situation(self):
-        self.calcula_situation()
+        for rec in self:
+            rec.calcula_situation()
     
+    def action_reativar_nota(self):    
+        for rec in self:
+            
+                rec.write({
+                    'state': 'draft',
+                    'situation': 'IN'
+                })
+
     def action_reabrir_nota(self):    
         _logger.debug("Nota Reaberta para edição")
-        if self.disciplina_matricula_id not in ['cancelada']:
-            self.write({
-                'state': 'draft'
-            })
+        for rec in self:
+            if rec.disciplina_matricula_id not in ['cancelada']:
+                rec.write({
+                    'state': 'draft'
+                })
 
 class NotasDialog(models.TransientModel):
     _name = 'geracad.curso.nota.dialog'

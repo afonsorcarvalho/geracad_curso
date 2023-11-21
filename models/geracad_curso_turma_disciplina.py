@@ -701,7 +701,7 @@ class GeracadCursoTurmDisciplina(models.Model):
             }
         }
 
-
+    
     def action_suspender_turma_disciplina(self):
         self.write({
             'state': 'suspensa',

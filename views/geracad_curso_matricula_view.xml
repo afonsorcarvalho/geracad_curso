@@ -150,38 +150,38 @@
             <!-- <widget name="web_ribbon" title="Arquivada" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
               <widget name="web_ribbon" title="Cancelada" bg_color="bg-danger" attrs="{'invisible': [('state', '!=', 'cancelada')]}"/>
               <widget name="web_ribbon" title="Encerrada" bg_color="bg-warning" attrs="{'invisible': [('state', '!=', 'encerrada')]}"/> -->
+              <div class="oe_button_box" name="button_box">
+                <button name="action_go_contratos" type="object" class="oe_stat_button" icon="fa-file-text-o">
+                  <div class="o_field_widget o_stat_info">
+  
+                    <field name="contratos_count" class="o_state_value" />
+                    <span class="o_stat_text">Contratos</span>
+                  </div>
+                </button>
+                <button name="action_go_parcelas" type="object" class="oe_stat_button" icon="fa-money">
+                  <div class="o_field_widget o_stat_info">
+  
+                    <field name="parcelas_count" class="o_state_value" />
+                    <span class="o_stat_text">Parcelas</span>
+                  </div>
+                </button>
+                <button name="action_go_matriculas_disciplinas" type="object" class="oe_stat_button" icon="fa-list-ol">
+                  <div class="o_field_widget o_stat_info">
+  
+                    <field name="matriculas_disciplinas_count" class="o_state_value" />
+                    <span class="o_stat_text">Disciplinas</span>
+                  </div>
+                </button>
+                <button name="action_go_notas_disciplinas" type="object" class="oe_stat_button" icon="fa-list-alt">
+                  <div class="o_field_widget o_stat_info">
+  
+                    <field name="notas_disciplinas_count" class="o_state_value" />
+                    <span class="o_stat_text">Notas</span>
+                  </div>
+                </button>
+  
+              </div>
              <widget name="web_ribbon" title="Formado" bg_color="bg-success" attrs="{'invisible': [('state', '!=', 'formado')]}"/>
-            <div class="oe_button_box" name="button_box">
-              <button name="action_go_contratos" type="object" class="oe_stat_button" icon="fa-file-text-o">
-                <div class="o_field_widget o_stat_info">
-
-                  <field name="contratos_count" class="o_state_value" />
-                  <span class="o_stat_text">Contratos</span>
-                </div>
-              </button>
-              <button name="action_go_parcelas" type="object" class="oe_stat_button" icon="fa-money">
-                <div class="o_field_widget o_stat_info">
-
-                  <field name="parcelas_count" class="o_state_value" />
-                  <span class="o_stat_text">Parcelas</span>
-                </div>
-              </button>
-              <button name="action_go_matriculas_disciplinas" type="object" class="oe_stat_button" icon="fa-list-ol">
-                <div class="o_field_widget o_stat_info">
-
-                  <field name="matriculas_disciplinas_count" class="o_state_value" />
-                  <span class="o_stat_text">Disciplinas</span>
-                </div>
-              </button>
-              <button name="action_go_notas_disciplinas" type="object" class="oe_stat_button" icon="fa-list-alt">
-                <div class="o_field_widget o_stat_info">
-
-                  <field name="notas_disciplinas_count" class="o_state_value" />
-                  <span class="o_stat_text">Notas</span>
-                </div>
-              </button>
-
-            </div>
 
             <h1>
               <field name="name" string="Código" attrs="{'readonly':[('edit_turma_curso', '==', False)]  }" />
