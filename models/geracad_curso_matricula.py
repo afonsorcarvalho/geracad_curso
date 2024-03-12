@@ -750,8 +750,8 @@ class GeracadCursoMatricula(models.Model):
                     'state': 'finalizado'
                 })
             
-            rec._atualiza_periodo_CH_turma_disciplina_com_grade()
-            rec._atualiza_periodo_de_nota_com_turma_disciplina()
+            rec.sudo()._atualiza_periodo_CH_turma_disciplina_com_grade()
+            rec.sudo()._atualiza_periodo_de_nota_com_turma_disciplina()
 
     def action_abandono(self):
         if self.state in ['formado']:
