@@ -744,9 +744,9 @@ class GeracadCursoMatricula(models.Model):
                 })
                 #matriculas_disciplinas_ids.atualiza_frequencia_aulas()
                 notas = matriculas_disciplinas_ids.mapped(lambda r: r.nota)
-                notas.calcula_situation()
+                notas.sudo().calcula_situation()
                 # colocando status de matricula de turmas encerradas como concluido
-                matriculas_disciplinas_ids_turma_encerrada.write({
+                matriculas_disciplinas_ids_turma_encerrada.sudo().write({
                     'state': 'finalizado'
                 })
             
@@ -924,8 +924,8 @@ class GeracadCursoMatricula(models.Model):
         if not self.curso_grade_version:
             raise ValidationError('Por favor, insira a Versão da Grade na matrícula')
         for rec in self:
-            rec._atualiza_periodo_CH_turma_disciplina_com_grade()
-            rec._atualiza_periodo_de_nota_com_turma_disciplina()
+            rec.sudo()._atualiza_periodo_CH_turma_disciplina_com_grade()
+            rec.sudo()._atualiza_periodo_de_nota_com_turma_disciplina()
         
         return self.env.ref("geracad_curso.action_historico_aluno_report").report_action(self)
 
