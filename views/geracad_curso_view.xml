@@ -14,6 +14,7 @@
           <field name="display_name" string="Nome" />
 
           <field name="type_curso" placeholder="Tipo do Curso" />
+          <field name="modalidade" placeholder="Modalidade" />
           <field name="quantidade_de_periodos" placeholder="Quantidade de períodos" optional="hide" />
           <field name="qtd_parcelas" placeholder="Quantidade de parcelas" optional="show" />
           
@@ -40,6 +41,7 @@
                 <field name="sigla" placeholder="Sigla do Curso" />
                 <field name="resolucao" placeholder="Resolução" />
                 <field name="type_curso" placeholder="Tipo do Curso" options="{'no_create': True}" />
+                <field name="modalidade" placeholder="Modalidade"  />
                 <field name="quantidade_de_periodos" string="Períodos" placeholder="Períodos" />
                 <field name="carga_horaria_total" placeholder="Carga horária" />
               </group>
@@ -142,7 +144,9 @@
         <search string="Procura Cursos">
           <filter string="Cursos Técnicos" name="Cursos Tecnicos" domain="[('type_curso','=','Técnico')]" context="{}" help="" />
           <filter string="Cursos Qualificação" name="Curso qualificacao" domain="[('type_curso','=','Qualificação')]" context="{}" help="" />
-          <filter string="Cursos Preparatórios" name="Curso qualificacao" domain="[('type_curso','=','Preparatório')]" context="{}" help="" />
+          <filter string="Cursos Preparatórios" name="Curso preparatorios" domain="[('type_curso','=','Preparatório')]" context="{}" help="" />
+          <filter string="Modalidade Presencial" name="presencial" domain="[('modalidade','=','presencial')]" context="{}" help="" />
+          <filter string="Modalidade EAD" name="a_distancia" domain="[('modalidade','=','a_distancia')]" context="{}" help="" />
           <field name="name" string="nome" />
           <field name="sigla" string="Sigla" />
           <field name="type_curso" string="Tipo de Curso" />
@@ -346,6 +350,7 @@
                 <field name="curso_id" string="Curso" attrs="{'readonly':[('state','!=','draft')]  }" options="{'no_create': True}" />
                 <field name="curso_grade_version"  domain = "curso_grade_version_domain" attrs="{'readonly':[('state','!=','draft')]  }" options="{'no_create': True}" />
                 <field name="curso_grade_version_domain" invisible="1"/>
+                <field name="modalidade" string="Modalidade" attrs="{'readonly':[('state','!=','draft')]  }" />
                 <field name="turno" string="Turno" attrs="{'readonly':[('state','!=','draft')]  }" />
                 <field name="matricula_aberta" string="Matrícula aberta" readonly="1" />
 

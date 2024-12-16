@@ -19,7 +19,7 @@ class GeracadCursoFinanceiroParcelas(models.Model):
     _order = "id desc"
 
     
-    _inherit = ['portal.mixin','mail.thread']
+    _inherit = ['portal.mixin','mail.thread',"date.range.search.mixin"]
     
 
 
@@ -39,6 +39,13 @@ class GeracadCursoFinanceiroParcelas(models.Model):
     type_curso =   fields.Many2one(
         string="Tipo do Curso",
         related="curso_matricula_id.curso_id.type_curso",
+        readonly=True,
+        store=True,
+
+    )
+    modalidade =   fields.Selection(
+        string="Modalidade",
+        related="curso_matricula_id.curso_id.modalidade",
         readonly=True,
         store=True,
 
@@ -84,18 +91,24 @@ class GeracadCursoFinanceiroParcelas(models.Model):
         'res.currency', related='company_id.currency_id',
         string="Company Currency", readonly=True)
 
-    curso_nome = fields.Char(
-        related = 'curso_matricula_id.curso_nome',
-        string='Curso',
-        readonly=True,
-        store=True
-        )
-    curso_turma_codigo = fields.Char(
-        related = 'curso_matricula_id.curso_turma_codigo',
+    curso_turma_id = fields.Many2one(
+        related = 'curso_matricula_id.curso_turma_id',
         string='Curso Turma',
         readonly=True,
         store=True
         )
+    curso_nome = fields.Char(
+        related = 'curso_matricula_id.curso_nome',
+        string='Curso Nome',
+        readonly=True,
+        store=True
+        )
+    # curso_turma_codigo = fields.Char(
+    #     related = 'curso_matricula_id.curso_turma_codigo',
+    #     string='Curso Turma',
+    #     readonly=True,
+    #     store=True
+    #     )
 
     unidade_curso_turma_id = fields.Many2one(
         related = 'curso_matricula_id.curso_turma_id.company_id',

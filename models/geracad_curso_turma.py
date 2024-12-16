@@ -30,6 +30,12 @@ class GeracadCursoTurma(models.Model):
         required=True
 
         )
+    modalidade = fields.Selection(
+    related='curso_id.modalidade',
+    readonly=True,
+    store=True
+    
+        )
 
     curso_grade_version = fields.Many2one(
         string='Versão Grade',

@@ -38,6 +38,12 @@ class GeracadCurso(models.Model):
         required=True
         
     )
+    modalidade = fields.Selection(
+        string='Modalidade',
+        selection=[('presencial', 'Presencial'), ('a_distancia', 'A Distância')],
+        default = 'presencial',
+    )
+
     quantidade_de_periodos = fields.Integer(string="Quantidade de Períodos", tracking=True,)
     grade_version_ids = fields.One2many('geracad.curso.grade.versao', 'curso_id')
     grade_id = fields.One2many(

@@ -29,6 +29,7 @@
         'web_calendar_color_field',
         'web_view_calendar_list',
         'web_widget_open_tab',
+        'date_range',
         ],
 
     # always loaded
