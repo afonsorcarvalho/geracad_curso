@@ -953,17 +953,18 @@ class GeracadCursoMatricula(models.Model):
 
         if self.state in ['formado']:
             raise ValidationError(_('Aluno formado não pode ser gerado histórico final.'))
-        _logger.info("Gerando Histórico final")
         if not self.curso_grade_version:
             raise ValidationError('Por favor, insiria a Versão da Grade na matrícula')
+        _logger.info("Gerando Histórico final")
         self._atualiza_periodo_CH_turma_disciplina_com_grade()
         self._atualiza_periodo_de_nota_com_turma_disciplina()
-        _logger.info("PROCURANDO TURMAS DISCIPLINAS SEM PERIODO")
+        self.verifica_disciplinas_nomes_duplicados()
         
         dummy, act_id = self.env["ir.model.data"].sudo().get_object_reference(
             "geracad_curso", "action_geracad_curso_gerar_historico_final"
         )
         disciplinas_faltantes_ids= self._get_disciplinas_analise_ids()
+        
         disciplinas_faltantes_values = []
         disciplinas_cursadas_values = []
         for disciplina in disciplinas_faltantes_ids['disciplinas_faltantes']:
@@ -981,7 +982,23 @@ class GeracadCursoMatricula(models.Model):
           
         }
         return vals
-
+    def verifica_disciplinas_nomes_duplicados(self):
+        
+        notas_disciplinas = self.env["geracad.curso.nota.disciplina"].search(
+                [('curso_matricula_id', '=', self.id),('situation','in',['AM','AP','EA'])],
+                offset=0, limit=None, order=None)
+       
+        notas_disciplinas_nomes = notas_disciplinas.mapped(lambda r: r.disciplina_id.name)
+        _logger.debug(f'notas_disciplinas:{notas_disciplinas_nomes}')
+        
+        
+        # # Procura por nomes duplicados na lista
+        from collections import Counter
+        duplicados = [nome for nome, count in Counter(notas_disciplinas_nomes).items() if count > 1]
+        _logger.debug(f'Duplicados:{duplicados}')
+        if duplicados:
+             raise ValidationError(_('Existem disciplinas com nomes duplicados com Aprovação: %s. Cancele-as, e gere novamente') % ', '.join(duplicados))
+        
     def action_go_matriculas_disciplinas(self):
 
         _logger.info("action open matriculas disciplinas")
