@@ -270,6 +270,21 @@
     <field name="help">Pendência Financeira Por Turma</field>
 </record>
 
+<!-- Relatório de Horário Semanal -->
+<record id="action_horario_semanal_turma_report" model="ir.actions.report">
+    <field name="name">Horário Semanal</field>
+    <field name="model">geracad.curso.turma</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">geracad_curso.view_horario_semanal_template</field>
+    <field name="report_file">geracad_curso.view_horario_semanal_template</field>
+    <field name="attachment_use" eval="False"/>
+    <field name="print_report_name">'Horário Semanal - %s' % (object.name)</field>
+    <field name="binding_model_id" ref="model_geracad_curso_turma"/>
+     <field name="paperformat_id" ref="paperformat_diario"/>
+    <field name="help">Horário Semanal de Aulas da Turma</field>
+
+</record>
+
  
  </odoo>
  

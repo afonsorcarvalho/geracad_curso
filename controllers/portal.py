@@ -23,7 +23,9 @@ class MatriculasPortal(CustomerPortal):
         if 'matriculas_count' in counters:
             values['matriculas_count'] = matriculas.search_count([('aluno_id', '=', partner.id)]) 
         if 'parcelas_count' in counters:
-            values['parcelas_count'] = parcelas.sudo().search_count([('aluno_id', '=', partner.id)]) 
+            values['parcelas_count'] = parcelas.sudo().search_count([('aluno_id', '=', partner.id)])
+        if 'horarios_count' in counters:
+            values['horarios_count'] = matriculas.search_count([('aluno_id', '=', partner.id)])
             
             print('matriculas_count')
             print(values)
@@ -134,6 +136,52 @@ class MatriculasPortal(CustomerPortal):
         
         return request.render("geracad_curso.portal_my_matriculas", values)
 
+    @http.route(['/my/horarios', '/my/horarios/page/<int:page>'], type='http', auth="user", website=True)
+    def portal_my_horarios(self, page=1, date_begin=None, date_end=None, sortby=None, **kw):
+        """
+        Lista todas as matrículas do aluno para acesso aos horários das turmas
+        """
+        values = self._prepare_portal_layout_values()
+        partner = request.env.user.partner_id
+        GeracadCursoMatricula = request.env['geracad.curso.matricula']
+
+        domain = [
+            ('aluno_id', '=', partner.id)
+        ]
+
+        searchbar_sortings = {
+            'date': {'label': _('Data Matricula'), 'order': 'data_matricula desc'},
+            'name': {'label': _('Referência'), 'order': 'name'},
+            'stage': {'label': _('Status'), 'order': 'state'},
+        }
+        # default sortby order
+        if not sortby:
+            sortby = 'date'
+        sort_matricula = searchbar_sortings[sortby]['order']
+
+        # count for pager
+        matricula_count = GeracadCursoMatricula.search_count(domain)
+        
+        # make pager
+        pager = portal_pager(
+            url="/my/horarios",
+            url_args={'date_begin': date_begin, 'date_end': date_end, 'sortby': sortby},
+            total=matricula_count,
+            page=page,
+            step=self._items_per_page
+        )
+        matriculas = GeracadCursoMatricula.search(domain, order=sort_matricula, limit=self._items_per_page, offset=pager['offset'])
+        values.update({
+            'date': date_begin,
+            'matriculas': matriculas.sudo(),
+            'page_name': 'horarios',
+            'pager': pager,
+            'default_url': '/my/horarios',
+            'searchbar_sortings': searchbar_sortings,
+            'sortby': sortby,
+        })
+        
+        return request.render("geracad_curso.portal_my_horarios", values)
 
     @http.route(['/my/matriculas/<int:matricula_id>'], type='http', auth="public", website=True)
     def portal_matricula_detail(self, matricula_id, report_type=None, access_token=None, message=False, download=False, **kw):
@@ -252,4 +300,131 @@ class MatriculasPortal(CustomerPortal):
      
         return request.render('geracad_curso.matricula_portal_template', values)
 
+    # ------------------------------------------------------------
+    # Horário da Matrícula
+    # ------------------------------------------------------------
+    
+    @http.route(['/my/horario/<int:matricula_id>'], type='http', auth="user", website=True)
+    def portal_matricula_horario(self, matricula_id, **kw):
+        """
+        Exibe o horário semanal de aulas da turma em que o aluno está matriculado
+        """
+        partner = request.env.user.partner_id
+        
+        # Busca a matrícula do aluno
+        matricula = request.env['geracad.curso.matricula'].sudo().search([
+            ('id', '=', matricula_id),
+            ('aluno_id', '=', partner.id)
+        ], limit=1)
+        
+        if not matricula:
+            return request.redirect('/my')
+        
+        # Busca a turma da matrícula
+        turma = matricula.curso_turma_id
+        
+        if not turma:
+            return request.redirect('/my/matriculas')
+        
+        # Busca o horário mais recente da turma
+        # É possível usar sudo nesses métodos de controller, mas geralmente não é recomendado por questões de segurança, pois pode dar acesso a registros que o usuário normalmente não poderia acessar.
+        # O uso de sudo faz a busca ignorando as regras de acesso e permissões do usuário logado, usando os privilégios do superusuário.
+        # Se você quiser garantir que o usuário só veja o que tem permissão, use apenas `request.env` (sem sudo):
+
+        horario = request.env['geracad.curso.turma.horario'].sudo().search([
+            ('curso_turma_id', '=', turma.id)
+        ], order='id desc', limit=1)
+        
+        # Agrupa os horários por dia da semana
+        dias_semana = {
+            '0': {'nome': 'Segunda-feira', 'horarios': []},
+            '1': {'nome': 'Terça-feira', 'horarios': []},
+            '2': {'nome': 'Quarta-feira', 'horarios': []},
+            '3': {'nome': 'Quinta-feira', 'horarios': []},
+            '4': {'nome': 'Sexta-feira', 'horarios': []},
+            '5': {'nome': 'Sábado', 'horarios': []},
+            '6': {'nome': 'Domingo', 'horarios': []},
+        }
+        
+        if horario and horario.todos_horarios_ids:
+            for linha in horario.todos_horarios_ids.sorted(lambda l: l.hora_inicio):
+                dias_semana[linha.dia_semana]['horarios'].append(linha)
+        
+        values = {
+            'page_name': 'horario',
+            'matricula': matricula,
+            'turma': turma,
+            'horario': horario,
+            'dias_semana': dias_semana,
+        }
+        
+        return request.render('geracad_curso.portal_matricula_horario_template', values)
+    
+    @http.route(['/my/horarios/turma/<int:turma_id>'], type='http',auth="user", website=True)
+    def portal_horarios_turma_publico(self, turma_id, report_type=None, access_token=None, download=False, **kwargs):
+        """
+        Rota pública para visualizar horários de uma turma
+        Acessível por qualquer usuário (público ou logado)
+        Suporta download de PDF igual ao histórico do aluno
+        """
+        try:
+            # Busca a turma com sudo para acesso público
+            turma_sudo = request.env['geracad.curso.turma'].sudo().browse(turma_id)
+            
+            if not turma_sudo.exists():
+                return request.render('website.404')
+            
+            # Se solicitar relatório (PDF, HTML, etc)
+            if report_type in ('html', 'pdf', 'text'):
+                return self._show_report(
+                    model=turma_sudo, 
+                    report_type=report_type, 
+                    report_ref='geracad_curso.action_horario_semanal_turma_report', 
+                    download=download
+                )
+            
+            # Busca o horário mais recente da turma
+            horario = request.env['geracad.curso.turma.horario'].sudo().search([
+                ('curso_turma_id', '=', turma_id)
+            ], order='id desc', limit=1)
+            
+            # Mapeia os dias da semana
+            dias_semana = {
+                '0': 'Segunda-feira',
+                '1': 'Terça-feira',
+                '2': 'Quarta-feira',
+                '3': 'Quinta-feira',
+                '4': 'Sexta-feira',
+                '5': 'Sábado',
+                '6': 'Domingo'
+            }
+            
+            # Organiza os horários por dia e horário
+            horarios_organizados = {}
+            if horario and horario.todos_horarios_ids:
+                for linha in horario.todos_horarios_ids:
+                    dia = linha.dia_semana
+                    if dia not in horarios_organizados:
+                        horarios_organizados[dia] = []
+                    horarios_organizados[dia].append(linha)
+                
+                # Ordena por hora de início em cada dia
+                for dia in horarios_organizados:
+                    horarios_organizados[dia] = sorted(
+                        horarios_organizados[dia], 
+                        key=lambda x: x.hora_inicio
+                    )
+            
+            values = {
+                'page_name': 'horarios',
+                'turma': turma_sudo,
+                'horario': horario,
+                'horarios_organizados': horarios_organizados,
+                'dias_semana': dias_semana,
+            }
+            
+            return request.render('geracad_curso.portal_horarios_turma_publico_template', values)
+            
+        except Exception as e:
+            return request.render('website.404')
     

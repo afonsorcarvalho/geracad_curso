@@ -323,6 +323,16 @@
           <sheet>
 
             <div class="oe_button_box" name="button_box">
+              <button name="action_go_horarios_turma" type="object" class="oe_stat_button" icon="fa-clock-o">
+                <div class="o_field_widget o_stat_info">
+
+                  <span class="o_state_value">
+                    <field name="count_horarios" nolabel="1" />
+                    <span class="o_stat_text"> Horários</span>
+                  </span>
+
+                </div>
+              </button>
               <button name="action_go_matriculas" type="object" class="oe_stat_button" icon="fa-files-o">
                 <div class="o_field_widget o_stat_info">
 
@@ -346,7 +356,7 @@
             <group>
 
               <group>
-
+                <field name="id" invisible="1" />
                 <field name="curso_id" string="Curso" attrs="{'readonly':[('state','!=','draft')]  }" options="{'no_create': True}" />
                 <field name="curso_grade_version"  domain = "curso_grade_version_domain" attrs="{'readonly':[('state','!=','draft')]  }" options="{'no_create': True}" />
                 <field name="curso_grade_version_domain" invisible="1"/>
@@ -365,6 +375,10 @@
                 <field name="company_id" groups="base.group_multi_company" attrs="{'readonly':[('state','!=','draft')]  }" options="{'no_create': True}" />
               </group>
             </group>
+            
+         
+            
+            
           </sheet>
 
           <div class="oe_chatter">

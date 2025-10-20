@@ -122,6 +122,8 @@ class GeracadCurso(models.Model):
         dummy, act_id = self.env["ir.model.data"].sudo().get_object_reference(
             "geracad_curso", "action_open_wizard_print_grade"
         )
+    
+    
 
    
 class GeracadCursoType(models.Model):

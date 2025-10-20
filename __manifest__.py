@@ -38,11 +38,13 @@
         'security/ir.model.access.csv',
         'data/sequence.xml',
         'data/mail_template.xml',
+     
         'views/geracad_curso_contrato_view.xml',
         'views/geracad_curso_grade_view.xml',
         'views/geracad_curso_disciplina_view.xml',
         'views/geracad_curso_equivalencia_disciplina_view.xml',
         'views/geracad_curso_turma_disciplina_view.xml',
+        'views/geracad_curso_turma_horario_view.xml',
         'views/geracad_curso_turma_disciplina_aulas_view.xml',
         'views/geracad_curso_matricula_disciplina_view.xml',
         'views/geracad_curso_matricula_view.xml',
@@ -74,6 +76,8 @@
         'reports/report_pendencias_financeira_turma_template.xml',
         'reports/report_ata_resultados_template.xml',
         'reports/report_mapa_pagamento_turma_template.xml',
+        'wizard/copiar_horario_wizard.xml',
+        'reports/report_horario_semanal_template.xml',
         'reports/report_actions.xml',
         'wizard/pagamento_parcela.xml',
         'wizard/finalizar_aula.xml',
@@ -83,9 +87,14 @@
         'wizard/curso_ata_resultados_wizard.xml',
         'wizard/curso_mapa_pagamento_wizard.xml',
         'wizard/wizard_notas_dialog.xml',
+        
     ],
     # only loaded in demonstration mode
     'demo': [
         'demo/demo.xml',
+    ],
+    
+    'qweb': [
+       
     ],
 }

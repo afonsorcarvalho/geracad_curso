@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="view_horario_semanal_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        
+                        <!-- Cabeçalho -->
+                        <div class="row mt-4 mb-3">
+                            <div class="col-12">
+                                <h2 style="text-align: center;">
+                                    Horário Semanal de Aulas
+                                </h2>
+                                <h4 style="text-align: center; ">
+                                    <t t-esc="o.curso_id.name"/> - <t t-esc="o.name"/>
+                                </h4>
+                            </div>
+                        </div>
+
+                        <!-- Busca o horário mais novo primeiro -->
+                        <t t-set="horario_mais_novo" t-value="o.horarios_ids.sorted(key=lambda h: h.id, reverse=True)[:1]"/>
+                        
+                        <!-- Informações da Turma -->
+                        <div class="row mb-3">
+                            <!-- <div class="col-6">
+                                <strong>Curso:</strong> <t t-esc="o.curso_id.name"/><br/>
+                                <strong>Turma:</strong> <t t-esc="o.name"/><br/>
+                                <strong>Turno:</strong> <t t-esc="o.turno"/>
+                            </div> -->
+                            <div class="col-6">
+                                <!-- <strong>Data Abertura:</strong> <t t-esc="o.data_abertura" t-options="{'widget': 'date'}"/><br/> -->
+                                <!-- <strong>Modalidade:</strong> <t t-esc="o.modalidade"/><br/> -->
+                                <strong>Unidade:</strong> <t t-esc="o.company_id.name"/>
+                                <t t-if="horario_mais_novo">
+                                    <br/><strong>Horário:</strong> <t t-esc="horario_mais_novo.name"/> 
+                                    <!-- <span style="">
+                                        (Status: <t t-if="horario_mais_novo.active">Ativo</t><t t-if="not horario_mais_novo.active">Inativo</t>)
+                                    </span> -->
+                                </t>
+                            </div>
+                        </div>
+
+                        <t t-if="horario_mais_novo and horario_mais_novo.todos_horarios_ids">
+                            <!-- Grid de Horários -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <table class="table table-sm" style="margin-top: 20px; table-layout: fixed; width: 100%;">
+                                        <thead >
+                                            <tr style="background-color:rgb(206, 223, 238);">
+                                                <th style="width: 80px; text-align: center; vertical-align: middle;">Horário</th>
+                                                <th style="width: calc((100% - 80px) / 7); text-align: center; vertical-align: middle;">Segunda</th>
+                                                <th style="width: calc((100% - 80px) / 7); text-align: center; vertical-align: middle;">Terça</th>
+                                                <th style="width: calc((100% - 80px) / 7); text-align: center; vertical-align: middle;">Quarta</th>
+                                                <th style="width: calc((100% - 80px) / 7); text-align: center; vertical-align: middle;">Quinta</th>
+                                                <th style="width: calc((100% - 80px) / 7); text-align: center; vertical-align: middle;">Sexta</th>
+                                                <th style="width: calc((100% - 80px) / 7); text-align: center; vertical-align: middle;">Sábado</th>
+                                                <th style="width: calc((100% - 80px) / 7); text-align: center; vertical-align: middle;">Domingo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Agrupa horários únicos usando todos_horarios_ids -->
+                                            <t t-set="horarios_unicos" t-value="sorted(set(horario_mais_novo.todos_horarios_ids.mapped('hora_inicio')))"/>
+                                            
+                                            <t t-foreach="horarios_unicos" t-as="hora">
+                                                <tr>
+                                                    <!-- Coluna de Horário -->
+                                                    <td style="text-align: center; vertical-align: middle;">
+                                                        <t t-esc="'%02d:%02d' % (int(hora), int((hora % 1) * 60))"/>
+                                                    </td>
+                                                    
+                                                    <!-- Colunas dos Dias da Semana (0=Segunda ... 6=Domingo) -->
+                                                    <t t-foreach="range(7)" t-as="dia">
+                                                        <t t-set="disciplina_horario" t-value="horario_mais_novo.todos_horarios_ids.filtered(lambda l: l.hora_inicio == hora and l.dia_semana == str(dia))[:1]"/>
+                                                        <td style="padding: 8px; vertical-align: middle; text-align: left;">
+                                                            <t t-if="disciplina_horario">
+                                                                <div style="padding: 5px; border-radius: 3px; border-left: 3px solid">
+                                                                    <div style="font-weight: bold;margin-bottom: 3px;">
+                                                                        <t t-esc="disciplina_horario.disciplina_id.name"/>
+                                                                    </div>
+                                                                    <div style="font-size: 16px;">
+                                                                        <i class="fa fa-clock-o"/> <t t-esc="'%02d:%02d' % (int(disciplina_horario.hora_inicio), int((disciplina_horario.hora_inicio % 1) * 60))"/> - 
+                                                                        <t t-esc="'%02d:%02d' % (int(disciplina_horario.hora_termino), int((disciplina_horario.hora_termino % 1) * 60))"/>
+                                                                        - Sala: <t t-esc="disciplina_horario.sala_id.name"/>
+                                                                    </div>
+                                                                    <t t-if="disciplina_horario.professor_id">
+                                                                        <div style="font-size: 16px; margin-top: 2px;">
+                                                                            <i class="fa fa-user"/> <t t-esc="disciplina_horario.professor_id.name"/>
+                                                                        </div>
+                                                                    </t>
+                                                                    
+                                                                </div>
+                                                            </t>
+                                                            <t t-if="not disciplina_horario">
+                                                                <span > - </span>
+                                                            </t>
+                                                        </td>
+                                                    </t>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Legenda de Disciplinas com Professores e Salas -->
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <h5>Disciplinas e Professores:</h5>
+                                    <t t-set="disciplinas_agrupadas" t-value="{}"/>
+                                    <t t-foreach="horario_mais_novo.todos_horarios_ids" t-as="linha">
+                                        <t t-set="key" t-value="linha.disciplina_id.id"/>
+                                        <t t-if="key not in disciplinas_agrupadas">
+                                            <t t-set="disciplinas_agrupadas" t-value="disciplinas_agrupadas.update({key: linha}) or disciplinas_agrupadas"/>
+                                        </t>
+                                    </t>
+                                    
+                                    <table class="table table-sm" style="font-size: 14px;">
+                                        <thead >
+                                            <tr>
+                                                <th>Disciplina</th>
+                                                <th>Professor</th>
+                                                <th>Sala</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-set="disciplinas_unicas" t-value="horario_mais_novo.todos_horarios_ids.mapped('disciplina_id').sorted(lambda d: d.name)"/>
+                                            <t t-foreach="disciplinas_unicas" t-as="disciplina">
+                                                <t t-set="exemplo" t-value="horario_mais_novo.todos_horarios_ids.filtered(lambda l: l.disciplina_id == disciplina)[:1]"/>
+                                                <tr>
+                                                    <td><strong><t t-esc="disciplina.name"/></strong></td>
+                                                    <td><t t-esc="exemplo.professor_id.name if exemplo.professor_id else '-'"/></td>
+                                                    <td><t t-esc="exemplo.sala_id.name if exemplo.sala_id else '-'"/></td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Observações -->
+                            <t t-if="horario_mais_novo.observacoes">
+                                <div class="row mt-3">
+                                    <div class="col-12">
+                                        <h5 >Observações:</h5>
+                                        <p><t t-esc="horario_mais_novo.observacoes"/></p>
+                                    </div>
+                                </div>
+                            </t>
+                        </t>
+                        
+                        <!-- Mensagem caso não haja horário -->
+                        <t t-if="not horario_mais_novo or not horario_mais_novo.todos_horarios_ids">
+                            <div class="row mt-4">
+                                <div class="col-12 text-center">
+                                    <p style="font-style: italic; font-size: 16px;">
+                                        Nenhum horário cadastrado para esta turma.
+                                    </p>
+                                </div>
+                            </div>
+                        </t>
+
+                        <!-- Rodapé -->
+                        <div class="row mt-5">
+                            <div class="col-12" style="border-top: 1px solid; padding-top: 10px; text-align: center;  font-size: 12px;">
+                                <p>
+                                    Documento gerado em 
+                                    <t t-set="br_now" t-value="datetime.datetime.now() - datetime.timedelta(hours=3)"/>
+                                    <t t-esc="context_timestamp(br_now).strftime('%d/%m/%Y às %H:%M')"/>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="oe_structure"/>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

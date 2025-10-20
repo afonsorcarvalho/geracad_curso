@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Form view do wizard -->
+        <record id="copiar_horario_wizard_form" model="ir.ui.view">
+            <field name="name">copiar.horario.wizard.form</field>
+            <field name="model">copiar.horario.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Copiar Horários de Disciplinas">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <i class="fa fa-copy"/> Copiar Horários de Disciplinas
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="horario_destino_id" readonly="1"/>
+                                <field name="curso_turma_id" readonly="1"/>
+                                
+                            </group>
+                            <group>
+                                <field name="horario_origem_id"                                     
+                                       options="{'no_create': True, 'no_create_edit': True}"/>
+                                <field name="quantidade_linhas" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <notebook>
+                            <page string="Opções de Cópia" name="opcoes">
+                                <!-- Aviso de Substituição -->
+                                <group>
+                                    <div style="padding: 15px; background-color: #fff3cd; border-left: 4px solid #ffc107; border-radius: 4px; margin-bottom: 15px;">
+                                        <p style="margin: 0; font-size: 14px; color: #856404;">
+                                            <i class="fa fa-exclamation-triangle" style="color: #ffc107; font-size: 18px;"/> 
+                                            <strong>ATENÇÃO: Substituição Total</strong>
+                                        </p>
+                                        <p style="margin: 10px 0 0 0; font-size: 13px; color: #856404;">
+                                            Todos os horários existentes no destino serão <strong>permanentemente removidos</strong> 
+                                            e substituídos pelos horários da origem selecionada.
+                                        </p>
+                                    </div>
+                                </group>
+                                
+                               
+                                
+                                <group string="Informações">
+                                    <div style="padding: 10px; background-color: #f8f9fa; border-left: 3px solid #5bc0de; border-radius: 3px;">
+                                        <p style="margin: 0; font-size: 13px;">
+                                            <i class="fa fa-info-circle" style="color: #5bc0de;"/> 
+                                            <strong>Como funciona:</strong>
+                                        </p>
+                                        <ul style="margin: 5px 0 0 20px; font-size: 12px;">
+                                            <li>Selecione o horário de origem que deseja copiar</li>
+                                            <li>Todos os horários atuais serão removidos e substituídos</li>
+                                            <li>Marque se deseja copiar também professores e/ou salas</li>
+                                            <li>Visualize a prévia dos horários que serão copiados</li>
+                                            <li>Clique em "Copiar Horários" para confirmar a substituição</li>
+                                        </ul>
+                                    </div>
+                                </group>
+                            </page>
+                            
+                            <page string="Prévia dos Horários" name="preview">
+                                <group>
+                                    <field name="preview_linhas" nolabel="1" 
+                                           attrs="{'invisible': [('quantidade_linhas', '=', 0)]}"/>
+                                    <div attrs="{'invisible': [('quantidade_linhas', '>', 0)]}"
+                                         style="text-align: center; padding: 40px; color: #999;">
+                                        <p style="font-size: 16px;">
+                                            <i class="fa fa-info-circle" style="font-size: 48px; display: block; margin-bottom: 20px;"/>
+                                            Selecione um horário de origem para ver a prévia
+                                        </p>
+                                    </div>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    
+                    <footer>
+                        <button name="action_copiar_horarios" 
+                                string="Copiar Horários" 
+                                type="object" 
+                                class="btn-primary"
+                                attrs="{'invisible': [('quantidade_linhas', '=', 0)]}"/>
+                        <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action do wizard -->
+        <record id="action_copiar_horario_wizard" model="ir.actions.act_window">
+            <field name="name">Copiar Horários</field>
+            <field name="res_model">copiar.horario.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="copiar_horario_wizard_form"/>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>
+

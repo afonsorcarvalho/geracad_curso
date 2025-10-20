@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    
+    <!-- Lista de horários das turmas -->
+    <record model="ir.ui.view" id="geracad_curso_turma_horario_list">
+      <field name="name">geracad.curso.turma.horario.list</field>
+      <field name="model">geracad.curso.turma.horario</field>
+      <field name="arch" type="xml">
+        <tree string="Horários das Disciplinas" default_order="name">
+          <field name="name" string="Código" />
+          <field name="curso_turma_id" string="Turma do Curso" />
+          <field name="curso_id" string="Curso" />
+          <field name="active" string="Ativo" widget="boolean_toggle" />
+          <field name="observacoes" optional="hide" />
+          <field name="company_id" groups="base.group_multi_company" optional="hide" />
+        </tree>
+      </field>
+    </record>
+
+    <!-- Formulário de horários das turmas -->
+    <record model="ir.ui.view" id="geracad_curso_turma_horario_form">
+      <field name="name">geracad.curso.turma.horario.form</field>
+      <field name="model">geracad.curso.turma.horario</field>
+      <field name="arch" type="xml">
+        <form string="Horários das Disciplinas">
+          <header>
+            <button name="%(geracad_curso.action_copiar_horario_wizard)d" 
+                    string="Copiar Horários" 
+                    type="action" 
+                    class="btn-primary"
+                    icon="fa-copy"
+                    help="Copiar horários de disciplinas de outro horário existente"/>
+          </header>
+          
+          <sheet>
+            <div class="oe_button_box" name="button_box">
+              <button name="toggle_active" type="object" 
+                      class="oe_stat_button" icon="fa-archive" 
+                      attrs="{'invisible': [('active', '=', True)]}">
+                <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+              </button>
+            </div>
+            
+            <widget name="web_ribbon" title="Inativo" bg_color="bg-danger" 
+                    attrs="{'invisible': [('active', '=', True)]}" />
+            
+            <div class="oe_title">
+              <h1>
+                <field name="name" readonly="1" />
+              </h1>
+            </div>
+            
+            <group>
+              <group>
+                <field name="curso_turma_id" string="Turma do Curso" readonly="1"/>
+                <field name="curso_id" string="Curso" readonly="1" />
+                <!-- <field name="active" string="Ativo" /> -->
+              </group>
+              
+              <group>
+                <field name="observacoes" string="Observações" />
+                <field name="company_id" groups="base.group_multi_company" />
+              </group>
+            </group>
+            
+            <!-- Campo One2many para as linhas de horários -->
+            <notebook>
+              <page string="Segunda-feira" name="segunda_horarios_linhas">
+                <group>
+                  <field name="segunda_horarios_ids" nolabel="1" context="{'default_dia_semana': '0'}" options="{'no_open': True}">
+                    <tree string="Horários - Segunda" default_order="hora_inicio" editable="bottom">
+                      <field name="hora_inicio" string="Início" widget="float_time"/>
+                      <field name="hora_termino" string="Término" widget="float_time"/>
+                      <field name="dia_semana" string="Dia da Semana" invisible="1"/>
+                      <field name="disciplina_id" string="Disciplina" options="{'no_create': True, 'no_create_edit': True}"/>
+                      <field name="sala_id" string="Sala" options="{'no_create': True, 'no_create_edit': True}"/>
+                      <field name="professor_id" string="Professor" options="{'no_create': True, 'no_create_edit': True}"/>
+                    </tree>
+                  </field>
+                </group>
+              </page>
+              <page string="Terça-feira" name="terca_horarios_linhas">
+                <group>
+                  <field name="terca_horarios_ids" nolabel="1" context="{'default_dia_semana': '1'}" options="{'no_open': True}">
+                    <tree string="Horários - Terça" default_order="hora_inicio" editable="bottom">
+                      <field name="hora_inicio" string="Início" widget="float_time"/>
+                      <field name="hora_termino" string="Término" widget="float_time"/>
+                      <field name="dia_semana" string="Dia da Semana" invisible="1"/>
+                      <field name="disciplina_id" string="Disciplina" options="{'no_create': True, 'no_create_edit': True}"/>
+                      <field name="sala_id" string="Sala" options="{'no_create': True, 'no_create_edit': True}"/>
+                      <field name="professor_id" string="Professor" options="{'no_create': True, 'no_create_edit': True}"/>
+                      
+                    </tree>
+                  </field>
+                </group>
+              </page>
+              <page string="Quarta-feira" name="quarta_horarios_linhas">
+                <group>
+                  <field name="quarta_horarios_ids" nolabel="1" context="{'default_dia_semana': '2'}" options="{'no_open': True}">
+                    <tree string="Horários - Quarta" default_order="hora_inicio" editable="bottom">
+                      <field name="hora_inicio" string="Início" widget="float_time"/>
+                      <field name="hora_termino" string="Término" widget="float_time"/>
+                      <field name="dia_semana" string="Dia da Semana" invisible="1"/>
+                      <field name="disciplina_id" string="Disciplina" options="{'no_create': True, 'no_create_edit': True}"/>
+                      <field name="sala_id" string="Sala" options="{'no_create': True, 'no_create_edit': True}"/>
+                      <field name="professor_id" string="Professor" options="{'no_create': True, 'no_create_edit': True}"/>
+                      
+                    </tree>
+                  </field>
+                </group>
+              </page>
+              <page string="Quinta-feira" name="quinta_horarios_linhas">
+                <group>
+                  <field name="quinta_horarios_ids" nolabel="1" context="{'default_dia_semana': '3'}" options="{'no_open': True}">
+                    <tree string="Horários - Quinta" default_order="hora_inicio" editable="bottom">
+                      <field name="hora_inicio" string="Início" widget="float_time"/>
+                      <field name="hora_termino" string="Término" widget="float_time"/>
+                      <field name="dia_semana" string="Dia da Semana" invisible="1"/>
+                       <field name="disciplina_id" string="Disciplina" options="{'no_create': True, 'no_create_edit': True}"/>
+                      <field name="sala_id" string="Sala" options="{'no_create': True, 'no_create_edit': True}"/>
+                      <field name="professor_id" string="Professor" options="{'no_create': True, 'no_create_edit': True}"/>
+                
+                    </tree>
+                  </field>
+                </group>
+              </page>
+              <page string="Sexta-feira" name="sexta_horarios_linhas">
+                <group>
+                  <field name="sexta_horarios_ids" nolabel="1" context="{'default_dia_semana': '4'}" options="{'no_open': True}">
+                    <tree string="Horários - Sexta" default_order="hora_inicio" editable="bottom">
+                      <field name="hora_inicio" string="Início" widget="float_time"/>
+                      <field name="hora_termino" string="Término" widget="float_time"/>
+                      <field name="dia_semana" string="Dia da Semana" invisible="1"/>
+                      <field name="disciplina_id" string="Disciplina" options="{'no_create': True, 'no_create_edit': True}"/>
+                      <field name="sala_id" string="Sala" options="{'no_create': True, 'no_create_edit': True}"/>
+                      <field name="professor_id" string="Professor" options="{'no_create': True, 'no_create_edit': True}"/>
+                
+                    </tree>
+                  </field>
+                </group>
+              </page>
+              <page string="Sábado" name="sabado_horarios_linhas">
+                <group>
+                  <field name="sabado_horarios_ids" nolabel="1" context="{'default_dia_semana': '5'}" options="{'no_open': True}">
+                    <tree string="Horários - Sábado" default_order="hora_inicio" editable="bottom">
+                      <field name="hora_inicio" string="Início" widget="float_time"/>
+                      <field name="hora_termino" string="Término" widget="float_time"/>
+                      <field name="dia_semana" string="Dia da Semana" invisible="1"/>
+                      <field name="disciplina_id" string="Disciplina" options="{'no_create': True, 'no_create_edit': True}"/>
+                      <field name="sala_id" string="Sala" options="{'no_create': True, 'no_create_edit': True}"/>
+                      <field name="professor_id" string="Professor" options="{'no_create': True, 'no_create_edit': True}"/>
+                  
+                    </tree>
+                  </field>
+                </group>
+              </page>
+              <page string="Domingo" name="domingo_horarios_linhas">
+                <group>
+                  <field name="domingo_horarios_ids" nolabel="1" context="{'default_dia_semana': '6'}" options="{'no_open': True}">
+                    <tree string="Horários - Domingo" default_order="hora_inicio" editable="bottom">
+                      <field name="hora_inicio" string="Início" widget="float_time"/>
+                      <field name="hora_termino" string="Término" widget="float_time"/>
+                      <field name="dia_semana" string="Dia da Semana" invisible="1"/>
+                     <field name="disciplina_id" string="Disciplina" options="{'no_create': True, 'no_create_edit': True}"/>
+                      <field name="sala_id" string="Sala" options="{'no_create': True, 'no_create_edit': True}"/>
+                      <field name="professor_id" string="Professor" options="{'no_create': True, 'no_create_edit': True}"/>
+                    
+                    </tree>
+                  </field>
+                </group>
+              </page>
+            </notebook>
+            
+          </sheet>
+          
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers" />
+            <field name="message_ids" widget="mail_thread" />
+          </div>
+        </form>
+      </field>
+    </record>
+
+    <!-- Busca de horários das turmas -->
+    <record model="ir.ui.view" id="geracad_curso_turma_horario_search">
+      <field name="name">geracad.curso.turma.horario.search</field>
+      <field name="model">geracad.curso.turma.horario</field>
+      <field name="arch" type="xml">
+        <search string="Buscar Horários">
+          <field name="name" string="Código" />
+          <field name="curso_turma_id" string="Turma do Curso" />
+          <field name="curso_id" string="Curso" />
+          
+          <filter string="Ativos" name="active" domain="[('active', '=', True)]" />
+          <filter string="Inativos" name="inactive" domain="[('active', '=', False)]" />
+          
+          <group expand="0" string="Agrupar Por">
+            <filter string="Turma do Curso" name="group_turma" context="{'group_by': 'curso_turma_id'}" />
+            <filter string="Curso" name="group_curso" context="{'group_by': 'curso_id'}" />
+          </group>
+        </search>
+      </field>
+    </record>
+
+    <!-- View do tipo horario_semanal para exibir o cronograma semanal -->
+    <!-- <record model="ir.ui.view" id="geracad_curso_turma_horario_horario_semanal">
+      <field name="name">geracad.curso.turma.horario.horario_semanal</field>
+      <field name="model">geracad.curso.turma.horario</field>
+      <field name="type">horario_semanal</field>
+      <field name="arch" type="xml">
+        <horario_semanal string="Cronograma Semanal">
+          <field name="id" />
+          <field name="name" />
+          <field name="curso_turma_id" />
+          <field name="curso_id" />
+          <field name="horarios_ids" />
+        </horario_semanal>
+      </field>
+    </record> -->
+
+    <!-- Ação da janela para horários -->
+    <record model="ir.actions.act_window" id="geracad_curso_turma_horario_action_window">
+      <field name="name">Horários das Disciplinas</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">geracad.curso.turma.horario</field>
+      <field name="view_mode">tree,form,horario_semanal</field>
+      <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+          Crie um novo horário para as disciplinas desta turma
+        </p>
+        <p>
+          Configure os horários específicos em que cada disciplina será ministrada,
+          definindo o dia da semana e os horários de início e término.
+        </p>
+      </field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record id="action_geracad_curso_turma_horario_tree_view" model="ir.actions.act_window.view">
+      <field eval="1" name="sequence" />
+      <field name="view_mode">tree</field>
+      <field name="view_id" ref="geracad_curso_turma_horario_list" />
+      <field name="act_window_id" ref="geracad_curso_turma_horario_action_window" />
+    </record>
+
+    <!-- <record id="action_geracad_curso_turma_horario_horario_semanal_view" model="ir.actions.act_window.view">
+      <field eval="2" name="sequence" />
+      <field name="view_mode">horario_semanal</field>
+      <field name="view_id" ref="geracad_curso_turma_horario_horario_semanal" />
+      <field name="act_window_id" ref="geracad_curso_turma_horario_action_window" />
+    </record> -->
+
+    <record id="action_geracad_curso_turma_horario_form_view" model="ir.actions.act_window.view">
+      <field eval="3" name="sequence" />
+      <field name="view_mode">form</field>
+      <field name="view_id" ref="geracad_curso_turma_horario_form" />
+      <field name="act_window_id" ref="geracad_curso_turma_horario_action_window" />
+    </record>
+
+  </data>
+</odoo>

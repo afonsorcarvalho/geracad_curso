@@ -36,6 +36,14 @@
             </li>
         </xpath>
     </template>
+    <template id="portal_my_home_menu_horarios" name="Portal layout : horarios menu entries" inherit_id="portal.portal_breadcrumbs" priority="19">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+      
+            <li t-if="page_name == 'horarios'" class="breadcrumb-item active">
+                <a t-attf-href="/my/horarios?{{ keep_query() }}">Horários</a>
+            </li>
+        </xpath>
+    </template>
 
 
 <!-- 
@@ -51,7 +59,7 @@
                 <t t-set="title">Histórico</t>
             </t>
             <t t-if="not matriculas">
-                <p>There are currently no quotations for your account.</p>
+                <p>Não há matriculas cadastradas para esse usuário.</p>
             </t>
             <t t-if="matriculas" t-call="portal.portal_table">
                 <thead>
@@ -80,14 +88,78 @@
                         <td>
 
                         </td>
-                        <td class="text-center">
+                        <td class="text-right">
                             <span  class="badge badge-pill badge-success">
                                 <i class="fa fa-fw fa-check" />
                                 <span t-field="matricula.state" />
                             </span>
 
                         </td>
-                        <td class="text-right"></td>
+                        <!-- <td class="text-right">
+                            <a t-attf-href="/my/horarios/turma/#{matricula.curso_turma_id.id}" 
+                               class="btn btn-sm btn-primary" 
+                               title="Ver Horário de Aulas">
+                                <i class="fa fa-calendar"/> Horário
+                            </a>
+                        </td> -->
+                    </tr>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="portal_my_horarios" name="Meus Horários">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True" />
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Horários</t>
+            </t>
+            <t t-if="not matriculas">
+                <p>Não há horários disponíveis para suas matrículas.</p>
+            </t>
+            <t t-if="matriculas" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Matrícula #</th>
+                        <th>Curso</th>
+                        <th>Turma</th>
+                        <th class="text-right">Data Matrícula</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-right">Ações</th>
+                    </tr>
+                </thead>
+                <t t-foreach="matriculas" t-as="matricula">
+                    <tr>
+                        <td>
+                            <strong><t t-esc="matricula.name" /></strong>
+                        </td>
+                        <td>
+                            <span t-field="matricula.curso_id.name" />
+                        </td>
+                        <td>
+                            <span t-field="matricula.curso_turma_id.name" />
+                        </td>
+                        <td class="text-right">
+                            <span t-field="matricula.data_matricula" />
+                        </td>
+                        <td class="text-center">
+                            <span class="badge badge-pill badge-success">
+                                <i class="fa fa-fw fa-check" />
+                                <span t-field="matricula.state" />
+                            </span>
+                        </td>
+                        <td class="text-right">
+                            <a t-if="matricula.curso_turma_id" 
+                               t-attf-href="/my/horarios/turma/#{matricula.curso_turma_id.id}" 
+                               class="btn btn-sm btn-primary" 
+                               title="Ver Horário de Aulas">
+                                <i class="fa fa-calendar"/> Ver Horário
+                            </a>
+                            <span t-if="not matricula.curso_turma_id" class="text-muted">
+                                <small>Sem turma</small>
+                            </span>
+                        </td>
                     </tr>
                 </t>
             </t>
@@ -132,6 +204,25 @@
                                         <span t-field="matricula.aluno_id" t-options='{"widget": "contact", "fields": ["name", "phone"], "no_marker": True}'/>
                                         <a href="#discussion" class="small"><i class="fa fa-fw fa-comments"/><b>Enviar Mensagem</b></a>
                                     </div>
+                                </div>
+                            </li>
+                            
+                            <!-- Link para Horários da Turma -->
+                            <li t-if="matricula.curso_turma_id" class="list-group-item flex-grow-1">
+                                <div class="small mb-1"><strong class="text-muted">
+                                    Turma
+                                </strong></div>
+                                <div>
+                                    <i class="fa fa-graduation-cap text-muted mr-1"/>
+                                    <strong><span t-field="matricula.curso_turma_id.name"/></strong>
+                                </div>
+                                <div class="mt-2">
+                                    <a t-attf-href="/my/horarios/turma/#{matricula.curso_turma_id.id}" 
+                                       class="btn btn-sm btn-primary btn-block" 
+                                       target="_blank"
+                                       title="Ver Horário de Aulas da Turma">
+                                        <i class="fa fa-calendar"/> Ver Horário de Aulas
+                                    </a>
                                 </div>
                             </li>
                         </ul>
@@ -253,6 +344,254 @@
     </t>
 </template>
 
+<!-- 
+        HORÁRIO DA MATRÍCULA
+-->
 
+<template id="portal_matricula_horario_template" name="Horário de Aulas da Matrícula">
+    <t t-call="portal.portal_layout">
+        <t t-set="breadcrumbs_searchbar" t-value="True"/>
+        
+        <t t-call="portal.portal_searchbar">
+            <t t-set="title">Horário de Aulas</t>
+        </t>
+        
+        <div class="container mt-4">
+            <!-- Cabeçalho com informações da matrícula -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fa fa-calendar"/> Horário de Aulas - <t t-esc="turma.name"/>
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-1"><strong>Curso:</strong> <t t-esc="turma.curso_id.name"/></p>
+                            <p class="mb-1"><strong>Turma:</strong> <t t-esc="turma.name"/></p>
+                            <p class="mb-1"><strong>Matrícula:</strong> <t t-esc="matricula.name"/></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-1"><strong>Turno:</strong> <t t-esc="turma.turno"/></p>
+                            <p class="mb-1"><strong>Modalidade:</strong> <t t-esc="turma.modalidade"/></p>
+                            <t t-if="horario">
+                                <p class="mb-1"><strong>Período:</strong> <t t-esc="horario.name"/></p>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mensagem se não houver horário -->
+            <t t-if="not horario or not horario.todos_horarios_ids">
+                <div class="alert alert-info text-center">
+                    <i class="fa fa-info-circle fa-3x mb-3"/>
+                    <h4>Nenhum horário cadastrado</h4>
+                    <p>O horário de aulas desta turma ainda não está disponível.</p>
+                </div>
+            </t>
+
+            <!-- Grid de Horários por Dia da Semana -->
+            <t t-if="horario and horario.todos_horarios_ids">
+                <div class="row">
+                    <t t-foreach="dias_semana.items()" t-as="dia_item">
+                        <t t-set="dia_codigo" t-value="dia_item[0]"/>
+                        <t t-set="dia_info" t-value="dia_item[1]"/>
+                        
+                        <t t-if="dia_info['horarios']">
+                            <div class="col-lg-6 col-xl-4 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-header bg-info text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fa fa-clock-o"/> <t t-esc="dia_info['nome']"/>
+                                        </h5>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div class="list-group list-group-flush">
+                                            <t t-foreach="dia_info['horarios']" t-as="horario_linha">
+                                                <div class="list-group-item">
+                                                    <div class="d-flex w-100 justify-content-between align-items-center">
+                                                        <h6 class="mb-1">
+                                                            <span class="badge badge-primary">
+                                                                <t t-esc="'%02d:%02d' % (int(horario_linha.hora_inicio), int((horario_linha.hora_inicio % 1) * 60))"/>
+                                                                -
+                                                                <t t-esc="'%02d:%02d' % (int(horario_linha.hora_termino), int((horario_linha.hora_termino % 1) * 60))"/>
+                                                            </span>
+                                                        </h6>
+                                                    </div>
+                                                    <p class="mb-1 font-weight-bold">
+                                                        <i class="fa fa-book"/> <t t-esc="horario_linha.disciplina_id.name"/>
+                                                    </p>
+                                                    <small class="text-muted">
+                                                        <t t-if="horario_linha.professor_id">
+                                                            <i class="fa fa-user"/> <t t-esc="horario_linha.professor_id.name"/><br/>
+                                                        </t>
+                                                        <t t-if="horario_linha.sala_id">
+                                                            <i class="fa fa-map-marker"/> <t t-esc="horario_linha.sala_id.name"/>
+                                                        </t>
+                                                    </small>
+                                                </div>
+                                            </t>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </t>
+                </div>
+            </t>
+
+            <!-- Botão Voltar -->
+            <div class="text-center mt-4 mb-4">
+                <a href="/my/matriculas" class="btn btn-secondary">
+                    <i class="fa fa-arrow-left"/> Voltar para Minhas Matrículas
+                </a>
+            </div>
+        </div>
+    </t>
+</template>
+
+<!-- Template Público de Horários da Turma -->
+<template id="portal_horarios_turma_publico_template" name="Horários da Turma - Visualização Pública">
+    <t t-call="portal.portal_layout">
+        <t t-set="additional_title">Horários - <t t-esc="turma.name"/></t>
+        
+        <div class="container mt-4 mb-5">
+            <!-- Cabeçalho -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header" style="background-color: #039fec; color: white;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h3 class="mb-0">
+                                    <i class="fa fa-calendar"/> Horário de Aulas
+                                </h3>
+                                <t t-if="horario">
+                                    <a t-att-href="turma.get_portal_url(report_type='pdf', download=True)" 
+                                       class="btn btn-light btn-sm" 
+                                       target="_blank"
+                                       title="Baixar PDF">
+                                        <i class="fa fa-download"/> Baixar PDF
+                                    </a>
+                                </t>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="mb-1"><strong>Curso:</strong> <t t-esc="turma.curso_id.name"/></p>
+                                    <p class="mb-1"><strong>Turma:</strong> <t t-esc="turma.name"/></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="mb-1"><strong>Turno:</strong> <t t-esc="turma.turno"/></p>
+                                    <p class="mb-1"><strong>Modalidade:</strong> <t t-esc="turma.modalidade"/></p>
+                                </div>
+                            </div>
+                            <t t-if="horario">
+                                <p class="mb-0 mt-2">
+                                    <span class="badge badge-info">Horário: <t t-esc="horario.name"/></span>
+                                    <span t-if="horario.active" class="badge badge-success">Ativo</span>
+                                    <span t-if="not horario.active" class="badge badge-secondary">Inativo</span>
+                                </p>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Grid de Horários -->
+            <t t-if="horario and horarios_organizados">
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="mb-0"><i class="fa fa-clock-o"/> Grade de Horários</h4>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover mb-0">
+                                        <thead style="background-color: #f8f9fa;">
+                                            <tr>
+                                                <th class="text-center" style="width: 150px;">Dia da Semana</th>
+                                                <th class="text-center" style="width: 120px;">Horário</th>
+                                                <th>Disciplina</th>
+                                                <th>Professor</th>
+                                                <th>Sala</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="['0', '1', '2', '3', '4', '5', '6']" t-as="dia">
+                                                <t t-if="dia in horarios_organizados">
+                                                    <t t-foreach="horarios_organizados[dia]" t-as="linha">
+                                                        <tr>
+                                                            <t t-if="linha_index == 0">
+                                                                <td class="text-center align-middle font-weight-bold" 
+                                                                    t-att-rowspan="len(horarios_organizados[dia])"
+                                                                    style="background-color:rgb(225, 235, 240);">
+                                                                    <t t-esc="dias_semana[dia]"/>
+                                                                </td>
+                                                            </t>
+                                                            <td class="text-center">
+                                                                <t t-esc="'%02d:%02d' % (int(linha.hora_inicio), int((linha.hora_inicio % 1) * 60))"/> - 
+                                                                <t t-esc="'%02d:%02d' % (int(linha.hora_termino), int((linha.hora_termino % 1) * 60))"/>
+                                                            </td>
+                                                            <td><strong><t t-esc="linha.disciplina_id.name"/></strong></td>
+                                                            <td><t t-esc="linha.professor_id.name if linha.professor_id else '-'"/></td>
+                                                            <td><t t-esc="linha.sala_id.name if linha.sala_id else '-'"/></td>
+                                                        </tr>
+                                                    </t>
+                                                </t>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+            
+            <!-- Mensagem se não houver horários -->
+            <t t-if="not horario or not horarios_organizados">
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="alert alert-info text-center">
+                            <i class="fa fa-info-circle fa-2x mb-3" style="display: block;"/>
+                            <h5>Nenhum horário cadastrado para esta turma</h5>
+                            <p class="mb-0">Entre em contato com a secretaria para mais informações.</p>
+                        </div>
+                    </div>
+                </div>
+            </t>
+            
+            <!-- Observações -->
+            <t t-if="horario and horario.observacoes">
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="fa fa-sticky-note-o"/> Observações</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-0"><t t-esc="horario.observacoes"/></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+</template>
+
+<!-- Card "Horários" no Portal Home -->
+<template id="portal_my_home_horarios" name="Portal My Home : Horários entry" inherit_id="portal.portal_my_home" priority="50">
+    <xpath expr="//div[hasclass('o_portal_docs_geracad')]" position="inside">
+        <t t-call="portal.portal_docs_entry">
+            <t t-set="title">Horários</t>
+            <t t-set="url" t-value="'/my/horarios'"/>
+            <t t-set="placeholder_count" t-value="'horarios_count'"/>
+        </t>
+    </xpath>
+</template>
 
 </odoo>

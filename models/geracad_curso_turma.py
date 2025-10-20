@@ -15,7 +15,7 @@ class GeracadCursoTurma(models.Model):
     _order = "data_abertura DESC"
 
     
-    _inherit = ['mail.thread']
+    _inherit = ['portal.mixin', 'mail.thread']
     
 
 
@@ -113,6 +113,21 @@ class GeracadCursoTurma(models.Model):
     )
 
     matriculas_count = fields.Integer("Qtd Matriculas", compute="_compute_matriculas_count")
+
+    # Relacionamento com horários das turmas de disciplina
+    horarios_ids = fields.One2many(
+        'geracad.curso.turma.horario',
+        'curso_turma_id',
+        
+        string='Horários das Disciplinas',
+        help="Horários das disciplinas desta turma"
+    )
+    
+    count_horarios = fields.Integer(compute="_compute_count_horarios")
+    def _compute_count_horarios(self):
+        for record in self:
+            record.count_horarios = self.env['geracad.curso.turma.horario'].search([('curso_turma_id', '=', record.id)], count=True)
+          
 
     active = fields.Boolean(default = True)
 
@@ -244,6 +259,19 @@ class GeracadCursoTurma(models.Model):
             'domain': [('curso_turma_id', '=', self.id)],
         }
 
+    def action_go_horarios_turma(self):
+        _logger.info("action open horarios turma")
+        return {
+            'name': _('Horários das Disciplinas'),
+            'type': 'ir.actions.act_window',
+            'target':'current',
+            'view_mode': 'tree,form',
+            'context': {
+                'default_curso_turma_id': self.id,
+            },
+            'res_model': 'geracad.curso.turma.horario',
+            'domain': [('curso_turma_id', '=', self.id)],
+        }
     # action button pra ajeitar as turmas de curso
     #
     #
@@ -266,17 +294,18 @@ class GeracadCursoTurma(models.Model):
                         company_id = self.env['res.company'].search([('sigla', '=', unidade.sigla )], offset=0, limit=None, order=None, count=False)
                         _logger.debug(company_id.name)
                         rec.company_id = company_id.id
-
-           
-
-            
-
-        
-
-
-
-
-        
-
     
-       
+    def _get_report_base_filename(self):
+        """
+        Define o nome base do arquivo PDF
+        """
+        self.ensure_one()
+        return 'Horario_%s' % (self.name)
+    
+    def _compute_access_url(self):
+        """
+        Define a URL de acesso ao portal para a turma
+        """
+        super(GeracadCursoTurma, self)._compute_access_url()
+        for turma in self:
+            turma.access_url = '/my/horarios/turma/%s' % turma.id

@@ -36,7 +36,7 @@ class GeracadCursoGerarHistoricoFinal(models.TransientModel):
        readonly=True, string="Disciplinas Concluídas",
        domain=[('concluida','=',1)]
     )
-
+  
     def _retorna_index_nota_disciplina_maior_media(self, nota_disciplinas):
         '''
             Recebe uma lista de notas de disciplnas iguais para analise e selecao apenas da de maior media
@@ -53,7 +53,26 @@ class GeracadCursoGerarHistoricoFinal(models.TransientModel):
             index=index+1
         return [index_maior_nota,nota_disciplinas_maior_nota]
 
+    def _get_disciplinas_duplicadas(self, nota_disciplinas):
+        """
+        Recebe uma lista de objetos nota_disciplinas, retorna todas as disciplinas que estão duplicadas
+        (ou seja, existem duas ou mais notas para a mesma disciplina_id).
+        Retorna uma lista de listas, sendo cada sublista as notas duplicadas para cada disciplina_id duplicado.
+        """
+        from collections import defaultdict
 
+        # Mapeia disciplina_id para lista de notas correspondentes
+        disciplina_map = defaultdict(list)
+        for nota in nota_disciplinas:
+            disciplina_map[nota.disciplina_id.id].append(nota)
+
+        # Coleta todas as listas cuja disciplina aparece mais de uma vez
+        duplicadas = []
+        for notas in disciplina_map.values():
+            if len(notas) > 1:
+                duplicadas.append(notas)
+        return duplicadas
+    
     def _limpa_disciplinas_duplicadas(self, nota_disciplinas):
         disciplinas_ids = []
         list_nota_disciplinas = list(nota_disciplinas)
@@ -116,6 +135,9 @@ class GeracadCursoGerarHistoricoFinal(models.TransientModel):
             ('state', 'not in',['cancelada'])
             ])
         nota_disciplinas_sem_duplicidade = self._limpa_disciplinas_duplicadas(nota_disciplina_ids)
+        if len(self._get_disciplinas_duplicadas(nota_disciplina_ids)) > 0:
+            raise UserError(_('Existem disciplinas duplicadas no histórico final. Por favor, cancele uma das disciplinas duplicadas.'))
+        
         _logger.info("nota_disciplinas_sem_duplicidade")
         _logger.info(nota_disciplinas_sem_duplicidade)
         for nota_disciplina in nota_disciplina_ids:
@@ -180,4 +202,3 @@ class GeracadCursoDisciplinasFaltantesHistoricoFinal(models.TransientModel):
        
          string="Concluída"
     )
-    
