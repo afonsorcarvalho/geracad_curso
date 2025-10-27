@@ -9,6 +9,7 @@ from . import pendencias_financeira_por_turma_wizard
 from . import curso_ata_resultados_wizard
 from . import curso_mapa_pagamento_wizard
 from . import copiar_horario_wizard
+from . import wizard_print_grade
 
 
 

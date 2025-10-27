@@ -78,7 +78,6 @@
         'reports/report_mapa_pagamento_turma_template.xml',
         'wizard/copiar_horario_wizard.xml',
         'reports/report_horario_semanal_template.xml',
-        'reports/report_actions.xml',
         'wizard/pagamento_parcela.xml',
         'wizard/finalizar_aula.xml',
         'wizard/gerar_historico_final.xml',
@@ -87,6 +86,9 @@
         'wizard/curso_ata_resultados_wizard.xml',
         'wizard/curso_mapa_pagamento_wizard.xml',
         'wizard/wizard_notas_dialog.xml',
+        'wizard/wizard_print_grade.xml',
+        'reports/report_grade_curricular_template.xml',
+        'reports/report_actions.xml',
         
     ],
     # only loaded in demonstration mode

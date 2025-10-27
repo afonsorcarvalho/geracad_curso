@@ -28,6 +28,13 @@
       <field name="model">geracad.curso</field>
       <field name="arch" type="xml">
         <form string="Cursos">
+          <header>
+            <button name="action_open_wizard_print_report" 
+                    string="Imprimir Grade Curricular" 
+                    type="object" 
+                    class="oe_highlight"
+                    icon="fa-print"/>
+          </header>
           <sheet>
             <div class="oe_title">
               <h1>

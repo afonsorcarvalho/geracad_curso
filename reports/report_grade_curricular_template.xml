@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Formato de página para o relatório de grade curricular -->
+    <record id="paperformat_grade_curricular" model="report.paperformat">
+        <field name="name">Grade Curricular</field>
+        <field name="default" eval="False" />
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="dpi">90</field>
+        <field name="margin_top">25</field>
+        <field name="margin_bottom">15</field>
+        <field name="margin_left">12</field>
+        <field name="margin_right">12</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">20</field>
+    </record>
+
+    <!-- Template do relatório de grade curricular -->
+    <template id="report_grade_curricular_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-size: 11px;">
+                        <!-- Cabeçalho da Grade -->
+                        <div class="text-center mb-2">
+                            <h4 class="mb-1"><strong>GRADE CURRICULAR</strong></h4>
+                            <h5 class="mb-1" t-field="o.curso_id.name"/>
+                            <t t-if="o.curso_id.resolucao">
+                                <small>Resolução: <span t-field="o.curso_id.resolucao"/></small>
+                            </t>
+                        </div>
+
+                        <!-- Informações da Versão -->
+                        <div class="border p-2 mb-2" style="font-size: 10px;">
+                            <div class="row">
+                                <div class="col-3">
+                                    <strong>Versão:</strong> <span t-field="o.name"/>
+                                </div>
+                                <div class="col-3">
+                                    <strong>Data:</strong> <span t-field="o.data_inicio"/>
+                                </div>
+                                <div class="col-3">
+                                    <strong>Modalidade:</strong> <span t-field="o.curso_id.modalidade"/>
+                                </div>
+                                <div class="col-3">
+                                    <strong>Carga Total:</strong> <span t-field="o.carga_horaria_total"/>h
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Lista de Disciplinas por Período -->
+                        <!-- Separa períodos regulares (>0) dos estágios (=0) -->
+                        <t t-set="all_periodos" t-value="sorted(set(o.grade_ids.mapped('periodo')))"/>
+                        <t t-set="periodos_regulares" t-value="[p for p in all_periodos if p > 0]"/>
+                        <t t-set="tem_estagio" t-value="0 in all_periodos"/>
+                        
+                        <!-- Exibe períodos regulares primeiro -->
+                        <t t-foreach="periodos_regulares" t-as="periodo">
+                            <t t-set="disciplinas" t-value="o.grade_ids.filtered(lambda x: x.periodo == periodo and not x.e_excluida)"/>
+                            
+                            <t t-if="disciplinas">
+                                <div class="mb-2">
+                                    <div class="bg-primary text-white py-1 px-2 mb-0" style="font-size: 11px;">
+                                        <strong><t t-esc="'%dº PERÍODO' % periodo"/></strong>
+                                        <span class="float-right">
+                                            <t t-set="ch_periodo" t-value="sum(disciplinas.mapped('disciplina_id_carga_horaria'))"/>
+                                            CH: <t t-esc="ch_periodo"/>h
+                                        </span>
+                                    </div>
+                                    
+                                    <table class="table table-sm table-bordered mb-0" style="font-size: 10px;">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th class="text-center py-1" style="width: 12%;">CÓDIGO</th>
+                                                <th class="py-1" style="width: 55%;">DISCIPLINA</th>
+                                                <th class="text-center py-1" style="width: 15%;">CH</th>
+                                                <th class="text-center py-1" style="width: 18%;">TIPO</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="disciplinas" t-as="disc">
+                                                <tr>
+                                                    <td class="text-center py-1">
+                                                        <strong><span t-field="disc.disciplina_id.codigo"/></strong>
+                                                    </td>
+                                                    <td class="py-1">
+                                                        <span t-field="disc.disciplina_id.name"/>
+                                                    </td>
+                                                    <td class="text-center py-1">
+                                                        <span t-field="disc.disciplina_id_carga_horaria"/>h
+                                                    </td>
+                                                    <td class="text-center py-1">
+                                                        <t t-if="disc.e_obrigatoria">
+                                                            <small class="badge badge-success">OBRIG.</small>
+                                                        </t>
+                                                        <t t-else="">
+                                                            <small class="badge badge-warning">OPT.</small>
+                                                        </t>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </t>
+                        </t>
+                        
+                        <!-- Exibe estágio por último -->
+                        <t t-if="tem_estagio">
+                            <t t-set="disciplinas_estagio" t-value="o.grade_ids.filtered(lambda x: x.periodo == 0 and not x.e_excluida)"/>
+                            
+                            <t t-if="disciplinas_estagio">
+                                <div class="mb-2">
+                                    <div class="bg-info text-white py-1 px-2 mb-0" style="font-size: 11px;">
+                                        <strong>ESTÁGIO SUPERVISIONADO / ATIVIDADES COMPLEMENTARES</strong>
+                                        <span class="float-right">
+                                            <t t-set="ch_estagio" t-value="sum(disciplinas_estagio.mapped('disciplina_id_carga_horaria'))"/>
+                                            CH: <t t-esc="ch_estagio"/>h
+                                        </span>
+                                    </div>
+                                    
+                                    <table class="table table-sm table-bordered mb-0" style="font-size: 10px;">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th class="text-center py-1" style="width: 12%;">CÓDIGO</th>
+                                                <th class="py-1" style="width: 55%;">DISCIPLINA</th>
+                                                <th class="text-center py-1" style="width: 15%;">CH</th>
+                                                <th class="text-center py-1" style="width: 18%;">TIPO</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="disciplinas_estagio" t-as="disc">
+                                                <tr>
+                                                    <td class="text-center py-1">
+                                                        <strong><span t-field="disc.disciplina_id.codigo"/></strong>
+                                                    </td>
+                                                    <td class="py-1">
+                                                        <span t-field="disc.disciplina_id.name"/>
+                                                    </td>
+                                                    <td class="text-center py-1">
+                                                        <span t-field="disc.disciplina_id_carga_horaria"/>h
+                                                    </td>
+                                                    <td class="text-center py-1">
+                                                        <t t-if="disc.e_obrigatoria">
+                                                            <small class="badge badge-success">OBRIG.</small>
+                                                        </t>
+                                                        <t t-else="">
+                                                            <small class="badge badge-warning">OPT.</small>
+                                                        </t>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </t>
+                        </t>
+
+                        <!-- Rodapé compacto -->
+                        <div class="mt-2 text-right" style="font-size: 9px;">
+                            <small class="text-muted">
+                                Documento gerado em: <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y %H:%M')"/>
+                            </small>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
+

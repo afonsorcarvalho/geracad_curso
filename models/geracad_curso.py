@@ -113,15 +113,23 @@ class GeracadCurso(models.Model):
                 record.carga_horaria_total = grade_versao_line.carga_horaria_total
     
     def action_open_wizard_print_report(self):
-        '''
-            Action que abre a wizard de impressao de grade curriculares
-        '''
-        _logger.info("ABRINDO WIZARD DE IMPRESSA DE GRADE")
+        """
+        Action que abre o wizard de impressão de grades curriculares.
+        Permite ao usuário selecionar qual versão da grade deseja imprimir.
+        """
+        _logger.info("Abrindo wizard de impressão de grade curricular para o curso: %s", self.name)
         
-
-        dummy, act_id = self.env["ir.model.data"].sudo().get_object_reference(
-            "geracad_curso", "action_open_wizard_print_grade"
-        )
+        return {
+            'name': 'Imprimir Grade Curricular',
+            'type': 'ir.actions.act_window',
+            'res_model': 'geracad.curso.wizard.print.grade',
+            'view_mode': 'form',
+            'view_id': self.env.ref('geracad_curso.view_geracad_curso_wizard_print_grade_form').id,
+            'target': 'new',
+            'context': {
+                'default_curso_id': self.id,
+            }
+        }
     
     
 

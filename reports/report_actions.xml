@@ -87,18 +87,28 @@
     <!-- <field name="paperformat_id" ref="report.paperformat_euro" /> --> 
     <field name="help">Recibo Parcela</field>
 </record>
+<!-- Relatório de Grade Curricular -->
 <record id="action_curso_grade_report" model="ir.actions.report">
-    <field name="name">Versão grade </field>
-    <field name="model">geracad.curso.wizard.print.grade</field>
-    <field name="report_type">qweb-html</field>
-    <field name="report_name">geracad_curso.view_recibo_parcela_template</field>
-    <field name="report_file">geracad_curso.view_recibo_parcela_template</field>
+    <field name="name">Grade Curricular</field>
+    <field name="model">geracad.curso.grade.versao</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">geracad_curso.report_grade_curricular_template</field>
+    <field name="report_file">geracad_curso.report_grade_curricular_template</field>
     <field name="attachment_use" eval="False"/>
-    
-     <field name="print_report_name">'Recibo Parcela - %s - %s' % (object.numero_parcela, object.curso_matricula_id.name)</field> 
-     <field name="binding_model_id" ref="model_geracad_curso"/> 
-    <!-- <field name="paperformat_id" ref="report.paperformat_euro" /> --> 
-    <field name="help">Grade Versão</field>
+    <field name="print_report_name">'Grade Curricular - %s - %s' % (object.curso_id.sigla, object.name)</field>
+    <field name="paperformat_id" ref="paperformat_grade_curricular"/> 
+    <field name="help">Relatório da Grade Curricular do Curso</field>
+</record>
+
+<!-- Action para abrir wizard de Grade Curricular a partir do botão Imprimir do Curso -->
+<record id="action_curso_grade_wizard_from_print" model="ir.actions.act_window">
+    <field name="name">Grade Curricular</field>
+    <field name="res_model">geracad.curso.wizard.print.grade</field>
+    <field name="view_mode">form</field>
+    <field name="view_id" ref="view_geracad_curso_wizard_print_grade_form"/>
+    <field name="target">new</field>
+    <field name="binding_model_id" ref="model_geracad_curso"/>
+    <field name="binding_type">report</field>
 </record>
 
 
