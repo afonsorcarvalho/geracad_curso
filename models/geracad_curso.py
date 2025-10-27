@@ -131,6 +131,27 @@ class GeracadCurso(models.Model):
             }
         }
     
+    def action_copiar_grade(self):
+        """
+        Action que abre o wizard para copiar uma versão da grade curricular.
+        Permite duplicar uma versão existente da grade com todas suas disciplinas.
+        Quando chamado de dentro de um curso, preenche o curso como origem e destino.
+        """
+        _logger.info("Abrindo wizard de cópia de grade curricular para o curso: %s", self.name)
+        
+        return {
+            'name': 'Copiar Grade Curricular',
+            'type': 'ir.actions.act_window',
+            'res_model': 'copiar.grade.wizard',
+            'view_mode': 'form',
+            'view_id': self.env.ref('geracad_curso.view_copiar_grade_wizard_form').id,
+            'target': 'new',
+            'context': {
+                'default_curso_origem_id': self.id,
+                'default_curso_destino_id': self.id,
+            }
+        }
+    
     
 
    

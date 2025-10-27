@@ -87,6 +87,7 @@
         'wizard/curso_mapa_pagamento_wizard.xml',
         'wizard/wizard_notas_dialog.xml',
         'wizard/wizard_print_grade.xml',
+        'wizard/copiar_grade_wizard.xml',
         'reports/report_grade_curricular_template.xml',
         'reports/report_actions.xml',
         

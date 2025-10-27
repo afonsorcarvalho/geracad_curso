@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Wizard para copiar versão da grade curricular -->
+    <record id="view_copiar_grade_wizard_form" model="ir.ui.view">
+        <field name="name">copiar.grade.wizard.form</field>
+        <field name="model">copiar.grade.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Copiar Grade Curricular">
+                <sheet>
+                    <div class="alert alert-info" role="alert">
+                        <strong>Atenção:</strong> Esta operação copiará uma grade curricular de um curso 
+                        para outro (ou para o mesmo curso com nova versão).
+                    </div>
+                    
+                    <group string="Origem">
+                        <group>
+                            <field name="curso_origem_id" 
+                                   options="{'no_create': True}"
+                                   placeholder="Selecione o curso de origem..."/>
+                            <field name="grade_versao_origem" 
+                                   domain="[('curso_id', '=', curso_origem_id)]"
+                                   options="{'no_create': True}"
+                                   placeholder="Selecione a versão a copiar..."
+                                   attrs="{'invisible': [('curso_origem_id', '=', False)]}"/>
+                        </group>
+                    </group>
+                    
+                    <group string="Destino">
+                        <group>
+                            <field name="curso_destino_id" 
+                                   options="{'no_create': True}"
+                                   placeholder="Selecione o curso de destino..."/>
+                            <field name="data_inicio"/>
+                            <field name="marcar_origem_obsoleta"/>
+                        </group>
+                    </group>
+                    
+                </sheet>
+                <footer>
+                    <button string="Copiar Grade" 
+                            name="action_copiar_grade" 
+                            type="object" 
+                            class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action para abrir o wizard -->
+    <record id="action_copiar_grade_wizard" model="ir.actions.act_window">
+        <field name="name">Copiar Grade Curricular</field>
+        <field name="res_model">copiar.grade.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_copiar_grade_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>
+

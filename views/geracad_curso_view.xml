@@ -34,6 +34,11 @@
                     type="object" 
                     class="oe_highlight"
                     icon="fa-print"/>
+            <button name="action_copiar_grade" 
+                    string="Copiar Grade Curricular" 
+                    type="object" 
+                    class="btn-secondary"
+                    icon="fa-copy"/>
           </header>
           <sheet>
             <div class="oe_title">

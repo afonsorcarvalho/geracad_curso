@@ -148,3 +148,7 @@ access_geracad_curso_wizard_print_grade_user,geracad_curso.geracad.curso.wizard.
 access_geracad_curso_wizard_print_grade_secretaria,geracad_curso.geracad.curso.wizard.print.grade.secretaria,model_geracad_curso_wizard_print_grade,geracad_curso.group_geracad_curso_secretaria,1,1,1,1
 access_geracad_curso_wizard_print_grade_secretaria_read_only,geracad_curso.geracad.curso.wizard.print.grade.secretaria.read.only,model_geracad_curso_wizard_print_grade,geracad_curso.group_geracad_curso_secretaria_only_read,1,1,1,1
 access_geracad_curso_wizard_print_grade_admin,geracad_curso.geracad.curso.wizard.print.grade.admin,model_geracad_curso_wizard_print_grade,base.group_system,1,1,1,1
+
+access_copiar_grade_wizard_user,geracad_curso.copiar.grade.wizard.user,model_copiar_grade_wizard,base.group_user,1,1,1,1
+access_copiar_grade_wizard_secretaria,geracad_curso.copiar.grade.wizard.secretaria,model_copiar_grade_wizard,geracad_curso.group_geracad_curso_secretaria,1,1,1,1
+access_copiar_grade_wizard_admin,geracad_curso.copiar.grade.wizard.admin,model_copiar_grade_wizard,base.group_system,1,1,1,1

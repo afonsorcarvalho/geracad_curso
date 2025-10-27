@@ -10,6 +10,7 @@ from . import curso_ata_resultados_wizard
 from . import curso_mapa_pagamento_wizard
 from . import copiar_horario_wizard
 from . import wizard_print_grade
+from . import copiar_grade_wizard
 
 
 
