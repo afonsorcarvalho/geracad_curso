@@ -123,9 +123,10 @@ Você tem duas opções:
 
 ### Organização das Disciplinas
 - As disciplinas são ordenadas por período (ordem crescente)
-- Período 0 é exibido como "Estágio Supervisionado / Atividades Complementares"
+- **Estágios**: Disciplinas onde `e_estagio = True` são exibidas no final como "Estágio Supervisionado / Atividades Complementares", independentemente do período configurado
 - Disciplinas excluídas não são exibidas no relatório
-- Cada período mostra seu subtotal de carga horária
+- Cada período mostra seu subtotal de carga horária no cabeçalho
+- Layout compacto otimizado para caber em uma página A4
 
 ## Observações
 

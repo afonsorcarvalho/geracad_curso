@@ -49,14 +49,14 @@
                         </div>
 
                         <!-- Lista de Disciplinas por Período -->
-                        <!-- Separa períodos regulares (>0) dos estágios (=0) -->
-                        <t t-set="all_periodos" t-value="sorted(set(o.grade_ids.mapped('periodo')))"/>
-                        <t t-set="periodos_regulares" t-value="[p for p in all_periodos if p > 0]"/>
-                        <t t-set="tem_estagio" t-value="0 in all_periodos"/>
+                        <!-- Separa disciplinas regulares de estágios baseado no campo e_estagio -->
+                        <t t-set="disciplinas_nao_estagio" t-value="o.grade_ids.filtered(lambda x: not x.disciplina_id.e_estagio and not x.e_excluida)"/>
+                        <t t-set="disciplinas_estagio" t-value="o.grade_ids.filtered(lambda x: x.disciplina_id.e_estagio and not x.e_excluida)"/>
+                        <t t-set="all_periodos" t-value="sorted(set(disciplinas_nao_estagio.mapped('periodo')))"/>
                         
-                        <!-- Exibe períodos regulares primeiro -->
-                        <t t-foreach="periodos_regulares" t-as="periodo">
-                            <t t-set="disciplinas" t-value="o.grade_ids.filtered(lambda x: x.periodo == periodo and not x.e_excluida)"/>
+                        <!-- Exibe períodos regulares primeiro (apenas disciplinas não-estágio) -->
+                        <t t-foreach="all_periodos" t-as="periodo">
+                            <t t-set="disciplinas" t-value="disciplinas_nao_estagio.filtered(lambda x: x.periodo == periodo)"/>
                             
                             <t t-if="disciplinas">
                                 <div class="mb-2">
@@ -105,11 +105,8 @@
                             </t>
                         </t>
                         
-                        <!-- Exibe estágio por último -->
-                        <t t-if="tem_estagio">
-                            <t t-set="disciplinas_estagio" t-value="o.grade_ids.filtered(lambda x: x.periodo == 0 and not x.e_excluida)"/>
-                            
-                            <t t-if="disciplinas_estagio">
+                        <!-- Exibe estágios por último (baseado no campo e_estagio da disciplina) -->
+                        <t t-if="disciplinas_estagio">
                                 <div class="mb-2">
                                     <div class="bg-info text-white py-1 px-2 mb-0" style="font-size: 11px;">
                                         <strong>ESTÁGIO SUPERVISIONADO / ATIVIDADES COMPLEMENTARES</strong>
@@ -153,7 +150,6 @@
                                         </tbody>
                                     </table>
                                 </div>
-                            </t>
                         </t>
 
                         <!-- Rodapé compacto -->
