@@ -28,6 +28,7 @@ As disciplinas são agrupadas e exibidas por período, mostrando:
 - **Código da Disciplina**: Código único da disciplina
 - **Nome da Disciplina**: Nome completo da disciplina
 - **Carga Horária**: Carga horária em horas
+- **Metodologia**: Tipo de metodologia da disciplina (ex: Teórica, Prática, Teórico-Prática)
 - **Tipo**: Se é obrigatória ou optativa
 
 #### Informações Adicionais

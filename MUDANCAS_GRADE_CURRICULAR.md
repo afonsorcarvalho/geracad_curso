@@ -63,7 +63,7 @@ O wizard possui permissões para:
 - O relatório é gerado em PDF
 - Disciplinas são organizadas por períodos
 - **Estágios**: Disciplinas com `e_estagio = True` aparecem sempre no final, independente do período
-- Mostra código, nome, carga horária e tipo de cada disciplina
+- Mostra código, nome, carga horária, metodologia (teórica/prática) e tipo de cada disciplina
 - Inclui subtotais por período no cabeçalho
 - Design compacto otimizado para caber em uma página A4
 - Versão da grade mais recente é selecionada automaticamente
