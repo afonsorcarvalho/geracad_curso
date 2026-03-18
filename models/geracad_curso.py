@@ -101,16 +101,20 @@ class GeracadCurso(models.Model):
             val = str(self.sigla)
             self.sigla = val.upper()
 
-    @api.depends('grade_id')
+    @api.depends('grade_id', 'grade_version_ids', 'grade_version_ids.carga_horaria_total')
     def _compute_carga_horaria_total(self):
+        """Carga horária total do curso: usa a primeira versão da grade, ou 0 se não houver versões (ex.: curso novo)."""
         _logger.info("calcula carga horaria total")
         for record in self:
-            
-            grade_versoes  = self.env['geracad.curso.grade.versao'].search([
+            record.carga_horaria_total = 0
+            if not record.id:
+                continue
+            grade_versoes = self.env['geracad.curso.grade.versao'].search([
                 ('curso_id', '=', record.id)
-                ], offset=0, limit=1)
+            ], offset=0, limit=1)
             for grade_versao_line in grade_versoes:
                 record.carga_horaria_total = grade_versao_line.carga_horaria_total
+                break
     
     def action_open_wizard_print_report(self):
         """
@@ -160,6 +164,25 @@ class GeracadCursoType(models.Model):
     _description = "Tipo do Curso"
 
     name = fields.Char()
+    
+    # Campos para configuração de diretor e secretaria específicos do tipo de curso
+    # Usados nos relatórios de histórico do aluno
+    diretor = fields.Char(
+        string="Diretor(a)",
+        help="Nome do diretor(a) para constar nos históricos deste tipo de curso. Se não preenchido, será usado o diretor da unidade."
+    )
+    diretor_formacao = fields.Char(
+        string="Formação do Diretor(a)",
+        help="Formação do diretor(a) para constar nos históricos deste tipo de curso."
+    )
+    secretaria = fields.Char(
+        string="Secretário(a) Escolar",
+        help="Nome do(a) secretário(a) escolar para constar nos históricos deste tipo de curso. Se não preenchido, será usado o secretário da unidade."
+    )
+    secretaria_formacao = fields.Char(
+        string="Formação do Secretário(a)",
+        help="Formação do(a) secretário(a) escolar para constar nos históricos deste tipo de curso."
+    )
 
 class GeracadEquivalenciaDisciplinas(models.Model):
     _name = "geracad.curso.equivalencia.disciplina"
@@ -378,13 +401,14 @@ class GeracadCursoGradeVersao(models.Model):
            
     #     return self.curso_id.sigla + '/' + str(self.data_inicio.year)
 
-    @api.depends('grade_ids')
+    @api.depends('grade_ids', 'grade_ids.disciplina_id_carga_horaria')
     def _compute_carga_horaria_total(self):
+        """Soma da carga horária das disciplinas da grade. Sempre atribui valor (0 se vazio ou em criação)."""
         for record in self:
-            sum = 0
+            total = 0
             for grade_line in record.grade_ids:
-                sum += grade_line.disciplina_id_carga_horaria
-            record.carga_horaria_total = sum
+                total += (grade_line.disciplina_id_carga_horaria or 0)
+            record.carga_horaria_total = total
 
 class GeracadCursoGrade(models.Model):
     _name = "geracad.curso.grade"

@@ -207,19 +207,25 @@
 							</t>
 						</div>
 						<div class="row assinaturas">
+							<!-- Define as variáveis para diretor e secretaria baseado na lógica: tipo_curso > empresa -->
+							<t t-set="diretor" t-value="o.curso_id.type_curso.diretor or o.company_id.diretor" />
+							<t t-set="diretor_formacao" t-value="o.curso_id.type_curso.diretor_formacao or o.company_id.diretor_formacao" />
+							<t t-set="secretaria" t-value="o.curso_id.type_curso.secretaria or o.company_id.secretaria" />
+							<t t-set="secretaria_formacao" t-value="o.curso_id.type_curso.secretaria_formacao or o.company_id.secretaria_formacao" />
+							
 							<div class="col-6 text-center">
 								_____________________________________________
 								<br />
 
-								<t t-if="o.company_id.diretor">
+								<t t-if="diretor">
 									<strong>
-										<t t-esc="o.company_id.diretor" />
+										<t t-esc="diretor" />
 									</strong>
 									<br />
 								</t>
-								<t t-if="o.company_id.diretor_formacao">
+								<t t-if="diretor_formacao">
 									<span>
-										<t t-esc="o.company_id.diretor_formacao" />
+										<t t-esc="diretor_formacao" />
 									</span>
 									<br />
 								</t>
@@ -231,10 +237,18 @@
 							<div class="col-6 text-center">
 								_____________________________________________
 								<br />
-								<strong>
-									<t t-esc="o.company_id.secretaria" />
-								</strong>
-								<br />
+								<t t-if="secretaria">
+									<strong>
+										<t t-esc="secretaria" />
+									</strong>
+									<br />
+								</t>
+								<t t-if="secretaria_formacao">
+									<span>
+										<t t-esc="secretaria_formacao" />
+									</span>
+									<br />
+								</t>
 								<span>Secretário(a) Escolar</span>
 								<br />
 

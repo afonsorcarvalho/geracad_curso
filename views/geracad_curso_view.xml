@@ -228,6 +228,47 @@
       </field>
     </record>
 
+    <record model="ir.ui.view" id="geracad_curso_tipo_curso_form">
+      <field name="name">cursos.tipo.curso.form</field>
+      <field name="model">geracad.curso.type</field>
+      <field name="arch" type="xml">
+        <form string="Tipo de Curso">
+          <sheet>
+            <div class="oe_title">
+              <label for="name" string="Nome do Tipo de Curso"/>
+              <h1>
+                <field name="name" placeholder="Ex: Técnico, Qualificação, Preparatório"/>
+              </h1>
+            </div>
+            
+            <group>
+              <group string="Diretor(a) - Para Históricos">
+                <field name="diretor" placeholder="Nome completo do diretor(a)"/>
+                <field name="diretor_formacao" placeholder="Ex: Mestre em Educação"/>
+              </group>
+              
+              <group string="Secretário(a) Escolar - Para Históricos">
+                <field name="secretaria" placeholder="Nome completo do(a) secretário(a)"/>
+                <field name="secretaria_formacao" placeholder="Ex: Especialista em Gestão Escolar"/>
+              </group>
+            </group>
+            
+            <group>
+              <div class="alert alert-info" role="alert">
+                <p>
+                  <strong>ℹ️ Configuração de Diretor e Secretaria:</strong>
+                </p>
+                <ul>
+                  <li>Se preenchidos, estes dados serão usados nos históricos dos alunos deste tipo de curso.</li>
+                  <li>Se não preenchidos, serão utilizados os dados configurados na unidade (empresa).</li>
+                </ul>
+              </div>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
     <record model="ir.actions.act_window" id="geracad_curso_tipo_curso_action_window">
       <field name="name">Tipo de Curso</field>
       <field name="type">ir.actions.act_window</field>
@@ -635,6 +676,7 @@
     <menuitem name="Turma de Disciplina" id="geracad_curso.menu_turma_disciplina_1_list" parent="geracad_curso.configuracao" action="geracad_curso_turma_disciplina_action_window" sequence="8" />
     <menuitem name="Notas de Disciplinas" id="geracad_curso.menu_nota_disciplina_list" parent="geracad_curso.configuracao" action="geracad_curso_nota_disciplina_action_window" sequence="9" />
     <menuitem name="Contratos" id="geracad_curso.menu_nota_contrato_list" parent="geracad_curso.configuracao" action="geracad_curso_contrato_action_window" sequence="10" />
+    <menuitem name="Notas Disciplina - Histórico Final" id="geracad_curso.menu_nota_disciplina_historico_final_list" parent="geracad_curso.configuracao" action="geracad_curso_nota_disciplina_historico_final_action_window" sequence="12" groups="base.group_system"/>
     <menuitem name="A receber" id="geracad_curso.menu_financeiro_parcelas_list" parent="geracad_curso.financeiro" action="geracad_curso_financeiro_parcelas_action_window" sequence="11" />
 
     <!-- <menuitem name="Server to list" id="geracad_aluno" parent="geracad_aluno.menu_2"

@@ -242,5 +242,18 @@
     <!-- <menuitem name="Server to list" id="geracad_aluno" parent="geracad_aluno.menu_2"
               action="geracad_aluno.action_server"/> -->
 
+    <!-- Ação para abrir o treeview do Histórico Final de Notas de Disciplina -->
+    <record model="ir.actions.act_window" id="geracad_curso_nota_disciplina_historico_final_action_window">
+      <field name="name">Notas Disciplina - Histórico Final</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">geracad.curso.nota.disciplina.historico.final</field>
+      <field name="view_mode">tree</field>
+      <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+          Visualização das notas finais consolidadas por disciplina (somente leitura).
+        </p>
+      </field>
+    </record>
+
   </data>
 </odoo>
