@@ -1,0 +1,229 @@
+/* Estilos para o Cronograma Semanal usando classes do Odoo */
+.o_horario_semanal_view {
+    padding: 16px;
+    background-color: #f9f9f9;
+}
+
+.o_horario_semanal_view .cronograma-header {
+    margin-bottom: 16px;
+}
+
+.o_horario_semanal_view .cronograma-header h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #212529;
+    margin: 0;
+}
+
+/* Grid usando estilo de tabela do Odoo */
+.o_horario_semanal_view .o_list_view {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.o_horario_semanal_view table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+}
+
+.o_horario_semanal_view thead {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.o_horario_semanal_view thead th {
+    padding: 8px 12px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 13px;
+    color: #495057;
+    border-right: 1px solid #dee2e6;
+}
+
+.o_horario_semanal_view thead th:first-child {
+    background-color: #e9ecef;
+    text-align: left;
+    width: 100px;
+}
+
+.o_horario_semanal_view tbody tr {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.o_horario_semanal_view tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.o_horario_semanal_view tbody td {
+    padding: 4px 8px;
+    border-right: 1px solid #dee2e6;
+    vertical-align: middle;
+}
+
+.o_horario_semanal_view tbody td:first-child {
+    background-color: #f8f9fa;
+    font-weight: 500;
+    font-size: 12px;
+    color: #495057;
+    text-align: center;
+}
+
+/* Many2one field styling */
+.o_horario_semanal_view .o_field_many2one {
+    width: 100%;
+    position: relative;
+}
+
+.o_horario_semanal_view .o_input_dropdown {
+    position: relative;
+    display: flex;
+    width: 100%;
+}
+
+.o_horario_semanal_view .disciplina-input {
+    width: 100%;
+    height: 30px;
+    border: 1px solid #ced4da;
+    border-radius: 3px;
+    padding: 4px 30px 4px 8px;
+    font-size: 13px;
+    color: #495057;
+    background-color: white;
+    cursor: text;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.o_horario_semanal_view .disciplina-input:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.o_horario_semanal_view .o_dropdown_button {
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    bottom: 1px;
+    width: 28px;
+    background-color: #f8f9fa;
+    border-left: 1px solid #ced4da;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.o_horario_semanal_view .o_dropdown_button:before {
+    content: "\f0d7";
+    font-family: FontAwesome;
+    font-size: 12px;
+    color: #495057;
+}
+
+.o_horario_semanal_view .o_dropdown_button:hover {
+    background-color: #e9ecef;
+}
+
+/* Autocomplete dropdown */
+.o_horario_semanal_view .ui-autocomplete {
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid #ced4da;
+    border-radius: 3px;
+    background-color: white;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+}
+
+.o_horario_semanal_view .ui-menu-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 13px;
+    border-bottom: 1px solid #f8f9fa;
+}
+
+.o_horario_semanal_view .ui-menu-item:hover,
+.o_horario_semanal_view .ui-state-active {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Botões usando estilo do Odoo */
+.o_horario_semanal_view .o_cp_buttons {
+    margin-top: 16px;
+    padding: 12px;
+    background-color: white;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    text-align: right;
+}
+
+.o_horario_semanal_view .btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: 6px 12px;
+    font-size: 13px;
+    line-height: 1.5;
+    border-radius: 3px;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    cursor: pointer;
+    margin-left: 8px;
+}
+
+.o_horario_semanal_view .btn-primary {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.o_horario_semanal_view .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+.o_horario_semanal_view .btn-secondary {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.o_horario_semanal_view .btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .o_horario_semanal_view {
+        padding: 8px;
+    }
+    
+    .o_horario_semanal_view thead th,
+    .o_horario_semanal_view tbody td {
+        padding: 4px 6px;
+        font-size: 11px;
+    }
+    
+    .o_horario_semanal_view .disciplina-select {
+        font-size: 11px;
+        height: 28px;
+    }
+}
+
+/* Loading state */
+.o_horario_semanal_view .o_loading {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+    font-style: italic;
+}
+
