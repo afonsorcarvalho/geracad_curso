@@ -29,6 +29,9 @@
         'web_calendar_color_field',
         'web_view_calendar_list',
         'web_widget_open_tab',
+        'web_ir_actions_act_view_reload',
+        'web_ir_actions_act_window_message',
+        'web_ir_actions_act_multi',
         'date_range',
         ],
 

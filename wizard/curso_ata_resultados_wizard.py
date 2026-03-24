@@ -101,7 +101,7 @@ class GeracadAtaResultadoCursoWizard(models.TransientModel):
             
             ],order="aluno_nome ASC, periodo ASC")
         if self.apenas_formados:
-            notas = notas.filtered(lambda r: r.curso_matricula_id.state in ['formado'])
+            notas = notas.filtered(lambda r: r.curso_matricula_id.state in ['formado'] and r.situation in ['AP', 'EA', 'AM'])
         
         #pegando as disciplinas
         

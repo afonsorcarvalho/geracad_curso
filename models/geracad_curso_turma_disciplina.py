@@ -477,38 +477,106 @@ class GeracadCursoTurmDisciplina(models.Model):
 
 
     def action_adiciona_alunos_turma_curso(self):
+        """Atualiza matrículas na disciplina.
+
+        Sucesso: OCA web_ir_actions_act_multi encadeia toast (display_notification) e
+        ir.actions.act_view_reload. Aviso sem turma: ir.actions.act_window.message (OCA
+        web_ir_actions_act_window_message).
+        """
+        self.ensure_one()
         _logger.debug("ADICIONANDO ALUNOS PELA TURMA CURSOS")
         _logger.debug(self.curso_turma_id.name)
         _logger.debug(self.name)
         self.message_post(body="Atualizado Lista de Alunos da disciplina!!")
-       
-        if self.curso_turma_id:
-            _logger.debug("ADICIONADA A TURMA NO FORMULARIO")
-            _logger.debug(self.curso_turma_id.name)
-            #pega todos os alunos inscritos na turma do curso
-            matriculas_alunos_inscritos_no_curso = self.env['geracad.curso.matricula'].search([
-                ('curso_turma_id','=',self.curso_turma_id.id),
-                ('state','=','inscrito')])
-                               
-            matricula_disciplina_create = []
-            #alunos já inscritos na disciplina
-            _logger.debug("PROCURANDO MATRICULA ALUNO JA ESTÁ INSCRITO NA TURMA DISCIPLINA")
-            ids_matriculas_ja_inscritos_na_disciplina = self.env['geracad.curso.matricula.disciplina'].search([
-                        ('turma_disciplina_id','=',self.id)
-                    ]).mapped(lambda r: r.curso_matricula_id.id) 
-            
-            ids_matricula_disciplina_inscrever = matriculas_alunos_inscritos_no_curso.filtered(lambda r: r.id not in ids_matriculas_ja_inscritos_na_disciplina).mapped("id")
-            _logger.debug("ADICIONADA A TURMA NO FORMULARIO")
-            _logger.debug(ids_matricula_disciplina_inscrever)
-            matricula_disciplina_create = list(map(lambda r: {
-                            'curso_matricula_id': r,
-                            'turma_disciplina_id': self.id,
-                            'state': 'inscrito'
-                        }, ids_matricula_disciplina_inscrever))
 
-            self.env['geracad.curso.matricula.disciplina'].create(matricula_disciplina_create)
-            
-    
+        if not self.curso_turma_id:
+            # OCA web_ir_actions_act_window_message: modal; ao fechar, recarrega a view
+            return {
+                'type': 'ir.actions.act_window.message',
+                'title': _('Atenção'),
+                'message': _(
+                    'Informe a turma do curso antes de atualizar a lista de alunos.'
+                ),
+            }
+
+        _logger.debug("ADICIONADA A TURMA NO FORMULARIO")
+        _logger.debug(self.curso_turma_id.name)
+
+        # Buscar todos os alunos inscritos na turma do curso (objeto matricula)
+        matricula_obj = self.env['geracad.curso.matricula']
+        matricula_disciplina_obj = self.env['geracad.curso.matricula.disciplina']
+        nota_disciplina_obj = self.env['geracad.curso.nota.disciplina']
+
+        matriculas_alunos_inscritos = matricula_obj.search([
+            ('curso_turma_id', '=', self.curso_turma_id.id),
+            ('state', '=', 'inscrito')
+        ])
+        matriculas_aluno_ids = list(matriculas_alunos_inscritos.ids)
+
+        # Para otimizar, obtenha todas as matriculas_disciplina relevantes de uma vez só
+        matriculas_disciplina_aluno = matricula_disciplina_obj.search([
+            ('curso_matricula_id', 'in', matriculas_aluno_ids)
+        ])
+        # Map: matricula_id -> [turma_disciplina_id]
+        matricula_to_turma_disciplinas = {}
+        for md in matriculas_disciplina_aluno:
+            matricula_to_turma_disciplinas.setdefault(md.curso_matricula_id.id, []).append(md)
+
+        # Buscar também todas as já vinculadas a esta turma-disciplina
+        ids_matriculas_ja_inscritos_na_disciplina = set(
+            md.curso_matricula_id.id for md in matriculas_disciplina_aluno if md.turma_disciplina_id.id == self.id
+        )
+
+        # Buscar as notas com situation aprovadas para todos os alunos e essa mesma disciplina
+        notas_validas = nota_disciplina_obj.search([
+            ('curso_matricula_id', 'in', matriculas_aluno_ids),
+            ('disciplina_id', '=', self.disciplina_id.id),
+            ('situation', 'in', ['AP', 'AM', 'EA'])
+        ])
+        matriculas_com_nota_aprovada = set(notas_validas.mapped('curso_matricula_id').ids)
+
+        matricula_disciplina_create = []
+        for matricula in matriculas_alunos_inscritos:
+            # Ignorar se já está nessa turma-disciplina
+            if matricula.id in ids_matriculas_ja_inscritos_na_disciplina:
+                continue
+            # Ignorar se o aluno já concluiu/aprovou esta disciplina em qualquer turma
+            if matricula.id in matriculas_com_nota_aprovada:
+                continue
+            # Está apto para inserir
+            matricula_disciplina_create.append({
+                'curso_matricula_id': matricula.id,
+                'turma_disciplina_id': self.id,
+                'state': 'inscrito'
+            })
+
+        qtd_adicionados = 0
+        if matricula_disciplina_create:
+            matricula_disciplina_obj.create(matricula_disciplina_create)
+            qtd_adicionados = len(matricula_disciplina_create)
+
+        # OCA web_ir_actions_act_multi: executa ações em sequência (ver readme/USAGE.rst).
+        # 1) toast 2) reload do form sem recarregar o navegador (web_ir_actions_act_view_reload).
+        return {
+            'type': 'ir.actions.act_multi',
+            'actions': [
+                {
+                    'type': 'ir.actions.client',
+                    'tag': 'display_notification',
+                    'params': {
+                        'title': _('Inserção concluída'),
+                        'message': _(
+                            'A atualização da lista de alunos foi concluída. '
+                            'Total de alunos adicionados: %d.'
+                        ) % qtd_adicionados,
+                        'type': 'success',
+                        'sticky': False,
+                    },
+                },
+                {'type': 'ir.actions.act_view_reload'},
+            ],
+        }
+
     @api.depends('name', 'disciplina_id')
     def name_get(self):
         result = []
