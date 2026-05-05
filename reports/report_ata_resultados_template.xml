@@ -98,7 +98,57 @@
 						}
                     </style>
 					<div class="page">
-						<h1 class="text-center" t-if="o.apenas_formados">ATA DE RESULTADOS FINAIS</h1>
+						<table class="table table-sm table-bordered" style="margin-bottom:5px; font-size:11px;">
+							<tr>
+								<th class="text-center text-uppercase align-middle" colspan="5" style="font-size:16px; font-weight:bold; letter-spacing:2px;">ATA DE RESULTADOS FINAIS</th>
+							</tr>
+							<tr>
+								<td class="text-center text-uppercase align-middle">
+									<small>CURSO</small><br/>
+									<strong><t t-esc="o.curso_turma_id.curso_id.name" /></strong>
+								</td>
+								<td class="text-center text-uppercase align-middle">
+									<small>TURMA</small><br/>
+									<strong><t t-esc="o.curso_turma_id.name" /></strong>
+								</td>
+								<td class="text-center text-uppercase align-middle">
+									<small>TURNO</small><br/>
+									<strong>
+										<t t-if="o.curso_turma_id.turno == 'MAT'">MATUTINO</t>
+										<t t-elif="o.curso_turma_id.turno == 'VES'">VESPERTINO</t>
+										<t t-elif="o.curso_turma_id.turno == 'NOT'">NOTURNO</t>
+									</strong>
+								</td>
+								<td class="text-center text-uppercase align-middle">
+									<small>ANO DE CONCLUSÃO</small><br/>
+									<strong>
+										<t t-if="o.curso_turma_id.data_encerramento">
+											<t t-esc="o.curso_turma_id.data_encerramento.year" />
+										</t>
+									</strong>
+								</td>
+								<td class="text-center text-uppercase align-middle">
+									<small>MÊS DE CONCLUSÃO</small><br/>
+									<strong>
+										<t t-if="o.curso_turma_id.data_encerramento">
+											<t t-set="mes" t-value="o.curso_turma_id.data_encerramento.month" />
+											<t t-if="mes == 1">JANEIRO</t>
+											<t t-elif="mes == 2">FEVEREIRO</t>
+											<t t-elif="mes == 3">MARÇO</t>
+											<t t-elif="mes == 4">ABRIL</t>
+											<t t-elif="mes == 5">MAIO</t>
+											<t t-elif="mes == 6">JUNHO</t>
+											<t t-elif="mes == 7">JULHO</t>
+											<t t-elif="mes == 8">AGOSTO</t>
+											<t t-elif="mes == 9">SETEMBRO</t>
+											<t t-elif="mes == 10">OUTUBRO</t>
+											<t t-elif="mes == 11">NOVEMBRO</t>
+											<t t-elif="mes == 12">DEZEMBRO</t>
+										</t>
+									</strong>
+								</td>
+							</tr>
+						</table>
 						<t t-set="col_width_disciplinas" t-value="str('22px')" />
 						
 						<table class="table table-sm table-bordered table-striped">

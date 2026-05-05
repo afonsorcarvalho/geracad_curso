@@ -144,7 +144,7 @@
                                 <t t-set="count" t-value="1" />
 
                                 <t t-foreach="o.notas" t-as="rec">
-                                    <t t-if="rec.state not in ['cancelada','trancada','suspensa']">
+                                    <t t-if="rec.disciplina_matricula_id.state == 'inscrito'">
                                     <tr>
                                         <td class="pri_col">
                                             <t t-esc="count" />
