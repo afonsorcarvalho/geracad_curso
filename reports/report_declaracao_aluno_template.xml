@@ -77,7 +77,7 @@
               Declaramos para os devidos fins que o aluno
               <span style="text-transform:uppercase; font-weight: 800" t-field="o.aluno_id.name" />
               , CPF nº
-              <span t-field="o.aluno_id.cnpj_cpf" />
+              <span t-field="o.aluno_id.l10n_br_cnpj_cpf" />
               , encontra-se regularmente matriculado nesta instituição de ensino técnico profissionalizante, cursando atualmente o
               <t t-esc="o.get_periodo_cursado()" />
               ° período do curso
