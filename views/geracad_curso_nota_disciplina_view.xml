@@ -32,6 +32,7 @@
          
           <field name="curso_turma_id" readonly="1" optional="hide" />
           <field name="turma_disciplina_id"  readonly="1" optional="show"/>
+          <field name="professor_id"  readonly="1" optional="show"/>
           <field name="disciplina_id"  readonly="1" optional="hide"/>
           <field name="faltas" optional="show" />
           <field name="nota_1" optional="show"/>

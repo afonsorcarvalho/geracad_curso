@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="paperformat_historico_detalhado" model="report.paperformat">
+		<field name="name">Histórico Aluno Detalhado</field>
+		<field name="default" eval="False" />
+		<field name="format">A4</field>
+		<field name="orientation">Portrait</field>
+		<field name="dpi">130</field>
+		<field name="margin_top">20</field>
+		<field name="margin_bottom">15</field>
+		<field name="margin_left">5</field>
+		<field name="margin_right">5</field>
+		<field name="header_line" eval="False" />
+		<field name="header_spacing">16</field>
+	</record>
+
+	<!-- Tabela de notas de um período -->
+	<template id="view_historico_aluno_detalhado_notas_template">
+		<table class="table table-sm table-striped notas">
+			<colgroup>
+				<col style="width: 10%" />
+				<col style="width: 33%" />
+				<col style="width: 27%" />
+				<col style="width: 4%" />
+				<col style="width: 5%" />
+				<col style="width: 4.25%" />
+				<col style="width: 4.25%" />
+				<col style="width: 4.25%" />
+				<col style="width: 4.25%" />
+				<col style="width: 4%" />
+			</colgroup>
+			<thead>
+				<tr>
+					<th colspan="10">
+						<t t-esc="periodo" />
+						º Período
+					</th>
+				</tr>
+				<tr>
+					<th class="col-turma">Turma</th>
+					<th class="col-disciplina">Disciplina</th>
+					<th class="col-professor">Professor</th>
+					<th class="text-center col-ch">CH</th>
+					<th class="text-center col-falta">Faltas</th>
+					<th class="text-center col-nota">1ªN</th>
+					<th class="text-center col-nota">2ªN</th>
+					<th class="text-center col-nota">Final</th>
+					<th class="text-center col-nota">Média</th>
+					<th class="text-center situation">Sit.</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<t t-foreach="o._get_notas_periodo(periodo)" t-as="notas_line">
+					<tr>
+						<td class="col-turma">
+							<span t-field="notas_line.turma_disciplina_id.name" />
+						</td>
+						<td class="col-disciplina">
+							<span t-field="notas_line.disciplina_id.name" />
+						</td>
+						<td class="col-professor">
+							<span t-field="notas_line.turma_disciplina_id.professor_id.name" />
+						</td>
+
+						<t t-if="o.state == 'formado'">
+							<td class="text-center col-ch">
+								<span t-field="notas_line.carga_horaria" />
+							</td>
+						</t>
+						<t t-if="o.state != 'formado'">
+							<td class="text-center col-ch">
+								<span t-field="notas_line.disciplina_id.carga_horaria" />
+							</td>
+						</t>
+
+						<td class="text-center col-falta">
+							<span t-field="notas_line.faltas" />
+						</td>
+						<td class="text-center col-nota">
+							<span t-field="notas_line.nota_1" t-options='{"widget": "float", "precision": 2}' />
+						</td>
+						<td class="text-center col-nota">
+							<span t-field="notas_line.nota_2" t-options='{"widget": "float", "precision": 2}' />
+						</td>
+						<td class="text-center col-nota">
+							<span t-field="notas_line.final" t-options='{"widget": "float", "precision": 2}' />
+						</td>
+						<td class="text-center col-nota">
+							<span t-field="notas_line.media" t-options='{"widget": "float", "precision": 2}' />
+						</td>
+						<td class="text-center situation">
+							<span t-field="notas_line.situation" />
+						</td>
+					</tr>
+				</t>
+			</tbody>
+		</table>
+	</template>
+
+	<!-- Histórico Escolar Detalhado -->
+	<template id="view_historico_aluno_detalhado_template">
+
+		<t t-call="web.html_container">
+			<t t-foreach="docs" t-as="o">
+				<t t-call="web.external_layout">
+					<style>
+						div .page{
+							margin: 0px;
+							padding: 0px;
+						}
+						div #state{
+							text-transform: uppercase;
+						}
+						.o_report_layout_background{
+							background-image: none;
+						}
+						.o_background_header h3 {
+							max-width: 400px;
+						}
+						table { table-layout: fixed; width: 100%; }
+						table.notas { font-size: 0.70rem; }
+						table.notas th, table.notas td {
+							padding: 0.15rem 0.1rem;
+							word-wrap: break-word;
+							overflow-wrap: break-word;
+						}
+						td { word-wrap: break-word; }
+						td.col-disciplina { text-transform: uppercase; }
+						td.col-professor { text-transform: uppercase; }
+
+						.dados-aluno {padding-top: 10px}
+						.cabecalho-historico {padding: 20px}
+						.pt-5{
+							padding-top: 0rem !important;
+						}
+						.assinaturas{
+							padding-top: 4rem ;
+						}
+						.legenda{
+							font-size: 0.8rem;
+						}
+					</style>
+					<div class="page">
+						<table class="table table-sm" style="table-layout: fixed" id="table_cabecalho">
+							<thead style="display: table-row-group">
+								<tr>
+									<th colspan="10">
+										<div class="row cabecalho-historico">
+											<div class="col-12">
+												<h4 class="text-center color-primary">
+													HISTÓRICO ESCOLAR DETALHADO
+													<span t-if="o.state=='formado'">FINAL</span>
+												</h4>
+												<h5 class="text-center" t-field="o.curso_nome" />
+
+												<t t-if="o.curso_id.resolucao">
+													<h6 class="text-center">
+														RESOLUÇÃO
+														<span t-field="o.curso_id.resolucao" />
+													</h6>
+												</t>
+											</div>
+										</div>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td colspan="10">
+										<div class="row dados-aluno">
+											<div class="col-6">
+												<div class="col-auto text-uppercase" name="aluno">
+													<strong>ALUNO:</strong>
+													<span t-field="o.aluno_id.display_name" />
+												</div>
+												<div class="col-auto" name="matricula">
+													<strong>MATRÍCULA:</strong>
+													<span t-field="o.name" />
+												</div>
+												<div class="col-auto" name="l10n_br_cnpj_cpf">
+													<strong>CPF:</strong>
+													<span t-field="o.aluno_id.l10n_br_cnpj_cpf" />
+												</div>
+												<div class="col-auto" name="data_nascimento">
+													<strong>DATA DE NASCIMENTO:</strong>
+													<span t-field="o.aluno_id.data_nascimento" />
+												</div>
+											</div>
+											<div class="col-6">
+												<div class="col-auto" name="turma_curso">
+													<strong>TURMA:</strong>
+													<span t-field="o.curso_turma_id.name" />
+												</div>
+												<div class="col-auto" name="data_matricula">
+													<strong>DATA INÍCIO:</strong>
+													<span t-field="o.data_matricula" />
+												</div>
+												<div class="col-auto" name="data_conclusao">
+													<strong>DATA TÉRMINO:</strong>
+													<t t-if="o.data_conclusao">
+														<span t-field="o.data_conclusao" />
+													</t>
+													<t t-if="not o.data_conclusao">
+														EM ANDAMENTO
+													</t>
+												</div>
+												<div class="col-auto text-uppercase">
+													<strong>SITUAÇÃO:</strong>
+													<span t-field="o.state" />
+												</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<!-- NOTAS DAS DISCIPLINAS GERAIS -->
+						<t t-foreach="o._get_periodos()" t-as="periodo">
+							<t t-if="o._tem_notas_periodo(periodo)">
+								<t t-call="geracad_curso.view_historico_aluno_detalhado_notas_template" />
+							</t>
+						</t>
+
+						<!-- NOTAS DO ESTÁGIO SUPERVISIONADO -->
+						<t t-if="o._tem_estagio()">
+							<table class="table table-sm table-striped notas">
+			<colgroup>
+				<col style="width: 10%" />
+				<col style="width: 33%" />
+				<col style="width: 27%" />
+				<col style="width: 4%" />
+				<col style="width: 5%" />
+				<col style="width: 4.25%" />
+				<col style="width: 4.25%" />
+				<col style="width: 4.25%" />
+				<col style="width: 4.25%" />
+				<col style="width: 4%" />
+			</colgroup>
+								<thead>
+									<tr>
+										<th colspan="10">ESTÁGIO SUPERVISIONADO</th>
+									</tr>
+									<tr>
+										<th class="col-turma">Turma</th>
+										<th class="col-disciplina">Disciplina</th>
+										<th class="col-professor">Professor</th>
+										<th class="text-center col-ch">CH</th>
+										<th class="text-center col-falta">Faltas</th>
+										<th class="text-center col-nota">1ªN</th>
+										<th class="text-center col-nota">2ªN</th>
+										<th class="text-center col-nota">Final</th>
+										<th class="text-center col-nota">Média</th>
+										<th class="text-center situation">Sit.</th>
+									</tr>
+								</thead>
+								<tbody>
+									<t t-foreach="o._get_nota_estagio()" t-as="notas_line">
+										<tr>
+											<td class="col-turma">
+												<span t-field="notas_line.turma_disciplina_id.name" />
+											</td>
+											<td class="col-disciplina">
+												<span t-field="notas_line.disciplina_id.name" />
+											</td>
+											<td class="col-professor">
+												<span t-field="notas_line.turma_disciplina_id.professor_id.name" />
+											</td>
+
+											<t t-if="o.state == 'formado'">
+												<td class="text-center col-ch">
+													<span t-field="notas_line.carga_horaria" />
+												</td>
+											</t>
+											<t t-if="o.state != 'formado'">
+												<td class="text-center col-ch">
+													<span t-field="notas_line.disciplina_id.carga_horaria" />
+												</td>
+											</t>
+
+											<td class="text-center col-falta">
+												<span t-field="notas_line.faltas" />
+											</td>
+											<td class="text-center col-nota">
+												<span t-field="notas_line.nota_1" t-options='{"widget": "float", "precision": 2}' />
+											</td>
+											<td class="text-center col-nota">
+												<span t-field="notas_line.nota_2" t-options='{"widget": "float", "precision": 2}' />
+											</td>
+											<td class="text-center col-nota">
+												<span t-field="notas_line.final" t-options='{"widget": "float", "precision": 2}' />
+											</td>
+											<td class="text-center col-nota">
+												<span t-field="notas_line.media" t-options='{"widget": "float", "precision": 2}' />
+											</td>
+											<td class="text-center situation">
+												<span t-field="notas_line.situation" />
+											</td>
+										</tr>
+									</t>
+								</tbody>
+							</table>
+						</t>
+
+						<div class="row">
+							<div class="col-auto text-right legenda ">
+									LEGENDA:  AM - APROV. MEDIA   AP - APROV. FINAL  RC - REP. CONTEUDO  RF - REP. P/ FALTA  IN - INSCRITO  CA - CANCELAMENTO  TR - TRANCAMENTO  AB - ABANDONO  EA - ESTUDOS APROVEITADOS
+							</div>
+						</div>
+						<div class="row assinaturas">
+							<div class="col-6"></div>
+							<t t-if="o.state != 'formado'">
+								<div class="col-6" align="right">
+									<p>
+										<t t-esc="o.get_date_str()" />
+									</p>
+								</div>
+							</t>
+						</div>
+						<div class="row assinaturas">
+							<t t-set="diretor" t-value="o.curso_id.type_curso.diretor or o.company_id.diretor" />
+							<t t-set="diretor_formacao" t-value="o.curso_id.type_curso.diretor_formacao or o.company_id.diretor_formacao" />
+							<t t-set="secretaria" t-value="o.curso_id.type_curso.secretaria or o.company_id.secretaria" />
+							<t t-set="secretaria_formacao" t-value="o.curso_id.type_curso.secretaria_formacao or o.company_id.secretaria_formacao" />
+
+							<div class="col-6 text-center">
+								_____________________________________________
+								<br />
+								<t t-if="diretor">
+									<strong>
+										<t t-esc="diretor" />
+									</strong>
+									<br />
+								</t>
+								<t t-if="diretor_formacao">
+									<span>
+										<t t-esc="diretor_formacao" />
+									</span>
+									<br />
+								</t>
+								<span>Diretor(a)</span>
+								<br />
+							</div>
+							<div class="col-6 text-center">
+								_____________________________________________
+								<br />
+								<t t-if="secretaria">
+									<strong>
+										<t t-esc="secretaria" />
+									</strong>
+									<br />
+								</t>
+								<t t-if="secretaria_formacao">
+									<span>
+										<t t-esc="secretaria_formacao" />
+									</span>
+									<br />
+								</t>
+								<span>Secretário(a) Escolar</span>
+								<br />
+							</div>
+						</div>
+					</div>
+				</t>
+			</t>
+		</t>
+	</template>
+</odoo>
