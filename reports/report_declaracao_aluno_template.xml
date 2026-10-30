@@ -93,7 +93,7 @@
               horas, dentre as quais estão inclusas as 300 horas de estágio supervisionado obrigatório.
             </p>
 
-            <p>Informamos ainda que o referido curso é reconhecido pelo Conselho de Educação do Estado do Maranhão e registrado no Conselho Regional de Engenharia, Arquitetura e Agronomia do Maranhão (CREA-MA).</p>
+            <p>Informamos ainda que o referido curso é reconhecido pelo Conselho de Educação do Estado do Maranhão, conforme resolução n° <t t-esc="o.curso_id.resolucao"/> e registrado no Conselho Federal dos Técnicos Industriais.</p>
 
             <p>Esta declaração terá validade de 30 (trinta) dias após a data de sua emissão.</p>
             <br />
